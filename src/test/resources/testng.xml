@@ -19,7 +19,7 @@
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="CheckDeviceInGroup">
+<suite name="DeviceExtensionTestSuite">
     <parameter name="useDefaultListeners" value="false"/>
 
     <test name="Extension Unit Tests" preserve-order="true">
