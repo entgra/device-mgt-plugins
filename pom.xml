@@ -1215,7 +1215,7 @@
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
 
         <!-- Carbon Device Management -->
-        <carbon.devicemgt.version>3.1.28</carbon.devicemgt.version>
+        <carbon.devicemgt.version>3.1.31-SNAPSHOT</carbon.devicemgt.version>
         <carbon.devicemgt.version.range>[3.1.0, 4.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon App Management -->
@@ -1558,9 +1558,29 @@
             </releases>
         </repository>
         <repository>
+            <id>entgra.snapshots</id>
+            <name>Entgra Snapshot Repository</name>
+            <url>http://104.215.188.88/repository/maven-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
             <id>gcm-server-repository</id>
             <name>GCM Server repository - GitHub</name>
             <url>https://github.com/slorber/gcm-server-repository/raw/master/releases/</url>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>http://104.215.188.88/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
