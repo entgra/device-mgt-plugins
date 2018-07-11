@@ -1,7 +1,8 @@
 # carbon-device-mgt-plugins
 
 <a href='https://opensource.org/licenses/Apache-2.0'><img src='https://img.shields.io/badge/License-Apache%202.0-blue.svg'></a><br/>
-<a href='https://wso2.org/jenkins/job/platform-builds/job/carbon-device-mgt-plugins/'><img src='https://wso2.org/jenkins/job/platform-builds/job/carbon-device-mgt-plugins/badge/icon'></a> - Java8<br/>
+
+[![pipeline status](https://gitlab.com/entgra/carbon-device-mgt-plugins/badges/master/pipeline.svg)](https://gitlab.com/entgra/carbon-device-mgt-plugins/commits/master)
 
 WSO2 MOBILE DEVICE MANAGER
 
