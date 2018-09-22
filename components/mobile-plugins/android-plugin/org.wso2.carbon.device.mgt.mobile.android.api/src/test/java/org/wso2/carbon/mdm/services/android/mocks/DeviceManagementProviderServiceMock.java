@@ -33,6 +33,7 @@ import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.common.policy.mgt.Policy;
 import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
 import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationExecutionFailedException;
 import org.wso2.carbon.device.mgt.common.push.notification.NotificationStrategy;
@@ -387,6 +388,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     public Activity addOperation(String s, Operation operation, List<DeviceIdentifier> list)
             throws OperationManagementException, InvalidDeviceException {
         return TestUtils.getActivity();
+    }
+
+    @Override
+    public void addPolicyOperations(String s, Policy policy, List<DeviceIdentifier> list) throws OperationManagementException, InvalidDeviceException {
+
     }
 
     @Override
