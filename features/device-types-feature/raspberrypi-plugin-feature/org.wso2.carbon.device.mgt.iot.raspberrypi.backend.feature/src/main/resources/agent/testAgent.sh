@@ -21,7 +21,7 @@
 #!/bin/bash
 
 echo "----------------------------------------------------------------"
-echo "|		                 WSO2 IOT Sample				          "
+echo "|		                 Entgra IOT Sample				          "
 echo "|		                   RaspiAgent				              "
 echo "|	                     ----------------				          "
 echo "|                ....initializing startup-script	              "
