@@ -1,6 +1,6 @@
 @echo off
 echo.
-echo.WSO2 IOT Sample
+echo.Entgra IOT Sample
 echo.Virtual Fire Alarm
 echo.initializing agent
 echo.

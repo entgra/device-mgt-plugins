@@ -16,12 +16,12 @@
    under the License.
 *#
 <EmailConfig>
-    <Subject>You have been invited to enroll your Android device in WSO2 IoT</Subject>
+    <Subject>You have been invited to enroll your Android device in Entgra IoT</Subject>
     <Body>
     <![CDATA[
     <html>
     <head>
-        <title>WSO2 IoT Server</title>
+        <title>Entgra IoT Server</title>
     </head>
     <body style="color: #666666; background-color:#cdcdcd; padding: 0px; margin: 0px;">
     <div style="background-color:#cdcdcd; font-size: 1em; font-family: Arial, Helvetica; line-height: 170%; color: #666666; padding: 20px 0px; margin: 0px;">
@@ -38,7 +38,7 @@
                 </p>
 
                 <p style="font-size: 1em; font-family: Arial, Helvetica; line-height: 170%; color: #666666; margin: 5px 0px;">
-                    You have been invited by $first-name to enrol your android device in WSO2 IoT Server.
+                    You have been invited by $first-name to enrol your android device in Entgra IoT Server.
                     Click <a href="$base-url-https/devicemgt/public/cdmf.unit.device.type.android.type-view/assets/android-agent.apk">here</a> to download device agent in to
                     your Android device.</p>
 
@@ -51,7 +51,7 @@
                 </p>
 
                 <p style="font-size: 1em; font-family: Arial, Helvetica; line-height: 170%; color: #666666; margin: 5px 0px;">
-                    WSO2 IoT Administrator
+                    Entgra IoT Administrator
                 </p>
             </div>
             <div style="background-color: #333333; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">

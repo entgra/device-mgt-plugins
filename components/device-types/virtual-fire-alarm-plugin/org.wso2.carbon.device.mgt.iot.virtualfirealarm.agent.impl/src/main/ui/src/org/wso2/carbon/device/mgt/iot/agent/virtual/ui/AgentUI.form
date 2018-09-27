@@ -79,7 +79,7 @@
           <Font name="Cantarell" size="24" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="text" type="java.lang.String" value="Device Name: WSO2 IoT Virtual Agent"/>
+        <Property name="text" type="java.lang.String" value="Device Name: Entgra IoT Virtual Agent"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

@@ -2,7 +2,7 @@
 @Plan:name('WSO2IoT-GeoAlerts-ExecutionPlan')
 
 /* Enter a unique description for ExecutionPlan */
-@Plan:description('To convert the WSO2 IoT event incoming stream to relavant streams')
+@Plan:description('To convert the Entgra IoT event incoming stream to relavant streams')
 
 /* define streams/tables and write queries here ... */
 

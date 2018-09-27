@@ -80,7 +80,7 @@ public class AgentUI extends javax.swing.JFrame {
 
         lblAgentName.setFont(new java.awt.Font("Cantarell", 1, 24)); // NOI18N
         lblAgentName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblAgentName.setText("Device Name: WSO2 IoT Virtual Agent");
+        lblAgentName.setText("Device Name: Entgra IoT Virtual Agent");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Copyright (c) 2015, WSO2 Inc.");

@@ -403,7 +403,7 @@ public class TestUtils {
     public static List<Application> getApplications() {
         List<Application> applications = new ArrayList<>();
         Application app = new Application();
-        app.setName("WSO2 IoT Agent");
+        app.setName("Entgra IoT Agent");
         app.setApplicationIdentifier("org.wos2.iot.agent");
         app.setVersion("1.0.0");
         app.setPlatform("Android");
