@@ -391,11 +391,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public void addPolicyOperations(String s, Policy policy, List<DeviceIdentifier> list) throws OperationManagementException, InvalidDeviceException {
-
-    }
-
-    @Override
     public List<? extends Operation> getOperations(DeviceIdentifier deviceIdentifier)
             throws OperationManagementException {
         return null;
