@@ -1230,7 +1230,7 @@
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
 
         <!-- Carbon Device Management -->
-        <carbon.devicemgt.version>3.1.41-SNAPSHOT</carbon.devicemgt.version>
+        <carbon.devicemgt.version>3.2.0</carbon.devicemgt.version>
         <carbon.devicemgt.version.range>[3.1.0, 4.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon App Management -->
@@ -1375,10 +1375,9 @@
     </properties>
 
     <scm>
-        <url>https://github.com/wso2/carbon-device-mgt-plugins.git</url>
-        <developerConnection>scm:git:https://github.com/wso2/carbon-device-mgt-plugins.git
-        </developerConnection>
-        <connection>scm:git:https://github.com/wso2/carbon-device-mgt-plugins.git</connection>
+        <url>https://gitlab.com/entgra/carbon-device-mgt-plugins.git</url>
+        <developerConnection>scm:git:https://gitlab.com/entgra/carbon-device-mgt-plugins.git</developerConnection>
+        <connection>scm:git:https://gitlab.com/entgra/carbon-device-mgt-plugins.git</connection>
         <tag>HEAD</tag>
     </scm>
 
@@ -1575,6 +1574,26 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
+	</repository>
+	<repository>
+            <id>entgra-nexus</id>
+            <name>Entgra internal Repository</name>
+            <url>http://nexus.entgra.io/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>entgra.releases</id>
+            <name>Entgra internal Repository</name>
+            <url>http://nexus.entgra.io/repository/maven-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
         </repository>
         <repository>
             <id>entgra.snapshots</id>
@@ -1599,7 +1618,11 @@
         <snapshotRepository>
             <id>maven-snapshots</id>
             <url>http://nexus.entgra.io/repository/maven-snapshots/</url>
-        </snapshotRepository>
+    	</snapshotRepository>
+    	<repository>
+            <id>maven-release</id>
+            <url>http://nexus.entgra.io/repository/maven-releases/</url>
+        </repository>
     </distributionManagement>
 
 </project>
