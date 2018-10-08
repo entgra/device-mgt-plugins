@@ -57,8 +57,8 @@
     access server after receiving push notification.
     -->
     <!--Configuration for enable firebase push notifications-->
-    <!--<PushNotificationProviderConfig type="FCM" isScheduled="false">-->
-    <!--</PushNotificationProviderConfig>-->
+    <PushNotificationProviderConfig type="FCM" isScheduled="false">
+    </PushNotificationProviderConfig>
 
     <DataSource>
         <JndiConfig>
