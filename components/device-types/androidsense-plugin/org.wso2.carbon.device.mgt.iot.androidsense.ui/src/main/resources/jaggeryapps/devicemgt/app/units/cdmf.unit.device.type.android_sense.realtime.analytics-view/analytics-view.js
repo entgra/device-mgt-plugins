@@ -46,14 +46,14 @@ function onRequest(context) {
             if (tokenPair) {
                 token = tokenPair.accessToken;
             }
-            websocketEndpoint = websocketEndpoint + "/secured-websocket/org.wso2.iot.android.sense/1.0.0?" +
+            websocketEndpoint = websocketEndpoint + "/secured-websocket-proxy/org.wso2.iot.android.sense/1.0.0?" +
                 "deviceId=" + device.deviceIdentifier + "&deviceType=" + device.type + "&websocketToken=" + token;
         } else {
             tokenPair = jwtClient.getAccessToken(resp[0], resp[1], context.user.username + "@" + tenantDomain,"default", {});
             if (tokenPair) {
                 token = tokenPair.accessToken;
             }
-            websocketEndpoint = websocketEndpoint + "/secured-websocket/t/"+tenantDomain+"/org.wso2.iot.android.sense/1.0.0?" +
+            websocketEndpoint = websocketEndpoint + "/secured-websocket-proxy/t/"+tenantDomain+"/org.wso2.iot.android.sense/1.0.0?" +
                 "deviceId=" + device.deviceIdentifier + "&deviceType=" + device.type + "&websocketToken=" + token;
         }
 
