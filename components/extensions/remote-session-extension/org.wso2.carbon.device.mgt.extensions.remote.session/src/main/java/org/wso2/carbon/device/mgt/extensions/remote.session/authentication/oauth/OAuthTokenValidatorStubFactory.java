@@ -107,8 +107,8 @@ public class OAuthTokenValidatorStubFactory extends BasePoolableObjectFactory {
             auth.setPreemptiveAuthentication(true);
             String username = tokenValidationProperties.get(RemoteSessionConstants.USERNAME);
             String password = tokenValidationProperties.get(RemoteSessionConstants.PASSWORD);
-            auth.setPassword(username);
-            auth.setUsername(password);
+            auth.setUsername(username);
+            auth.setPassword(password);
             Options options = client.getOptions();
             options.setProperty(HTTPConstants.AUTHENTICATE, auth);
             options.setProperty(HTTPConstants.REUSE_HTTP_CLIENT, Constants.VALUE_TRUE);
@@ -116,8 +116,12 @@ public class OAuthTokenValidatorStubFactory extends BasePoolableObjectFactory {
             if (hostURL.getProtocol().equals("https")) {
                 // set up ssl factory since axis2 https notification is used.
                 EasySSLProtocolSocketFactory sslProtocolSocketFactory = createProtocolSocketFactory();
-                Protocol authhttps = new Protocol(hostURL.getProtocol()
-                        , (ProtocolSocketFactory) sslProtocolSocketFactory, hostURL.getPort());
+                int port = hostURL.getPort();
+                if (port == -1) {
+                    port = 443;
+                }
+                Protocol authhttps = new Protocol(hostURL.getProtocol(),
+                        (ProtocolSocketFactory) sslProtocolSocketFactory, port);
                 Protocol.registerProtocol(hostURL.getProtocol(), authhttps);
                 options.setProperty(HTTPConstants.CUSTOM_PROTOCOL_HANDLER, authhttps);
             }
