@@ -31,6 +31,8 @@ import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.common.policy.mgt.Policy;
+import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
 import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.PolicyComplianceException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
@@ -263,7 +265,19 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                                     operation, deviceIdentifiers);
                 }
                 PolicyManagerService policyManagerService = AndroidAPIUtils.getPolicyManagerService();
-                policyManagerService.getEffectivePolicy(new DeviceIdentifier(androidDevice.getDeviceIdentifier(), device.getType()));
+                Policy effectivePolicy = policyManagerService.getEffectivePolicy(new DeviceIdentifier(androidDevice.getDeviceIdentifier(), device.getType()));
+
+                if (effectivePolicy != null) {
+                    List<ProfileFeature> effectiveProfileFeatures = effectivePolicy.getProfile().
+                            getProfileFeaturesList();
+                    for (ProfileFeature feature : effectiveProfileFeatures) {
+                        if (feature.getFeatureCode().equalsIgnoreCase(AndroidConstants.
+                                ApplicationInstall.APP_INSTALL_FEATURE_CODE)) {
+                            AndroidDeviceUtils.installApplications(feature, deviceIdentifier.getId());
+                            break;
+                        }
+                    }
+                }
 
                 Message responseMessage = new Message();
                 responseMessage.setResponseCode(Response.Status.OK.toString());

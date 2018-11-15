@@ -24,6 +24,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
@@ -32,6 +36,8 @@ import org.wso2.carbon.analytics.dataservice.commons.AnalyticsDataResponse;
 import org.wso2.carbon.analytics.dataservice.commons.SearchResultEntry;
 import org.wso2.carbon.analytics.datasource.commons.Record;
 import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
+import org.wso2.carbon.apimgt.application.extension.dto.ApiApplicationKey;
+import org.wso2.carbon.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -47,17 +53,23 @@ import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
 import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.ComplianceFeature;
 import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.PolicyComplianceException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
 import org.wso2.carbon.device.mgt.core.search.mgt.impl.Utils;
+import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
 import org.wso2.carbon.mdm.services.android.bean.DeviceState;
 import org.wso2.carbon.mdm.services.android.bean.ErrorListItem;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.exception.BadRequestException;
+import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
+import org.wso2.carbon.user.api.UserStoreException;
 
 import javax.validation.ConstraintViolation;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -458,6 +470,52 @@ public class AndroidDeviceUtils {
         }
         errorResponse.setErrorItems(errorListItems);
         return errorResponse;
+    }
+
+    public static void installApplications(ProfileFeature feature, String deviceId) throws PolicyManagementException {
+        String username = "";
+        String appId = "";
+        try {
+            String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+            ApiApplicationKey apiApplicationKey = OAuthUtils.getClientCredentials(tenantDomain);
+            username = PrivilegedCarbonContext.getThreadLocalCarbonContext().getUserRealm().
+                    getRealmConfiguration().getAdminUserName() + AndroidConstants.ApplicationInstall.AT + tenantDomain;
+            AccessTokenInfo tokenInfo = OAuthUtils.getOAuthCredentials(apiApplicationKey, username);
+            String requestUrl = AndroidConstants.ApplicationInstall.APP_INSTALL_PROTOCOL +
+                    System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_HOST) +
+                    AndroidConstants.ApplicationInstall.COLON +
+                    System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_PORT) +
+                    AndroidConstants.ApplicationInstall.APP_INSTALL_CONTEXT;
+            JsonElement appListElement = new JsonParser().parse(feature.getContent().toString()).
+                    getAsJsonObject().get(AndroidConstants.ApplicationInstall.APP_INSTALL_CODE);
+            JsonArray appListArray = appListElement.getAsJsonArray();
+            for (JsonElement appElement : appListArray) {
+                appId = appElement.getAsJsonObject().
+                        get(AndroidConstants.ApplicationInstall.APP_INSTALL_ID).getAsString();
+                String payload = "{\"appId\": \"" + appId + "\", \"scheduleTime\":\"2013-12-25T15:25:30-05:00\"," +
+                        "\"deviceIds\": [\"{\\\"id\\\":\\\"" + deviceId + "\\\", \\\"type\\\":\\\"android\\\"}\"]}";
+                StringRequestEntity requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON,
+                        AndroidConstants.ApplicationInstall.ENCODING);
+                HttpClient httpClient = new HttpClient();
+                PostMethod request = new PostMethod(requestUrl);
+                request.addRequestHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION,
+                        AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE +
+                                tokenInfo.getAccessToken());
+                request.setRequestEntity(requestEntity);
+                httpClient.executeMethod(request);
+            }
+        } catch (UserStoreException e) {
+            throw new PolicyManagementException("Error while accessing the user store for user " + username, e);
+        } catch (APIManagerException e) {
+            throw new PolicyManagementException("Error while retrieving access token for Android device id: " +
+                    deviceId, e);
+        } catch (HttpException e) {
+            throw new PolicyManagementException("Error while calling the app store to install app id: " +
+                    appId + " on device with id: " + deviceId, e);
+        } catch (IOException e) {
+            throw new PolicyManagementException("Error while installing the app  with id: " + appId +
+                    " on device with id: " + deviceId, e);
+        }
     }
 
 }

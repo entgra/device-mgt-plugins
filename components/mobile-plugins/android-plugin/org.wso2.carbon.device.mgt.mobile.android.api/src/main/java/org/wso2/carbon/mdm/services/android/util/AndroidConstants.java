@@ -139,6 +139,30 @@ public final class AndroidConstants {
         public static final String IS_ACTIVE = "isActive";
     }
 
+    public final class ApplicationInstall {
+        private ApplicationInstall() {
+            throw new AssertionError();
+        }
+
+        public static final String APPLICATION_NAME = "device_type_android";
+        public static final String APP_INSTALL_FEATURE_CODE = "APP_INSTALL";
+        public static final String DEVICE_TYPE = "android";
+        public static final String DEFAULT_TOKEN_TYPE = "PRODUCTION";
+        public static final String DEFAULT_VALIDITY_PERIOD = "3600";
+        public static final String SUBSCRIPTION_SCOPE = "appm:subscribe";
+        public static final String APP_INSTALL_ID = "appId";
+        public static final String APP_INSTALL_CODE = "apps";
+        public static final String ENCODING = "UTF-8";
+        public static final String AT = "@";
+        public static final String COLON = ":";
+        public static final String IOT_CORE_HOST = "iot.core.host";
+        public static final String IOT_CORE_PORT = "iot.core.https.port";
+        public static final String APP_INSTALL_PROTOCOL = "https://";
+        public static final String APP_INSTALL_CONTEXT = "/api/appm/store/v1.1/apps/mobile/schedule-install";
+        public static final String AUTHORIZATION = "Authorization";
+        public static final String AUTHORIZATION_HEADER_VALUE = "Bearer ";
+    }
+
     public final class ErrorMessages {
         private ErrorMessages () { throw new AssertionError(); }
 
