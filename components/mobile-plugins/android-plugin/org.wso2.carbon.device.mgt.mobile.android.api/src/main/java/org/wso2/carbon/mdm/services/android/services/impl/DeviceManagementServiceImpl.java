@@ -272,8 +272,8 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                             getProfileFeaturesList();
                     for (ProfileFeature feature : effectiveProfileFeatures) {
                         if (feature.getFeatureCode().equalsIgnoreCase(AndroidConstants.
-                                ApplicationInstall.APP_INSTALL_FEATURE_CODE)) {
-                            AndroidDeviceUtils.installApplications(feature, deviceIdentifier.getId());
+                                ApplicationInstall.ENROLMENT_APP_INSTALL_FEATURE_CODE)) {
+                            AndroidDeviceUtils.installEnrolmentApplications(feature, deviceIdentifier.getId());
                             break;
                         }
                     }
