@@ -265,15 +265,16 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                                     operation, deviceIdentifiers);
                 }
                 PolicyManagerService policyManagerService = AndroidAPIUtils.getPolicyManagerService();
-                Policy effectivePolicy = policyManagerService.getEffectivePolicy(new DeviceIdentifier(androidDevice.getDeviceIdentifier(), device.getType()));
+                Policy effectivePolicy = policyManagerService.
+                        getEffectivePolicy(new DeviceIdentifier(androidDevice.getDeviceIdentifier(), device.getType()));
 
                 if (effectivePolicy != null) {
                     List<ProfileFeature> effectiveProfileFeatures = effectivePolicy.getProfile().
                             getProfileFeaturesList();
                     for (ProfileFeature feature : effectiveProfileFeatures) {
                         if (feature.getFeatureCode().equalsIgnoreCase(AndroidConstants.
-                                ApplicationInstall.ENROLMENT_APP_INSTALL_FEATURE_CODE)) {
-                            AndroidDeviceUtils.installEnrolmentApplications(feature, deviceIdentifier.getId());
+                                ApplicationInstall.ENROLLMENT_APP_INSTALL_FEATURE_CODE)) {
+                            AndroidDeviceUtils.installEnrollmentApplications(feature, deviceIdentifier.getId());
                             break;
                         }
                     }

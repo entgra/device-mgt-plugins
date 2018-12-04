@@ -472,7 +472,7 @@ public class AndroidDeviceUtils {
         return errorResponse;
     }
 
-    public static void installEnrolmentApplications(ProfileFeature feature, String deviceId)
+    public static void installEnrollmentApplications(ProfileFeature feature, String deviceId)
             throws PolicyManagementException {
         String username = "";
         String appId = "";
@@ -482,17 +482,17 @@ public class AndroidDeviceUtils {
             username = PrivilegedCarbonContext.getThreadLocalCarbonContext().getUserRealm().
                     getRealmConfiguration().getAdminUserName() + AndroidConstants.ApplicationInstall.AT + tenantDomain;
             AccessTokenInfo tokenInfo = OAuthUtils.getOAuthCredentials(apiApplicationKey, username);
-            String requestUrl = AndroidConstants.ApplicationInstall.ENROLMENT_APP_INSTALL_PROTOCOL +
+            String requestUrl = AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_PROTOCOL +
                     System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_HOST) +
                     AndroidConstants.ApplicationInstall.COLON +
                     System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_PORT) +
-                    AndroidConstants.ApplicationInstall.ENROLMENT_APP_INSTALL_CONTEXT;
+                    AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CONTEXT;
             JsonElement appListElement = new JsonParser().parse(feature.getContent().toString()).
-                    getAsJsonObject().get(AndroidConstants.ApplicationInstall.ENROLMENT_APP_INSTALL_CODE);
+                    getAsJsonObject().get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
             JsonArray appListArray = appListElement.getAsJsonArray();
             for (JsonElement appElement : appListArray) {
                 appId = appElement.getAsJsonObject().
-                        get(AndroidConstants.ApplicationInstall.ENROLMENT_APP_INSTALL_ID).getAsString();
+                        get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_ID).getAsString();
                 String payload = "{\"appId\": \"" + appId + "\", \"scheduleTime\":\"2013-12-25T15:25:30-05:00\"," +
                         "\"deviceIds\": [\"{\\\"id\\\":\\\"" + deviceId + "\\\", \\\"type\\\":\\\"android\\\"}\"]}";
                 StringRequestEntity requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON,
@@ -511,10 +511,10 @@ public class AndroidDeviceUtils {
             throw new PolicyManagementException("Error while retrieving access token for Android device id: " +
                     deviceId, e);
         } catch (HttpException e) {
-            throw new PolicyManagementException("Error while calling the app store to install enrolment app with id: " +
-                    appId + " on device with id: " + deviceId, e);
+            throw new PolicyManagementException("Error while calling the app store to install enrollment app with id: "
+                    + appId + " on device with id: " + deviceId, e);
         } catch (IOException e) {
-            throw new PolicyManagementException("Error while installing the enrolment app with id: " + appId +
+            throw new PolicyManagementException("Error while installing the enrollment app with id: " + appId +
                     " on device with id: " + deviceId, e);
         }
     }
