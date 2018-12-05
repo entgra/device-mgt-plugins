@@ -37,7 +37,9 @@ var androidOperationConstants = {
     "RUNTIME_PERMISSION_POLICY_OPERATION_CODE": "RUNTIME_PERMISSION_POLICY",
     "RUNTIME_PERMISSION_POLICY_OPERATION": "runtime-permission-policy",
     "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
-    "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE"
+    "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
+    "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
+    "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL"
 };
 
 /**
@@ -537,6 +539,24 @@ var validatePolicyProfile = function () {
             // Updating validationStatusArray with validationStatus
             validationStatusArray.push(validationStatus);
         }
+        if ($.inArray(androidOperationConstants["ENROLLMENT_APP_INSTALL_CODE"], configuredOperations) != -1) {
+            //If enrollment app install configured
+            operation = androidOperationConstants["ENROLLMENT_APP_INSTALL"];
+            var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
+            if($(enrollmentAppInstallAppList).length == 0) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Applications are not selected to be installed during device enrollment.",
+                    "erroneousFeature": operation
+                };
+            } else {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+            }
+            validationStatusArray.push(validationStatus);
+        }
     }
     // ending validation process
 
@@ -944,5 +964,31 @@ $(document).ready(function () {
         $(this).closest("[data-add-form-element=clone]").remove();
         setId(addFormContainer);
         showHideHelpText(addFormContainer);
+    });
+
+    // add app entry for enrollment-app-install
+    $(advanceOperations).on("click", "[data-click-event=add-enrollment-app]", function () {
+        $(this).attr("hidden", true);
+        $(this).siblings("a").removeAttr("hidden");
+        var appInstallContainer = $(this).siblings("[data-enrollment-app-install-details=" + $(this).attr("href") + "]");
+        var appInstallDetails = appInstallContainer.children();
+        var appInstallAppPackageName = appInstallDetails.data("enrollment-app-install-package-name");
+        var appInstallAppId = appInstallDetails.data("enrollment-app-install-app-id");
+        var appInstallAppName = appInstallDetails.data("enrollment-app-install-app-name");
+        var appInstallAppVersion = appInstallDetails.data("enrollment-app-install-app-version");
+        var addInputDiv = '<div data-enrollment-app-install="add-app-inputs" hidden>' +
+            '<input class="child-input" type="hidden" data-child-key="appId" value="' + appInstallAppId + '"/>' +
+            '<input class="child-input" type="hidden" data-child-key="appName" value="' + appInstallAppName + '"/>' +
+            '<input class="child-input" type="hidden" data-child-key="packageName" value="' + appInstallAppPackageName + '"/>' +
+            '<input class="child-input" type="hidden" data-child-key="version"  value="' + appInstallAppVersion  + '"/></div>';
+        appInstallContainer.append(addInputDiv);
+    });
+
+    // remove app entry for enrollment-app-install
+    $(advanceOperations).on("click", "[data-click-event=remove-enrollment-app]", function () {
+        $(this).attr("hidden", true);
+        $(this).siblings("a").removeAttr("hidden");
+        var appInstallContainer = $(this).siblings("[data-enrollment-app-install-details=" + $(this).attr("href") + "]");
+        appInstallContainer.children("div").remove();
     });
 });

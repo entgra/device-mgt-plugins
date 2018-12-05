@@ -79,7 +79,9 @@ var androidOperationModule = function () {
         "RUNTIME_PERMISSION_POLICY_OPERATION": "runtime-permission-policy",
         "RUNTIME_PERMISSION_POLICY_OPERATION_CODE": "RUNTIME_PERMISSION_POLICY",
         "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
-        "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE"
+        "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
+        "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
+        "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL"
     };
 
     /**
@@ -175,6 +177,11 @@ var androidOperationModule = function () {
             case androidOperationConstants["KIOSK_APPS_CODE"]:
                 payload = {
                     "cosuWhitelistedApplications": operationPayload["whitelistedApplications"]
+                };
+                break;
+            case androidOperationConstants["ENROLLMENT_APP_INSTALL_CODE"]:
+                payload = {
+                    "enrollmentAppInstall": operationPayload["enrollmentAppInstall"]
                 };
                 break;
         }
@@ -381,6 +388,14 @@ var androidOperationModule = function () {
                 payload = {
                     "operation": {
                         "whitelistedApplications": operationData["cosuWhitelistedApplications"]
+                    }
+                };
+                break;
+            case androidOperationConstants["ENROLLMENT_APP_INSTALL_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "enrollmentAppInstall": operationData["enrollmentAppInstall"]
                     }
                 };
                 break;
@@ -752,6 +767,31 @@ var androidOperationModule = function () {
                             '</th> <th>' + uiPayload.restrictedApplications[i].packageName + '</th></tr>');
                     }
 
+                }
+
+                // only for enrollment-app-install
+                if (operationCode == "ENROLLMENT_APP_INSTALL" && key == "enrollmentAppInstall") {
+                    if ($("#install-app-enrollment").data("type") == "edit") {
+                        var i;
+                        for (i = 0; i < uiPayload.enrollmentAppInstall.length; i++) {
+                            $(".enrollment-app-install-details").each(function() {
+                                if ($(this).data("enrollment-app-install-app-id") ==
+                                    uiPayload.enrollmentAppInstall[i].appId) {
+                                    $(this).parent().parent().find("a").filterByData("click-event",
+                                        "add-enrollment-app").click();
+                                }
+                            });
+                        }
+                    } else {
+                        var i;
+                        for (i = 0; i < uiPayload.enrollmentAppInstall.length; i++) {
+                            var content = '<tr><td data-title="enrollment-app-install-app-name">' +
+                                uiPayload.enrollmentAppInstall[i].appName +
+                                '</td><td data-title="enrollment-app-install-app-name">' +
+                                uiPayload.enrollmentAppInstall[i].version + '</td></tr>';
+                            $('[data-add-form-container="#enrollment-app-install-grid"]').append(content);
+                        }
+                    }
                 }
             }
         );

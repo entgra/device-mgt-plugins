@@ -114,6 +114,16 @@
                     class="fw fw-error"></i></span>
         </a>
         {{/unless}}
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('enrollment-app-install', this)">
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-application fw-stack-2x"></i>
+              </span>
+            Enrollment Application Install
+            <span id="enrollment-app-install-configured" class="has-configured status-icon hidden"><i
+                    class="fw fw-success"></i></span>
+            <span id="enrollment-app-install-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="enrollment-app-install-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
     </div>
     <div class="wr-hidden-operations-content col-lg-8">
         <!-- passcode-policy -->
@@ -1909,5 +1919,56 @@
                 </div>
             </div>
         </div>
+        <!--enrolment-app-install-->
+        <div class="wr-hidden-operation" data-operation="enrollment-app-install">
+            <div class="panel panel-default operation-data" data-operation="enrollment-app-install"
+                 data-operation-code="ENROLLMENT_APP_INSTALL">
+                <div id="enrollment-app-install-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Enrollment Application Install
+                        <label class="wr-input-control switch hidden" data-toggle="collapse"
+                               data-target="#enrollment-app-install-body">
+                            <input type="checkbox"/>
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                    </h2>
+                    <div class="panel-title-description">
+                        This configuration can be used to install applications during Android device enrollment.
+                        <div class="message message-info">
+                            <i class="icon fw fw-info"></i>
+                            This configuration will be applied <b>only during Android device enrollment</b>.
+                        </div>
+                    </div>
+                </div>
+                <div id="enrollment-app-install-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                     aria-labelledby="enrollment-app-install-body">
+                    <hr/>
+                    <div id="enrollment-app-install-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <label class="wr-input-label">
+                        Selected Enrollment Applications
+                    </label>
+
+                    <div id="install-app-enrollment"
+                         class="operationDataKeys grouped-array-input multi-column-key-value-pair-array"
+                         data-key="enrollmentAppInstall" data-column-count="4" data-type="view">
+                        <table class="table table-responsive table-striped" id="enrollment-app-install-table">
+                            <thead>
+                            <tr class="sort-row">
+                                <th>Application Name</th>
+                                <th>Version</th>
+                            </tr>
+                            </thead>
+                            <tbody data-add-form-container="#enrollment-app-install-grid">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/enrolment-app-install-->
     </div>
 </div>
