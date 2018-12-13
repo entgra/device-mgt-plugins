@@ -146,7 +146,6 @@ public final class AndroidConstants {
 
         public static final String APPLICATION_NAME = "device_type_android";
         public static final String ENROLLMENT_APP_INSTALL_FEATURE_CODE = "ENROLLMENT_APP_INSTALL";
-        public static final String DEVICE_TYPE = "android";
         public static final String DEFAULT_TOKEN_TYPE = "PRODUCTION";
         public static final String DEFAULT_VALIDITY_PERIOD = "3600";
         public static final String SUBSCRIPTION_SCOPE = "appm:subscribe";

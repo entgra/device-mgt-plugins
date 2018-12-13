@@ -474,45 +474,48 @@ public class AndroidDeviceUtils {
 
     public static void installEnrollmentApplications(ProfileFeature feature, String deviceId)
             throws PolicyManagementException {
-        String username = "";
         String appId = "";
+        String payload;
+        StringRequestEntity requestEntity;
+        HttpClient httpClient;
+        PostMethod request;
         try {
             String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
             ApiApplicationKey apiApplicationKey = OAuthUtils.getClientCredentials(tenantDomain);
-            username = PrivilegedCarbonContext.getThreadLocalCarbonContext().getUserRealm().
-                    getRealmConfiguration().getAdminUserName() + AndroidConstants.ApplicationInstall.AT + tenantDomain;
+            String username = PrivilegedCarbonContext.getThreadLocalCarbonContext().getUserRealm()
+                    .getRealmConfiguration().getAdminUserName() + AndroidConstants.ApplicationInstall.AT + tenantDomain;
             AccessTokenInfo tokenInfo = OAuthUtils.getOAuthCredentials(apiApplicationKey, username);
             String requestUrl = AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_PROTOCOL +
                     System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_HOST) +
                     AndroidConstants.ApplicationInstall.COLON +
                     System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_PORT) +
                     AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CONTEXT;
-            JsonElement appListElement = new JsonParser().parse(feature.getContent().toString()).
-                    getAsJsonObject().get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
+            JsonElement appListElement = new JsonParser().parse(feature.getContent().toString()).getAsJsonObject()
+                    .get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
             JsonArray appListArray = appListElement.getAsJsonArray();
             for (JsonElement appElement : appListArray) {
                 appId = appElement.getAsJsonObject().
                         get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_ID).getAsString();
-                String payload = "{\"appId\": \"" + appId + "\", \"scheduleTime\":\"2013-12-25T15:25:30-05:00\"," +
+                payload = "{\"appId\": \"" + appId + "\", \"scheduleTime\":\"2013-12-25T15:25:30-05:00\"," +
                         "\"deviceIds\": [\"{\\\"id\\\":\\\"" + deviceId + "\\\", \\\"type\\\":\\\"android\\\"}\"]}";
-                StringRequestEntity requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON,
+                requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON,
                         AndroidConstants.ApplicationInstall.ENCODING);
-                HttpClient httpClient = new HttpClient();
-                PostMethod request = new PostMethod(requestUrl);
+                httpClient = new HttpClient();
+                request = new PostMethod(requestUrl);
                 request.addRequestHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION,
-                        AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE +
-                                tokenInfo.getAccessToken());
+                        AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo.getAccessToken());
                 request.setRequestEntity(requestEntity);
                 httpClient.executeMethod(request);
             }
         } catch (UserStoreException e) {
-            throw new PolicyManagementException("Error while accessing the user store for user " + username, e);
+            throw new PolicyManagementException("Error while accessing user store for user with iOS device id: " +
+                    deviceId, e);
         } catch (APIManagerException e) {
             throw new PolicyManagementException("Error while retrieving access token for Android device id: " +
                     deviceId, e);
         } catch (HttpException e) {
-            throw new PolicyManagementException("Error while calling the app store to install enrollment app with id: "
-                    + appId + " on device with id: " + deviceId, e);
+            throw new PolicyManagementException("Error while calling the app store to install enrollment app with " +
+                    "id: " + appId + " on device with id: " + deviceId, e);
         } catch (IOException e) {
             throw new PolicyManagementException("Error while installing the enrollment app with id: " + appId +
                     " on device with id: " + deviceId, e);

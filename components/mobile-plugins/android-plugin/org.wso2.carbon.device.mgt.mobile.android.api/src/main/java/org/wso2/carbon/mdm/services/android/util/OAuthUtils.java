@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2018, Entgra (Pvt) LTD. (http://www.entgra.io) All Rights Reserved.
+ * Copyright (c) 2018, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- * Entgra (Pvt) LTD. licenses this file to you under the Apache License,
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
@@ -40,7 +40,7 @@ public class OAuthUtils {
             throws UserStoreException, APIManagerException {
         ApiRegistrationProfile registrationProfile = new ApiRegistrationProfile();
         registrationProfile.setApplicationName(AndroidConstants.ApplicationInstall.APPLICATION_NAME);
-        registrationProfile.setTags(new String[]{AndroidConstants.ApplicationInstall.DEVICE_TYPE});
+        registrationProfile.setTags(new String[]{AndroidConstants.DEVICE_TYPE_ANDROID});
         registrationProfile.setAllowedToAllDomains(false);
         registrationProfile.setMappingAnExistingOAuthApp(false);
         return getCredentials(registrationProfile, tenantDomain);
