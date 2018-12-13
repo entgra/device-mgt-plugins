@@ -723,34 +723,55 @@ var androidOperationModule = function () {
                     } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
                         // generating input fields to populate complex value
                         if (value) {
-                            for (i = 0; i < value.length; ++i) {
-                                operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                            if (operationDataObj.hasClass("specific-enrollment-app-install")) {
+                                if ($(".enrollment-app-install-input", this).length > 0) {
+                                    for (i=0; i<value.length; i++) {
+                                        $(".enrollment-app-install-input", this).each(function() {
+                                            childInput = $(this);
+                                            var childInputKey = childInput.data("child-key");
+                                            if (childInputKey === "appId" && value[i].appId === childInput.val()) {
+                                                childInput.parent().find("a").filterByData("click-event", "add-enrollment-app").click();
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    for (i=0; i<value.length; i++) {
+                                        var content = '<tr><td data-title="enrollment-app-install-app-name">'
+                                            + value[i].appName + '</td><td data-title="enrollment-app-install-version">'
+                                            + value[i].version + '</td></tr>';
+                                        $('[data-add-form-container="#enrollment-app-install-grid"]').append(content);
+                                    }
+                                }
+                            } else {
+                                for (i = 0; i < value.length; ++i) {
+                                    operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                                }
+                                columnCount = operationDataObj.data("column-count");
+                                var multiColumnKeyValuePairArrayIndex = 0;
+                                // traversing through each child input
+                                $(".child-input", this).each(function () {
+                                    childInput = $(this);
+                                    var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
+                                    var childInputKey = childInput.data("child-key");
+                                    var childInputValue = multiColumnKeyValuePair[childInputKey];
+                                    // populating extracted value in the UI according to the input type
+                                    if (childInput.is(":text") ||
+                                        childInput.is("textarea") ||
+                                        childInput.is(":password") ||
+                                        childInput.is("input[type=hidden]") ||
+                                        childInput.is("select")) {
+                                        childInput.val(childInputValue);
+                                    } else if (childInput.is(":checkbox")) {
+                                        operationDataObj.prop("checked", childInputValue);
+                                    }
+                                    // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
+                                    if ((childInputIndex % columnCount) == (columnCount - 1)) {
+                                        multiColumnKeyValuePairArrayIndex++;
+                                    }
+                                    // incrementing childInputIndex
+                                    childInputIndex++;
+                                });
                             }
-                            columnCount = operationDataObj.data("column-count");
-                            var multiColumnKeyValuePairArrayIndex = 0;
-                            // traversing through each child input
-                            $(".child-input", this).each(function () {
-                                childInput = $(this);
-                                var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
-                                var childInputKey = childInput.data("child-key");
-                                var childInputValue = multiColumnKeyValuePair[childInputKey];
-                                // populating extracted value in the UI according to the input type
-                                if (childInput.is(":text") ||
-                                    childInput.is("textarea") ||
-                                    childInput.is(":password") ||
-                                    childInput.is("input[type=hidden]") ||
-                                    childInput.is("select")) {
-                                    childInput.val(childInputValue);
-                                } else if (childInput.is(":checkbox")) {
-                                    operationDataObj.prop("checked", childInputValue);
-                                }
-                                // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
-                                if ((childInputIndex % columnCount) == (columnCount - 1)) {
-                                    multiColumnKeyValuePairArrayIndex++;
-                                }
-                                // incrementing childInputIndex
-                                childInputIndex++;
-                            });
                         }
                     }
                 }
@@ -767,31 +788,6 @@ var androidOperationModule = function () {
                             '</th> <th>' + uiPayload.restrictedApplications[i].packageName + '</th></tr>');
                     }
 
-                }
-
-                // only for enrollment-app-install
-                if (operationCode == "ENROLLMENT_APP_INSTALL" && key == "enrollmentAppInstall") {
-                    if ($("#install-app-enrollment").data("type") == "edit") {
-                        var i;
-                        for (i = 0; i < uiPayload.enrollmentAppInstall.length; i++) {
-                            $(".enrollment-app-install-details").each(function() {
-                                if ($(this).data("enrollment-app-install-app-id") ==
-                                    uiPayload.enrollmentAppInstall[i].appId) {
-                                    $(this).parent().parent().find("a").filterByData("click-event",
-                                        "add-enrollment-app").click();
-                                }
-                            });
-                        }
-                    } else {
-                        var i;
-                        for (i = 0; i < uiPayload.enrollmentAppInstall.length; i++) {
-                            var content = '<tr><td data-title="enrollment-app-install-app-name">' +
-                                uiPayload.enrollmentAppInstall[i].appName +
-                                '</td><td data-title="enrollment-app-install-app-name">' +
-                                uiPayload.enrollmentAppInstall[i].version + '</td></tr>';
-                            $('[data-add-form-container="#enrollment-app-install-grid"]').append(content);
-                        }
-                    }
                 }
             }
         );

@@ -1872,8 +1872,8 @@
                     </label>
 
                     <div id="install-app-enrollment"
-                         class="operationDataKeys grouped-array-input multi-column-key-value-pair-array"
-                         data-key="enrollmentAppInstall" data-column-count="4" data-type="create">
+                         class="operationDataKeys grouped-array-input multi-column-key-value-pair-array specific-enrollment-app-install"
+                         data-key="enrollmentAppInstall" data-column-count="4">
                         <table class="table table-responsive table-striped data-table" id="enrollment-app-install-table">
                             <thead>
                                 <tr class="sort-row">
@@ -1883,11 +1883,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            {{#each androidstoreapps}}
+                            {{#each storeapps}}
                                 <tr data-add-form-container="#enrollment-app-install-grid">
-                                    <td data-title="enrollment-app-install-app-name">{{this.appName}}</td>
-                                    <td data-title="enrollment-app-install-app-name">{{this.version}}</td>
+                                    <td data-title="enrollment-app-install-app-name">
+                                        {{this.appName}}
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="appName" value="{{this.appName}}"/>
+                                    </td>
+                                    <td data-title="enrollment-app-install-app-name">
+                                        {{this.version}}
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="version" value="{{this.version}}"/>
+                                    </td>
                                     <td data-title="enrollment-app-install-app-selection">
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="packageName" value="{{this.packageName}}"/>
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="appId"  value="{{this.appId}}"/>
                                         <a href="#enrollment-app-install-grid" data-click-event="add-enrollment-app">
                                             <span>
                                                 <i class="fa fa-plus-circle fa-2x"></i>
@@ -1898,14 +1906,6 @@
                                                 <i class="fa fa-minus-circle fa-2x"></i>
                                             </span>
                                         </a>
-                                        <div hidden data-enrollment-app-install-details="#enrollment-app-install-grid">
-                                            <span id="logged-in-user"
-                                                  data-enrollment-app-install-app-id="{{this.appId}}"
-                                                  data-enrollment-app-install-app-name="{{this.appName}}"
-                                                  data-enrollment-app-install-package-name="{{this.packageName}}"
-                                                  data-enrollment-app-install-app-version="{{this.version}}" >
-                                            </span>
-                                        </div>
                                     </td>
                                 </tr>
                             {{else}}
