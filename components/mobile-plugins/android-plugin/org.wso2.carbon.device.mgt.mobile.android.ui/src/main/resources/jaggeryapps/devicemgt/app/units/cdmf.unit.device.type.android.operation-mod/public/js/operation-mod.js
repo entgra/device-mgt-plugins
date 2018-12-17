@@ -752,6 +752,7 @@ var androidOperationModule = function () {
                                         });
                                     }
                                 } else {
+                                    $('[data-add-form-container="#enrollment-app-install-grid"]').empty();
                                     for (i=0; i<value.length; i++) {
                                         var content = '<tr><td data-title="enrollment-app-install-app-name">'
                                             + value[i].appName + '</td><td data-title="enrollment-app-install-version">'

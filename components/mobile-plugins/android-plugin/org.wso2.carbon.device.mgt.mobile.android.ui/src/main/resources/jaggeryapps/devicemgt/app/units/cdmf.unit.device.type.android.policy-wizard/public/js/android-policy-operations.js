@@ -770,6 +770,13 @@ var showHideHelpText = function (addFormContainer) {
     }
 };
 
+var applyDataTable = function() {
+    $("#enrollment-app-install-table").datatables_extended({
+        ordering: false,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+};
+
 $(document).ready(function () {
     // Maintains an array of configured features of the profile
     var advanceOperations = ".wr-advance-operations";
