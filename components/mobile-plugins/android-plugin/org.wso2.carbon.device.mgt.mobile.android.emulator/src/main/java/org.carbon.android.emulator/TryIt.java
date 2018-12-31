@@ -269,14 +269,14 @@ public class TryIt {
         checkForSystemImages();
         if (!new File(wso2AvdLocation).isDirectory()) {
             Scanner read = new Scanner(System.in, StandardCharsets.UTF_8.toString());
-            System.out.print("Do you want to create WSO2_AVD with default configs (y/n)?: ");
+            System.out.print("Do you want to create Entgra_AVD with default configs (y/n)?: ");
             if (read.next().toLowerCase().matches("y")) {
                 createAVD();
                 return;
             }
         }
         System.out.println("+----------------------------------------------------------------+");
-        System.out.println("|                        WSO2 Android TryIt                      |");
+        System.out.println("|                        Entgra Android TryIt                      |");
         System.out.println("+----------------------------------------------------------------+");
 
         emulatorLocation = androidSdkHome + File.separator + "tools" + File.separator + "emulator";
