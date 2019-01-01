@@ -14,6 +14,23 @@
  * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ *
+ * Copyright (c) 2018, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 var configuredOperations = [];
@@ -37,7 +54,9 @@ var androidOperationConstants = {
     "RUNTIME_PERMISSION_POLICY_OPERATION_CODE": "RUNTIME_PERMISSION_POLICY",
     "RUNTIME_PERMISSION_POLICY_OPERATION": "runtime-permission-policy",
     "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
-    "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE"
+    "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
+    "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
+    "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL"
 };
 
 /**
@@ -537,6 +556,24 @@ var validatePolicyProfile = function () {
             // Updating validationStatusArray with validationStatus
             validationStatusArray.push(validationStatus);
         }
+        if ($.inArray(androidOperationConstants["ENROLLMENT_APP_INSTALL_CODE"], configuredOperations) != -1) {
+            //If enrollment app install configured
+            operation = androidOperationConstants["ENROLLMENT_APP_INSTALL"];
+            var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
+            if($(enrollmentAppInstallAppList).length == 0) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Applications are not selected to be installed during device enrollment.",
+                    "erroneousFeature": operation
+                };
+            } else {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+            }
+            validationStatusArray.push(validationStatus);
+        }
     }
     // ending validation process
 
@@ -771,6 +808,13 @@ var showHideHelpText = function (addFormContainer) {
     }
 };
 
+var applyDataTable = function() {
+    $("#enrollment-app-install-table").datatables_extended({
+        ordering: false,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+};
+
 $(document).ready(function () {
     // Maintains an array of configured features of the profile
     var advanceOperations = ".wr-advance-operations";
@@ -944,5 +988,23 @@ $(document).ready(function () {
         $(this).closest("[data-add-form-element=clone]").remove();
         setId(addFormContainer);
         showHideHelpText(addFormContainer);
+    });
+
+    // add app entry for enrollment-app-install
+    $(advanceOperations).on("click", "[data-click-event=add-enrollment-app]", function () {
+        $(this).attr("hidden", true);
+        $(this).siblings("a").removeAttr("hidden");
+        $(this).parent().parent().find("input").each(function () {
+            $(this).addClass("child-input");
+        });
+    });
+
+    // remove app entry for enrollment-app-install
+    $(advanceOperations).on("click", "[data-click-event=remove-enrollment-app]", function () {
+        $(this).attr("hidden", true);
+        $(this).siblings("a").removeAttr("hidden");
+        $(this).parent().parent().find("input").each(function () {
+            $(this).removeClass("child-input");
+        });
     });
 });
