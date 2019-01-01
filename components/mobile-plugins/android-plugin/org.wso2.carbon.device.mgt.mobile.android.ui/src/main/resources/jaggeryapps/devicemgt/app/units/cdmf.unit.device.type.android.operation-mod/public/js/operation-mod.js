@@ -14,6 +14,23 @@
  * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ *
+ * Copyright (c) 2018, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 var androidOperationModule = function () {
@@ -79,7 +96,9 @@ var androidOperationModule = function () {
         "RUNTIME_PERMISSION_POLICY_OPERATION": "runtime-permission-policy",
         "RUNTIME_PERMISSION_POLICY_OPERATION_CODE": "RUNTIME_PERMISSION_POLICY",
         "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
-        "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE"
+        "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
+        "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
+        "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL"
     };
 
     /**
@@ -175,6 +194,11 @@ var androidOperationModule = function () {
             case androidOperationConstants["KIOSK_APPS_CODE"]:
                 payload = {
                     "cosuWhitelistedApplications": operationPayload["whitelistedApplications"]
+                };
+                break;
+            case androidOperationConstants["ENROLLMENT_APP_INSTALL_CODE"]:
+                payload = {
+                    "enrollmentAppInstall": operationPayload["enrollmentAppInstall"]
                 };
                 break;
         }
@@ -381,6 +405,14 @@ var androidOperationModule = function () {
                 payload = {
                     "operation": {
                         "whitelistedApplications": operationData["cosuWhitelistedApplications"]
+                    }
+                };
+                break;
+            case androidOperationConstants["ENROLLMENT_APP_INSTALL_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "enrollmentAppInstall": operationData["enrollmentAppInstall"]
                     }
                 };
                 break;
@@ -708,34 +740,56 @@ var androidOperationModule = function () {
                     } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
                         // generating input fields to populate complex value
                         if (value) {
-                            for (i = 0; i < value.length; ++i) {
-                                operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                            if (operationDataObj.hasClass("specific-enrollment-app-install")) {
+                                if ($(".enrollment-app-install-input", this).length > 0) {
+                                    for (i=0; i<value.length; i++) {
+                                        $(".enrollment-app-install-input", this).each(function() {
+                                            childInput = $(this);
+                                            var childInputKey = childInput.data("child-key");
+                                            if (childInputKey === "appId" && value[i].appId === childInput.val()) {
+                                                childInput.parent().find("a").filterByData("click-event", "add-enrollment-app").click();
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    $('[data-add-form-container="#enrollment-app-install-grid"]').empty();
+                                    for (i=0; i<value.length; i++) {
+                                        var content = '<tr><td data-title="enrollment-app-install-app-name">'
+                                            + value[i].appName + '</td><td data-title="enrollment-app-install-version">'
+                                            + value[i].version + '</td></tr>';
+                                        $('[data-add-form-container="#enrollment-app-install-grid"]').append(content);
+                                    }
+                                }
+                            } else {
+                                for (i = 0; i < value.length; ++i) {
+                                    operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                                }
+                                columnCount = operationDataObj.data("column-count");
+                                var multiColumnKeyValuePairArrayIndex = 0;
+                                // traversing through each child input
+                                $(".child-input", this).each(function () {
+                                    childInput = $(this);
+                                    var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
+                                    var childInputKey = childInput.data("child-key");
+                                    var childInputValue = multiColumnKeyValuePair[childInputKey];
+                                    // populating extracted value in the UI according to the input type
+                                    if (childInput.is(":text") ||
+                                        childInput.is("textarea") ||
+                                        childInput.is(":password") ||
+                                        childInput.is("input[type=hidden]") ||
+                                        childInput.is("select")) {
+                                        childInput.val(childInputValue);
+                                    } else if (childInput.is(":checkbox")) {
+                                        operationDataObj.prop("checked", childInputValue);
+                                    }
+                                    // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
+                                    if ((childInputIndex % columnCount) == (columnCount - 1)) {
+                                        multiColumnKeyValuePairArrayIndex++;
+                                    }
+                                    // incrementing childInputIndex
+                                    childInputIndex++;
+                                });
                             }
-                            columnCount = operationDataObj.data("column-count");
-                            var multiColumnKeyValuePairArrayIndex = 0;
-                            // traversing through each child input
-                            $(".child-input", this).each(function () {
-                                childInput = $(this);
-                                var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
-                                var childInputKey = childInput.data("child-key");
-                                var childInputValue = multiColumnKeyValuePair[childInputKey];
-                                // populating extracted value in the UI according to the input type
-                                if (childInput.is(":text") ||
-                                    childInput.is("textarea") ||
-                                    childInput.is(":password") ||
-                                    childInput.is("input[type=hidden]") ||
-                                    childInput.is("select")) {
-                                    childInput.val(childInputValue);
-                                } else if (childInput.is(":checkbox")) {
-                                    operationDataObj.prop("checked", childInputValue);
-                                }
-                                // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
-                                if ((childInputIndex % columnCount) == (columnCount - 1)) {
-                                    multiColumnKeyValuePairArrayIndex++;
-                                }
-                                // incrementing childInputIndex
-                                childInputIndex++;
-                            });
                         }
                     }
                 }
