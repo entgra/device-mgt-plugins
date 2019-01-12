@@ -56,6 +56,17 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('global-proxy', this)">
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-proxy fw-stack-2x"></i>
+                </span>
+            Global Proxy Settings
+            <span id="global-proxy-configured" class="has-configured status-icon hidden">
+                <i class="fw fw-success"></i>
+            </span>
+            <span id="global-proxy-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="global-proxy-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('vpn', this)">
                 <span class="wr-hidden-operations-icon fw-stack">
                     <i class="fw fw-vpn fw-stack-2x"></i>
@@ -949,6 +960,102 @@
             </div>
         </div>
         <!-- /wi-fi -->
+
+        <!-- global-proxy -->
+        <div class="wr-hidden-operation" data-operation="global-proxy">
+            <div class="panel panel-default operation-data" data-operation="global-proxy" data-operation-code="GLOBAL_PROXY">
+                <div id="global-proxy-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Global Proxy Settings
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#global-proxy-body">
+                            <input type="checkbox"/>
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                    </h2>
+                    <div class="panel-title-description">
+                        <p>
+                            This configurations can be used to set a network-independent global HTTP proxy on an Android
+                            device. Once this configuration profile is installed on a device, all the network traffic
+                            will be routed through the proxy server.
+                        </p>
+                        <p>
+                            <b>This method requires the caller to be the device owner.</b>
+                        </p>
+                        <p>
+                            This proxy is only a recommendation and it is possible that some apps will ignore it.
+                        </p>
+                    </div>
+                </div>
+                <div id="global-proxy-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                     aria-labelledby="global-proxy-body">
+                    <hr/>
+                    Please note that * sign represents required fields of data.
+                    <br>
+                    <br>
+                    <div id="global-proxy-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="proxy-host">
+                            Proxy Host
+                            <span class="helper required" title="Host name of the proxy server.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="proxy-host" class="form-control operationDataKeys" data-key="proxyHost"/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="proxy-port">
+                            Proxy Port
+                            <span class="helper required" title="The port which the proxy server is running.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <label id="proxyPortValidationText" class="wr-input-label hidden">
+                            Port number should be between 0 - 65535
+                        </label>
+                        <input id="proxy-port" class="form-control operationDataKeys" data-key="proxyPort"
+                               placeholder="[ Port number 0-65535 ]"/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="proxy-excl">
+                            Excluded List
+                            <span class="helper"
+                                  title="Hosts to exclude using the proxy on connections for. These hosts can use
+                                  wildcards such as *.example.com.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="proxy-excl" class="form-control operationDataKeys" data-key="proxyExclList"
+                               placeholder="[ Comma (,) separated list of proxy exclusions. These hosts can use
+                               wildcards such as *.example.com. ]"/>
+                    </div>
+                    <div class="wr-input-control" id="control-proxy-username">
+                        <label class="wr-input-label" for="proxy-username">
+                            Username
+                            <span class="helper" title="Username for the proxy server.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="proxy-username" class="form-control operationDataKeys"
+                               data-key="proxyUsername" maxlength="50"/>
+                    </div>
+                    <div class="wr-input-control" id="control-proxy-password">
+                        <label class="wr-input-label" for="proxy-password">
+                            Password
+                            <span class="helper" title="Password for the proxy server.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="proxy-password" type="password" class="form-control operationDataKeys"
+                               data-key="proxyPassword" maxlength="100"/>
+                    </div>
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+        <!-- /global-proxy -->
 
         <!--app-restriction-->
         <div class="wr-hidden-operation" data-operation="app-restriction">

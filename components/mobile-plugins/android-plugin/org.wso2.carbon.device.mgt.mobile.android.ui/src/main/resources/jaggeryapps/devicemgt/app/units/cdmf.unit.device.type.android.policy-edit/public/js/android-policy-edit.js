@@ -45,6 +45,8 @@ var androidOperationConstants = {
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION": "wifi",
     "WIFI_OPERATION_CODE": "WIFI",
+    "GLOBAL_PROXY_OPERATION": "global-proxy",
+    "GLOBAL_PROXY_OPERATION_CODE": "GLOBAL_PROXY",
     "VPN_OPERATION": "vpn",
     "VPN_OPERATION_CODE": "VPN",
     "APPLICATION_OPERATION": "app-restriction",
@@ -321,6 +323,57 @@ var validatePolicyProfile = function () {
 
             // updating validationStatusArray with validationStatus
             validationStatusArray.push(validationStatus);
+        }
+
+        // Validating PROXY
+        if ($.inArray(androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"], configuredOperations) !== -1) {
+            // if PROXY is configured
+            operation = androidOperationConstants["GLOBAL_PROXY_OPERATION"];
+            // initializing continueToCheckNextInputs to true
+            continueToCheckNextInputs = true;
+
+            var proxyHost = $("input#proxy-host").val();
+            var proxyPort = $("input#proxy-port").val();
+            if (!proxyHost) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Proxy server host name is required.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+
+            if (!proxyPort) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Proxy server port is required.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            } else if (!$.isNumeric(proxyPort)) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Proxy server port requires a number input.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            } else if (!inputIsValidAgainstRange(proxyPort, 0, 65535)) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Proxy server port is not within the range of valid port numbers.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+
+            // at-last, if the value of continueToCheckNextInputs is still true
+            // this means that no error is found
+            if (continueToCheckNextInputs) {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+            }
         }
 
         if ($.inArray(androidOperationConstants["VPN_OPERATION_CODE"], configuredOperations) != -1) {
