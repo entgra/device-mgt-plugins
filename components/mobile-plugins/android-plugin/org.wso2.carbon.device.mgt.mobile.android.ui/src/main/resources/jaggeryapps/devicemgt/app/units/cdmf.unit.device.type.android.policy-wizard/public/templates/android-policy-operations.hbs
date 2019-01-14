@@ -140,6 +140,16 @@
                         class="fw fw-error"></i></span>
             </a>
         {{/unless}}
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('enrollment-app-install', this)">
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-application fw-stack-2x"></i>
+              </span>
+            Enrollment Application Install
+            <span id="enrollment-app-install-configured" class="has-configured status-icon hidden"><i
+                    class="fw fw-success"></i></span>
+            <span id="enrollment-app-install-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="enrollment-app-install-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -1827,5 +1837,91 @@
                 </div>
             </div>
         </div>
+
+        <!--enrolment-app-install-->
+        <div class="wr-hidden-operation" data-operation="enrollment-app-install">
+            <div class="panel panel-default operation-data" data-operation="enrollment-app-install"
+                 data-operation-code="ENROLLMENT_APP_INSTALL">
+                <div id="enrollment-app-install-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Enrollment Application Install
+                        <label class="wr-input-control switch" data-toggle="collapse"
+                               data-target="#enrollment-app-install-body">
+                            <input type="checkbox"/>
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                    </h2>
+                    <div class="panel-title-description">
+                        Enforce applications to be installed during Android device enrollment.
+                        <div class="message message-info">
+                            <i class="icon fw fw-info"></i>
+                            This configuration will be applied <b>only during Android device enrollment</b>.
+                        </div>
+                    </div>
+                </div>
+                <div id="enrollment-app-install-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                     aria-labelledby="enrollment-app-install-body">
+                    <hr/>
+                    <div id="enrollment-app-install-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <label class="wr-input-label">
+                        Select Enrollment Applications
+                    </label>
+
+                    <div id="install-app-enrollment"
+                         class="operationDataKeys grouped-array-input multi-column-key-value-pair-array specific-enrollment-app-install"
+                         data-key="enrollmentAppInstall" data-column-count="4">
+                        <table class="table table-responsive table-striped data-table" id="enrollment-app-install-table">
+                            <thead>
+                                <tr class="sort-row">
+                                    <th>Application Name</th>
+                                    <th>Version</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {{#each storeapps}}
+                                <tr data-add-form-container="#enrollment-app-install-grid">
+                                    <td data-title="enrollment-app-install-app-name">
+                                        {{this.appName}}
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="appName" value="{{this.appName}}"/>
+                                    </td>
+                                    <td data-title="enrollment-app-install-app-name">
+                                        {{this.version}}
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="version" value="{{this.version}}"/>
+                                    </td>
+                                    <td data-title="enrollment-app-install-app-selection">
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="packageName" value="{{this.packageName}}"/>
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="appId"  value="{{this.appId}}"/>
+                                        <a href="#enrollment-app-install-grid" data-click-event="add-enrollment-app">
+                                            <span>
+                                                <i class="fa fa-plus-circle fa-2x"></i>
+                                            </span>
+                                        </a>
+                                        <a href="#enrollment-app-install-grid" data-click-event="remove-enrollment-app" hidden>
+                                            <span>
+                                                <i class="fa fa-minus-circle fa-2x"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {{else}}
+                                <tr>
+                                    <td>No android apps available in the store.</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/enrolment-app-install-->
     </div>
+    <script type="text/javascript">applyDataTable();</script>
 </div>
