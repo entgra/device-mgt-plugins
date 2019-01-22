@@ -14,6 +14,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ *
+ * Copyright (c) 2018, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.device.mgt.mobile.windows.api.common;
@@ -167,6 +184,7 @@ public final class PluginConstants {
 
         public static final String SYNCML_SOURCE = "Source";
         public static final String SYNCML_DATA = "Data";
+        public static final String SYNCML_META = "Meta";
         public static final String SYNCML_CMD = "Cmd";
         public static final String SYNCML_CHAL = "ChallengeTag";
         public static final String SYNCML_CMD_ID = "CmdID";
@@ -221,6 +239,7 @@ public final class PluginConstants {
         public static final String LONGITUDE = "LONGITUDE";
         public static final String LATITUDE = "LATITUDE";
 
+        public static final String DEVICE_UNENROLL_META_TYPE = "com.microsoft:mdm.unenrollment.userrequest";
     }
 
     /**
@@ -274,6 +293,7 @@ public final class PluginConstants {
         public static final String LONGITUDE = "LONGITUDE";
         public static final String LATITUDE = "LATITUDE";
         public static final String DEVICE_REBOOT = "DEVICE_REBOOT";
+        public static final String INSTALL_ENTERPRISE_APPLICATION = "INSTALL_ENTERPRISE_APPLICATION";
     }
 
     /**
@@ -357,5 +377,46 @@ public final class PluginConstants {
         public static final String DEVICE_ID = "DeviceID";
         public static final String IMEI = "MobileEquipmentId";
         public static final String TYPE = "DeviceType";
+    }
+
+    public final class ApplicationInstallProperties {
+        private ApplicationInstallProperties() {
+            throw new AssertionError();
+        }
+        public static final String APPLICATION = "Application";
+        public static final String TYPE_APPX = "APPX";
+        public static final String TYPE_MSI = "MSI";
+        public static final String PACKAGE_FAMILY_NAME = "PackageFamilyName";
+        public static final String LICENSE_ID = "LicenseID";
+        public static final String PRODUCT_ID = "ProductId";
+        public static final String CERT_HASH = "CertHash";
+
+        //XML Related Constants
+        public static final String ID = "id";
+        public static final String PACKAGE_URI = "PackageUri";
+        public static final String DEPENDENCIES = "Dependencies";
+        public static final String DEPENDENCY = "Dependency";
+        public static final String CONTENT_URL = "ContentURL";
+        public static final String CONTENT_URL_LIST = "ContentURLList";
+        public static final String DOWNLOAD = "Download";
+        public static final String COMMAND_LINE = "CommandLine";
+        public static final String COMMAND_LINE_VALUE = "/quiet";
+        public static final String FILE_HASH = "FileHash";
+        public static final String VALIDATION = "Validation";
+        public static final String ENFORCEMENT = "Enforcement";
+        public static final String TIMEOUT = "TimeOut";
+        public static final String RETRY_COUNT = "RetryCount";
+        public static final String RETRY_INTERVAL = "RetryInterval";
+        public static final String PRODUCT = "Product";
+        public static final String MSI_INSTALL_JOB = "MsiInstallJob";
+        public static final String VERSION = "version";
+        public static final String VERSION_VALUE = "1.0.0";
+        public static final String TIMEOUT_VALUE = "5";
+        public static final String RETRY_COUNT_VALUE = "3";
+        public static final String RETRY_INTERVAL_VALUE = "5";
+        public static final String LICENSE = "License";
+        public static final String CONTENT = "Content";
+        public static final String URL_ESCAPED_OPEN_CURLY = "%7B";
+        public static final String URL_ESCAPED_CLOSE_CURLY = "%7D";
     }
 }
