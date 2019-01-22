@@ -166,9 +166,9 @@ public class EnterpriseApplication extends WindowsOperation {
         ItemTag itemTag = new ItemTag();
         MetaTag metaTag = new MetaTag();
         TargetTag targetTag = new TargetTag();
-        targetTag.setLocURI(operationCode.replace(replaceOld, replaceNew));
         Document document;
         Element dependencyElement;
+        targetTag.setLocURI(operationCode.replace(replaceOld, replaceNew));
         metaTag.setFormat(Constants.META_FORMAT_XML);
         try {
             if (PluginConstants.ApplicationInstallProperties.TYPE_APPX.equals(appType)) {
