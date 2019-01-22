@@ -47,7 +47,7 @@ public abstract class WindowsOperation {
      * @return boolean value of null or empty
      */
     public boolean isNullOrEmpty(String value) {
-        return value == null || value.isEmpty();
+        return value == null || value.trim().isEmpty();
     }
 
     /*
