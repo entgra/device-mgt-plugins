@@ -142,7 +142,7 @@ public class EnterpriseApplication extends WindowsOperation {
                 ItemTag certItemTag = new ItemTag();
                 MetaTag certMetaTag = new MetaTag();
                 TargetTag certTargetTag = new TargetTag();
-                certTargetTag.setLocURI(OperationCode.Command.INSTALL_ENTERPRISE_APPX_CERT.getCode()
+                certTargetTag.setLocURI(OperationCode.Command.INSTALL_ENTERPRISE_APPX_CERTIFICATE.getCode()
                         .replace(PluginConstants.ApplicationInstallProperties.CERT_HASH,
                                 getHostedAppxApplication().getCertificateHash()));
                 certMetaTag.setFormat(Constants.META_FORMAT_B64);
@@ -191,7 +191,7 @@ public class EnterpriseApplication extends WindowsOperation {
                 }
                 itemTag.setElementData(applicationElement);
             } else if (PluginConstants.ApplicationInstallProperties.TYPE_MSI.equals(appType)) {
-                metaTag.setType(Constants.META_FORMAT_TYPE_TEXT_PLAIN);
+                metaTag.setType(Constants.META_TYPE_TEXT_PLAIN);
                 document = SyncmlGenerator.generateDocument();
                 Element contentURLElement = document
                         .createElement(PluginConstants.ApplicationInstallProperties.CONTENT_URL);
