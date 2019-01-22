@@ -261,6 +261,16 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public int getDeviceCount(String s, EnrolmentInfo.Status status) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
+    public int getDeviceCount(EnrolmentInfo.Status status) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
     public HashMap<Integer, Device> getTenantedDevice(DeviceIdentifier deviceIdentifier)
             throws DeviceManagementException {
         return null;
