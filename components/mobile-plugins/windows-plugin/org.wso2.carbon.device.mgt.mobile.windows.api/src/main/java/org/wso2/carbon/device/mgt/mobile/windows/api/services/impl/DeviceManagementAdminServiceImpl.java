@@ -35,7 +35,6 @@
 
 package org.wso2.carbon.device.mgt.mobile.windows.api.services.impl;
 
-import com.ibm.wsdl.OperationImpl;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,7 +54,7 @@ import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.WindowsDe
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.WindowsOperationsException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.Message;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.WindowsAPIUtils;
-import org.wso2.carbon.device.mgt.mobile.windows.api.exception.ProfileConfigurationException;
+import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.ProfileConfigurationException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.services.DeviceManagementAdminService;
 
 import javax.ws.rs.*;

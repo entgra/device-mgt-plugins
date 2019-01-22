@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.PluginConstants;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.SyncmlOperationException;
-import org.wso2.carbon.device.mgt.mobile.windows.api.exception.ProfileConfigurationException;
+import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.ProfileConfigurationException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.*;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.util.Constants;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.util.OperationCode;

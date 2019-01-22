@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.windows.api.exception;
+package org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions;
 
 public class ProfileConfigurationException extends Exception {
 
