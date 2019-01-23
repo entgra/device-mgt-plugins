@@ -157,11 +157,13 @@ var androidOperationModule = function () {
                 break;
             case androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"]:
                 payload = {
+                    "proxyConfigType": operationPayload["proxyConfigType"],
                     "proxyHost": operationPayload["proxyHost"],
                     "proxyPort": operationPayload["proxyPort"],
                     "proxyExclList": operationPayload["proxyExclList"],
                     "proxyUsername": operationPayload["proxyUsername"],
-                    "proxyPassword": operationPayload["proxyPassword"]
+                    "proxyPassword": operationPayload["proxyPassword"],
+                    "proxyPacUrl": operationPayload["proxyPacUrl"]
                 };
                 break;
             case androidOperationConstants["VPN_OPERATION_CODE"]:
@@ -323,17 +325,15 @@ var androidOperationModule = function () {
                 break;
             case androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
-                var proxyExclList = [];
-                if (operationData["proxyExclList"]) {
-                    proxyExclList = operationData["proxyExclList"].trim().split(/\s*,\s*/);
-                }
                 payload = {
                     "operation": {
+                        "proxyConfigType": operationData["proxyConfigType"],
                         "proxyHost": operationData["proxyHost"],
                         "proxyPort": operationData["proxyPort"],
-                        "proxyExclList": proxyExclList,
+                        "proxyExclList": operationData["proxyExclList"],
                         "proxyUsername": operationData["proxyUsername"],
-                        "proxyPassword": operationData["proxyPassword"]
+                        "proxyPassword": operationData["proxyPassword"],
+                        "proxyPacUrl": operationData["proxyPacUrl"]
                     }
                 };
                 break;

@@ -166,6 +166,33 @@ var slideDownPaneAgainstValueSetForRadioButtons = function (selectElement, paneI
         $(paneSelector).addClass("hidden");
     }
 };
+
+/**
+ * Method to switch panes based on the selected radio button.
+ *
+ * The method will un hide the element with the id (paneIdPrefix + selectElement.value)
+ *
+ * @param selectElement selected HTML element
+ * @param paneIdPrefix  prefix of the id of the pane to un hide.
+ * @param valueSet applicable value set
+ */
+var switchPaneAgainstValueSetForRadioButtons = function (selectElement, paneIdPrefix, valueSet) {
+    var selectedValueOnChange = selectElement.value;
+    var paneSelector = "#" + paneIdPrefix;
+    for (var i = 0; i < valueSet.length; ++i) {
+        if (selectedValueOnChange !== valueSet[i]) {
+            if ($(paneSelector).hasClass("expanded")) {
+                $(paneSelector).removeClass("expanded");
+            }
+            $(paneSelector + valueSet[i]).slideUp();
+        } else {
+            if (!$(paneSelector).hasClass("expanded")) {
+                $(paneSelector).addClass("expanded");
+            }
+            $(paneSelector + selectedValueOnChange).slideDown();
+        }
+    }
+};
 // End of HTML embedded invoke methods
 
 /**

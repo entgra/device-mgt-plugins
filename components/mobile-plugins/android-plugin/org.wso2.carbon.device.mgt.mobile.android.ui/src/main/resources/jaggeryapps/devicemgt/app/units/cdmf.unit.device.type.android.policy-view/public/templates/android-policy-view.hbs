@@ -968,7 +968,8 @@
 
         <!-- global-proxy -->
         <div class="wr-hidden-operation" data-operation="global-proxy">
-            <div class="panel panel-default operation-data" data-operation="global-proxy" data-operation-code="GLOBAL_PROXY">
+            <div class="panel panel-default operation-data" data-operation="global-proxy"
+                 data-operation-code="GLOBAL_PROXY">
                 <div id="global-proxy-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
                         Global Proxy Settings
@@ -984,79 +985,128 @@
                             device. Once this configuration profile is installed on a device, all the network traffic
                             will be routed through the proxy server.
                         </p>
-                        <p>
-                            <b>This method requires the caller to be the device owner.</b>
-                        </p>
-                        <p>
-                            This proxy is only a recommendation and it is possible that some apps will ignore it.
-                        </p>
                     </div>
                 </div>
                 <div id="global-proxy-body" class="panel-collapse panel-body collapse" role="tabpanel"
                      aria-labelledby="global-proxy-body">
                     <hr/>
+                    <ul class="message message-info">
+                        <i class="icon fw fw-info"></i>
+                        <a id="global-proxy-info-message">
+                            This profile requires the agent application to be the device owner.
+                        </a>
+                    </ul>
+                    <br>
+                    <ul class="message message-warning">
+                        <i class="icon fw fw-warning"></i>
+                        <a id="global-proxy-warning-message">
+                            This proxy is only a recommendation and it is possible that some apps will ignore it.
+                        </a>
+                    </ul>
+                    <br>
                     Please note that * sign represents required fields of data.
                     <br>
                     <br>
                     <div id="global-proxy-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="proxy-host">
-                            Proxy Host
-                            <span class="helper required" title="Host name of the proxy server.">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
+                    <label class="wr-input-label" for="proxy-config-type-container">
+                        Proxy Configuration Type
+                        <span class="helper" title="Select the configuration type.">
+                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                        </span>
+                    </label>
+                    <div class="wr-input-control" id="proxy-config-type-container">
+                        <label class="wr-input-control radio light">
+                            <input id="manual-proxy-configuration-radio-button" type="radio"
+                                   name="global-proxy-config-type"
+                                   class="form-control operationDataKeys" data-key="proxyConfigType"
+                                   value="manual" disabled/>
+                            <span class="helper" title="Manually enter proxy configurations.">
+                              Manual
+                          </span>
                         </label>
-                        <input id="proxy-host" class="form-control operationDataKeys" data-key="proxyHost"/>
-                    </div>
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="proxy-port">
-                            Proxy Port
-                            <span class="helper required" title="The port which the proxy server is running.">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <label id="proxyPortValidationText" class="wr-input-label hidden">
-                            Port number should be between 0 - 65535
-                        </label>
-                        <input id="proxy-port" class="form-control operationDataKeys" data-key="proxyPort"
-                               placeholder="[ Port number 0-65535 ]"/>
-                    </div>
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="proxy-excl">
-                            Excluded List
+                        <label class="wr-input-control radio light">
+                            <input id="auto-proxy-configuration-radio-button" type="radio"
+                                   name="global-proxy-config-type"
+                                   class="form-control operationDataKeys" data-key="proxyConfigType"
+                                   value="auto" disabled/>
                             <span class="helper"
-                                  title="Hosts to exclude using the proxy on connections for. These hosts can use
-                                  wildcards such as *.example.com.">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                  title="Proxy configurations will be automatically fetched from Proxy PAC file.">
+                                Auto
                             </span>
                         </label>
-                        <input id="proxy-excl" class="form-control operationDataKeys" data-key="proxyExclList"
-                               placeholder="[ Comma (,) separated list of proxy exclusions. These hosts can use
-                               wildcards such as *.example.com. ]"/>
                     </div>
-                    <div class="wr-input-control" id="control-proxy-username">
-                        <label class="wr-input-label" for="proxy-username">
-                            Username
-                            <span class="helper" title="Username for the proxy server.">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="proxy-username" class="form-control operationDataKeys"
-                               data-key="proxyUsername" maxlength="50"/>
+                    <div id="global-proxy-configuration-type-manual" class="wr-input-control expanded">
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="proxy-host">
+                                Proxy Host
+                                <span class="helper required" title="Host name/IP address of the proxy server.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="proxy-host" class="form-control operationDataKeys" data-key="proxyHost"
+                                   placeholder="[ 192.168.8.1 ]" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="proxy-port">
+                                Proxy Port
+                                <span class="helper required" title="Target port for the proxy server">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <label id="proxyPortValidationText" class="wr-input-label hidden">
+                                Target port should be between 0 - 65535
+                            </label>
+                            <input id="proxy-port" class="form-control operationDataKeys" data-key="proxyPort"
+                                   placeholder="[ Target port 0-65535 ]" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="proxy-excl">
+                                Proxy Exclusion List
+                                <span class="helper"
+                                      title="Add hostnames to this separated by commas to prevent them from routing
+                                      through the proxy server. The hostname entries can be wildcards such as
+                                      *.example.com">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="proxy-excl" class="form-control operationDataKeys" data-key="proxyExclList"
+                                   placeholder="[ Example: localhost, *.example.com ]" disabled/>
+                        </div>
+                        <div class="wr-input-control" id="control-proxy-username">
+                            <label class="wr-input-label" for="proxy-username">
+                                Username
+                                <span class="helper" title="Username for the proxy server.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="proxy-username" class="form-control operationDataKeys"
+                                   data-key="proxyUsername" maxlength="50" disabled/>
+                        </div>
+                        <div class="wr-input-control" id="control-proxy-password">
+                            <label class="wr-input-label" for="proxy-password">
+                                Password
+                                <span class="helper" title="Password for the proxy server.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="proxy-password" type="password" class="form-control operationDataKeys"
+                                   data-key="proxyPassword" maxlength="100" disabled/>
+                        </div>
                     </div>
-                    <div class="wr-input-control" id="control-proxy-password">
-                        <label class="wr-input-label" for="proxy-password">
-                            Password
-                            <span class="helper" title="Password for the proxy server.">
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                        </label>
-                        <input id="proxy-password" type="password" class="form-control operationDataKeys"
-                               data-key="proxyPassword" maxlength="100"/>
+                    <div id="global-proxy-configuration-type-auto" class="wr-input-control">
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="proxy-host">
+                                Proxy PAC File URL
+                                <span class="helper required" title="URL for the proxy auto config PAC script">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="proxy-pac-url" class="form-control operationDataKeys" data-key="proxyPacUrl"
+                                   placeholder="[ http://exampleproxy.com/proxy.pac ]" disabled/>
+                        </div>
                     </div>
-                    <!--</div>-->
                 </div>
             </div>
         </div>

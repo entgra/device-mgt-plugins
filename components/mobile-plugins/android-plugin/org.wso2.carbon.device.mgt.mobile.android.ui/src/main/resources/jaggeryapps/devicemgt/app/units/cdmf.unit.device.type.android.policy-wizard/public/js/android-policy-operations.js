@@ -251,38 +251,50 @@ var validatePolicyProfile = function () {
             // initializing continueToCheckNextInputs to true
             continueToCheckNextInputs = true;
 
-            var proxyHost = $("input#proxy-host").val();
-            var proxyPort = $("input#proxy-port").val();
-            if (!proxyHost) {
-                validationStatus = {
-                    "error": true,
-                    "subErrorMsg": "Proxy server host name is required.",
-                    "erroneousFeature": operation
-                };
-                continueToCheckNextInputs = false;
-            }
+            if ($("input#manual-proxy-configuration-radio-button").is(":checked")) {
+                var proxyHost = $("input#proxy-host").val();
+                var proxyPort = $("input#proxy-port").val();
+                if (!proxyHost) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy server host name is required.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
 
-            if (!proxyPort) {
-                validationStatus = {
-                    "error": true,
-                    "subErrorMsg": "Proxy server port is required.",
-                    "erroneousFeature": operation
-                };
-                continueToCheckNextInputs = false;
-            }else if (!$.isNumeric(proxyPort)) {
-                validationStatus = {
-                    "error": true,
-                    "subErrorMsg": "Proxy server port requires a number input.",
-                    "erroneousFeature": operation
-                };
-                continueToCheckNextInputs = false;
-            } else if (!inputIsValidAgainstRange(proxyPort, 0, 65535)) {
-                validationStatus = {
-                    "error": true,
-                    "subErrorMsg": "Proxy server port is not within the range of valid port numbers.",
-                    "erroneousFeature": operation
-                };
-                continueToCheckNextInputs = false;
+                if (!proxyPort) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy server port is required.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                } else if (!$.isNumeric(proxyPort)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy server port requires a number input.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                } else if (!inputIsValidAgainstRange(proxyPort, 0, 65535)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy server port is not within the range of valid port numbers.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+            } else if ($("input#auto-proxy-configuration-radio-button").is(":checked")) {
+                var pacFileUrl = $("input#proxy-pac-url").val();
+                if (!pacFileUrl) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy pac file URL is required for proxy auto config.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
             }
 
             // at-last, if the value of continueToCheckNextInputs is still true
@@ -792,6 +804,33 @@ var slideDownPaneAgainstValueSetForRadioButtons = function (selectElement, paneI
         $(paneSelector).removeClass("hidden");
     } else {
         $(paneSelector).addClass("hidden");
+    }
+};
+
+/**
+ * Method to switch panes based on the selected radio button.
+ *
+ * The method will un hide the element with the id (paneIdPrefix + selectElement.value)
+ *
+ * @param selectElement selected HTML element
+ * @param paneIdPrefix  prefix of the id of the pane to un hide.
+ * @param valueSet applicable value set
+ */
+var switchPaneAgainstValueSetForRadioButtons = function (selectElement, paneIdPrefix, valueSet) {
+    var selectedValueOnChange = selectElement.value;
+    var paneSelector = "#" + paneIdPrefix;
+    for (var i = 0; i < valueSet.length; ++i) {
+        if (selectedValueOnChange !== valueSet[i]) {
+            if ($(paneSelector).hasClass("expanded")) {
+                $(paneSelector).removeClass("expanded");
+            }
+            $(paneSelector + valueSet[i]).slideUp();
+        } else {
+            if (!$(paneSelector).hasClass("expanded")) {
+                $(paneSelector).addClass("expanded");
+            }
+            $(paneSelector + selectedValueOnChange).slideDown();
+        }
     }
 };
 
