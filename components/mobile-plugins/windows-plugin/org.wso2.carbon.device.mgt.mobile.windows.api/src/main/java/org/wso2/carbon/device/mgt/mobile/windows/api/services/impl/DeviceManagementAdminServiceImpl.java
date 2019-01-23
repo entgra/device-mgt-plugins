@@ -14,19 +14,39 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ *
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.device.mgt.mobile.windows.api.services.impl;
 
-import com.ibm.wsdl.OperationImpl;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpStatus;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
+import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
+import org.wso2.carbon.device.mgt.mobile.windows.api.bean.EnterpriseApplication;
+import org.wso2.carbon.device.mgt.mobile.windows.api.bean.wrapper.EnterpriseApplicationBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.PluginConstants;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.beans.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.BadRequestException;
@@ -35,6 +55,7 @@ import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.WindowsDe
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.WindowsOperationsException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.Message;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.WindowsAPIUtils;
+import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.ProfileConfigurationException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.services.DeviceManagementAdminService;
 
 import javax.ws.rs.*;
@@ -51,7 +72,7 @@ import java.util.List;
 @Path("/admin/devices")
 public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminService {
 
-    private static Log log = LogFactory.getLog(OperationImpl.class);
+    private static Log log = LogFactory.getLog(DeviceManagementAdminServiceImpl.class);
 
     /**
      * REST endpoint for the Device Lock operation
@@ -334,6 +355,60 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
             log.error(errorMessage, e);
             throw new UnexpectedServerErrorException(
                     new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
+        }
+    }
+
+    /**
+     * Rest endpoint for Enterprise Application (MSI or APPX) installation
+     *
+     * @param enterpriseApplicationBeanWrapper Enterprise application installation payload object
+     * @return Response object for client.
+     */
+    @POST
+    @Path("/enterprise-application")
+    public Response installEnterpriseApplication(@ApiParam(
+            name = "enterpriseApplicationBeanWrapper",
+            value = "Enterprise application configuration and Device IDs",
+            required = true) EnterpriseApplicationBeanWrapper enterpriseApplicationBeanWrapper) {
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Windows install enterprise application device operation");
+        }
+        if (enterpriseApplicationBeanWrapper == null || enterpriseApplicationBeanWrapper.getOperation() == null) {
+            String errorMessage = "The payload of the application installing operation is incorrect";
+            log.error(errorMessage);
+            throw new BadRequestException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatus.SC_BAD_REQUEST).setMessage(errorMessage)
+                            .build());
+        }
+        try {
+            EnterpriseApplication enterpriseApplication = enterpriseApplicationBeanWrapper.getOperation();
+            enterpriseApplication.validateRequest();
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(PluginConstants.OperationCodes.INSTALL_ENTERPRISE_APPLICATION);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setPayLoad(enterpriseApplication.toJSON());
+            return WindowsAPIUtils.getOperationResponse(enterpriseApplicationBeanWrapper.getDeviceIDs(), operation);
+        } catch (ProfileConfigurationException e) {
+            throw new BadRequestException(new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatus.SC_BAD_REQUEST)
+                    .setMessage(e.getMessage()).build());
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            log.error(errorMessage, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                            .setMessage(errorMessage).build());
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            log.error(errorMessage, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                            .setMessage(errorMessage).build());
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
+            throw new BadRequestException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatus.SC_BAD_REQUEST).setMessage(errorMessage)
+                            .build());
         }
     }
 }

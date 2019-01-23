@@ -14,13 +14,33 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ *
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.device.mgt.mobile.windows.api.operations.util;
 
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.wso2.carbon.device.mgt.mobile.windows.api.bean.EnterpriseApplication;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.PluginConstants;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.*;
 
@@ -375,8 +395,15 @@ public class SyncmlParser {
         AlertTag alert = new AlertTag();
         String commandID = node.getChildNodes().item(0).getTextContent().trim();
         String data = node.getChildNodes().item(1).getTextContent().trim();
+        List<ItemTag> items = new ArrayList<>();
+        for (int i = 1; i < node.getChildNodes().getLength() - 1; i++) {
+            items.add(generateItem(node.getChildNodes().item(i + 1)));
+        }
         alert.setCommandId(Integer.valueOf(commandID));
         alert.setData(data);
+        if (!items.isEmpty()) {
+            alert.setItems(items);
+        }
         return alert;
     }
 
@@ -423,6 +450,15 @@ public class SyncmlParser {
                     throw new IllegalStateException();
                 }
                 item.setData(data);
+            } else if (PluginConstants.SyncML.SYNCML_META.equals(nodeName)) {
+                MetaTag metaTag = new MetaTag();
+                if (itemNode.getChildNodes().item(0) != null) {
+                    metaTag.setType(itemNode.getChildNodes().item(0).getTextContent().trim());
+                }
+                if (itemNode.getChildNodes().item(1) != null) {
+                    metaTag.setFormat(itemNode.getChildNodes().item(1).getTextContent().trim());
+                }
+                item.setMeta(metaTag);
             }
         }
         return item;

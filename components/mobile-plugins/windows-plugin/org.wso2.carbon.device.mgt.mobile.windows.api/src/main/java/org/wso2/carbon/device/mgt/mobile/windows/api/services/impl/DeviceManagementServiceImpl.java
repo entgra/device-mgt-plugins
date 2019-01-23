@@ -14,6 +14,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ *
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.device.mgt.mobile.windows.api.services.impl;
@@ -26,7 +43,6 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.PluginConstants;
@@ -38,6 +54,7 @@ import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.AuthenticationI
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.DeviceUtil;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.WindowsAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.ItemTag;
+import org.wso2.carbon.device.mgt.mobile.windows.api.operations.MetaTag;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.ReplaceTag;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.SyncmlDocument;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.SyncmlHeader;
@@ -61,10 +78,8 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     private static Log log = LogFactory.getLog(
             org.wso2.carbon.device.mgt.mobile.windows.api.services.syncml.impl.SyncmlServiceImpl.class);
 
-    @Override
-    public Response getResponse(Document request) throws WindowsDeviceEnrolmentException, WindowsOperationException,
-            NotificationManagementException, WindowsConfigurationException {
-
+    @Override public Response getResponse(Document request)
+            throws WindowsDeviceEnrolmentException, WindowsOperationException, WindowsConfigurationException {
         int msgId;
         int sessionId;
         String user;
@@ -127,12 +142,17 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                         carbonCtx.setTenantId(cacheToken.getTenanatID());
                     }
                     if ((syncmlDocument.getBody().getAlert() != null)) {
-                        if (!syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)) {
-                            pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
-                            operationHandler.checkForDeviceWipe(pendingOperations, deviceIdentifier);
-                            return Response.ok().entity(operationReply.generateReply(
-                                    syncmlDocument, pendingOperations)).build();
-                        } else {
+                        List<ItemTag> disEnrollItemList = syncmlDocument.getBody().getAlert().getItems();
+                        String disEnrollMetaType = null;
+                        if (disEnrollItemList != null && !disEnrollItemList.isEmpty()) {
+                            MetaTag disEnrollMetaTag = disEnrollItemList.get(0).getMeta();
+                            if (disEnrollMetaTag != null) {
+                                disEnrollMetaType = disEnrollMetaTag.getType();
+                            }
+                        }
+                        if (syncmlDocument.getBody().getAlert().getData().equals(Constants.DISENROLL_ALERT_DATA)
+                                && disEnrollMetaType != null && PluginConstants.SyncML.DEVICE_UNENROLL_META_TYPE
+                                .equals(disEnrollMetaType.trim())) {
                             if (WindowsAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier, false) != null) {
                                 operationHandler.updateDisenrollOperationStatus(deviceIdentifier);
                                 WindowsAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
@@ -142,12 +162,17 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                                 log.error(msg);
                                 return Response.status(Response.Status.NOT_FOUND).entity(msg).build();
                             }
+                        } else {
+                            pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
+                            operationHandler.checkForDeviceWipe(pendingOperations, deviceIdentifier);
+                            return Response.ok().entity(operationReply.generateReply(syncmlDocument, pendingOperations))
+                                    .build();
                         }
                     } else {
                         pendingOperations = operationHandler.getPendingOperations(syncmlDocument);
                         operationHandler.checkForDeviceWipe(pendingOperations, deviceIdentifier);
-                        return Response.ok().entity(operationReply.generateReply(
-                                syncmlDocument, pendingOperations)).build();
+                        return Response.ok().entity(operationReply.generateReply(syncmlDocument, pendingOperations))
+                                .build();
                     }
                 }
             }
