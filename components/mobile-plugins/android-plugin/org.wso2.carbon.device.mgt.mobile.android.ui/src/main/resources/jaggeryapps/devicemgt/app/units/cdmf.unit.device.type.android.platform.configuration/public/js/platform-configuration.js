@@ -80,6 +80,15 @@ var configParams = {
     "IOS_CONFIG_APNS_MODE": "iOSConfigAPNSMode"
 };
 
+var kioskConfigs = {
+    "adminComponentName" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME",
+    "wifiSSID" : "android.app.extra.PROVISIONING_WIFI_SSID",
+    "wifiPassword" : "android.app.extra.PROVISIONING_WIFI_PASSWORD",
+    "skipEncryption" : "android.app.extra.PROVISIONING_SKIP_ENCRYPTION",
+    "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM",
+    "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION"
+};
+
 $(document).ready(function () {
     $("#fcm-inputs").hide();
     tinymce.init({
@@ -111,21 +120,33 @@ $(document).ready(function () {
             if (data != null && data.configuration != null) {
                 for (var i = 0; i < data.configuration.length; i++) {
                     var config = data.configuration[i];
-                    if (config.name == configParams["NOTIFIER_TYPE"]) {
+                    if (config.name === configParams["NOTIFIER_TYPE"]) {
                         $("#android-config-notifier").val(config.value);
-                        if (config.value != notifierTypeConstants["FCM"]) {
+                        if (config.value !== notifierTypeConstants["FCM"]) {
                             $("#fcm-inputs").hide();
                             $("#local-inputs").show();
                         } else {
                             $("#fcm-inputs").show();
                             $("#local-inputs").hide();
                         }
-                    } else if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
+                    } else if (config.name === configParams["NOTIFIER_FREQUENCY"]) {
                         $("input#android-config-notifier-frequency").val(config.value / 1000);
-                    } else if (config.name == configParams["FCM_API_KEY"]) {
+                    } else if (config.name === configParams["FCM_API_KEY"]) {
                         $("input#android-config-fcm-api-key").val(config.value);
-                    } else if (config.name == configParams["ANDROID_EULA"]) {
+                    } else if (config.name === configParams["ANDROID_EULA"]) {
                         $("#android-eula").val(config.value);
+                    } else if (config.name === kioskConfigs["adminComponentName"]) {
+                        $("input#android-kiosk-config-1").val(config.value);
+                    } else if (config.name === kioskConfigs["wifiSSID"]) {
+                        $("input#android-kiosk-config-2").val(config.value);
+                    } else if (config.name === kioskConfigs["wifiPassword"]) {
+                        $("input#android-kiosk-config-3").val(config.value);
+                    } else if (config.name === kioskConfigs["checksum"]) {
+                        $("input#android-kiosk-config-4").val(config.value);
+                    } else if (config.name === kioskConfigs["downloadURL"]) {
+                        $("input#android-kiosk-config-5").val(config.value);
+                    } else if (config.name === kioskConfigs["skipEncryption"]) {
+                        $("#android-kiosk-config-6").val(config.value);
                     }
                 }
             }
@@ -161,13 +182,22 @@ $(document).ready(function () {
         var androidLicense = tinyMCE.activeEditor.getContent();
         var errorMsgWrapper = "#android-config-error-msg";
         var errorMsg = "#android-config-error-msg span";
-        if (notifierType == notifierTypeConstants["LOCAL"] && !notifierFrequency) {
+
+        // KIOSK configs
+        var adminComponentName = $("input#android-kiosk-config-1").val();
+        var checksum = $("input#android-kiosk-config-2").val();
+        var downloadUrl = $("input#android-kiosk-config-3").val();
+        var wifiSSID = $("input#android-kiosk-config-4").val();
+        var wifiPassword = $("input#android-kiosk-config-5").val();
+        var encryption = $("#android-kiosk-config-6").find("option:selected").attr("value");
+
+        if (notifierType === notifierTypeConstants["LOCAL"] && !notifierFrequency) {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (notifierType == notifierTypeConstants["LOCAL"] && !isPositiveInteger(notifierFrequency)) {
+        } else if (notifierType === notifierTypeConstants["LOCAL"] && !isPositiveInteger(notifierFrequency)) {
             $(errorMsg).text("Provided notifier frequency is invalid. ");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (notifierType == notifierTypeConstants["FCM"] && !fcmAPIKey) {
+        } else if (notifierType === notifierTypeConstants["FCM"] && !fcmAPIKey) {
             $(errorMsg).text("FCM API Key is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
@@ -205,10 +235,54 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            var kioskAdminComponent = {
+                "name": kioskConfigs["adminComponentName"],
+                "value": adminComponentName,
+                "contentType": "text"
+            };
+
+            var kioskChecksum = {
+                "name": kioskConfigs["checksum"],
+                "value": checksum,
+                "contentType": "text"
+            };
+
+            var kioskDownloadURL = {
+                "name": kioskConfigs["downloadURL"],
+                "value": downloadUrl,
+                "contentType": "text"
+            };
+
+            var kioskWifiSSID = {
+                "name": kioskConfigs["wifiSSID"],
+                "value": wifiSSID,
+                "contentType": "text"
+            };
+
+            var kioskWifiPassword = {
+                "name": kioskConfigs["wifiPassword"],
+                "value": wifiPassword,
+                "contentType": "text"
+            };
+
+            var kioskEncryption = {
+                "name": kioskConfigs["skipEncryption"],
+                "value": encryption,
+                "contentType": "text"
+            };
+
             configList.push(type);
             configList.push(frequency);
             configList.push(androidEula);
-            if (notifierType == notifierTypeConstants["FCM"]) {
+
+            configList.push(kioskAdminComponent);
+            configList.push(kioskChecksum);
+            configList.push(kioskDownloadURL);
+            configList.push(kioskEncryption);
+            configList.push(kioskWifiSSID);
+            configList.push(kioskWifiPassword);
+
+            if (notifierType === notifierTypeConstants["FCM"]) {
                 configList.push(fcmKey);
                 configList.push(fcmId);
             }

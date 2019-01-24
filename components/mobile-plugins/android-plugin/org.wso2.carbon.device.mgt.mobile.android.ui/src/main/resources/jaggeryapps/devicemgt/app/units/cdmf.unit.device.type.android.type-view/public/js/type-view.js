@@ -31,6 +31,15 @@ var backendEndBasePath = "/api/device-mgt/v1.0";
 //    });
 //}
 
+var kioskConfigs = {
+    "adminComponentName" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME",
+    "wifiSSID" : "android.app.extra.PROVISIONING_WIFI_SSID",
+    "wifiPassword" : "android.app.extra.PROVISIONING_WIFI_PASSWORD",
+    "skipEncryption" : "android.app.extra.PROVISIONING_SKIP_ENCRYPTION",
+    "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM",
+    "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION"
+};
+
 /*
  * set popup maximum height function.
  */
@@ -70,6 +79,63 @@ function generateQRCode(qrCodeClass) {
         width: 200,
         height: 200
     });
+}
+
+/*
+ * QR-code generation function for KIOSK.
+ */
+function generateKIOSKQRCode(qrCodeClass) {
+
+    var androidConfigAPI = "/api/device-mgt/android/v1.0/configuration";
+    var payload = {};
+
+    var isKioskConfigured = false;
+
+    invokerUtil.get(
+        androidConfigAPI,
+        function (data) {
+            data = JSON.parse(data);
+            if (data != null && data.configuration != null) {
+                for (var i = 0; i < data.configuration.length; i++) {
+                    var config = data.configuration[i];
+
+                    if (config.name === kioskConfigs["adminComponentName"]) {
+                        isKioskConfigured = true;
+                        payload[config.name] = config.value;
+                    } else if (config.name === kioskConfigs["wifiSSID"]) {
+                        payload[config.name] = config.value;
+                    } else if (config.name === kioskConfigs["wifiPassword"]) {
+                        payload[config.name] = config.value;
+                    } else if (config.name === kioskConfigs["checksum"]) {
+                        payload[config.name] = config.value;
+                    } else if (config.name === kioskConfigs["downloadURL"]) {
+                        payload[config.name] = config.value;
+                    } else if (config.name === kioskConfigs["skipEncryption"]) {
+                        payload[config.name] = Boolean(config.value);
+                    }
+                }
+            }
+        }, function (data) {
+            console.log(data);
+        });
+
+    var aToken = $(".a-token");
+    var tokenPair = aToken.data("atoken");
+
+    var accessToken = {};
+    accessToken[kioskConfigs["accessToken"]] = tokenPair["accessToken"];
+    payload[kioskConfigs["androidExtra"]] = accessToken;
+
+    if (isKioskConfigured) {
+        $(qrCodeClass).qrcode({
+            text: JSON.stringify(payload),
+            width: 300,
+            height: 300
+        });
+    } else {
+        $("#kiosk_heading").hide();
+        $("#kiosk_content").hide();
+    }
 }
 
 function toggleEnrollment() {
@@ -351,6 +417,7 @@ $(document).ready(function () {
     $.sidebar_toggle();
 
     generateQRCode(".enrollment-qr-container");
+    generateKIOSKQRCode(".kiosk-enrollment-qr-container");
 
     if (typeof $.fn.collapse == 'function') {
         $('.navbar-collapse.tiles').on('shown.bs.collapse', function () {
