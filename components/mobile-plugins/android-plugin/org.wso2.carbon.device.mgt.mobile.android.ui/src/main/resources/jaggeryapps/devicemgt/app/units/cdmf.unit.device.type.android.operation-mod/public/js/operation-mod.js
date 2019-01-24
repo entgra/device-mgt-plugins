@@ -460,7 +460,7 @@ var androidOperationModule = function () {
     publicMethods.getAndroidServiceEndpoint = function (operationCode) {
         var featureMap = {
             "WIFI": "configure-wifi",
-            "GLOBAL_PROXY": "set-global-proxy",
+            "GLOBAL_PROXY": "configure-global-proxy",
             "CAMERA": "control-camera",
             "VPN": "configure-vpn",
             "DEVICE_LOCK": "lock-devices",

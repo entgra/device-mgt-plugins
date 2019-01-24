@@ -211,6 +211,12 @@ import java.util.List;
                         permissions = {"/device-mgt/devices/owning-device/operations/android/wifi"}
                 ),
                 @Scope(
+                        name = "Configure Global Proxy",
+                        description = "Configure Global Proxy on Android Device",
+                        key = "perm:android:configure-global-proxy",
+                        permissions = {"/device-mgt/devices/owning-device/operations/android/global-proxy"}
+                ),
+                @Scope(
                         name = "Encrypt Storage",
                         description = "Encrypting storage on Android Device",
                         key = "perm:android:encrypt-storage",
@@ -1852,7 +1858,7 @@ public interface DeviceManagementAdminService {
                     WebClipBeanWrapper webClipBeanWrapper);
 
     @POST
-    @Path("/set-global-proxy")
+    @Path("/configure-global-proxy")
     @ApiOperation(
             consumes = MediaType.APPLICATION_JSON,
             httpMethod = "POST",
@@ -1863,14 +1869,15 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:set-global-proxy")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE,
+                                    value = "perm:android:configure-global-proxy")
                     })
             }
     )
     @ApiResponses(value = {
             @ApiResponse(
                     code = 201,
-                    message = "Created. \n Successfully scheduled the set global proxy operation.",
+                    message = "Created. \n Successfully scheduled the global proxy operation.",
                     response = Activity.class,
                     responseHeaders = {
                             @ResponseHeader(

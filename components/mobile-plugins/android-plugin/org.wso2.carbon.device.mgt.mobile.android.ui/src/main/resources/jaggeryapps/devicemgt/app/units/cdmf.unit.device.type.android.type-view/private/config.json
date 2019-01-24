@@ -13,6 +13,7 @@
             "perm:android:lock-devices",
             "perm:android:configure-vpn",
             "perm:android:configure-wifi",
+            "perm:android:configure-global-proxy",
             "perm:android:enroll",
             "perm:android:uninstall-application",
             "perm:android:manage-configuration",

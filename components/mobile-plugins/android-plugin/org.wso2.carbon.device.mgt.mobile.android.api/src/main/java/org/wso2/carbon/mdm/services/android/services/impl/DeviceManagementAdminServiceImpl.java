@@ -977,16 +977,16 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
     }
 
     @POST
-    @Path("/set-global-proxy")
+    @Path("/configure-global-proxy")
     @Override
     public Response setRecommendedGlobalProxy(GlobalProxyBeanWrapper globalProxyBeanWrapper) {
         if (log.isDebugEnabled()) {
-            log.debug("Invoking 'set-global-proxy' operation");
+            log.debug("Invoking 'configure-global-proxy' operation");
         }
 
         try {
             if (globalProxyBeanWrapper == null || globalProxyBeanWrapper.getOperation() == null) {
-                String errorMessage = "The payload of the set global proxy operation is incorrect";
+                String errorMessage = "The payload of the global proxy operation is incorrect";
                 log.error(errorMessage);
                 throw new BadRequestException(
                         new ErrorResponse.ErrorResponseBuilder().setCode(400L).setMessage(errorMessage).build());
