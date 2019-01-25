@@ -566,4 +566,21 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
                                             GeoCoordinate geoCoordinate1, int i) throws DeviceManagementException {
         return null;
     }
+
+    @Override
+    public int getDeviceCountOfTypeByStatus(String deviceType, String deviceStatus) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
+    public List<String> getDeviceIdentifiersByStatus(String deviceType, String deviceStatus)
+            throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public boolean bulkUpdateDeviceStatus(String deviceType, List<String> deviceList, String status)
+            throws DeviceManagementException {
+        return false;
+    }
 }
