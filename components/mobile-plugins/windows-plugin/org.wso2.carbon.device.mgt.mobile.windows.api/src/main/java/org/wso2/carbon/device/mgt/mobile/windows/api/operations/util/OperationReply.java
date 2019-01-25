@@ -14,6 +14,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ *
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.device.mgt.mobile.windows.api.operations.util;
@@ -21,10 +38,9 @@ package org.wso2.carbon.device.mgt.mobile.windows.api.operations.util;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.mobile.windows.api.bean.EnterpriseApplication;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.PluginConstants;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.SyncmlCommandType;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.SyncmlMessageFormatException;
@@ -87,7 +103,7 @@ public class OperationReply {
      * @throws org.wso2.carbon.policy.mgt.common.FeatureManagementException
      */
     public String generateReply(SyncmlDocument syncmlDocument, List<? extends Operation> operations)
-            throws SyncmlMessageFormatException, SyncmlOperationException {
+            throws SyncmlMessageFormatException, SyncmlOperationException, WindowsOperationException {
 
         OperationReply operationReply;
         SyncmlGenerator generator;
@@ -102,7 +118,8 @@ public class OperationReply {
         return generator.generatePayload(syncmlResponse);
     }
 
-    public SyncmlDocument generateReply() throws SyncmlMessageFormatException, SyncmlOperationException {
+    public SyncmlDocument generateReply()
+            throws SyncmlMessageFormatException, SyncmlOperationException, WindowsOperationException {
         generateHeader();
         generateBody();
         return replySyncmlDocument;
@@ -146,14 +163,11 @@ public class OperationReply {
         replySyncmlDocument.setHeader(header);
     }
 
-    private void generateBody() throws SyncmlMessageFormatException, SyncmlOperationException {
+    private void generateBody()
+            throws SyncmlMessageFormatException, SyncmlOperationException, WindowsOperationException {
         SyncmlBody syncmlBody = generateStatuses();
         try {
             appendOperations(syncmlBody);
-        } catch (PolicyManagementException e) {
-            throw new SyncmlOperationException("Error occurred while retrieving policy operations.", e);
-        } catch (FeatureManagementException e) {
-            throw new SyncmlOperationException("Error occurred while retrieving effective policy operations.", e);
         } catch (JSONException e) {
             throw new SyncmlMessageFormatException("Error Occurred while parsing operation object.", e);
         }
@@ -235,8 +249,8 @@ public class OperationReply {
         return syncmlBodyReply;
     }
 
-    private void appendOperations(SyncmlBody syncmlBody) throws PolicyManagementException,
-            FeatureManagementException, JSONException, SyncmlOperationException {
+    private void appendOperations(SyncmlBody syncmlBody)
+            throws JSONException, SyncmlOperationException, WindowsOperationException {
         GetTag getElement = new GetTag();
         List<ItemTag> getElements = new ArrayList<>();
         List<ExecuteTag> executeElements = new ArrayList<>();
@@ -359,8 +373,23 @@ public class OperationReply {
                                     }
                                 }
                             }
-                            break;
                         }
+                        break;
+                case PROFILE:
+                    if (PluginConstants.OperationCodes.INSTALL_ENTERPRISE_APPLICATION.equals(operation.getCode())) {
+                        EnterpriseApplication enterpriseApplication = gson
+                                .fromJson((String) operation.getPayLoad(), EnterpriseApplication.class);
+                        List<Object> enterpriseApplicationContent = enterpriseApplication
+                                .createOperationContent(operation);
+                        for (Object object : enterpriseApplicationContent) {
+                            if (object instanceof AddTag) {
+                                addElements.add((AddTag) object);
+                            } else if (object instanceof ExecuteTag) {
+                                executeElements.add((ExecuteTag) object);
+                            }
+                        }
+                    }
+                    break;
                 }
             }
             if (!replaceItems.isEmpty()) {

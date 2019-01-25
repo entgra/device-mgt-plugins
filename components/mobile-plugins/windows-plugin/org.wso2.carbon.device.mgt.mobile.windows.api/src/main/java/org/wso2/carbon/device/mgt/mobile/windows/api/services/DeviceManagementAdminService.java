@@ -14,6 +14,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ *
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.device.mgt.mobile.windows.api.services;
@@ -23,6 +40,7 @@ import io.swagger.annotations.*;
 import org.wso2.carbon.apimgt.annotations.api.Scope;
 import org.wso2.carbon.apimgt.annotations.api.Scopes;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
+import org.wso2.carbon.device.mgt.mobile.windows.api.bean.wrapper.EnterpriseApplicationBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.util.Constants;
 
@@ -107,6 +125,12 @@ import java.util.List;
                         description = "Lock reset on Windows devices",
                         key = "perm:windows:location",
                         permissions = {"/device-mgt/devices/owning-device/operations/windows/location"}
+                ),
+                @Scope(
+                        name = "Install Enterprise Application",
+                        description = "Installing an Enterprise Application",
+                        key = "perm:windows:enterprise-app",
+                        permissions = {"/device-mgt/devices/owning-device/operations/windows/enterprise-application"}
                 )
         }
 )
@@ -536,5 +560,65 @@ public interface DeviceManagementAdminService {
                         required = true)
                 List<String> deviceIDs);
 
+
+        @POST
+        @Path("/enterprise-application")
+        @ApiOperation(
+                consumes = MediaType.APPLICATION_JSON,
+                httpMethod = "POST",
+                value = "Installing an Enterprise Application",
+                notes = "Install an enterprise application on Windows devices.",
+                response = Activity.class,
+                tags = "Windows Device Management Administrative Service",
+                extensions = {
+                        @Extension(properties = {
+                                @ExtensionProperty(name = Constants.SCOPE, value = "perm:windows:enterprise-app")
+                        })
+                }
+        )
+        @ApiResponses(value = {
+                @ApiResponse(
+                        code = 201,
+                        message = "Created. \n Successfully added Enterprise application operation.",
+                        response = Activity.class,
+                        responseHeaders = {
+                                @ResponseHeader(
+                                        name = "Content-Location",
+                                        description = "URL of the activity instance that refers to the scheduled operation."),
+                                @ResponseHeader(
+                                        name = "Content-Type",
+                                        description = "Content type of the body"),
+                                @ResponseHeader(
+                                        name = "ETag",
+                                        description = "Entity Tag of the response resource.\n" +
+                                                "Used by caches, or in conditional requests."),
+                                @ResponseHeader(
+                                        name = "Last-Modified",
+                                        description = "Date and time the resource was last modified.\n" +
+                                                "Used by caches, or in conditional requests.")}),
+                @ApiResponse(
+                        code = 303,
+                        message = "See Other. \n The source can be retrieved from the URL specified in the location header.\n",
+                        responseHeaders = {
+                                @ResponseHeader(
+                                        name = "Content-Location",
+                                        description = "The Source URL of the document.")}),
+                @ApiResponse(
+                        code = 400,
+                        message = "Bad Request. \n Invalid request or validation error."),
+                @ApiResponse(
+                        code = 415,
+                        message = "Unsupported media type. \n The format of the requested entity was not supported.\n"),
+                @ApiResponse(
+                        code = 500,
+                        message = "Internal Server Error. \n " +
+                                "Server error occurred while adding the enterprise application operation.")
+        })
+        Response installEnterpriseApplication(
+                @ApiParam(
+                        name = "enterpriseApplicationBeanWrapper",
+                        value = "Enterprise application configuration and Device IDs",
+                        required = true)
+                EnterpriseApplicationBeanWrapper enterpriseApplicationBeanWrapper);
 }
 
