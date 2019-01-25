@@ -1574,26 +1574,6 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
-	</repository>
-	<repository>
-            <id>entgra-nexus</id>
-            <name>Entgra internal Repository</name>
-            <url>http://nexus.entgra.io/repository/maven-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-        <repository>
-            <id>entgra.releases</id>
-            <name>Entgra internal Repository</name>
-            <url>http://nexus.entgra.io/repository/maven-releases/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
         </repository>
         <repository>
             <id>entgra.snapshots</id>
@@ -1606,6 +1586,19 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
+        </repository>
+        <repository>
+            <id>entgra.releases</id>
+            <name>Entgra internal Repository</name>
+            <url>http://nexus.entgra.io/repository/maven-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>gcm-server-repository</id>
