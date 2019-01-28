@@ -1020,6 +1020,8 @@
                         <label class="wr-input-control radio light">
                             <input id="manual-proxy-configuration-radio-button" type="radio"
                                    name="global-proxy-config-type"
+                                   onclick="switchPaneAgainstValueSetForRadioButtons(this,
+                                   'global-proxy-configuration-type-', ['manual','auto'])"
                                    class="form-control operationDataKeys" data-key="proxyConfigType"
                                    value="manual" disabled/>
                             <span class="helper" title="Manually enter proxy configurations.">
@@ -1029,6 +1031,8 @@
                         <label class="wr-input-control radio light">
                             <input id="auto-proxy-configuration-radio-button" type="radio"
                                    name="global-proxy-config-type"
+                                   onclick="switchPaneAgainstValueSetForRadioButtons(this,
+                                   'global-proxy-configuration-type-', ['auto','manual'])"
                                    class="form-control operationDataKeys" data-key="proxyConfigType"
                                    value="auto" disabled/>
                             <span class="helper"

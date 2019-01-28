@@ -1039,11 +1039,9 @@
                             <input id="manual-proxy-configuration-radio-button" type="radio" name="global-proxy-config-type"
                                    class="form-control operationDataKeys" data-key="proxyConfigType"
                                    value="manual"
-                                   onload="switchPaneAgainstValueSetForRadioButtons(this,
-                                 'global-proxy-configuration-type-', ['manual','auto'])"
-                                   onchange="switchPaneAgainstValueSetForRadioButtons(this,
-                                 'global-proxy-configuration-type-', ['manual','auto'])" checked/>
-                            <span class="helper"title="Manually enter proxy configurations.">
+                                   onclick="switchPaneAgainstValueSetForRadioButtons(this,
+                                   'global-proxy-configuration-type-', ['manual','auto'])" checked/>
+                            <span class="helper" title="Manually enter proxy configurations.">
                               Manual
                           </span>
                         </label>
@@ -1051,9 +1049,7 @@
                             <input id="auto-proxy-configuration-radio-button" type="radio" name="global-proxy-config-type"
                                    class="form-control operationDataKeys" data-key="proxyConfigType"
                                    value="auto"
-                                   onload="switchPaneAgainstValueSetForRadioButtons(this,
-                                   'global-proxy-configuration-type-', ['auto','manual'])"
-                                   onchange="switchPaneAgainstValueSetForRadioButtons(this,
+                                   onclick="switchPaneAgainstValueSetForRadioButtons(this,
                                    'global-proxy-configuration-type-', ['auto','manual'])"/>
                             <span class="helper"
                                   title="Proxy configurations will be automatically fetched from Proxy PAC file.">
