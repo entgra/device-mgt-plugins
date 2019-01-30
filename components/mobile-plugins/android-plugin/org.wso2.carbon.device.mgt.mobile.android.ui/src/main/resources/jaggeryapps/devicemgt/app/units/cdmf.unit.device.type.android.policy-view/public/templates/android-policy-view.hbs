@@ -1021,9 +1021,9 @@
                             <input id="manual-proxy-configuration-radio-button" type="radio"
                                    name="global-proxy-config-type"
                                    onclick="switchPaneAgainstValueSetForRadioButtons(this,
-                                   'global-proxy-configuration-type-', ['manual','auto'])"
+                                   'global-proxy-configuration-type-', ['MANUAL','AUTO'])"
                                    class="form-control operationDataKeys" data-key="proxyConfigType"
-                                   value="manual" disabled/>
+                                   value="MANUAL" disabled/>
                             <span class="helper" title="Manually enter proxy configurations.">
                               Manual
                           </span>
@@ -1032,9 +1032,9 @@
                             <input id="auto-proxy-configuration-radio-button" type="radio"
                                    name="global-proxy-config-type"
                                    onclick="switchPaneAgainstValueSetForRadioButtons(this,
-                                   'global-proxy-configuration-type-', ['auto','manual'])"
+                                   'global-proxy-configuration-type-', ['AUTO','MANUAL'])"
                                    class="form-control operationDataKeys" data-key="proxyConfigType"
-                                   value="auto" disabled/>
+                                   value="AUTO" disabled/>
                             <span class="helper"
                                   title="Proxy configurations will be automatically fetched from Proxy PAC file.">
                                 Auto
@@ -1077,26 +1077,6 @@
                             </label>
                             <input id="proxy-excl" class="form-control operationDataKeys" data-key="proxyExclList"
                                    placeholder="[ Example: localhost, *.example.com ]" disabled/>
-                        </div>
-                        <div class="wr-input-control" id="control-proxy-username">
-                            <label class="wr-input-label" for="proxy-username">
-                                Username
-                                <span class="helper" title="Username for the proxy server.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                            </label>
-                            <input id="proxy-username" class="form-control operationDataKeys"
-                                   data-key="proxyUsername" maxlength="50" disabled/>
-                        </div>
-                        <div class="wr-input-control" id="control-proxy-password">
-                            <label class="wr-input-label" for="proxy-password">
-                                Password
-                                <span class="helper" title="Password for the proxy server.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                            </label>
-                            <input id="proxy-password" type="password" class="form-control operationDataKeys"
-                                   data-key="proxyPassword" maxlength="100" disabled/>
                         </div>
                     </div>
                     <div id="global-proxy-configuration-type-auto" class="wr-input-control">

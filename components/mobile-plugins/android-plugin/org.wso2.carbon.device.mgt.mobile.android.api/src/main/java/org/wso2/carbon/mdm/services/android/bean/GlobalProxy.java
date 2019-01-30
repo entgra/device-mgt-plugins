@@ -23,7 +23,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * This class represents the information of setting up global proxy
@@ -35,71 +34,75 @@ import java.util.List;
 )
 public class GlobalProxy extends AndroidOperation implements Serializable {
 
-    @ApiModelProperty(name = "host", value = "The hostname of the proxy server", required = true)
-    private String host;
+    @ApiModelProperty(
+            name = "proxyConfigType",
+            value = "Type of the proxy",
+            required = true
+    )
+    private ProxyType proxyConfigType;
 
     @ApiModelProperty(
-            name = "port",
-            value = "The port which the proxy server is running",
-            required = true)
-    private int port;
+            name = "proxyHost",
+            value = "The hostname of the proxy server"
+    )
+    private String proxyHost;
 
     @ApiModelProperty(
-            name = "excludedList",
+            name = "proxyPort",
+            value = "The port which the proxy server is running"
+    )
+    private int proxyPort;
+
+    @ApiModelProperty(
+            name = "proxyExclList",
             value = "Hosts to exclude using the proxy on connections for. These hosts can use wildcards such as " +
                     "*.example.com"
     )
-    private List<String> excludedList;
+    private String proxyExclList;
 
     @ApiModelProperty(
-            name = "username",
-            value = "Username of the proxy server"
+            name = "proxyPacUrl",
+            value = "PAC file URL to auto config proxy"
     )
-    private String username;
+    private String proxyPacUrl;
 
-    @ApiModelProperty(
-            name = "password",
-            value = "Password of the proxy server"
-    )
-    private String password;
-
-    public String getHost() {
-        return host;
+    public ProxyType getProxyConfigType() {
+        return proxyConfigType;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setProxyConfigType(ProxyType proxyConfigType) {
+        this.proxyConfigType = proxyConfigType;
     }
 
-    public int getPort() {
-        return port;
+    public String getProxyHost() {
+        return proxyHost;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
     }
 
-    public List<String> getExcludedList() {
-        return excludedList;
+    public int getProxyPort() {
+        return proxyPort;
     }
 
-    public void setExcludedList(List<String> excludedList) {
-        this.excludedList = excludedList;
+    public void setProxyPort(int proxyPort) {
+        this.proxyPort = proxyPort;
     }
 
-    public String getUsername() {
-        return username;
+    public String getProxyExclList() {
+        return proxyExclList;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setProxyExclList(String proxyExclList) {
+        this.proxyExclList = proxyExclList;
     }
 
-    public String getPassword() {
-        return password;
+    public String getProxyPacUrl() {
+        return proxyPacUrl;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setProxyPacUrl(String proxyPacUrl) {
+        this.proxyPacUrl = proxyPacUrl;
     }
 }

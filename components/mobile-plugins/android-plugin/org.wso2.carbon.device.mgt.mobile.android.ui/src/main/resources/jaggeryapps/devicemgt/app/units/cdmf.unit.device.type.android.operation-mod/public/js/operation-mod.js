@@ -161,8 +161,6 @@ var androidOperationModule = function () {
                     "proxyHost": operationPayload["proxyHost"],
                     "proxyPort": operationPayload["proxyPort"],
                     "proxyExclList": operationPayload["proxyExclList"],
-                    "proxyUsername": operationPayload["proxyUsername"],
-                    "proxyPassword": operationPayload["proxyPassword"],
                     "proxyPacUrl": operationPayload["proxyPacUrl"]
                 };
                 break;
@@ -331,8 +329,6 @@ var androidOperationModule = function () {
                         "proxyHost": operationData["proxyHost"],
                         "proxyPort": operationData["proxyPort"],
                         "proxyExclList": operationData["proxyExclList"],
-                        "proxyUsername": operationData["proxyUsername"],
-                        "proxyPassword": operationData["proxyPassword"],
                         "proxyPacUrl": operationData["proxyPacUrl"]
                     }
                 };

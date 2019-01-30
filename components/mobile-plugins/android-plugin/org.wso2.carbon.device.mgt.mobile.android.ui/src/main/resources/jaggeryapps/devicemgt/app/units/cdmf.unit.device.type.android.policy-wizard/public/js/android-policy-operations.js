@@ -819,17 +819,20 @@ var slideDownPaneAgainstValueSetForRadioButtons = function (selectElement, paneI
 var switchPaneAgainstValueSetForRadioButtons = function (selectElement, paneIdPrefix, valueSet) {
     var selectedValueOnChange = selectElement.value;
     var paneSelector = "#" + paneIdPrefix;
+    var pane;
     for (var i = 0; i < valueSet.length; ++i) {
         if (selectedValueOnChange !== valueSet[i]) {
-            if ($(paneSelector).hasClass("expanded")) {
-                $(paneSelector).removeClass("expanded");
+            pane = paneSelector + valueSet[i].toLowerCase();
+            if ($(pane).hasClass("expanded")) {
+                $(pane).removeClass("expanded");
             }
-            $(paneSelector + valueSet[i]).slideUp();
+            $(pane).slideUp();
         } else {
-            if (!$(paneSelector).hasClass("expanded")) {
-                $(paneSelector).addClass("expanded");
+            pane = paneSelector + selectedValueOnChange.toLowerCase();
+            if (!$(pane).hasClass("expanded")) {
+                $(pane).addClass("expanded");
             }
-            $(paneSelector + selectedValueOnChange).slideDown();
+            $(pane).slideDown();
         }
     }
 };
