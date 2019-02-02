@@ -981,7 +981,9 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
     @Override
     public Response setRecommendedGlobalProxy(GlobalProxyBeanWrapper globalProxyBeanWrapper) {
         if (log.isDebugEnabled()) {
-            log.debug("Invoking 'configure-global-proxy' operation");
+            log.debug("Applying 'configure-global-proxy' operation: " +
+                    globalProxyBeanWrapper.getOperation().toJSON() + " for Devices: ["
+                    + String.join(",", globalProxyBeanWrapper.getDeviceIDs()) + "]");
         }
 
         try {
