@@ -85,7 +85,7 @@ var kioskConfigs = {
     "wifiSSID" : "android.app.extra.PROVISIONING_WIFI_SSID",
     "wifiPassword" : "android.app.extra.PROVISIONING_WIFI_PASSWORD",
     "skipEncryption" : "android.app.extra.PROVISIONING_SKIP_ENCRYPTION",
-    "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM",
+    "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM",
     "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION"
 };
 
@@ -136,17 +136,17 @@ $(document).ready(function () {
                     } else if (config.name === configParams["ANDROID_EULA"]) {
                         $("#android-eula").val(config.value);
                     } else if (config.name === kioskConfigs["adminComponentName"]) {
-                        $("input#android-kiosk-config-1").val(config.value);
+                        $("input#android-kiosk-config-admin-component").val(config.value);
                     } else if (config.name === kioskConfigs["wifiSSID"]) {
-                        $("input#android-kiosk-config-2").val(config.value);
+                        $("input#android-kiosk-config-wifi-ssid").val(config.value);
                     } else if (config.name === kioskConfigs["wifiPassword"]) {
-                        $("input#android-kiosk-config-3").val(config.value);
+                        $("input#android-kiosk-config-wifi-password").val(config.value);
                     } else if (config.name === kioskConfigs["checksum"]) {
-                        $("input#android-kiosk-config-4").val(config.value);
+                        $("input#android-kiosk-config-checksum").val(config.value);
                     } else if (config.name === kioskConfigs["downloadURL"]) {
-                        $("input#android-kiosk-config-5").val(config.value);
+                        $("input#android-kiosk-config-download-url").val(config.value);
                     } else if (config.name === kioskConfigs["skipEncryption"]) {
-                        $("#android-kiosk-config-6").val(config.value);
+                        $("#android-kiosk-config-encryption").val(config.value);
                     }
                 }
             }
@@ -184,12 +184,12 @@ $(document).ready(function () {
         var errorMsg = "#android-config-error-msg span";
 
         // KIOSK configs
-        var adminComponentName = $("input#android-kiosk-config-1").val();
-        var checksum = $("input#android-kiosk-config-2").val();
-        var downloadUrl = $("input#android-kiosk-config-3").val();
-        var wifiSSID = $("input#android-kiosk-config-4").val();
-        var wifiPassword = $("input#android-kiosk-config-5").val();
-        var encryption = $("#android-kiosk-config-6").find("option:selected").attr("value");
+        var adminComponentName = $("input#android-kiosk-config-admin-component").val();
+        var checksum = $("input#android-kiosk-config-checksum").val();
+        var downloadUrl = $("input#android-kiosk-config-download-url").val();
+        var wifiSSID = $("input#android-kiosk-config-wifi-ssid").val();
+        var wifiPassword = $("input#android-kiosk-config-wifi-password").val();
+        var encryption = $("#android-kiosk-config-encryption").find("option:selected").attr("value");
 
         if (notifierType === notifierTypeConstants["LOCAL"] && !notifierFrequency) {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");

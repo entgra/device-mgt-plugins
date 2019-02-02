@@ -36,8 +36,10 @@ var kioskConfigs = {
     "wifiSSID" : "android.app.extra.PROVISIONING_WIFI_SSID",
     "wifiPassword" : "android.app.extra.PROVISIONING_WIFI_PASSWORD",
     "skipEncryption" : "android.app.extra.PROVISIONING_SKIP_ENCRYPTION",
-    "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM",
-    "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION"
+    "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM",
+    "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION",
+    "androidExtra" : "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE",
+    "accessToken" : "android.app.extra.token"
 };
 
 /*
