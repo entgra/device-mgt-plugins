@@ -71,6 +71,92 @@
         <div class="wr-input-control">
             <textarea id="android-eula" type="text" class="form-control"></textarea>
         </div>
+
+        <!-- KIOSK Configs -->
+        <h4>
+            Android KIOSK Provisioning Configs
+            <hr>
+        </h4>
+
+        <div class="kiosk-inputs">
+            <div class="wr-input-control">
+                <label class="wr-input-label" for="android-kiosk-config-admin-component">
+                    PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME
+                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
+                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
+                    <!--</span>-->
+                    <br>
+                    ( ex: org.wso2.iot.agent/org.wso2.iot.agent.services.AgentDeviceAdminReceiver )
+                </label>
+                <input id="android-kiosk-config-admin-component" type="text" class="form-control" >
+            </div>
+
+            <div class="wr-input-control">
+                <label class="wr-input-label" for="android-kiosk-config-checksum">
+                    PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM
+                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
+                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
+                    <!--</span>-->
+                    <br>
+                    ( ex: gJD2YwtOiWJHkSMkkIfLRlj-quNqG1fb6v100QmzM9w= )
+                </label>
+                <input id="android-kiosk-config-checksum" type="text" class="form-control" >
+            </div>
+
+            <div class="wr-input-control">
+                <label class="wr-input-label" for="android-kiosk-config-download-url">
+                    PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION
+                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
+                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
+                    <!--</span>-->
+                    <br>
+                    ( ex: http://192.168.8.20:8080/android.apk )
+                </label>
+                <input id="android-kiosk-config-download-url" type="text" class="form-control" >
+            </div>
+
+            <div class="wr-input-control">
+                <label class="wr-input-label" for="android-kiosk-config-wifi-ssid">
+                    PROVISIONING_WIFI_SSID
+                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
+                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
+                    <!--</span>-->
+                    <br>
+                    ( ex: Entgra )
+                </label>
+                <input id="android-kiosk-config-wifi-ssid" type="text" class="form-control" >
+            </div>
+
+            <div class="wr-input-control">
+                <label class="wr-input-label" for="android-kiosk-config-wifi-password">
+                    PROVISIONING_WIFI_PASSWORD
+                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
+                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
+                    <!--</span>-->
+                    <br>
+
+                </label>
+                <input id="android-kiosk-config-wifi-password" type="text" class="form-control" >
+            </div>
+
+            <div class="wr-input-control">
+                <label class="wr-input-label" for="android-kiosk-config-encryption">
+                    PROVISIONING_SKIP_ENCRYPTION
+                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
+                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
+                    <!--</span>-->
+                    <br>
+                </label>
+                <select id="android-kiosk-config-encryption" class="form-control" data-default="0">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- End of KIOSK Configs -->
+
         <div class="wr-input-control wr-btn-grp">
             <button id="save-android-btn" class="wr-btn">Save</button>
         </div>
