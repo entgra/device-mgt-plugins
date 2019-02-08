@@ -21,6 +21,7 @@ package org.wso2.carbon.mdm.services.android.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 
@@ -65,6 +66,22 @@ public class GlobalProxy extends AndroidOperation implements Serializable {
             value = "PAC file URL to auto config proxy"
     )
     private String proxyPacUrl;
+
+    public boolean validateRequest() {
+        if (ProxyType.MANUAL.equals(this.proxyConfigType)) {
+            if (StringUtils.isEmpty(this.proxyHost)) {
+                return false;
+            }
+            if (this.proxyPort < 0 || this.proxyPort > 65535) {
+                return false;
+            }
+        } else if (ProxyType.AUTO.equals(this.proxyConfigType)) {
+            if (StringUtils.isEmpty(proxyPacUrl)) {
+                return false;
+            }
+        }
+        return false;
+    }
 
     public ProxyType getProxyConfigType() {
         return proxyConfigType;

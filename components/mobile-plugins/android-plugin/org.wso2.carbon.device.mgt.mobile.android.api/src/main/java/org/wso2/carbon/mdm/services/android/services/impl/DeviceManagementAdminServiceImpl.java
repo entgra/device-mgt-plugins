@@ -995,14 +995,21 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
             }
 
             GlobalProxy globalProxy = globalProxyBeanWrapper.getOperation();
-            ProfileOperation operation = new ProfileOperation();
-            operation.setCode(AndroidConstants.OperationCodes.GLOBAL_PROXY);
-            operation.setType(Operation.Type.PROFILE);
-            operation.setPayLoad(globalProxy.toJSON());
+            if (globalProxy.validateRequest()) {
+                ProfileOperation operation = new ProfileOperation();
+                operation.setCode(AndroidConstants.OperationCodes.GLOBAL_PROXY);
+                operation.setType(Operation.Type.PROFILE);
+                operation.setPayLoad(globalProxy.toJSON());
 
-            Activity activity = AndroidDeviceUtils
-                    .getOperationResponse(globalProxyBeanWrapper.getDeviceIDs(), operation);
-            return Response.status(Response.Status.CREATED).entity(activity).build();
+                Activity activity = AndroidDeviceUtils
+                        .getOperationResponse(globalProxyBeanWrapper.getDeviceIDs(), operation);
+                return Response.status(Response.Status.CREATED).entity(activity).build();
+            } else {
+                String errorMessage = "The payload of the global proxy operation is incorrect";
+                log.error(errorMessage);
+                throw new BadRequestException(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(400L).setMessage(errorMessage).build());
+            }
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
