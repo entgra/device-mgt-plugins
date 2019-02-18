@@ -44,6 +44,8 @@ var androidOperationConstants = {
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION": "wifi",
     "WIFI_OPERATION_CODE": "WIFI",
+    "GLOBAL_PROXY_OPERATION": "global-proxy",
+    "GLOBAL_PROXY_OPERATION_CODE": "GLOBAL_PROXY",
     "VPN_OPERATION": "vpn",
     "VPN_OPERATION_CODE": "VPN",
     "APPLICATION_OPERATION": "app-restriction",
@@ -229,6 +231,72 @@ var validatePolicyProfile = function () {
                     continueToCheckNextInputs = false;
                 }
             }
+            // at-last, if the value of continueToCheckNextInputs is still true
+            // this means that no error is found
+            if (continueToCheckNextInputs) {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+            }
+
+            // updating validationStatusArray with validationStatus
+            validationStatusArray.push(validationStatus);
+        }
+
+        // Validating PROXY
+        if ($.inArray(androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"], configuredOperations) !== -1) {
+            // if PROXY is configured
+            operation = androidOperationConstants["GLOBAL_PROXY_OPERATION"];
+            // initializing continueToCheckNextInputs to true
+            continueToCheckNextInputs = true;
+
+            if ($("input#manual-proxy-configuration-radio-button").is(":checked")) {
+                var proxyHost = $("input#proxy-host").val();
+                var proxyPort = $("input#proxy-port").val();
+                if (!proxyHost) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy server host name is required.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                if (!proxyPort) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy server port is required.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                } else if (!$.isNumeric(proxyPort)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy server port requires a number input.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                } else if (!inputIsValidAgainstRange(proxyPort, 0, 65535)) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy server port is not within the range of valid port numbers.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+            } else if ($("input#auto-proxy-configuration-radio-button").is(":checked")) {
+                var pacFileUrl = $("input#proxy-pac-url").val();
+                if (!pacFileUrl) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Proxy pac file URL is required for proxy auto config.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+            }
+
             // at-last, if the value of continueToCheckNextInputs is still true
             // this means that no error is found
             if (continueToCheckNextInputs) {
@@ -736,6 +804,36 @@ var slideDownPaneAgainstValueSetForRadioButtons = function (selectElement, paneI
         $(paneSelector).removeClass("hidden");
     } else {
         $(paneSelector).addClass("hidden");
+    }
+};
+
+/**
+ * Method to switch panes based on the selected radio button.
+ *
+ * The method will un hide the element with the id (paneIdPrefix + selectElement.value)
+ *
+ * @param selectElement selected HTML element
+ * @param paneIdPrefix  prefix of the id of the pane to un hide.
+ * @param valueSet applicable value set
+ */
+var switchPaneAgainstValueSetForRadioButtons = function (selectElement, paneIdPrefix, valueSet) {
+    var selectedValueOnChange = selectElement.value;
+    var paneSelector = "#" + paneIdPrefix;
+    var pane;
+    for (var i = 0; i < valueSet.length; ++i) {
+        if (selectedValueOnChange !== valueSet[i]) {
+            pane = paneSelector + valueSet[i].toLowerCase();
+            if ($(pane).hasClass("expanded")) {
+                $(pane).removeClass("expanded");
+            }
+            $(pane).slideUp();
+        } else {
+            pane = paneSelector + selectedValueOnChange.toLowerCase();
+            if (!$(pane).hasClass("expanded")) {
+                $(pane).addClass("expanded");
+            }
+            $(pane).slideDown();
+        }
     }
 };
 

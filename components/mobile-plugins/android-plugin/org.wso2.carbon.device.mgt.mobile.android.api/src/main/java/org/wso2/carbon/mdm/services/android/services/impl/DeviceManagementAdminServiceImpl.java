@@ -1,19 +1,36 @@
 /*
- *   Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *   WSO2 Inc. licenses this file to you under the Apache License,
- *   Version 2.0 (the "License"); you may not use this file except
- *   in compliance with the License.
- *   You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing,
- *   software distributed under the License is distributed on an
- *   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *   KIND, either express or implied.  See the License for the
- *   specific language governing permissions and limitations
- *   under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  *
  */
 package org.wso2.carbon.mdm.services.android.services.impl;
@@ -21,7 +38,6 @@ package org.wso2.carbon.mdm.services.android.services.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -37,6 +53,7 @@ import org.wso2.carbon.mdm.services.android.bean.DeviceEncryption;
 import org.wso2.carbon.mdm.services.android.bean.DeviceLock;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.FileTransfer;
+import org.wso2.carbon.mdm.services.android.bean.GlobalProxy;
 import org.wso2.carbon.mdm.services.android.bean.LockCode;
 import org.wso2.carbon.mdm.services.android.bean.Notification;
 import org.wso2.carbon.mdm.services.android.bean.PasscodePolicy;
@@ -53,6 +70,7 @@ import org.wso2.carbon.mdm.services.android.bean.wrapper.CameraBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.DeviceLockBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EncryptionBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.FileTransferBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.GlobalProxyBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.LockCodeBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.NotificationBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.PasswordPolicyBeanWrapper;
@@ -955,6 +973,53 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
             log.error(errorMessage, e);
             throw new UnexpectedServerErrorException(
                     new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
+        }
+    }
+
+    @POST
+    @Path("/configure-global-proxy")
+    @Override
+    public Response setRecommendedGlobalProxy(GlobalProxyBeanWrapper globalProxyBeanWrapper) {
+        if (log.isDebugEnabled()) {
+            log.debug("Applying 'configure-global-proxy' operation: " +
+                    globalProxyBeanWrapper.getOperation().toJSON() + " for Devices: ["
+                    + String.join(",", globalProxyBeanWrapper.getDeviceIDs()) + "]");
+        }
+
+        try {
+            if (globalProxyBeanWrapper == null || globalProxyBeanWrapper.getOperation() == null) {
+                String errorMessage = "The payload of the global proxy operation is incorrect";
+                log.error(errorMessage);
+                throw new BadRequestException(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(400L).setMessage(errorMessage).build());
+            }
+
+            GlobalProxy globalProxy = globalProxyBeanWrapper.getOperation();
+            if (globalProxy.validateRequest()) {
+                ProfileOperation operation = new ProfileOperation();
+                operation.setCode(AndroidConstants.OperationCodes.GLOBAL_PROXY);
+                operation.setType(Operation.Type.PROFILE);
+                operation.setPayLoad(globalProxy.toJSON());
+
+                Activity activity = AndroidDeviceUtils
+                        .getOperationResponse(globalProxyBeanWrapper.getDeviceIDs(), operation);
+                return Response.status(Response.Status.CREATED).entity(activity).build();
+            } else {
+                String errorMessage = "The payload of the global proxy operation is incorrect";
+                log.error(errorMessage);
+                throw new BadRequestException(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(400L).setMessage(errorMessage).build());
+            }
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
+            throw new BadRequestException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(400L).setMessage(errorMessage).build());
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            log.error(errorMessage, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(500L).setMessage(errorMessage).build());
         }
     }
 

@@ -23,14 +23,15 @@
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
  */
 
 var androidOperationModule = function () {
@@ -51,6 +52,7 @@ var androidOperationModule = function () {
         "CAMERA_OPERATION_CODE": "CAMERA",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
         "WIFI_OPERATION_CODE": "WIFI",
+        "GLOBAL_PROXY_OPERATION_CODE": "GLOBAL_PROXY",
         "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "WORK_PROFILE_CODE": "WORK_PROFILE",
@@ -151,6 +153,15 @@ var androidOperationModule = function () {
                     "wifiAnoIdentity": operationPayload["anonymousIdentity"],
                     "wifiCaCert": operationPayload["cacert"],
                     "wifiCaCertName": operationPayload["cacertName"]
+                };
+                break;
+            case androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"]:
+                payload = {
+                    "proxyConfigType": operationPayload["proxyConfigType"],
+                    "proxyHost": operationPayload["proxyHost"],
+                    "proxyPort": operationPayload["proxyPort"],
+                    "proxyExclList": operationPayload["proxyExclList"],
+                    "proxyPacUrl": operationPayload["proxyPacUrl"]
                 };
                 break;
             case androidOperationConstants["VPN_OPERATION_CODE"]:
@@ -310,6 +321,18 @@ var androidOperationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "proxyConfigType": operationData["proxyConfigType"],
+                        "proxyHost": operationData["proxyHost"],
+                        "proxyPort": operationData["proxyPort"],
+                        "proxyExclList": operationData["proxyExclList"],
+                        "proxyPacUrl": operationData["proxyPacUrl"]
+                    }
+                };
+                break;
             case androidOperationConstants["VPN_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
@@ -433,6 +456,7 @@ var androidOperationModule = function () {
     publicMethods.getAndroidServiceEndpoint = function (operationCode) {
         var featureMap = {
             "WIFI": "configure-wifi",
+            "GLOBAL_PROXY": "configure-global-proxy",
             "CAMERA": "control-camera",
             "VPN": "configure-vpn",
             "DEVICE_LOCK": "lock-devices",
@@ -455,7 +479,6 @@ var androidOperationModule = function () {
             "ENTERPRISE_WIPE": "enterprise-wipe",
             "WIPE_DATA": "wipe"
         };
-        //return "/mdm-android-agent/operation/" + featureMap[operationCode];
         return "/api/device-mgt/android/v1.0/admin/devices/" + featureMap[operationCode];
     };
 

@@ -163,6 +163,10 @@
             <Name>Wifi</Name>
             <Description>Setting up wifi configuration</Description>
         </Feature>
+        <Feature code="GLOBAL_PROXY">
+            <Name>Global Proxy</Name>
+            <Description>Setting up a network-independent global HTTP proxy on a device.</Description>
+        </Feature>
         <Feature code="CAMERA">
             <Name>Camera</Name>
             <Description>Enable or disable camera</Description>
