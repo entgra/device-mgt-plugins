@@ -1392,6 +1392,71 @@
                             </div>
                         </div>
                     </form>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <h2 class="sub-title panel-title"
+                                style="padding: 0px; padding-right:15px; font-size:15px; margin-left:15px;">
+                                Device Global Configuration
+                                <label class="wr-input-control switch" data-toggle="collapse"
+                                       data-target="#cosu-profile-device-global-operation">
+                                    <input type="checkbox" class="non-advance-operation" />
+                                    <span class="helper"></span>
+                                    <span class="text"></span>
+                                </label>
+                            </h2>
+                        </div>
+                        <div id="cosu-profile-device-global-operation" class="panel-collapse panel-body collapse"
+                             role="tabpanel">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <h2 class="col-sm-12 form-inline sub-title panel-title"
+                                        style="padding: 0px; padding-right:15px; font-size:13px; margin-left:10px;">
+                                        Browser Properties
+                                        <label class="wr-input-control switch" data-toggle="collapse"
+                                               data-target="#cosu-browser-property">
+                                            <input type="checkbox" />
+                                            <span class="helper"></span>
+                                            <span class="text"></span>
+                                        </label>
+                                    </h2>
+                                </div>
+                                <div id="cosu-browser-property" class="panel-collapse panel-body collapse"
+                                     role="tabpanel">
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-label">
+                                            Primary URL
+                                            <span class="helper" title="Primary URL">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                        <input id="cosu-browser-property-primary-url" type="text"
+                                               class="form-control operationDataKeys" data-key="primaryURL"
+                                               maxlength="100" placeholder="[ Should be a valid URL ]"/>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-address-bar-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isAddressBarEnabled"/>
+                                            <span class="helper" title="Enables address bar of the browser.">
+                                                Enable browser address bar
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
+                            <br/>
+                            <div>
+                                <ul class="message message-info">
+                                    <i class="icon fw fw-info"></i>
+                                    <a id="cosu-profile-configuration-select-msg">
+                                        Global configurations related to device.
+                                    </a>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
