@@ -150,6 +150,28 @@ var inputIsValidAgainstRange = function (numberInput, min, max) {
     return (numberInput == min || (numberInput > min && numberInput < max) || numberInput == max);
 };
 
+var ovpnConfigUploaded = function () {
+    var ovpnFileInput = document.getElementById("ovpn-file");
+    if ('files' in ovpnFileInput) {
+        if (ovpnFileInput.files.length === 1) {
+            var reader = new FileReader();
+            reader.onload = function(progressEvent){
+                var txt = "";
+                var lines = this.result.split('\n');
+                for(var line = 0; line < lines.length; line++){
+                    console.log(lines[line]);
+                    if (lines[line].charAt(0) !== '#') {
+                        txt += lines[line] + '\n';
+                    }
+                }
+                document.getElementById ("openvpn-config").value = txt;
+                console.log(txt);
+            };
+            reader.readAsText(ovpnFileInput.files[0]);
+        }
+    }
+};
+
 /**
  * Validates policy profile operations for the windows platform.
  *
@@ -389,46 +411,18 @@ var validatePolicyProfile = function () {
         }
 
         if ($.inArray(androidOperationConstants["VPN_OPERATION_CODE"], configuredOperations) != -1) {
-            // if WIFI is configured
             operation = androidOperationConstants["VPN_OPERATION"];
             // initializing continueToCheckNextInputs to true
             continueToCheckNextInputs = true;
 
-            var serverAddress = $("input#vpn-server-address").val();
-            if (!serverAddress) {
+            var openvpnConfig = $("#openvpn-config").val();
+            if (!openvpnConfig || openvpnConfig === '') {
                 validationStatus = {
                     "error": true,
-                    "subErrorMsg": "Server address is required. You cannot proceed.",
+                    "subErrorMsg": "ovpn config required. You cannot proceed.",
                     "erroneousFeature": operation
                 };
                 continueToCheckNextInputs = false;
-            }
-
-            if (continueToCheckNextInputs) {
-                var serverPort = $("input#vpn-server-port").val();
-                if (!serverPort) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "VPN server port is required. You cannot proceed.",
-                        "erroneousFeature": operation
-                    };
-                    continueToCheckNextInputs = false;
-                } else if (!$.isNumeric(serverPort)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "VPN server port requires a number input.",
-                        "erroneousFeature": operation
-                    };
-                    continueToCheckNextInputs = false;
-                } else if (!inputIsValidAgainstRange(serverPort, 0, 65535)) {
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "VPN server port is not within the range " +
-                        "of valid port numbers.",
-                        "erroneousFeature": operation
-                    };
-                    continueToCheckNextInputs = false;
-                }
             }
 
             // at-last, if the value of continueToCheckNextInputs is still true

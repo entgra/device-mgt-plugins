@@ -1410,59 +1410,29 @@
                         </label>
                     </h2>
                     <div class="panel-title-description">
-                        Configure the VPN settings on Android devices.
-                        Once this profile is applied, the device owners won't be able to modify the configured settings
-                        on their devices.
+                        Configure the OpenVPN settings on Android devices.
+                        In order to enable this, device needs to have "OpenVPN for Android" application installed.
                     </div>
                 </div>
                 <div id="vpn-body" class="panel-collapse panel-body collapse" role="tabpanel"
                      aria-labelledby="vpn-body">
                     <hr/>
-                    Please note that * sign represents required fields of data.
-                    <br>
                     <br>
                     <div id="vpn-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="vpn-server-address">
-                            VPN Server Address*
-                            <span class="helper" title="Address of the VPN server to be configured.">
+                        <label class="wr-input-label" for="ovpn-file">
+                            OpenVPN Server Config*
+                            <span class="helper" title="OpenVPN configurations from ovpn file">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
-                        <input id="vpn-server-address" type="text" class="form-control operationDataKeys"
-                               data-key="serverAddress" maxlength="200" placeholder="[ Should be a valid hostname ]"/>
-                    </div>
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="vpn-server-port">
-                            VPN Server Port
-                            <span class="helper" title="Port of the VPN server to be configured.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                        </label>
-                        <input id="vpn-server-port" type="text" class="form-control operationDataKeys"
-                               data-key="serverPort" maxlength="100" placeholder="[ Optional field ]"/>
-                    </div>
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="vpn-shared-secret">
-                            Shared Secret
-                            <span class="helper" title="Shared secret.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                        </label>
-                        <input id="vpn-shared-secret" type="password" class="form-control operationDataKeys"
-                               data-key="sharedSecret" maxlength="100" placeholder="[ Optional field ]"/>
-                    </div>
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="vpn-dns">
-                            DNS Server
-                            <span class="helper" title="DNS Server.">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                        </label>
-                        <input id="vpn-dns" type="text" class="form-control operationDataKeys" data-key="dnsServer"
-                               maxlength="100" placeholder="[ Optional field ]"/>
+                        <input id="ovpn-file" type="file" class="form-control operationDataKeys"
+                               maxlength="200" onchange="ovpnConfigUploaded()"/>
+
+                        <input id="openvpn-config" class="form-control operationDataKeys" type="hidden" data-key="openvpn_config" />
+                        <input id="vpn-type" class="form-control operationDataKeys" type="hidden" data-key="type" value="OpenVPN" />
                     </div>
                 </div>
             </div>

@@ -417,10 +417,8 @@ var generatePayload = function (operationCode, operationData, deviceList) {
             operationType = operationTypeConstants["PROFILE"];
             payload = {
                 "operation": {
-                    "serverAddress": operationData["serverAddress"],
-                    "serverPort": operationData["serverPort"],
-                    "sharedSecret": operationData["sharedSecret"],
-                    "dnsServer": operationData["dnsServer"]
+                    "type": operationData["type"],
+                    "openvpn_config": operationData["openvpn_config"]
                 }
             };
             break;
