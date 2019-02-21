@@ -241,12 +241,15 @@ $(document).ready(function () {
         var operation = $(this).parents(".operation-data").data("operation");
         // prevents event bubbling by figuring out what element it's being called from.
         if (event.target.tagName == "INPUT") {
-            var featureConfiguredIcon;
-            if ($("input[type='checkbox']", this).is(":checked")) {
-                // add configured-state-icon to the feature
-                featureConfiguredIcon = "#" + operation + "-configured";
-                if ($(featureConfiguredIcon).hasClass("hidden")) {
-                    $(featureConfiguredIcon).removeClass("hidden");
+            var isNonAdvanceOperation = $("input[type='checkbox']", this).hasClass("non-advance-operation");
+            if (!isNonAdvanceOperation) {
+                var featureConfiguredIcon;
+                if ($("input[type='checkbox']", this).is(":checked")) {
+                    // add configured-state-icon to the feature
+                    featureConfiguredIcon = "#" + operation + "-configured";
+                    if ($(featureConfiguredIcon).hasClass("hidden")) {
+                        $(featureConfiguredIcon).removeClass("hidden");
+                    }
                 }
             }
         }
