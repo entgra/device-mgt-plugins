@@ -243,28 +243,30 @@ public class ApplicationOperationsImpl implements ApplicationOperations {
 	/**
 	 * @param applicationOperationDevice holds the information needs to retrieve device list.
 	 * @return List of devices
-	 * @throws MobileApplicationException
+	 * @throws MobileApplicationException If unexpected error occur in getting devices or if app platform is not supported.
 	 */
 	public List<Device> getDevices(ApplicationOperationDevice applicationOperationDevice)
 			throws MobileApplicationException {
 
 		List<Device> devices;
-		List<org.wso2.carbon.device.mgt.common.Device> deviceList = null;
+		List<org.wso2.carbon.device.mgt.common.Device> deviceList;
 		try {
 			DeviceManagementProviderService deviceManagementService = MDMServiceAPIUtils
 					.getDeviceManagementService(applicationOperationDevice.getTenantId());
 			final String username = applicationOperationDevice.getCurrentUser().getUsername();
-			if (MDMAppConstants.WEBAPP.equals
-					(applicationOperationDevice.getPlatform())) {
-				deviceList = deviceManagementService.
-						getDevicesOfUser(username);
-			} else {
-				deviceList = deviceManagementService.
-						getDevicesOfUser(username,
-						                 MDMAppConstants.ANDROID);
-				deviceList.addAll(deviceManagementService.
-						getDevicesOfUser(username,
-						                 MDMAppConstants.IOS));
+			final String platform = applicationOperationDevice.getPlatform();
+			switch (platform) {
+				case MDMAppConstants.WEBAPP:
+					deviceList = deviceManagementService.getDevicesOfUser(username);
+					break;
+				case MDMAppConstants.ANDROID:
+					deviceList = deviceManagementService.getDevicesOfUser(username, MDMAppConstants.ANDROID);
+					break;
+				case MDMAppConstants.IOS:
+					deviceList = deviceManagementService.getDevicesOfUser(username, MDMAppConstants.IOS);
+					break;
+				default:
+					throw new MobileApplicationException("App platform:" + platform + "is not supported.");
 			}
 			devices = new ArrayList<>(deviceList.size());
 			if(log.isDebugEnabled()){
