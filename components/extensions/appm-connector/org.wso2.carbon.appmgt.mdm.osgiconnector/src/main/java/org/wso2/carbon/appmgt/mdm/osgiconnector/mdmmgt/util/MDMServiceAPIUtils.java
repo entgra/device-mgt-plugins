@@ -19,6 +19,7 @@ package org.wso2.carbon.appmgt.mdm.osgiconnector.mdmmgt.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.common.authorization.DeviceAccessAuthorizationService;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 
@@ -48,6 +49,26 @@ public class MDMServiceAPIUtils {
 		}
 		return deviceManagementProviderService;
 	}
+
+    /**
+     * Returns the DeviceAccessAuthorizationService osgi service.
+     *
+     * @param tenantId tenant id
+     * @return {@link DeviceAccessAuthorizationService}
+     */
+    public static DeviceAccessAuthorizationService getDeviceAccessAuthorizationService(int tenantId) {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantId(tenantId, true);
+        DeviceAccessAuthorizationService deviceAccessAuthorizationService =
+                (DeviceAccessAuthorizationService) ctx
+                        .getOSGiService(DeviceAccessAuthorizationService.class, null);
+        if (deviceAccessAuthorizationService == null) {
+            String msg = "Device Access Authorization service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return deviceAccessAuthorizationService;
+    }
 
 	/**
 	 * Returns the ApplicationManagementProviderService osgi service.

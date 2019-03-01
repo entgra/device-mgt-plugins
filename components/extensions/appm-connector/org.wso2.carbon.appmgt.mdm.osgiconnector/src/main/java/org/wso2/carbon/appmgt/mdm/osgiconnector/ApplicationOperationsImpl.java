@@ -39,6 +39,8 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.Platform;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
+import org.wso2.carbon.device.mgt.common.authorization.DeviceAccessAuthorizationException;
+import org.wso2.carbon.device.mgt.common.authorization.DeviceAccessAuthorizationService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.appmgt.mobile.utils.User;
@@ -233,25 +235,32 @@ public class ApplicationOperationsImpl implements ApplicationOperations {
         List<Device> devices;
         List<org.wso2.carbon.device.mgt.common.Device> deviceList;
         try {
-            DeviceManagementProviderService deviceManagementService = MDMServiceAPIUtils
-                    .getDeviceManagementService(applicationOperationDevice.getTenantId());
+            final int tenantId = applicationOperationDevice.getTenantId();
             final String username = applicationOperationDevice.getCurrentUser().getUsername();
             final String platform = applicationOperationDevice.getPlatform();
+            DeviceAccessAuthorizationService deviceAccessAuthorizationService = MDMServiceAPIUtils
+                    .getDeviceAccessAuthorizationService(applicationOperationDevice.getTenantId());
+            DeviceManagementProviderService deviceManagementService = MDMServiceAPIUtils
+                    .getDeviceManagementService(tenantId);
+            boolean isAdmin = deviceAccessAuthorizationService.isDeviceAdminUser();
+
             switch (platform) {
                 case MDMAppConstants.WEBAPP:
-                    deviceList = deviceManagementService.getDevicesOfUser(username);
+                    deviceList = isAdmin ? deviceManagementService.getAllDevices() :
+                            deviceManagementService.getDevicesOfUser(username);
                     break;
                 case MDMAppConstants.ANDROID:
-                    deviceList = deviceManagementService.getDevicesOfUser(username, MDMAppConstants.ANDROID);
+                    deviceList = isAdmin ? deviceManagementService.getAllDevices(MDMAppConstants.ANDROID) :
+                            deviceManagementService.getDevicesOfUser(username, MDMAppConstants.ANDROID);
                     break;
                 case MDMAppConstants.IOS:
-                    deviceList = deviceManagementService.getDevicesOfUser(username, MDMAppConstants.IOS);
+                    deviceList = isAdmin ? deviceManagementService.getAllDevices(MDMAppConstants.IOS) :
+                            deviceManagementService.getDevicesOfUser(username, MDMAppConstants.IOS);
                     break;
                 default:
-                    String msg = "App platform:" + platform + "is not supported.";
-                    log.error(msg);
-                    throw new MobileApplicationException(msg);
+                    throw new MobileApplicationException("App platform: [" + platform + "] is not supported.");
             }
+
             devices = new ArrayList<>(deviceList.size());
             if (log.isDebugEnabled()) {
                 log.debug("device list got from mdm " + deviceList.toString());
@@ -291,7 +300,8 @@ public class ApplicationOperationsImpl implements ApplicationOperations {
         } catch (DeviceManagementException e) {
             logError("Error While retrieving Device List.", e);
             throw new MobileApplicationException(e.getMessage());
-
+        } catch (DeviceAccessAuthorizationException e) {
+            throw new MobileApplicationException("Error while checking user permissions", e);
         }
         return devices;
     }
