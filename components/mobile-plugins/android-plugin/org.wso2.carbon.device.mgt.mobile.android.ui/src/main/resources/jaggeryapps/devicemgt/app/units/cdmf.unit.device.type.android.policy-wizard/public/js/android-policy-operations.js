@@ -878,89 +878,92 @@ $(document).ready(function () {
         var operationDataWrapper = $(this).data("target");
         // prevents event bubbling by figuring out what element it's being called from.
         if (event.target.tagName == "INPUT") {
-            var featureConfiguredIcon;
-            if ($("input[type='checkbox']", this).is(":checked")) {
-                configuredOperations.push(operationCode);
-                // when a feature is enabled, if "zero-configured-features" msg is available, hide that.
-                var zeroConfiguredOperationsErrorMsg = "#policy-profile-main-error-msg";
-                if (!$(zeroConfiguredOperationsErrorMsg).hasClass("hidden")) {
-                    $(zeroConfiguredOperationsErrorMsg).addClass("hidden");
-                }
-                // add configured-state-icon to the feature
-                featureConfiguredIcon = "#" + operation + "-configured";
-                if ($(featureConfiguredIcon).hasClass("hidden")) {
-                    $(featureConfiguredIcon).removeClass("hidden");
-                }
-            } else {
-                //splicing the array if operation is present.
-                var index = $.inArray(operationCode, configuredOperations);
-                if (index != -1) {
-                    configuredOperations.splice(index, 1);
-                }
-                // when a feature is disabled, clearing all its current configured, error or success states
-                var subErrorMsgWrapper = "#" + operation + "-feature-error-msg";
-                var subErrorIcon = "#" + operation + "-error";
-                var subOkIcon = "#" + operation + "-ok";
-                featureConfiguredIcon = "#" + operation + "-configured";
+            var isNonAdvanceOperation = $("input[type='checkbox']", this).hasClass("non-advance-operation");
+            if (!isNonAdvanceOperation) {
+                var featureConfiguredIcon;
+                if ($("input[type='checkbox']", this).is(":checked")) {
+                    configuredOperations.push(operationCode);
+                    // when a feature is enabled, if "zero-configured-features" msg is available, hide that.
+                    var zeroConfiguredOperationsErrorMsg = "#policy-profile-main-error-msg";
+                    if (!$(zeroConfiguredOperationsErrorMsg).hasClass("hidden")) {
+                        $(zeroConfiguredOperationsErrorMsg).addClass("hidden");
+                    }
+                    // add configured-state-icon to the feature
+                    featureConfiguredIcon = "#" + operation + "-configured";
+                    if ($(featureConfiguredIcon).hasClass("hidden")) {
+                        $(featureConfiguredIcon).removeClass("hidden");
+                    }
+                } else {
+                    //splicing the array if operation is present.
+                    var index = $.inArray(operationCode, configuredOperations);
+                    if (index != -1) {
+                        configuredOperations.splice(index, 1);
+                    }
+                    // when a feature is disabled, clearing all its current configured, error or success states
+                    var subErrorMsgWrapper = "#" + operation + "-feature-error-msg";
+                    var subErrorIcon = "#" + operation + "-error";
+                    var subOkIcon = "#" + operation + "-ok";
+                    featureConfiguredIcon = "#" + operation + "-configured";
 
-                if (!$(subErrorMsgWrapper).hasClass("hidden")) {
-                    $(subErrorMsgWrapper).addClass("hidden");
-                }
-                if (!$(subErrorIcon).hasClass("hidden")) {
-                    $(subErrorIcon).addClass("hidden");
-                }
-                if (!$(subOkIcon).hasClass("hidden")) {
-                    $(subOkIcon).addClass("hidden");
-                }
-                if (!$(featureConfiguredIcon).hasClass("hidden")) {
-                    $(featureConfiguredIcon).addClass("hidden");
-                }
-                // reinitializing input fields into the defaults
-                $(operationDataWrapper + " input").each(
-                    function () {
-                        if ($(this).is("input:text")) {
-                            $(this).val($(this).data("default"));
-                        } else if ($(this).is("input:password")) {
-                            $(this).val("");
-                        } else if ($(this).is("input:checkbox")) {
-                            $(this).prop("checked", $(this).data("default"));
-                            // if this checkbox is the parent input of a grouped-input
-                            if ($(this).hasClass("parent-input")) {
-                                var groupedInput = $(this).parent().parent().parent();
-                                updateGroupedInputVisibility(groupedInput);
+                    if (!$(subErrorMsgWrapper).hasClass("hidden")) {
+                        $(subErrorMsgWrapper).addClass("hidden");
+                    }
+                    if (!$(subErrorIcon).hasClass("hidden")) {
+                        $(subErrorIcon).addClass("hidden");
+                    }
+                    if (!$(subOkIcon).hasClass("hidden")) {
+                        $(subOkIcon).addClass("hidden");
+                    }
+                    if (!$(featureConfiguredIcon).hasClass("hidden")) {
+                        $(featureConfiguredIcon).addClass("hidden");
+                    }
+                    // reinitializing input fields into the defaults
+                    $(operationDataWrapper + " input").each(
+                        function () {
+                            if ($(this).is("input:text")) {
+                                $(this).val($(this).data("default"));
+                            } else if ($(this).is("input:password")) {
+                                $(this).val("");
+                            } else if ($(this).is("input:checkbox")) {
+                                $(this).prop("checked", $(this).data("default"));
+                                // if this checkbox is the parent input of a grouped-input
+                                if ($(this).hasClass("parent-input")) {
+                                    var groupedInput = $(this).parent().parent().parent();
+                                    updateGroupedInputVisibility(groupedInput);
+                                }
                             }
                         }
-                    }
-                );
-                // reinitializing select fields into the defaults
-                $(operationDataWrapper + " select").each(
-                    function () {
-                        var defaultOption = $(this).data("default");
-                        $("option:eq(" + defaultOption + ")", this).prop("selected", "selected");
-                    }
-                );
-                // collapsing expanded-panes (upon the selection of html-select-options) if any
-                $(operationDataWrapper + " .expanded").each(
-                    function () {
-                        if ($(this).hasClass("expanded")) {
-                            $(this).removeClass("expanded");
+                    );
+                    // reinitializing select fields into the defaults
+                    $(operationDataWrapper + " select").each(
+                        function () {
+                            var defaultOption = $(this).data("default");
+                            $("option:eq(" + defaultOption + ")", this).prop("selected", "selected");
                         }
-                        $(this).slideUp();
-                    }
-                );
-                // removing all entries of grid-input elements if exist
-                $(operationDataWrapper + " .grouped-array-input").each(
-                    function () {
-                        var gridInputs = $(this).find("[data-add-form-clone]");
-                        if (gridInputs.length > 0) {
-                            gridInputs.remove();
+                    );
+                    // collapsing expanded-panes (upon the selection of html-select-options) if any
+                    $(operationDataWrapper + " .expanded").each(
+                        function () {
+                            if ($(this).hasClass("expanded")) {
+                                $(this).removeClass("expanded");
+                            }
+                            $(this).slideUp();
                         }
-                        var helpTexts = $(this).find("[data-help-text=add-form]");
-                        if (helpTexts.length > 0) {
-                            helpTexts.show();
+                    );
+                    // removing all entries of grid-input elements if exist
+                    $(operationDataWrapper + " .grouped-array-input").each(
+                        function () {
+                            var gridInputs = $(this).find("[data-add-form-clone]");
+                            if (gridInputs.length > 0) {
+                                gridInputs.remove();
+                            }
+                            var helpTexts = $(this).find("[data-help-text=add-form]");
+                            if (helpTexts.length > 0) {
+                                helpTexts.show();
+                            }
                         }
-                    }
-                );
+                    );
+                }
             }
         }
     });

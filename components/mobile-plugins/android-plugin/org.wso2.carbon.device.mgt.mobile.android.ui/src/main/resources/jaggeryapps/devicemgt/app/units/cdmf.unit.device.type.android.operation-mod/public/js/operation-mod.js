@@ -198,8 +198,12 @@ var androidOperationModule = function () {
             case androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION_CODE"]:
                 payload = {
                     "cosuProfileRestrictionStartTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
-                    "cosuProfileRestrictionEndTime": operationPayload["cosuProfileOperationRestrictionEndTime"]
-                }
+                    "cosuProfileRestrictionEndTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
+                    "primaryURL": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["primaryURL"],
+                    "isAddressBarEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]
+                        ["isAddressBarEnabled"]
+                };
+                break;
             case androidOperationConstants["KIOSK_APPS_CODE"]:
                 payload = {
                     "cosuWhitelistedApplications": operationPayload["whitelistedApplications"]
@@ -397,7 +401,13 @@ var androidOperationModule = function () {
                  payload = {
                       "operation": {
                          "cosuProfileRestrictionStartTime": operationData["cosuProfileOperationRestrictionStartTime"],
-                         "cosuProfileRestrictionEndTime": operationData["cosuProfileOperationRestrictionEndTime"]
+                         "cosuProfileRestrictionEndTime": operationData["cosuProfileOperationRestrictionEndTime"],
+                         "deviceGlobalConfigurations" : {
+                              "browserProperties": {
+                                  "primaryURL": operationData["primaryURL"],
+                                  "isAddressBarEnabled": operationData["isAddressBarEnabled"]
+                              }
+                          }
                       }
                  };
                break;
