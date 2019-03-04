@@ -379,6 +379,8 @@ public class AndroidDeviceUtils {
             deviceInfo.getDeviceDetailsMap().put("mac", prop.getValue());
         } else if (prop.getName().equalsIgnoreCase("SERIAL")) {
             deviceInfo.getDeviceDetailsMap().put("serial", prop.getValue());
+        } else {
+            deviceInfo.getDeviceDetailsMap().put(prop.getName(), prop.getValue());
         }
     }
 
