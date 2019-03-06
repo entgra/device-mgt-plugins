@@ -15,11 +15,27 @@
  *   specific language governing permissions and limitations
  *   under the License.
  *
+ *   Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ *   Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ *   Version 2.0 (the "License"); you may not use this file except
+ *   in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing,
+ *   software distributed under the License is distributed on an
+ *   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *   KIND, either express or implied.  See the License for the
+ *   specific language governing permissions and limitations
+ *   under the License.
  */
 package org.wso2.carbon.mdm.services.android.services.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -29,7 +45,6 @@ import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.mdm.services.android.bean.AndroidPlatformConfiguration;
@@ -80,11 +95,18 @@ public class DeviceTypeConfigurationServiceImpl implements DeviceTypeConfigurati
                     DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, AndroidConstants.
                     TenantConfigProperties.LANGUAGE_US);
 
-            if (license != null && configs != null) {
-                entry.setContentType(AndroidConstants.TenantConfigProperties.CONTENT_TYPE_TEXT);
-                entry.setName(AndroidConstants.TenantConfigProperties.LICENSE_KEY);
-                entry.setValue(license.getText());
-                configs.add(entry);
+            if (configs != null) {
+                ConfigurationEntry versionEntry = new ConfigurationEntry();
+                versionEntry.setContentType(AndroidConstants.TenantConfigProperties.CONTENT_TYPE_TEXT);
+                versionEntry.setName(AndroidConstants.TenantConfigProperties.SERVER_VERSION);
+                versionEntry.setValue(ServerConfiguration.getInstance().getFirstProperty("Version"));
+                configs.add(versionEntry);
+                if (license != null) {
+                    entry.setContentType(AndroidConstants.TenantConfigProperties.CONTENT_TYPE_TEXT);
+                    entry.setName(AndroidConstants.TenantConfigProperties.LICENSE_KEY);
+                    entry.setValue(license.getText());
+                    configs.add(entry);
+                }
                 platformConfiguration.setConfiguration(configs);
             }
         } catch (DeviceManagementException e) {
