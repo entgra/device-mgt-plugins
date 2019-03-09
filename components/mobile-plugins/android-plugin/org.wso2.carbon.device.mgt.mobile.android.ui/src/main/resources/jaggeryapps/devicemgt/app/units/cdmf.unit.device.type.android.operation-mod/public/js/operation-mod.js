@@ -203,7 +203,9 @@ var androidOperationModule = function () {
                     "cosuProfileRestrictionEndTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
                     "primaryURL": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["primaryURL"],
                     "isAddressBarEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]
-                        ["isAddressBarEnabled"]
+                        ["isAddressBarEnabled"],
+
+                    "isLoginRequired" : operationPayload["deviceGlobalConfigurations"]["isLoginRequired"]
                 };
                 break;
             case androidOperationConstants["KIOSK_APPS_CODE"]:
@@ -402,18 +404,22 @@ var androidOperationModule = function () {
                 break;
             case androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION_CODE"]:
                  operationType = operationTypeConstants["PROFILE"];
-                 payload = {
-                      "operation": {
-                         "cosuProfileRestrictionStartTime": operationData["cosuProfileOperationRestrictionStartTime"],
-                         "cosuProfileRestrictionEndTime": operationData["cosuProfileOperationRestrictionEndTime"],
-                         "deviceGlobalConfigurations" : {
-                              "browserProperties": {
-                                  "primaryURL": operationData["primaryURL"],
-                                  "isAddressBarEnabled": operationData["isAddressBarEnabled"]
-                              }
-                          }
-                      }
+                 payload = {};
+                 operation = {};
+                 operation["cosuProfileRestrictionStartTime"] =
+                                  operationData["cosuProfileOperationRestrictionStartTime"];
+                 operation["cosuProfileRestrictionEndTime"] = operationData["cosuProfileOperationRestrictionEndTime"];
+
+                 deviceGlobalConfigurations = {};
+                 deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"];
+                 deviceGlobalConfigurations["browserProperties"]= {
+                    "primaryURL": operationData["primaryURL"],
+                    "isAddressBarEnabled": operationData["isAddressBarEnabled"]
                  };
+                 operation.deviceGlobalConfigurations = deviceGlobalConfigurations;
+
+                 payload.operation = operation;
+
                break;
             case androidOperationConstants["SYSTEM_UPDATE_POLICY_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
