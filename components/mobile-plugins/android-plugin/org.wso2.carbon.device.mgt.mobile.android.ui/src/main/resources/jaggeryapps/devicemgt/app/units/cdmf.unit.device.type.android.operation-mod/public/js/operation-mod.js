@@ -209,6 +209,7 @@ var androidOperationModule = function () {
                     "idleTimeout" : operationPayload["deviceGlobalConfigurations"]["idleTimeout"],
                     "isMultiUserDevice" : operationPayload["deviceGlobalConfigurations"]["isMultiUserDevice"],
                     "isLoginRequired" : operationPayload["deviceGlobalConfigurations"]["isLoginRequired"],
+                    "displayOrientation" : operationPayload["deviceGlobalConfigurations"]["displayOrientation"],
                     "primaryURL": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["primaryURL"],
                     "isAddressBarEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]
                         ["isAddressBarEnabled"]
@@ -426,6 +427,7 @@ var androidOperationModule = function () {
                  deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"],
                  deviceGlobalConfigurations["isMultiUserDevice"] = operationData["isMultiUserDevice"],
                  deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"],
+                 deviceGlobalConfigurations["displayOrientation"] = operationData["displayOrientation"],
                  deviceGlobalConfigurations["browserProperties"]= {
                     "primaryURL": operationData["primaryURL"],
                     "isAddressBarEnabled": operationData["isAddressBarEnabled"]
