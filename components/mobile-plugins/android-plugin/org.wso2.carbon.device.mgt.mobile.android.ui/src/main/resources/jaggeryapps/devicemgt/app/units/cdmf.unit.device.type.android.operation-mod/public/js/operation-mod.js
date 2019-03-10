@@ -201,11 +201,17 @@ var androidOperationModule = function () {
                 payload = {
                     "cosuProfileRestrictionStartTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
                     "cosuProfileRestrictionEndTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
+                    "idleMediaURL" : operationPayload["deviceGlobalConfigurations"]["idleMediaURL"],
+                    "kioskBackgroundImage": operationPayload["deviceGlobalConfigurations"]["kioskBackgroundImage"],
+                    "kioskLogoImage" : operationPayload["deviceGlobalConfigurations"]["kioskLogoImage"],
+                    "kioskAppName" : operationPayload["deviceGlobalConfigurations"]["kioskAppName"],
+                    "isIdleGraphicsEnabled" : operationPayload["deviceGlobalConfigurations"]["isIdleGraphicsEnabled"],
+                    "idleTimeout" : operationPayload["deviceGlobalConfigurations"]["idleTimeout"],
+                    "isMultiUserDevice" : operationPayload["deviceGlobalConfigurations"]["isMultiUserDevice"],
+                    "isLoginRequired" : operationPayload["deviceGlobalConfigurations"]["isLoginRequired"],
                     "primaryURL": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["primaryURL"],
                     "isAddressBarEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]
-                        ["isAddressBarEnabled"],
-
-                    "isLoginRequired" : operationPayload["deviceGlobalConfigurations"]["isLoginRequired"]
+                        ["isAddressBarEnabled"]
                 };
                 break;
             case androidOperationConstants["KIOSK_APPS_CODE"]:
@@ -411,13 +417,20 @@ var androidOperationModule = function () {
                  operation["cosuProfileRestrictionEndTime"] = operationData["cosuProfileOperationRestrictionEndTime"];
 
                  deviceGlobalConfigurations = {};
-                 deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"];
+
+                 deviceGlobalConfigurations["idleMediaURL"] = operationData["idleMediaURL"],
+                 deviceGlobalConfigurations["kioskBackgroundImage"] = operationData["kioskBackgroundImage"],
+                 deviceGlobalConfigurations["kioskLogoImage"] = operationData["kioskLogoImage"],
+                 deviceGlobalConfigurations["kioskAppName"] = operationData["kioskAppName"],
+                 deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"],
+                 deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"],
+                 deviceGlobalConfigurations["isMultiUserDevice"] = operationData["isMultiUserDevice"],
+                 deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"],
                  deviceGlobalConfigurations["browserProperties"]= {
                     "primaryURL": operationData["primaryURL"],
                     "isAddressBarEnabled": operationData["isAddressBarEnabled"]
                  };
                  operation.deviceGlobalConfigurations = deviceGlobalConfigurations;
-
                  payload.operation = operation;
 
                break;
