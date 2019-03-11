@@ -18,7 +18,7 @@
  *
  * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
@@ -159,6 +159,7 @@ public final class AndroidConstants {
         public static final String LANGUAGE_US = "en_US";
         public static final String CONTENT_TYPE_TEXT = "text";
         public static final String NOTIFIER_FREQUENCY = "notifierFrequency";
+        public static final String SERVER_VERSION = "serverVersion";
     }
 
     public final class ApplicationProperties {
