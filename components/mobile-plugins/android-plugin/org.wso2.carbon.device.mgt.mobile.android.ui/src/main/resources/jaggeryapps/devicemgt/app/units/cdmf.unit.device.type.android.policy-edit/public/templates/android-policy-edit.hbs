@@ -2024,11 +2024,12 @@
 
                     <div id="install-app-enrollment"
                          class="operationDataKeys grouped-array-input multi-column-key-value-pair-array specific-enrollment-app-install"
-                         data-key="enrollmentAppInstall" data-column-count="4">
+                         data-key="enrollmentAppInstall" data-column-count="5">
                         <table class="table table-responsive table-striped data-table" id="enrollment-app-install-table">
                             <thead>
                             <tr class="sort-row">
                                 <th>Application Name</th>
+                                <th>Type</th>
                                 <th>Version</th>
                                 <th></th>
                             </tr>
@@ -2039,6 +2040,10 @@
                                     <td data-title="enrollment-app-install-app-name">
                                         {{this.appName}}
                                         <input class="enrollment-app-install-input" type="hidden" data-child-key="appName" value="{{this.appName}}"/>
+                                    </td>
+                                    <td data-title="enrollment-app-install-app-type">
+                                        {{this.type}}
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="type" value="{{this.type}}"/>
                                     </td>
                                     <td data-title="enrollment-app-install-app-name">
                                         {{this.version}}
