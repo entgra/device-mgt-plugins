@@ -248,11 +248,71 @@ var validatePolicyProfile = function () {
         }
         // Validating COSU PROFILE CONFIGURATION
         if ($.inArray(androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION_CODE"], configuredOperations) != -1) {
-           operation = androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION"];
-           validationStatus = {
-                "error": false,
-                "okFeature": operation
-           };
+
+            operation = androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION"];
+            var continueToCheckNextInputs = true;
+
+            if (continueToCheckNextInputs) {
+                var backgroundImage = $("input#cosu-global-config-kiosk-background-image").val();
+                if (backgroundImage && !(backgroundImage.endsWith("jpg") || backgroundImage.endsWith("jpeg")
+                                || backgroundImage.endsWith("png"))) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Launcher background image file types are jpg, jpeg and png",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var kioskLogo = $("input#cosu-global-config-kiosk-logo-image").val();
+                if (kioskLogo && !(kioskLogo.endsWith("jpg") || kioskLogo.endsWith("jpeg")
+                                || kioskLogo.endsWith("png"))) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Company log to display file types are jpg, jpeg and png",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var idleMediaUrl = $("input#cosu-global-config-idle-media-url").val();
+                if (idleMediaUrl && !(idleMediaUrl.endsWith("jpg") || idleMediaUrl.endsWith("jpeg")
+                                || idleMediaUrl.endsWith("png") || idleMediaUrl.endsWith("mp4")
+                                || idleMediaUrl.endsWith("3gp") || idleMediaUrl.endsWith("wmv")
+                                || idleMediaUrl.endsWith("mkv"))) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Idle media url file types are .jpg, .png, .jpeg, .mp4, .3gp, .wmv, .mkv",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var idleTimeout = $("input#cosu-browser-property-idle-timeout").val();
+                if (idleTimeout) {
+                    if (idleTimeout && (!$.isNumeric(idleTimeout) || idleTimeout < 0)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Idle timeout must be a positive whole number",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                    }
+                }
+            }
+
+           if (continueToCheckNextInputs) {
+               validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+               };
+           }
            validationStatusArray.push(validationStatus);
         }
         // Validating ENCRYPT_STORAGE

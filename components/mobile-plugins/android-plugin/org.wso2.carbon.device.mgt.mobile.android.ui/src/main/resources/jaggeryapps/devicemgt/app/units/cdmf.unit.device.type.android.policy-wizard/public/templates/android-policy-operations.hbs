@@ -1410,17 +1410,6 @@
                             <form class="form-horizontal">
                                 <div class="wr-input-control">
                                     <label class="wr-input-label">
-                                        Media to display while idle
-                                        <span class="helper" title="Media to display while the device is idle.">
-                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                            </span>
-                                    </label>
-                                    <input id="cosu-global-config-idle-media-url" type="text"
-                                           class="form-control operationDataKeys" data-key="idleMediaURL"
-                                           maxlength="100" placeholder="[ Should be a valid URL ending with .jpg, .png, .jpeg, .mp4, .3gp, .wmv, .mkv ]"/>
-                                </div>
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label">
                                         Launcher background image
                                         <span class="helper" title="This is the image that will be displayed in kiosk background.">
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1428,7 +1417,7 @@
                                     </label>
                                     <input id="cosu-global-config-kiosk-background-image" type="text"
                                            class="form-control operationDataKeys"  data-key="kioskBackgroundImage"
-                                           maxlength="100" placeholder="[ Should be a valid URL ]"/>
+                                           maxlength="100" placeholder="[ Should be a valid URL of jpg or jpeg or png ]"/>
                                 </div>
                                 <div class="wr-input-control">
                                     <label class="wr-input-label">
@@ -1440,7 +1429,7 @@
                                     <input id="cosu-global-config-kiosk-logo-image" type="text"
                                            class="form-control operationDataKeys"  data-key="kioskLogoImage"
                                            maxlength="100" placeholder="[ Should be a valid URL ending with .jpg, .png,
-                                           .jpeg, .mp4, .3gp, .wmv, .mkv ]"/>
+                                           .jpeg ]"/>
                                 </div>
                                 <div class="wr-input-control">
                                     <label class="wr-input-label">
@@ -1463,6 +1452,17 @@
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                             </span>
                                     </label>
+                                </div>
+                                <div class="wr-input-control">
+                                    <label class="wr-input-label">
+                                        Media to display while idle
+                                        <span class="helper" title="Media to display while the device is idle.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                    </label>
+                                    <input id="cosu-global-config-idle-media-url" type="text"
+                                           class="form-control operationDataKeys" data-key="idleMediaURL"
+                                           maxlength="100" placeholder="[ Should be a valid URL ending with .jpg, .png, .jpeg, .mp4, .3gp, .wmv, .mkv ]"/>
                                 </div>
                                 <div class="wr-input-control">
                                     <label class="wr-input-label">
@@ -1611,7 +1611,7 @@
                                         <label class="wr-input-control checkbox">
                                             <input id="cosu-browser-property-lock-to-primary-url" type="checkbox"
                                                    class="form-control operationDataKeys"
-                                                   data-key="lockToPrimaryURL"/>
+                                                   data-key="lockToPrimaryURL" checked />
                                             <span class="helper" title="Only allowed to visit the pirmary url.">
                                                 Only allowed to visit the pirmary url
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1623,7 +1623,7 @@
                                         <label class="wr-input-control checkbox">
                                             <input id="cosu-browser-property-is-javascript-enabled" type="checkbox"
                                                    class="form-control operationDataKeys"
-                                                   data-key="isJavascriptEnabled"/>
+                                                   data-key="isJavascriptEnabled" checked />
                                             <span class="helper" title="Is javascript enabled.">
                                                 Is javascript enabled
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1759,7 +1759,7 @@
                                         <label class="wr-input-control checkbox">
                                             <input id="cosu-browser-property-is-loads-images-automatically" type="checkbox"
                                                    class="form-control operationDataKeys"
-                                                   data-key="isLoadsImagesAutomatically"/>
+                                                   data-key="isLoadsImagesAutomatically" checked />
                                             <span class="helper" title="Sets whether the browser should load image resources(through network and cached). Note that this method controls loading of all images, including those embedded using the data URI scheme.">
                                                 Should load images
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1792,7 +1792,7 @@
                                         <label class="wr-input-control checkbox">
                                             <input id="cosu-browser-property-is-support-zoom-enabled" type="checkbox"
                                                    class="form-control operationDataKeys"
-                                                   data-key="isSupportZoomEnabled"/>
+                                                   data-key="isSupportZoomEnabled" checked />
                                             <span class="helper" title="Sets whether the browser should support zooming using its on-screen zoom controls and gestures.">
                                                 Support zooming
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1893,7 +1893,7 @@
                                         <label class="wr-input-control checkbox">
                                             <input id="cosu-browser-property-is-media-playback-requires-user-gesture" type="checkbox"
                                                    class="form-control operationDataKeys"
-                                                   data-key="isMediaPlaybackRequiresUserGesture"/>
+                                                   data-key="isMediaPlaybackRequiresUserGesture" checked/>
                                             <span class="helper" title="Sets whether the browser requires a user gesture to play media. If false, the browser can play media without user consent">
                                                 Does media playback requires user consent
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1904,7 +1904,7 @@
                                         <label class="wr-input-control checkbox">
                                             <input id="cosu-browser-property-is-safe-browsing-enabled" type="checkbox"
                                                    class="form-control operationDataKeys"
-                                                   data-key="isSafeBrowsingEnabled"/>
+                                                   data-key="isSafeBrowsingEnabled" checked/>
                                             <span class="helper" title="Sets whether safe browsing is enabled. Safe browsing allows browser to protect against malware and phishing attacks by verifying the links.">
                                                 Is safe browsing enabled
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1915,7 +1915,7 @@
                                         <label class="wr-input-control checkbox">
                                             <input id="cosu-browser-property-is-use-wide-view-port" type="checkbox"
                                                    class="form-control operationDataKeys"
-                                                   data-key="isUseWideViewPort"/>
+                                                   data-key="isUseWideViewPort" checked />
                                             <span class="helper" title="Sets whether the browser should enable support for the viewport HTML meta tag or should use a wide viewport. When the value of the setting is false, the layout width is always set to the width of the browser control in device-independent (CSS) pixels. When the value is true and the page contains the viewport meta tag, the value of the width specified in the tag is used. If the page does not contain the tag or does not provide a width, then a wide viewport will be used.">
                                                 Use wide view port
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>

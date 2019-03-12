@@ -1699,17 +1699,7 @@
                         <div id="cosu-profile-device-global-operation" class="panel-collapse panel-body collapse"
                              role="tabpanel">
                             <form class="form-horizontal">
-                                <div class="wr-input-control">
-                                    <label class="wr-input-label">
-                                        Media to display while idle
-                                        <span class="helper" title="Media to display while the device is idle.">
-                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                            </span>
-                                    </label>
-                                    <input id="cosu-global-config-idle-media-url" type="text"
-                                           class="form-control operationDataKeys" data-key="idleMediaURL"
-                                           maxlength="100" placeholder="[ Should be a valid URL ending with .jpg, .png, .jpeg, .mp4, .3gp, .wmv, .mkv ]"/>
-                                </div>
+
                                 <div class="wr-input-control">
                                     <label class="wr-input-label">
                                         Launcher background image
@@ -1719,7 +1709,7 @@
                                     </label>
                                     <input id="cosu-global-config-kiosk-background-image" type="text"
                                            class="form-control operationDataKeys"  data-key="kioskBackgroundImage"
-                                           maxlength="100" placeholder="[ Should be a valid URL ]"/>
+                                           maxlength="100" placeholder="[ Should be a valid URL of jpg or jpeg or png]"/>
                                 </div>
                                 <div class="wr-input-control">
                                     <label class="wr-input-label">
@@ -1731,7 +1721,7 @@
                                     <input id="cosu-global-config-kiosk-logo-image" type="text"
                                            class="form-control operationDataKeys"  data-key="kioskLogoImage"
                                            maxlength="100" placeholder="[ Should be a valid URL ending with .jpg, .png,
-                                           .jpeg, .mp4, .3gp, .wmv, .mkv ]"/>
+                                           .jpeg"/>
                                 </div>
                                 <div class="wr-input-control">
                                     <label class="wr-input-label">
@@ -1744,7 +1734,6 @@
                                            class="form-control operationDataKeys"  data-key="kioskAppName"
                                            maxlength="100" placeholder="Name to appear on the agent"/>
                                 </div>
-
                                 <div class="wr-input-control">
                                     <label class="wr-input-control checkbox">
                                         <input id="cosu-global-config-is-idle-graphics-enabled" type="checkbox"
@@ -1754,6 +1743,17 @@
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                             </span>
                                     </label>
+                                </div>
+                                <div class="wr-input-control">
+                                    <label class="wr-input-label">
+                                        Media to display while idle
+                                        <span class="helper" title="Media to display while the device is idle.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                    </label>
+                                    <input id="cosu-global-config-idle-media-url" type="text"
+                                           class="form-control operationDataKeys" data-key="idleMediaURL"
+                                           maxlength="100" placeholder="[ Should be a valid URL ending with .jpg, .png, .jpeg, .mp4, .3gp, .wmv, .mkv ]"/>
                                 </div>
                                 <div class="wr-input-control">
                                     <label class="wr-input-label">
