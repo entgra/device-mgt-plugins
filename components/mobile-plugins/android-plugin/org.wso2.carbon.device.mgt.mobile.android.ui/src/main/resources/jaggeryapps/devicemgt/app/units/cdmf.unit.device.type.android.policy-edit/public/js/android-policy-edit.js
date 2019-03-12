@@ -295,17 +295,43 @@ var validatePolicyProfile = function () {
 
             if (continueToCheckNextInputs) {
                 var idleTimeout = $("input#cosu-browser-property-idle-timeout").val();
-                if (idleTimeout) {
-                    if (idleTimeout && (!$.isNumeric(idleTimeout) || idleTimeout < 0)) {
+                if (idleTimeout && (!$.isNumeric(idleTimeout) || idleTimeout < 0)) {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Idle timeout must be a positive whole number",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
-                    }
                 }
             }
+
+            if (continueToCheckNextInputs) {
+                var textZoom = $("input#cosu-browser-property-text-zoom").val();
+                if (textZoom && (!$.isNumeric(textZoom) || textZoom < 0)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Text zoom must be a positive whole number",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                }
+            }
+
+
+            if (continueToCheckNextInputs) {
+                var defaultFontSize = $("input#cosu-browser-property-default-font-size").val();
+                if (defaultFontSize) {
+                    if (!$.isNumeric(defaultFontSize) || !inputIsValidAgainstRange(defaultFontSize, 0, 72)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Default font size is a number between 0 and 72",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                    }
+                 }
+            }
+
 
            if (continueToCheckNextInputs) {
                validationStatus = {
