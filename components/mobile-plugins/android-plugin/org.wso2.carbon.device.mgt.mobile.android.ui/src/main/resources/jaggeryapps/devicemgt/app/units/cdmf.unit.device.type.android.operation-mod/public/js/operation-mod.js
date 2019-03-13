@@ -784,7 +784,8 @@ var androidOperationModule = function () {
                                     $('[data-add-form-container="#enrollment-app-install-grid"]').empty();
                                     for (i=0; i<value.length; i++) {
                                         var content = '<tr><td data-title="enrollment-app-install-app-name">'
-                                            + value[i].appName + '</td><td data-title="enrollment-app-install-version">'
+                                            + value[i].appName + '</td><td data-title="enrollment-app-install-app-type">'
+                                            + value[i].type + '</td><td data-title="enrollment-app-install-version">'
                                             + value[i].version + '</td></tr>';
                                         $('[data-add-form-container="#enrollment-app-install-grid"]').append(content);
                                     }
