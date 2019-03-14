@@ -260,7 +260,6 @@ var validatePolicyProfile = function () {
                 }
             }
 
-
             if (continueToCheckNextInputs) {
                 var defaultFontSize = $("input#cosu-browser-property-default-font-size").val();
                 if (defaultFontSize) {
@@ -274,7 +273,6 @@ var validatePolicyProfile = function () {
                     }
                  }
             }
-
 
            if (continueToCheckNextInputs) {
                validationStatus = {
