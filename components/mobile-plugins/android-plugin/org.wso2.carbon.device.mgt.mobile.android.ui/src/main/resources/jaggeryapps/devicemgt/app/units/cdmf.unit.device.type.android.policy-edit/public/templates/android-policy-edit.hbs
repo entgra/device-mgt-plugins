@@ -1677,6 +1677,117 @@
                         <div id="cosu-profile-device-global-operation" class="panel-collapse panel-body collapse"
                              role="tabpanel">
                             <form class="form-horizontal">
+
+                                <div class="wr-input-control">
+                                    <label class="wr-input-label">
+                                        Launcher background image
+                                        <span class="helper" title="This is the image that will be displayed in kiosk background.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                    </label>
+                                    <input id="cosu-global-config-kiosk-background-image" type="text"
+                                           class="form-control operationDataKeys"  data-key="kioskBackgroundImage"
+                                           maxlength="100" placeholder="[ Should be a valid URL of jpg or jpeg or png]"/>
+                                </div>
+                                <div class="wr-input-control">
+                                    <label class="wr-input-label">
+                                        Company logo to display
+                                        <span class="helper" title="Company log to display.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                    </label>
+                                    <input id="cosu-global-config-kiosk-logo-image" type="text"
+                                           class="form-control operationDataKeys"  data-key="kioskLogoImage"
+                                           maxlength="100" placeholder="[ Should be a valid URL ending with .jpg, .png,
+                                           .jpeg"/>
+                                </div>
+                                <div class="wr-input-control">
+                                    <label class="wr-input-label">
+                                        Company name
+                                        <span class="helper" title="Company name.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                    </label>
+                                    <input id="cosu-global-config-company-name" type="text"
+                                           class="form-control operationDataKeys"  data-key="kioskAppName"
+                                           maxlength="100" placeholder="Name to appear on the agent"/>
+                                </div>
+                                <div class="wr-input-control">
+                                    <label class="wr-input-control checkbox">
+                                        <input id="cosu-global-config-is-idle-graphics-enabled" type="checkbox"
+                                               class="form-control operationDataKeys" data-key="isIdleGraphicsEnabled"
+                                               onchange="changeDivVisibility('idle-properties', this)"/>
+                                        <span class="helper" title="Is idle media enabled">
+                                                Is idle media enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                    </label>
+                                </div>
+                                <div id="idle-properties">
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-label">
+                                            Media to display while idle
+                                            <span class="helper" title="Media to display while the device is idle.">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                        </label>
+                                        <input id="cosu-global-config-idle-media-url" type="text"
+                                               class="form-control operationDataKeys" data-key="idleMediaURL"
+                                               maxlength="100" placeholder="[ Should be a valid URL ending with .jpg, .png, .jpeg, .mp4, .3gp, .wmv, .mkv ]"/>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-label">
+                                            Idle graphic begin after(seconds)
+                                            <span class="helper" title="Idle graphic begin after the defined seconds">
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                        </label>
+                                        <input id="cosu-browser-property-idle-timeout" type="text"
+                                               class="form-control operationDataKeys" data-key="idleTimeout"
+                                               maxlength="100" placeholder="[ Idle timeout in seconds ]"/>
+                                    </div>
+                                </div>
+                                <div class="wr-input-control">
+                                    <label class="wr-input-control checkbox">
+                                        <input id="cosu-global-config-is-multi-user-device" type="checkbox"
+                                               class="form-control operationDataKeys" data-key="isMultiUserDevice"
+                                               onchange="changeDivVisibility('cosu-global-config-is-is-login-required-div', this)"/>
+                                        <span class="helper" title="Is multi-user device">
+                                                Is multi-user device
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                    </label>
+                                </div>
+                                <div id="cosu-global-config-is-is-login-required-div">
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-global-config-is-is-login-required" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isLoginRequired"/>
+                                            <span class="helper" title="Is login needed for user switch">
+                                                    Is login needed for user switch
+                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="wr-input-label">
+                                        Device display orientation
+                                        <span class="helper" title="Device display orientation">
+                                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
+                                    </label>
+                                    <select id="cosu-profile-orientation"
+                                            class="form-control operationDataKeys"
+                                            data-key="displayOrientation" data-default="auto">
+                                        <option value="auto">Auto</option>
+                                        <option value="portrait">Portrait</option>
+                                        <option value="landscape">Landscape</option>
+                                    </select>
+                                </div>
+                                <br><br>
                                 <div class="form-group">
                                     <h2 class="col-sm-12 form-inline sub-title panel-title"
                                         style="padding: 0px; padding-right:15px; font-size:13px; margin-left:10px;">
@@ -1704,6 +1815,17 @@
                                     </div>
                                     <div class="wr-input-control">
                                         <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-top-bar-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isTopBarEnabled"/>
+                                            <span class="helper" title="Enabled top control bar that displays all the controllers such as address bar, home button and forwards controllers">
+                                                Enabled top control bar
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
                                             <input id="cosu-browser-property-address-bar-enabled" type="checkbox"
                                                    class="form-control operationDataKeys"
                                                    data-key="isAddressBarEnabled"/>
@@ -1712,6 +1834,396 @@
                                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                             </span>
                                         </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-show-back-controller" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="showBackController" checked/>
+                                            <span class="helper" title="Allow to go back in a page">
+                                                Is allow to go back on a page
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-forward-controller-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isForwardControllerEnabled"/>
+                                            <span class="helper" title="Is it allowed to go forward in a web page.">
+                                                Is it allowed to go forward in browser
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-home-button-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isHomeButtonEnabled"/>
+                                            <span class="helper" title="Is home button enabled.">
+                                                Is home button enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-reload-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isReloadEnabled"/>
+                                            <span class="helper" title="Is page reload enabled.">
+                                                Is page reload enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-lock-to-primary-url" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="lockToPrimaryURL"/>
+                                            <span class="helper" title="Only allowed to visit the pirmary url.">
+                                                Only allowed to visit the pirmary url
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-javascript-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isJavascriptEnabled"/>
+                                            <span class="helper" title="Is javascript enabled.">
+                                                Is javascript enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-text-copy-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isTextCopyEnabled"/>
+                                            <span class="helper" title="Is copying text from browser enabled.">
+                                                Is copying text from browser enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-downloads-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isDownloadsEnabled"/>
+                                            <span class="helper" title="Is downloading files enabled.">
+                                                Is downloading files enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-locked-to-browser" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isLockedToBrowser"/>
+                                            <span class="helper" title="Is Kiosk limited to one webapp.">
+                                                Is Kiosk limited to one webapp
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-form-auto-fill-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isFormAutoFillEnabled"/>
+                                            <span class="helper" title="Is form auto-fille enabled.">
+                                                Is form auto-fille enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-content-access-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isContentAccessEnabled"/>
+                                            <span class="helper" title="Enables or disables content URL access within WebView. Content URL access allows WebView to load content from a content provider installed in the system.">
+                                                Is content access enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-file-access-allowed" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isFileAccessAllowed"/>
+                                            <span class="helper" title="Sets whether JavaScript running in the context of a file scheme URL should be allowed to access content from other file scheme URLs. .">
+                                                Is file access allowed
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-allowed-universal-access-from-fileURLs" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isAllowedUniversalAccessFromFileURLs"/>
+                                            <span class="helper" title="Sets whether JavaScript running in the context of a file scheme URL should be allowed to access content from any origin.">
+                                                Is allowed universal access from file URLs
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-app-cache-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isAppCacheEnabled"/>
+                                            <span class="helper" title="Is application chche enabled.">
+                                                Is application chche enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-label">
+                                            Application caches file path
+                                            <span class="helper" title="Sets the path to the Application Caches files. In order for the Application Caches API to be enabled, this method must be called with a path to which the application can write">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                        <input id="cosu-browser-property-app-cache-path" type="text"
+                                               class="form-control operationDataKeys"  data-key="appCachePath"
+                                               maxlength="100" placeholder="[ Should be a valid path ]"/>
+                                    </div>
+
+                                    <div>
+                                        <label class="wr-input-label">
+                                            Application cache mode
+                                            <span class="helper" title="Overrides the way the cache is used. The way the cache is used is based on the navigation type. For a normal page load, the cache is checked and content is re-validated as needed. When navigating back, content is not revalidated, instead the content is just retrieved from the cache. This method allows the client to override this behavior by specifying one of LOAD_DEFAULT, LOAD_CACHE_ELSE_NETWORK, LOAD_NO_CACHE or LOAD_CACHE_ONLY">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                        <select id="cosu-browser-property-cache-mode"
+                                                class="form-control operationDataKeys"
+                                                data-key="cacheMode" data-default="-1">
+                                            <option value="-1">LOAD_DEFAULT</option>
+                                            <option value="1">LOAD_CACHE_ELSE_NETWORK</option>
+                                            <option value="2">LOAD_NO_CACHE</option>
+                                            <option value="3">LOAD_CACHE_ONLY</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-loads-images-automatically" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isLoadsImagesAutomatically"/>
+                                            <span class="helper" title="Sets whether the browser should load image resources(through network and cached). Note that this method controls loading of all images, including those embedded using the data URI scheme.">
+                                                Should load images
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-block-network-image" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isBlockNetworkImage"/>
+                                            <span class="helper" title="Sets whether the browser should not load image resources from the network (resources accessed via http and https URI schemes)">
+                                                Block image loads via network
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-block-network-loads" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isBlockNetworkLoads"/>
+                                            <span class="helper" title="Sets whether the browser should not load any resources from the network.">
+                                                Block all resource loads from network
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-support-zoom-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isSupportZoomEnabled"/>
+                                            <span class="helper" title="Sets whether the browser should support zooming using its on-screen zoom controls and gestures.">
+                                                Support zooming
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-display-zoom-controls" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isDisplayZoomControls"/>
+                                            <span class="helper" title="Sets whether the browser should display on-screen zoom controls. Guesture based controllers are still available">
+                                                Show on-screen zoom controlers
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-label">
+                                            Text zoom percentage
+                                            <span class="helper" title="Sets the text zoom of the page in percent.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                        <input id="cosu-browser-property-text-zoom" type="text"
+                                               class="form-control operationDataKeys"  data-key="textZoom"
+                                               maxlength="100" placeholder="[ Should be a positive number ]"/>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-label">
+                                            Default font size
+                                            <span class="helper" title="Sets the default font size.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                        <input id="cosu-browser-property-default-font-size" type="text"
+                                               class="form-control operationDataKeys"  data-key="defaultFontSize"
+                                               maxlength="100" placeholder="[ Should be a positive number between 1 and 72 ]"/>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-label">
+                                            Defaut text encoding name
+                                            <span class="helper" title="Sets the default text encoding name to use when decoding html pages.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                        <input id="cosu-browser-property-default-text-encoding" type="text"
+                                               class="form-control operationDataKeys"  data-key="defaultTextEncodingName"
+                                               maxlength="100" placeholder="[ Should a valid text encoding ]"/>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-database-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isDatabaseEnabled"/>
+                                            <span class="helper" title="Sets whether the database storage API is enabled.">
+                                                Is database storage API enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-dom-storage-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isDomStorageEnabled"/>
+                                            <span class="helper" title="Sets whether the DOM storage API is enabled.">
+                                                Is DOM storage API enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-geolocation-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="geolocationEnabled"/>
+                                            <span class="helper" title="Sets whether Geolocation API is enabled.">
+                                                Is Geolocation enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-javaScript-can-open-windows-automatically" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isJavaScriptCanOpenWindowsAutomatically"/>
+                                            <span class="helper" title="JavaScript can open windows automatically or not. This applies to the JavaScript function window.open()">
+                                                Can JavaScript open windows
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-media-playback-requires-user-gesture" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isMediaPlaybackRequiresUserGesture"/>
+                                            <span class="helper" title="Sets whether the browser requires a user gesture to play media. If false, the browser can play media without user consent">
+                                                Does media playback requires user consent
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-safe-browsing-enabled" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isSafeBrowsingEnabled"/>
+                                            <span class="helper" title="Sets whether safe browsing is enabled. Safe browsing allows browser to protect against malware and phishing attacks by verifying the links.">
+                                                Is safe browsing enabled
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-control checkbox">
+                                            <input id="cosu-browser-property-is-use-wide-view-port" type="checkbox"
+                                                   class="form-control operationDataKeys"
+                                                   data-key="isUseWideViewPort"/>
+                                            <span class="helper" title="Sets whether the browser should enable support for the viewport HTML meta tag or should use a wide viewport. When the value of the setting is false, the layout width is always set to the width of the browser control in device-independent (CSS) pixels. When the value is true and the page contains the viewport meta tag, the value of the width specified in the tag is used. If the page does not contain the tag or does not provide a width, then a wide viewport will be used.">
+                                                Use wide view port
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="wr-input-control">
+                                        <label class="wr-input-label">
+                                            Browser user agent string
+                                            <span class="helper" title="Sets the WebView's user-agent string.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                        <input id="cosu-browser-property-user-agent-string" type="text"
+                                               class="form-control operationDataKeys"  data-key="userAgentString"
+                                               maxlength="100" placeholder="[ Should be a valid user agent string ]"/>
+                                    </div>
+
+                                    <div>
+                                        <label class="wr-input-label">
+                                            Mixed content mode
+                                            <span class="helper" title="Configures the browser's behavior when a secure origin attempts to load a resource from an insecure origin.">
+                                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                        </label>
+                                        <select id="cosu-browser-property-mixed-content-mode"
+                                                class="form-control operationDataKeys"
+                                                data-key="mixedContentMode" data-default="1">
+                                            <option value="0">MIXED_CONTENT_ALWAYS_ALLOW</option>
+                                            <option value="1">MIXED_CONTENT_NEVER_ALLOW</option>
+                                            <option value="2">MIXED_CONTENT_COMPATIBILITY_MODE</option>
+                                        </select>
                                     </div>
                                 </div>
                             </form>
@@ -1729,6 +2241,7 @@
                 </div>
             </div>
         </div>
+
         <!--COSU profile configuration-->
 
         <!-- cosu-system-update-policy -->
