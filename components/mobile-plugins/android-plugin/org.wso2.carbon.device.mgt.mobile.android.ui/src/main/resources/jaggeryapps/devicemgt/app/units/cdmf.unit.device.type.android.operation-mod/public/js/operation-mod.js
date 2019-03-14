@@ -199,9 +199,55 @@ var androidOperationModule = function () {
                 payload = {
                     "cosuProfileRestrictionStartTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
                     "cosuProfileRestrictionEndTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
+                    "idleMediaURL" : operationPayload["deviceGlobalConfigurations"]["idleMediaURL"],
+                    "kioskBackgroundImage": operationPayload["deviceGlobalConfigurations"]["kioskBackgroundImage"],
+                    "kioskLogoImage" : operationPayload["deviceGlobalConfigurations"]["kioskLogoImage"],
+                    "kioskAppName" : operationPayload["deviceGlobalConfigurations"]["kioskAppName"],
+                    "isIdleGraphicsEnabled" : operationPayload["deviceGlobalConfigurations"]["isIdleGraphicsEnabled"],
+                    "idleTimeout" : operationPayload["deviceGlobalConfigurations"]["idleTimeout"],
+                    "isMultiUserDevice" : operationPayload["deviceGlobalConfigurations"]["isMultiUserDevice"],
+                    "isLoginRequired" : operationPayload["deviceGlobalConfigurations"]["isLoginRequired"],
+                    "displayOrientation" : operationPayload["deviceGlobalConfigurations"]["displayOrientation"],
                     "primaryURL": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["primaryURL"],
+                    "isTopBarEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isTopBarEnabled"],
                     "isAddressBarEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]
-                        ["isAddressBarEnabled"]
+                        ["isAddressBarEnabled"],
+
+                    "showBackController": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["showBackController"],
+                    "isForwardControllerEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isForwardControllerEnabled"],
+                    "isHomeButtonEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isHomeButtonEnabled"],
+                    "isReloadEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isReloadEnabled"],
+                    "lockToPrimaryURL": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["lockToPrimaryURL"],
+                    "isJavascriptEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isJavascriptEnabled"],
+                    "isTextCopyEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isTextCopyEnabled"],
+                    "isDownloadsEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isDownloadsEnabled"],
+                    "isLockedToBrowser": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isLockedToBrowser"],
+                    "isFormAutoFillEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isFormAutoFillEnabled"],
+                    "isContentAccessEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isContentAccessEnabled"],
+                    "isFileAccessAllowed": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isFileAccessAllowed"],
+                    "isAllowedUniversalAccessFromFileURLs": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isAllowedUniversalAccessFromFileURLs"],
+                    "isAllowedFileAccessFromFileURLs": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isAllowedFileAccessFromFileURLs"],
+                    "isAppCacheEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isAppCacheEnabled"],
+                    "appCachePath": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["appCachePath"],
+                    "cacheMode": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["cacheMode"],
+                    "isLoadsImagesAutomatically": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isLoadsImagesAutomatically"],
+                    "isBlockNetworkImage": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isBlockNetworkImage"],
+                    "isBlockNetworkLoads": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isBlockNetworkLoads"],
+                    "isSupportZoomEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isSupportZoomEnabled"],
+                    "isDisplayZoomControls": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isDisplayZoomControls"],
+                    "textZoom": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["textZoom"],
+                    "defaultFontSize": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["defaultFontSize"],
+                    "defaultTextEncodingName": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["defaultTextEncodingName"],
+                    "isDatabaseEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isDatabaseEnabled"],
+                    "isDomStorageEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isDomStorageEnabled"],
+                    "geolocationEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["geolocationEnabled"],
+                    "isJavaScriptCanOpenWindowsAutomatically": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isJavaScriptCanOpenWindowsAutomatically"],
+                    "isMediaPlaybackRequiresUserGesture": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isMediaPlaybackRequiresUserGesture"],
+                    "isSafeBrowsingEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isSafeBrowsingEnabled"],
+                    "isUseWideViewPort": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isUseWideViewPort"],
+                    "userAgentString": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["userAgentString"],
+                    "mixedContentMode": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["mixedContentMode"]
+
                 };
                 break;
             case androidOperationConstants["KIOSK_APPS_CODE"]:
@@ -398,18 +444,87 @@ var androidOperationModule = function () {
                 break;
             case androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION_CODE"]:
                  operationType = operationTypeConstants["PROFILE"];
-                 payload = {
-                      "operation": {
-                         "cosuProfileRestrictionStartTime": operationData["cosuProfileOperationRestrictionStartTime"],
-                         "cosuProfileRestrictionEndTime": operationData["cosuProfileOperationRestrictionEndTime"],
-                         "deviceGlobalConfigurations" : {
-                              "browserProperties": {
-                                  "primaryURL": operationData["primaryURL"],
-                                  "isAddressBarEnabled": operationData["isAddressBarEnabled"]
-                              }
-                          }
-                      }
-                 };
+                 payload = {};
+                 operation = {};
+                 operation["cosuProfileRestrictionStartTime"] =
+                                  operationData["cosuProfileOperationRestrictionStartTime"];
+                 operation["cosuProfileRestrictionEndTime"] = operationData["cosuProfileOperationRestrictionEndTime"];
+
+                 deviceGlobalConfigurations = {};
+                 if (operationData["idleMediaURL"]) {
+                    deviceGlobalConfigurations["idleMediaURL"] = operationData["idleMediaURL"];
+                 }
+                 if (operationData["kioskBackgroundImage"]) {
+                    deviceGlobalConfigurations["kioskBackgroundImage"] = operationData["kioskBackgroundImage"];
+                 }
+                 if (operationData["kioskLogoImage"]) {
+                    deviceGlobalConfigurations["kioskLogoImage"] = operationData["kioskLogoImage"];
+                 }
+                 if (operationData["kioskAppName"]) {
+                    deviceGlobalConfigurations["kioskAppName"] = operationData["kioskAppName"];
+                 }
+                 deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
+                 if (operationData["idleTimeout"]) {
+                    deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"];
+                 }
+                 deviceGlobalConfigurations["isMultiUserDevice"] = operationData["isMultiUserDevice"];
+                 deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"];
+                 deviceGlobalConfigurations["displayOrientation"] = operationData["displayOrientation"];
+
+                 browserProperties = {};
+                 if (operationData["primaryURL"]) {
+                     browserProperties["primaryURL"] = operationData["primaryURL"];
+                     browserProperties["isTopBarEnabled"] = operationData["isTopBarEnabled"];
+                     browserProperties["isAddressBarEnabled"] = operationData["isAddressBarEnabled"];
+                     browserProperties["showBackController"] = operationData["showBackController"];
+                     browserProperties["isForwardControllerEnabled"] = operationData["isForwardControllerEnabled"];
+                     browserProperties["isHomeButtonEnabled"] = operationData["isHomeButtonEnabled"];
+                     browserProperties["isReloadEnabled"] = operationData["isReloadEnabled"];
+                     browserProperties["lockToPrimaryURL"] = operationData["lockToPrimaryURL"];
+                     browserProperties["isJavascriptEnabled"] = operationData["isJavascriptEnabled"];
+                     browserProperties["isTextCopyEnabled"] = operationData["isTextCopyEnabled"];
+                     browserProperties["isDownloadsEnabled"] = operationData["isDownloadsEnabled"];
+                     browserProperties["isLockedToBrowser"] = operationData["isLockedToBrowser"];
+                     browserProperties["isFormAutoFillEnabled"] = operationData["isFormAutoFillEnabled"];
+                     browserProperties["isContentAccessEnabled"] = operationData["isContentAccessEnabled"];
+                     browserProperties["isFileAccessAllowed"] = operationData["isFileAccessAllowed"];
+                     browserProperties["isAllowedUniversalAccessFromFileURLs"] = operationData["isAllowedUniversalAccessFromFileURLs"];
+                     browserProperties["isAllowedFileAccessFromFileURLs"] = operationData["isAllowedFileAccessFromFileURLs"];
+                     browserProperties["isAppCacheEnabled"] = operationData["isAppCacheEnabled"];
+                     if (operationData["isAppCacheEnabled"] && operationData["appCachePath"]) {
+                        browserProperties["appCachePath"] = operationData["appCachePath"];
+                     }
+                     browserProperties["cacheMode"] = operationData["cacheMode"];
+                     browserProperties["isLoadsImagesAutomatically"] = operationData["isLoadsImagesAutomatically"];
+                     browserProperties["isBlockNetworkImage"] = operationData["isBlockNetworkImage"];
+                     browserProperties["isBlockNetworkLoads"] = operationData["isBlockNetworkLoads"];
+                     browserProperties["isSupportZoomEnabled"] = operationData["isSupportZoomEnabled"];
+                     browserProperties["isDisplayZoomControls"] = operationData["isDisplayZoomControls"];
+                     if (operationData["textZoom"]) {
+                        browserProperties["textZoom"] = operationData["textZoom"];
+                     }
+                     if (operationData["defaultFontSize"]) {
+                        browserProperties["defaultFontSize"] = operationData["defaultFontSize"];
+                     }
+                     if (operationData["defaultTextEncodingName"]) {
+                        browserProperties["defaultTextEncodingName"] = operationData["defaultTextEncodingName"];
+                     }
+                     browserProperties["isDatabaseEnabled"] = operationData["isDatabaseEnabled"];
+                     browserProperties["isDomStorageEnabled"] = operationData["isDomStorageEnabled"];
+                     browserProperties["geolocationEnabled"] = operationData["geolocationEnabled"];
+                     browserProperties["isJavaScriptCanOpenWindowsAutomatically"] = operationData["isJavaScriptCanOpenWindowsAutomatically"];
+                     browserProperties["isMediaPlaybackRequiresUserGesture"] = operationData["isMediaPlaybackRequiresUserGesture"];
+                     browserProperties["isSafeBrowsingEnabled"] = operationData["isSafeBrowsingEnabled"];
+                     browserProperties["isUseWideViewPort"] = operationData["isUseWideViewPort"];
+                     if (operationData["userAgentString"]) {
+                        browserProperties["userAgentString"] = operationData["userAgentString"];
+                     }
+                     browserProperties["mixedContentMode"] = operationData["mixedContentMode"];
+                    deviceGlobalConfigurations.browserProperties = browserProperties;
+                 }
+                 operation.deviceGlobalConfigurations = deviceGlobalConfigurations;
+                 payload.operation = operation;
+
                break;
             case androidOperationConstants["SYSTEM_UPDATE_POLICY_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
