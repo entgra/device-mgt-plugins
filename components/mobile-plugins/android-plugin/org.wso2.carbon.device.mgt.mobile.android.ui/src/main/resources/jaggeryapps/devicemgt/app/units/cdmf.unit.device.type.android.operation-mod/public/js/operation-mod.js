@@ -468,7 +468,9 @@ var androidOperationModule = function () {
                     deviceGlobalConfigurations["kioskAppName"] = operationData["kioskAppName"];
                  }
                  deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
-                 deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"];
+                 if (operationData["idleTimeout"]) {
+                    deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"];
+                 }
                  deviceGlobalConfigurations["isMultiUserDevice"] = operationData["isMultiUserDevice"];
                  deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"];
                  deviceGlobalConfigurations["displayOrientation"] = operationData["displayOrientation"];

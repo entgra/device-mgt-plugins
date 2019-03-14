@@ -834,6 +834,25 @@ var changeAndroidWifiPolicyEAP = function (select, superSelect) {
 };
 
 /**
+ * Pass a div Id and a check box to view or hide div content based on checkbox value
+ */
+var changeDivVisibility = function (divId, checkbox) {
+    if (checkbox.checked) {
+        document.getElementById(divId).style.display= "block"
+    } else {
+        document.getElementById(divId).style.display= "none"
+        inputs = document.getElementById(divId).getElementsByTagName('input');
+        for (index = 0; index < inputs.length; ++index) {
+            if (inputs[index].type == "text") {
+                inputs[index].value = inputs[index].defaultValue;
+            } else if (inputs[index].type == "checkbox") {
+                inputs[index].checked = inputs[index].defaultChecked;
+            }
+        }
+    }
+};
+
+/**
  * Method to slide down a provided pane upon provided value set.
  *
  * @param selectElement Select HTML Element to consider
