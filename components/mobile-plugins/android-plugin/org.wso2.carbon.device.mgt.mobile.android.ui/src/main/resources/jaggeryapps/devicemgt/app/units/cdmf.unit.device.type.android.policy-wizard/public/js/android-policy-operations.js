@@ -52,6 +52,8 @@ var androidOperationConstants = {
     "APPLICATION_OPERATION_CODE": "APP-RESTRICTION",
     "KIOSK_APPS_CODE": "KIOSK_APPS",
     "KIOSK_APPS": "cosu-whitelisted-applications",
+    "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
+    "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
     "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
     "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL"
 };
@@ -208,6 +210,101 @@ var validatePolicyProfile = function () {
             // updating validationStatusArray with validationStatus
             validationStatusArray.push(validationStatus);
         }
+
+        // Validating COSU PROFILE CONFIGURATION
+        if ($.inArray(androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION_CODE"], configuredOperations) != -1) {
+
+            operation = androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION"];
+            var continueToCheckNextInputs = true;
+
+            if (continueToCheckNextInputs) {
+                var backgroundImage = $("input#cosu-global-config-kiosk-background-image").val();
+                if (backgroundImage && !(backgroundImage.endsWith("jpg") || backgroundImage.endsWith("jpeg")
+                                || backgroundImage.endsWith("png"))) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Launcher background image file types are jpg, jpeg and png",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var kioskLogo = $("input#cosu-global-config-kiosk-logo-image").val();
+                if (kioskLogo && !(kioskLogo.endsWith("jpg") || kioskLogo.endsWith("jpeg")
+                                || kioskLogo.endsWith("png"))) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Company log to display file types are jpg, jpeg and png",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var idleMediaUrl = $("input#cosu-global-config-idle-media-url").val();
+                if (idleMediaUrl && !(idleMediaUrl.endsWith("jpg") || idleMediaUrl.endsWith("jpeg")
+                                || idleMediaUrl.endsWith("png") || idleMediaUrl.endsWith("mp4")
+                                || idleMediaUrl.endsWith("3gp") || idleMediaUrl.endsWith("wmv")
+                                || idleMediaUrl.endsWith("mkv"))) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Idle media url file types are .jpg, .png, .jpeg, .mp4, .3gp, .wmv, .mkv",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var idleTimeout = $("input#cosu-browser-property-idle-timeout").val();
+                if (idleTimeout && (!$.isNumeric(idleTimeout) || idleTimeout < 0)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Idle timeout must be a positive whole number",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var textZoom = $("input#cosu-browser-property-text-zoom").val();
+                if (textZoom && (!$.isNumeric(textZoom) || textZoom < 0)) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Text zoom must be a positive whole number",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var defaultFontSize = $("input#cosu-browser-property-default-font-size").val();
+                if (defaultFontSize) {
+                    if (!$.isNumeric(defaultFontSize) || !inputIsValidAgainstRange(defaultFontSize, 0, 72)) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Default font size is a number between 0 and 72",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                    }
+                 }
+            }
+
+           if (continueToCheckNextInputs) {
+               validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+               };
+           }
+           validationStatusArray.push(validationStatus);
+        }
+
         // Validating ENCRYPT_STORAGE
         if ($.inArray(androidOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"], configuredOperations) != -1) {
             // if ENCRYPT_STORAGE is configured
@@ -702,6 +799,25 @@ var changeAndroidWifiPolicyEAP = function (select, superSelect) {
     slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['peap', 'tls', 'ttls']);
     if (superSelect.value != '802eap') {
         changeAndroidWifiPolicy(superSelect);
+    }
+};
+
+/**
+ * Pass a div Id and a check box to view or hide div content based on checkbox value
+ */
+var changeDivVisibility = function (divId, checkbox) {
+    if (checkbox.checked) {
+        document.getElementById(divId).style.display= "block"
+    } else {
+        document.getElementById(divId).style.display= "none"
+        inputs = document.getElementById(divId).getElementsByTagName('input');
+        for (index = 0; index < inputs.length; ++index) {
+            if (inputs[index].type == "text") {
+                inputs[index].value = inputs[index].defaultValue;
+            } else if (inputs[index].type == "checkbox") {
+                inputs[index].checked = inputs[index].defaultChecked;
+            }
+        }
     }
 };
 
