@@ -1801,6 +1801,19 @@
                                                     </a>
                                                 </ul>
                                             </div>
+                                            <br>
+                                            <div class="wr-input-control">
+                                                <label class="wr-input-label">
+                                                    Primary User Apps
+                                                    <span class="helper">
+                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"
+                                                              title="Primary User is the user to which the device is enrolled."></span>
+                                                    </span>
+                                                </label>
+                                                <input id="cosu-user-app-config-primary-user" type="text"
+                                                       class="form-control operationDataKeys"
+                                                       data-key="primaryUserApps" placeholder="[ Applications ]"/>
+                                            </div>
                                             <a href="#cosu-global-config-multi-user-app-config-grid"
                                                class="btn btn-secondary grid-input-add"
                                                data-click-event="add-form">
@@ -1823,11 +1836,11 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody data-add-form-container="#cosu-global-config-multi-user-app-config-grid">
-                                                    <tr data-help-text="add-form">
-                                                        <td colspan="4">
-                                                            No entries added yet.
-                                                        </td>
-                                                    </tr>
+                                                        <tr data-help-text="add-form">
+                                                            <td colspan="4">
+                                                                No entries added yet.
+                                                            </td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                                 <table class="template hidden">
@@ -1847,21 +1860,23 @@
                                                                    title="visibleAppList">
                                                         </td>
                                                         <td>
-                                                    <span class="list-group-item-actions">
-                                                        <a href="#cosu-global-config-multi-user-app-config-grid"
-                                                           class="grid-input-remove"
-                                                           data-click-event="remove-form">
-                                                            <span class="fw-stack helper" title="Remove Entry">
-                                                                <i class="fw fw-circle-outline fw-stack-2x"></i>
-                                                                <i class="fw fw-delete fw-stack-1x"></i>
+                                                            <span class="list-group-item-actions">
+                                                                <a href="#cosu-global-config-multi-user-app-config-grid"
+                                                                   class="grid-input-remove"
+                                                                   data-click-event="remove-form">
+                                                                    <span class="fw-stack helper" title="Remove Entry">
+                                                                        <i class="fw fw-circle-outline fw-stack-2x"></i>
+                                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                                    </span>
+                                                                </a>
                                                             </span>
-                                                        </a>
-                                                    </span>
                                                         </td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <span id="cosu-profile-app-configs-storeapps"
+                                                  data-storeapps="{{json storeapps}}" hidden></span>
                                         </div>
                                     </div>
                                     <!--COSU profile user app configuration-->

@@ -368,51 +368,62 @@ var validatePolicyProfile = function () {
             if (continueToCheckNextInputs) {
                 var isMultiUser = $("input#cosu-global-config-is-multi-user-device").is(":checked");
                 if (isMultiUser === true) {
-                    var isEmptyInputValue = false;
-                    var cosuUserAppConfig = $("#cosu-user-app-config .child-input");
-                    if($(cosuUserAppConfig).length === 0) {
+                    var primaryUserApps = $("input#cosu-user-app-config-primary-user").val();
+                    if (!primaryUserApps) {
                         validationStatus = {
                             "error": true,
-                            "subErrorMsg": "Users and apps are not configured for multi users.",
+                            "subErrorMsg": "Primary user apps are not configured.",
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
-                    } else {
-                        var childInputCount = 0;
-                        var userInputArray = [];
-                        var appInputArray = [];
-                        $(cosuUserAppConfig).each(function () {
-                            childInputCount++;
-                            var childInputValue = $(this).val();
-                            if (!childInputValue) {
-                                isEmptyInputValue = true;
-                                return false;
-                            }
-                            if (childInputCount % 2 === 0) {
-                                appInputArray.push(childInputValue);
-                            } else {
-                                userInputArray.push(childInputValue);
-                            }
-                        });
-                        var uniqueUserInputArray = userInputArray.filter(function (value, index, self) {
-                            return self.indexOf(value) === index;
-                        });
-                        if (userInputArray.length !== uniqueUserInputArray.length) {
+                    }
+                    if (continueToCheckNextInputs) {
+                        var isEmptyInputValue = false;
+                        var cosuUserAppConfig = $("#cosu-user-app-config .child-input");
+                        if ($(cosuUserAppConfig).length === 0) {
                             validationStatus = {
                                 "error": true,
-                                "subErrorMsg": "Duplicate values exist for username in multi user app configuration.",
+                                "subErrorMsg": "Users and apps are not configured for multi users.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else {
+                            var childInputCount = 0;
+                            var userInputArray = [];
+                            var appInputArray = [];
+                            $(cosuUserAppConfig).each(function () {
+                                childInputCount++;
+                                var childInputValue = $(this).val();
+                                if (!childInputValue) {
+                                    isEmptyInputValue = true;
+                                    return false;
+                                }
+                                if (childInputCount % 2 === 0) {
+                                    appInputArray.push(childInputValue);
+                                } else {
+                                    userInputArray.push(childInputValue);
+                                }
+                            });
+                            var uniqueUserInputArray = userInputArray.filter(function (value, index, self) {
+                                return self.indexOf(value) === index;
+                            });
+                            if (userInputArray.length !== uniqueUserInputArray.length) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Duplicate values exist for username in multi user app configuration.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+                        if (isEmptyInputValue === true) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more multi user app configurations are empty.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
                         }
-                    }
-                    if (isEmptyInputValue === true) {
-                        validationStatus = {
-                            "error": true,
-                            "subErrorMsg": "One or more multi user app configurations are empty.",
-                            "erroneousFeature": operation
-                        };
-                        continueToCheckNextInputs = false;
                     }
                 }
             }
@@ -896,6 +907,7 @@ var changeDivVisibility = function (divId, checkbox) {
     if (checkbox.checked) {
         document.getElementById(divId).style.display= "block";
     } else {
+
         document.getElementById(divId).style.display= "none";
         $("#" + divId + " input").each(
             function () {

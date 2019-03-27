@@ -1530,6 +1530,19 @@
                                                     </a>
                                                 </ul>
                                             </div>
+                                            <br>
+                                            <div class="wr-input-control">
+                                                <label class="wr-input-label">
+                                                    Primary User Apps
+                                                    <span class="helper">
+                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"
+                                                              title="Primary User is the user to which the device is enrolled."></span>
+                                                    </span>
+                                                </label>
+                                                <input id="cosu-user-app-config-primary-user" type="text"
+                                                       class="form-control operationDataKeys"
+                                                       data-key="primaryUserApps" placeholder="[ Applications ]"/>
+                                            </div>
                                             <a href="#cosu-global-config-multi-user-app-config-grid"
                                                class="btn btn-secondary grid-input-add"
                                                data-click-event="add-form">
@@ -1552,11 +1565,11 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody data-add-form-container="#cosu-global-config-multi-user-app-config-grid">
-                                                    <tr data-help-text="add-form">
-                                                        <td colspan="4">
-                                                            No entries added yet.
-                                                        </td>
-                                                    </tr>
+                                                        <tr data-help-text="add-form">
+                                                            <td colspan="4">
+                                                                No entries added yet.
+                                                            </td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                                 <table class="template hidden">
@@ -1568,12 +1581,12 @@
                                                         <td data-title="User">
                                                             <input type="text" class="form-control grid-input-text"
                                                                    data-child-key="username"
-                                                                   maxlength="100" placeholder="[ username ]"/>
+                                                                   maxlength="100" placeholder="[ Username ]"/>
                                                         </td>
                                                         <td data-title="Applications">
                                                             <input type="text" class="form-control grid-input-text"
                                                                    rows="2" data-child-key="visibleAppList"
-                                                                   title="visibleAppList">
+                                                                   title="visibleAppList" placeholder="[ Applications ]">
                                                         </td>
                                                         <td>
                                                     <span class="list-group-item-actions">
@@ -1591,6 +1604,8 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <span id="cosu-profile-app-configs-storeapps"
+                                                  data-storeapps="{{json storeapps}}" hidden></span>
                                         </div>
                                     </div>
                                     <!--COSU profile user app configuration-->
