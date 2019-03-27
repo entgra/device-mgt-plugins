@@ -215,7 +215,26 @@ var androidOperationModule = function () {
                     payload["isMultiUserDevice"] = deviceGlobalConfigurations["isMultiUserDevice"];
                     if (payload["isMultiUserDevice"] === true) {
                         payload["isLoginRequired"] = deviceGlobalConfigurations["isLoginRequired"];
-                        payload["userAppConfigurations"] = operationPayload["userAppConfigurations"];
+                        var userAppConfigurations = operationPayload["userAppConfigurations"];
+                        var index;
+                        for (index = 0; index < userAppConfigurations.length; index++) {
+                            userAppConfigurations[index]["visibleAppList"] =
+                                userAppConfigurations[index]["visibleAppList"].map(function (item) {
+                                        var packageName = item.trim();
+                                        if (packageName && packageName.charAt(0) !== "{") {
+                                            var indexValue = packageName.lastIndexOf(":");
+                                            if (indexValue > -1) {
+                                                packageName = packageName.substring(0, indexValue);
+                                            }
+                                        }
+                                        return packageName;
+                                    }).filter(Boolean);
+                            if (userAppConfigurations[index]["username"] === "primaryUser") {
+                                payload["primaryUserApps"] = userAppConfigurations[index]["visibleAppList"];
+                                delete userAppConfigurations[index];
+                            }
+                        }
+                        payload["userAppConfigurations"] = userAppConfigurations.filter(Boolean);
                     }
                     payload["displayOrientation"] = deviceGlobalConfigurations["displayOrientation"];
                     if ("browserProperties" in deviceGlobalConfigurations) {
@@ -490,13 +509,28 @@ var androidOperationModule = function () {
                      deviceGlobalConfigurations["displayOrientation"] = operationData["displayOrientation"];
                      if (deviceGlobalConfigurations["isMultiUserDevice"] === true) {
                          deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"];
+                         var storeApps = $("#cosu-profile-app-configs-storeapps").data("storeapps");
+                         var primaryUserApps = {
+                             "username" : "primaryUser",
+                             "visibleAppList" : operationData["primaryUserApps"]
+                         };
                          var userAppConfigurations = operationData["userAppConfigurations"];
+                         userAppConfigurations.push(primaryUserApps);
                          var index;
                          for (index = 0; index < userAppConfigurations.length; index++) {
                              userAppConfigurations[index]["visibleAppList"] =
                                  userAppConfigurations[index]["visibleAppList"].split(/,(?![^{]*})/)
                                      .map(function (item) {
-                                     return (item.trim());
+                                         var packageName = item.trim();
+                                         if (packageName) {
+                                             var i;
+                                             for (i=0; i<storeApps.length; i++) {
+                                                 if (packageName === storeApps[i]["packageName"]) {
+                                                     packageName += ":" + storeApps[i]["webUrl"];
+                                                 }
+                                             }
+                                         }
+                                         return packageName;
                                  }).filter(Boolean);
                          }
                          operation["userAppConfigurations"] = operationData["userAppConfigurations"];
@@ -953,6 +987,7 @@ var androidOperationModule = function () {
                                     var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
                                     var childInputKey = childInput.data("child-key");
                                     var childInputValue = multiColumnKeyValuePair[childInputKey];
+
                                     // populating extracted value in the UI according to the input type
                                     if (childInput.is(":text") ||
                                         childInput.is("textarea") ||
