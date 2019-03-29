@@ -509,6 +509,7 @@ var androidOperationModule = function () {
                      deviceGlobalConfigurations["displayOrientation"] = operationData["displayOrientation"];
                      if (deviceGlobalConfigurations["isMultiUserDevice"] === true) {
                          deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"];
+                         deviceGlobalConfigurations["tenantDomainName"] = $("#logged-in-user").data("domain");
                          var storeApps = $("#cosu-profile-app-configs-storeapps").data("storeapps");
                          var primaryUserApps = {
                              "username" : "primaryUser",
@@ -522,7 +523,7 @@ var androidOperationModule = function () {
                                  userAppConfigurations[index]["visibleAppList"].split(/,(?![^{]*})/)
                                      .map(function (item) {
                                          var packageName = item.trim();
-                                         if (packageName) {
+                                         if (packageName && storeApps) {
                                              var i;
                                              for (i=0; i<storeApps.length; i++) {
                                                  if (packageName === storeApps[i]["packageName"]) {
