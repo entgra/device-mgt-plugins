@@ -309,6 +309,22 @@ var validatePolicyProfile = function () {
             }
 
             if (continueToCheckNextInputs) {
+                var isSingleAppMode = $("input#cosu-global-config-is-single-application-mode").is(":checked");
+                if (isSingleAppMode === true) {
+                    var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
+                    if ($(enrollmentAppInstallAppList).length === 0) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "No application has been selected in Enrollment Application Install " +
+                                "config to run on Single Application Mode.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+            }
+
+            if (continueToCheckNextInputs) {
                 var isMultiUser = $("input#cosu-global-config-is-multi-user-device").is(":checked");
                 if (isMultiUser === true) {
                     var primaryUserApps = $("input#cosu-user-app-config-primary-user").val();
@@ -713,7 +729,7 @@ var validatePolicyProfile = function () {
             //If enrollment app install configured
             operation = androidOperationConstants["ENROLLMENT_APP_INSTALL"];
             var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
-            if($(enrollmentAppInstallAppList).length == 0) {
+            if($(enrollmentAppInstallAppList).length === 0) {
                 validationStatus = {
                     "error": true,
                     "subErrorMsg": "Applications are not selected to be installed during device enrollment.",

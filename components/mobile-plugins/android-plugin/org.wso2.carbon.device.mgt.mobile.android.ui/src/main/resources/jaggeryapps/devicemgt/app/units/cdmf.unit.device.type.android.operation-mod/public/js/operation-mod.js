@@ -210,6 +210,7 @@ var androidOperationModule = function () {
                     payload["kioskBackgroundImage"] = deviceGlobalConfigurations["kioskBackgroundImage"];
                     payload["kioskLogoImage"] = deviceGlobalConfigurations["kioskLogoImage"];
                     payload["kioskAppName"] = deviceGlobalConfigurations["kioskAppName"];
+                    payload["isSingleAppMode"] = deviceGlobalConfigurations["isSingleAppMode"];
                     payload["isIdleGraphicsEnabled"] = deviceGlobalConfigurations["isIdleGraphicsEnabled"];
                     payload["idleTimeout"] = deviceGlobalConfigurations["idleTimeout"];
                     payload["isMultiUserDevice"] = deviceGlobalConfigurations["isMultiUserDevice"];
@@ -500,6 +501,20 @@ var androidOperationModule = function () {
                      }
                      if (operationData["kioskAppName"]) {
                          deviceGlobalConfigurations["kioskAppName"] = operationData["kioskAppName"];
+                     }
+                     deviceGlobalConfigurations["isSingleAppMode"] = operationData["isSingleAppMode"];
+                     if (deviceGlobalConfigurations["isSingleAppMode"] === true) {
+                         var selectedSingleModeAppElement = "div#install-app-enrollment .child-input";
+                         if ($(selectedSingleModeAppElement + "[data-child-key='type']").val() === "Web Clip") {
+                             var webClipApp = {
+                                 "identity": $(selectedSingleModeAppElement + "[data-child-key='packageName']").val(),
+                                 "title": $(selectedSingleModeAppElement + "[data-child-key='appName']").val()
+                             };
+                             deviceGlobalConfigurations["singleApplicationModeApp"] = JSON.stringify(webClipApp);
+                         } else {
+                             deviceGlobalConfigurations["singleApplicationModeApp"]
+                                 = $(selectedSingleModeAppElement + "[data-child-key='packageName']").val();
+                         }
                      }
                      deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
                      if (operationData["idleTimeout"]) {
