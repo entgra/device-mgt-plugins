@@ -210,6 +210,7 @@ var androidOperationModule = function () {
                     payload["kioskBackgroundImage"] = deviceGlobalConfigurations["kioskBackgroundImage"];
                     payload["kioskLogoImage"] = deviceGlobalConfigurations["kioskLogoImage"];
                     payload["kioskAppName"] = deviceGlobalConfigurations["kioskAppName"];
+                    payload["isSingleModeApp"] = deviceGlobalConfigurations["isSingleModeApp"];
                     payload["isIdleGraphicsEnabled"] = deviceGlobalConfigurations["isIdleGraphicsEnabled"];
                     payload["idleTimeout"] = deviceGlobalConfigurations["idleTimeout"];
                     payload["isMultiUserDevice"] = deviceGlobalConfigurations["isMultiUserDevice"];
@@ -500,6 +501,20 @@ var androidOperationModule = function () {
                      }
                      if (operationData["kioskAppName"]) {
                          deviceGlobalConfigurations["kioskAppName"] = operationData["kioskAppName"];
+                     }
+                     deviceGlobalConfigurations["isSingleModeApp"] = operationData["isSingleModeApp"];
+                     if (deviceGlobalConfigurations["isSingleModeApp"] === true) {
+                         var selectedSingleModeAppElement = "div#install-app-enrollment .child-input";
+                         if ($(selectedSingleModeAppElement + "[data-child-key='type']").val() === "Web Clip") {
+                             var webClipApp = {
+                                 "identity": $(selectedSingleModeAppElement + "[data-child-key='packageName']").val(),
+                                 "title": $(selectedSingleModeAppElement + "[data-child-key='appName']").val()
+                             };
+                             deviceGlobalConfigurations["singleModeApp"] = JSON.stringify(webClipApp);
+                         } else {
+                             deviceGlobalConfigurations["singleModeApp"]
+                                 = $(selectedSingleModeAppElement + "[data-child-key='packageName']").val();
+                         }
                      }
                      deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
                      if (operationData["idleTimeout"]) {
