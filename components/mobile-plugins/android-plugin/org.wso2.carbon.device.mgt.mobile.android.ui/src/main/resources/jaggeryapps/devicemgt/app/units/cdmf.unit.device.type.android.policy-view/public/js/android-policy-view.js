@@ -199,6 +199,48 @@ var switchPaneAgainstValueSetForRadioButtons = function (selectElement, paneIdPr
 // End of HTML embedded invoke methods
 
 /**
+ * Pass a div Id and a check box to view or hide div content based on checkbox value
+ */
+var changeDivVisibility = function (divId, checkbox) {
+    if (checkbox.checked) {
+        document.getElementById(divId).style.display= "block";
+    } else {
+        document.getElementById(divId).style.display= "none";
+        $("#" + divId + " input").each(
+            function () {
+                if ($(this).is("input:text")) {
+                    $(this).val(this.defaultValue);
+                } else if ($(this).is("input:checkbox")) {
+                    $(this).prop("checked", this.defaultChecked);
+                }
+            }
+        );
+        $("#" + divId + " select").each(
+            function () {
+                $(this).val($(this).data("default"));
+            }
+        );
+        $("#" + divId + " .grouped-array-input").each(
+            function () {
+                var gridInputs = $(this).find("[data-add-form-clone]");
+                if (gridInputs.length > 0) {
+                    gridInputs.remove();
+                }
+                var helpTexts = $(this).find("[data-help-text=add-form]");
+                if (helpTexts.length > 0) {
+                    helpTexts.show();
+                }
+            }
+        );
+        $("#" + divId + " .collapse-config").each(
+            function() {
+                this.style.display = "none";
+            }
+        );
+    }
+};
+
+/**
  * This method will display appropriate fields based on wifi type
  * @param {object} wifi type select object
  */
@@ -254,4 +296,53 @@ $(document).ready(function () {
             }
         }
     });
+
+    // add form entry click function for grid inputs
+    $(advanceOperations).on("click", "[data-click-event=add-form]", function () {
+        var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
+        var clonedForm = $("[data-add-form=" + $(this).attr("href") + "]").clone().find("[data-add-form-element=clone]")
+            .attr("data-add-form-clone", $(this).attr("href"));
+
+        // adding class .child-input to capture text-input-array-values
+        $("input, select", clonedForm).addClass("child-input");
+
+        $(addFormContainer).append(clonedForm);
+        setId(addFormContainer);
+        showHideHelpText(addFormContainer);
+    });
+
+    // remove form entry click function for grid inputs
+    $(advanceOperations).on("click", "[data-click-event=remove-form]", function () {
+        var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
+
+        $(this).closest("[data-add-form-element=clone]").remove();
+        setId(addFormContainer);
+        showHideHelpText(addFormContainer);
+    });
 });
+
+/**
+ * Method to set count id to cloned elements.
+ * @param {object} addFormContainer
+ */
+var setId = function (addFormContainer) {
+    $(addFormContainer).find("[data-add-form-clone]").each(function (i) {
+        $(this).attr("id", $(this).attr("data-add-form-clone").slice(1) + "-" + (i + 1));
+        if ($(this).find(".index").length > 0) {
+            $(this).find(".index").html(i + 1);
+        }
+    });
+};
+
+/**
+ * Method to set count id to cloned elements.
+ * @param {object} addFormContainer
+ */
+var showHideHelpText = function (addFormContainer) {
+    var helpText = "[data-help-text=add-form]";
+    if ($(addFormContainer).find("[data-add-form-clone]").length > 0) {
+        $(addFormContainer).find(helpText).hide();
+    } else {
+        $(addFormContainer).find(helpText).show();
+    }
+};

@@ -217,6 +217,18 @@ var validatePolicyProfile = function () {
             operation = androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION"];
             var continueToCheckNextInputs = true;
 
+            var isDeviceGlobalConfigChecked = $("input#cosu-profile-device-global-config").is(":checked");
+            var isDeviceRestrictOperationChecked = $("input#cosu-profile-device-restrict-operation-time").is(":checked");
+
+            if (isDeviceGlobalConfigChecked === false && isDeviceRestrictOperationChecked === false) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "COSU Profile Configuration is empty.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+
             if (continueToCheckNextInputs) {
                 var backgroundImage = $("input#cosu-global-config-kiosk-background-image").val();
                 if (backgroundImage && !(backgroundImage.endsWith("jpg") || backgroundImage.endsWith("jpeg")
@@ -294,6 +306,85 @@ var validatePolicyProfile = function () {
                                 continueToCheckNextInputs = false;
                     }
                  }
+            }
+
+            if (continueToCheckNextInputs) {
+                var isSingleAppMode = $("input#cosu-global-config-is-single-application-mode").is(":checked");
+                if (isSingleAppMode === true) {
+                    var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
+                    if ($(enrollmentAppInstallAppList).length === 0) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "No application has been selected in Enrollment Application Install " +
+                                "config to run on Single Application Mode.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                }
+            }
+
+            if (continueToCheckNextInputs) {
+                var isMultiUser = $("input#cosu-global-config-is-multi-user-device").is(":checked");
+                if (isMultiUser === true) {
+                    var primaryUserApps = $("input#cosu-user-app-config-primary-user").val();
+                    if (!primaryUserApps) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Primary user apps are not configured.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                    if (continueToCheckNextInputs) {
+                        var isEmptyInputValue = false;
+                        var cosuUserAppConfig = $("#cosu-user-app-config .child-input");
+                        if ($(cosuUserAppConfig).length === 0) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Users and apps are not configured for multi users.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else {
+                            var childInputCount = 0;
+                            var userInputArray = [];
+                            var appInputArray = [];
+                            $(cosuUserAppConfig).each(function () {
+                                childInputCount++;
+                                var childInputValue = $(this).val();
+                                if (!childInputValue) {
+                                    isEmptyInputValue = true;
+                                    return false;
+                                }
+                                if (childInputCount % 2 === 0) {
+                                    appInputArray.push(childInputValue);
+                                } else {
+                                    userInputArray.push(childInputValue);
+                                }
+                            });
+                            var uniqueUserInputArray = userInputArray.filter(function (value, index, self) {
+                                return self.indexOf(value) === index;
+                            });
+                            if (userInputArray.length !== uniqueUserInputArray.length) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Duplicate values exist for username in multi user app configuration.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+                        if (isEmptyInputValue === true) {
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more multi user app configurations are empty.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
             }
 
            if (continueToCheckNextInputs) {
@@ -638,7 +729,7 @@ var validatePolicyProfile = function () {
             //If enrollment app install configured
             operation = androidOperationConstants["ENROLLMENT_APP_INSTALL"];
             var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
-            if($(enrollmentAppInstallAppList).length == 0) {
+            if($(enrollmentAppInstallAppList).length === 0) {
                 validationStatus = {
                     "error": true,
                     "subErrorMsg": "Applications are not selected to be installed during device enrollment.",
@@ -807,17 +898,40 @@ var changeAndroidWifiPolicyEAP = function (select, superSelect) {
  */
 var changeDivVisibility = function (divId, checkbox) {
     if (checkbox.checked) {
-        document.getElementById(divId).style.display= "block"
+        document.getElementById(divId).style.display= "block";
     } else {
-        document.getElementById(divId).style.display= "none"
-        inputs = document.getElementById(divId).getElementsByTagName('input');
-        for (index = 0; index < inputs.length; ++index) {
-            if (inputs[index].type == "text") {
-                inputs[index].value = inputs[index].defaultValue;
-            } else if (inputs[index].type == "checkbox") {
-                inputs[index].checked = inputs[index].defaultChecked;
+        document.getElementById(divId).style.display= "none";
+        $("#" + divId + " input").each(
+            function () {
+                if ($(this).is("input:text")) {
+                    $(this).val(this.defaultValue);
+                } else if ($(this).is("input:checkbox")) {
+                    $(this).prop("checked", this.defaultChecked);
+                }
             }
-        }
+        );
+        $("#" + divId + " select").each(
+            function () {
+                $(this).val($(this).data("default"));
+            }
+        );
+        $("#" + divId + " .grouped-array-input").each(
+            function () {
+                var gridInputs = $(this).find("[data-add-form-clone]");
+                if (gridInputs.length > 0) {
+                    gridInputs.remove();
+                }
+                var helpTexts = $(this).find("[data-help-text=add-form]");
+                if (helpTexts.length > 0) {
+                    helpTexts.show();
+                }
+            }
+        );
+        $("#" + divId + " .collapse-config").each(
+            function() {
+                this.style.display = "none";
+            }
+        );
     }
 };
 

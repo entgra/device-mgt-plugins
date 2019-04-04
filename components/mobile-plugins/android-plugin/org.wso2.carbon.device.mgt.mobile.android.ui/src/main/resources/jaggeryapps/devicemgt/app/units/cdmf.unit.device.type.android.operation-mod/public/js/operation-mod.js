@@ -196,59 +196,94 @@ var androidOperationModule = function () {
                  };
                  break;
             case androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION_CODE"]:
-                payload = {
-                    "cosuProfileRestrictionStartTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
-                    "cosuProfileRestrictionEndTime": operationPayload["cosuProfileOperationRestrictionEndTime"],
-                    "idleMediaURL" : operationPayload["deviceGlobalConfigurations"]["idleMediaURL"],
-                    "kioskBackgroundImage": operationPayload["deviceGlobalConfigurations"]["kioskBackgroundImage"],
-                    "kioskLogoImage" : operationPayload["deviceGlobalConfigurations"]["kioskLogoImage"],
-                    "kioskAppName" : operationPayload["deviceGlobalConfigurations"]["kioskAppName"],
-                    "isIdleGraphicsEnabled" : operationPayload["deviceGlobalConfigurations"]["isIdleGraphicsEnabled"],
-                    "idleTimeout" : operationPayload["deviceGlobalConfigurations"]["idleTimeout"],
-                    "isMultiUserDevice" : operationPayload["deviceGlobalConfigurations"]["isMultiUserDevice"],
-                    "isLoginRequired" : operationPayload["deviceGlobalConfigurations"]["isLoginRequired"],
-                    "displayOrientation" : operationPayload["deviceGlobalConfigurations"]["displayOrientation"],
-                    "primaryURL": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["primaryURL"],
-                    "isTopBarEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isTopBarEnabled"],
-                    "isAddressBarEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]
-                        ["isAddressBarEnabled"],
-
-                    "showBackController": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["showBackController"],
-                    "isForwardControllerEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isForwardControllerEnabled"],
-                    "isHomeButtonEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isHomeButtonEnabled"],
-                    "isReloadEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isReloadEnabled"],
-                    "lockToPrimaryURL": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["lockToPrimaryURL"],
-                    "isJavascriptEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isJavascriptEnabled"],
-                    "isTextCopyEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isTextCopyEnabled"],
-                    "isDownloadsEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isDownloadsEnabled"],
-                    "isLockedToBrowser": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isLockedToBrowser"],
-                    "isFormAutoFillEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isFormAutoFillEnabled"],
-                    "isContentAccessEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isContentAccessEnabled"],
-                    "isFileAccessAllowed": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isFileAccessAllowed"],
-                    "isAllowedUniversalAccessFromFileURLs": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isAllowedUniversalAccessFromFileURLs"],
-                    "isAllowedFileAccessFromFileURLs": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isAllowedFileAccessFromFileURLs"],
-                    "isAppCacheEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isAppCacheEnabled"],
-                    "appCachePath": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["appCachePath"],
-                    "cacheMode": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["cacheMode"],
-                    "isLoadsImagesAutomatically": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isLoadsImagesAutomatically"],
-                    "isBlockNetworkImage": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isBlockNetworkImage"],
-                    "isBlockNetworkLoads": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isBlockNetworkLoads"],
-                    "isSupportZoomEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isSupportZoomEnabled"],
-                    "isDisplayZoomControls": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isDisplayZoomControls"],
-                    "textZoom": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["textZoom"],
-                    "defaultFontSize": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["defaultFontSize"],
-                    "defaultTextEncodingName": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["defaultTextEncodingName"],
-                    "isDatabaseEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isDatabaseEnabled"],
-                    "isDomStorageEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isDomStorageEnabled"],
-                    "geolocationEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["geolocationEnabled"],
-                    "isJavaScriptCanOpenWindowsAutomatically": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isJavaScriptCanOpenWindowsAutomatically"],
-                    "isMediaPlaybackRequiresUserGesture": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isMediaPlaybackRequiresUserGesture"],
-                    "isSafeBrowsingEnabled": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isSafeBrowsingEnabled"],
-                    "isUseWideViewPort": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["isUseWideViewPort"],
-                    "userAgentString": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["userAgentString"],
-                    "mixedContentMode": operationPayload["deviceGlobalConfigurations"]["browserProperties"]["mixedContentMode"]
-
-                };
+                payload = {};
+                payload["isDeviceRestrictOperationTimeEnabled"] =
+                    operationPayload["isDeviceRestrictOperationTimeEnabled"];
+                payload["isDeviceGlobalConfigEnabled"] = operationPayload["isDeviceGlobalConfigEnabled"];
+                if (payload["isDeviceRestrictOperationTimeEnabled"] === true) {
+                    payload["cosuProfileRestrictionStartTime"] = operationPayload["cosuProfileRestrictionStartTime"];
+                    payload["cosuProfileRestrictionEndTime"] = operationPayload["cosuProfileRestrictionEndTime"];
+                }
+                if (payload["isDeviceGlobalConfigEnabled"] === true) {
+                    var deviceGlobalConfigurations = operationPayload["deviceGlobalConfigurations"];
+                    payload["idleMediaURL"] = deviceGlobalConfigurations["idleMediaURL"];
+                    payload["kioskBackgroundImage"] = deviceGlobalConfigurations["kioskBackgroundImage"];
+                    payload["kioskLogoImage"] = deviceGlobalConfigurations["kioskLogoImage"];
+                    payload["kioskAppName"] = deviceGlobalConfigurations["kioskAppName"];
+                    payload["isSingleModeApp"] = deviceGlobalConfigurations["isSingleModeApp"];
+                    payload["isIdleGraphicsEnabled"] = deviceGlobalConfigurations["isIdleGraphicsEnabled"];
+                    payload["idleTimeout"] = deviceGlobalConfigurations["idleTimeout"];
+                    payload["isMultiUserDevice"] = deviceGlobalConfigurations["isMultiUserDevice"];
+                    if (payload["isMultiUserDevice"] === true) {
+                        payload["isLoginRequired"] = deviceGlobalConfigurations["isLoginRequired"];
+                        var userAppConfigurations = operationPayload["userAppConfigurations"];
+                        var index;
+                        for (index = 0; index < userAppConfigurations.length; index++) {
+                            userAppConfigurations[index]["visibleAppList"] =
+                                userAppConfigurations[index]["visibleAppList"].map(function (item) {
+                                        var packageName = item.trim();
+                                        if (packageName && packageName.charAt(0) !== "{") {
+                                            var indexValue = packageName.lastIndexOf(":");
+                                            if (indexValue > -1) {
+                                                packageName = packageName.substring(0, indexValue);
+                                            }
+                                        }
+                                        return packageName;
+                                    }).filter(Boolean);
+                            if (userAppConfigurations[index]["username"] === "primaryUser") {
+                                payload["primaryUserApps"] = userAppConfigurations[index]["visibleAppList"];
+                                delete userAppConfigurations[index];
+                            }
+                        }
+                        payload["userAppConfigurations"] = userAppConfigurations.filter(Boolean);
+                    }
+                    payload["displayOrientation"] = deviceGlobalConfigurations["displayOrientation"];
+                    if ("browserProperties" in deviceGlobalConfigurations) {
+                        var browserProperties = deviceGlobalConfigurations["browserProperties"];
+                        payload["isBrowserPropertyEnabled"] = browserProperties["isBrowserPropertyEnabled"];
+                        payload["primaryURL"] = browserProperties["primaryURL"];
+                        payload["isTopBarEnabled"] = browserProperties["isTopBarEnabled"];
+                        payload["isAddressBarEnabled"] = browserProperties["isAddressBarEnabled"];
+                        payload["showBackController"] = browserProperties["showBackController"];
+                        payload["isForwardControllerEnabled"] = browserProperties["isForwardControllerEnabled"];
+                        payload["isHomeButtonEnabled"] = browserProperties["isHomeButtonEnabled"];
+                        payload["isReloadEnabled"] = browserProperties["isReloadEnabled"];
+                        payload["lockToPrimaryURL"] = browserProperties["lockToPrimaryURL"];
+                        payload["isJavascriptEnabled"] = browserProperties["isJavascriptEnabled"];
+                        payload["isTextCopyEnabled"] = browserProperties["isTextCopyEnabled"];
+                        payload["isDownloadsEnabled"] = browserProperties["isDownloadsEnabled"];
+                        payload["isLockedToBrowser"] = browserProperties["isLockedToBrowser"];
+                        payload["isFormAutoFillEnabled"] = browserProperties["isFormAutoFillEnabled"];
+                        payload["isContentAccessEnabled"] = browserProperties["isContentAccessEnabled"];
+                        payload["isFileAccessAllowed"] = browserProperties["isFileAccessAllowed"];
+                        payload["isAllowedUniversalAccessFromFileURLs"] =
+                            browserProperties["isAllowedUniversalAccessFromFileURLs"];
+                        payload["isAllowedFileAccessFromFileURLs"] =
+                            browserProperties["isAllowedFileAccessFromFileURLs"];
+                        payload["isAppCacheEnabled"] = browserProperties["isAppCacheEnabled"];
+                        payload["appCachePath"] = browserProperties["appCachePath"];
+                        payload["cacheMode"] = browserProperties["cacheMode"];
+                        payload["isLoadsImagesAutomatically"] = browserProperties["isLoadsImagesAutomatically"];
+                        payload["isBlockNetworkImage"] = browserProperties["isBlockNetworkImage"];
+                        payload["isBlockNetworkLoads"] = browserProperties["isBlockNetworkLoads"];
+                        payload["isSupportZoomEnabled"] = browserProperties["isSupportZoomEnabled"];
+                        payload["isDisplayZoomControls"] = browserProperties["isDisplayZoomControls"];
+                        payload["textZoom"] = browserProperties["textZoom"];
+                        payload["defaultFontSize"] = browserProperties["defaultFontSize"];
+                        payload["defaultTextEncodingName"] = browserProperties["defaultTextEncodingName"];
+                        payload["isDatabaseEnabled"] = browserProperties["isDatabaseEnabled"];
+                        payload["isDomStorageEnabled"] = browserProperties["isDomStorageEnabled"];
+                        payload["geolocationEnabled"] = browserProperties["geolocationEnabled"];
+                        payload["isJavaScriptCanOpenWindowsAutomatically"] =
+                            browserProperties["isJavaScriptCanOpenWindowsAutomatically"];
+                        payload["isMediaPlaybackRequiresUserGesture"] =
+                            browserProperties["isMediaPlaybackRequiresUserGesture"];
+                        payload["isSafeBrowsingEnabled"] = browserProperties["isSafeBrowsingEnabled"];
+                        payload["isUseWideViewPort"] = browserProperties["isUseWideViewPort"];
+                        payload["userAgentString"] = browserProperties["userAgentString"];
+                        payload["mixedContentMode"] = browserProperties["mixedContentMode"];
+                    }
+                }
                 break;
             case androidOperationConstants["KIOSK_APPS_CODE"]:
                 payload = {
@@ -445,86 +480,136 @@ var androidOperationModule = function () {
             case androidOperationConstants["COSU_PROFILE_CONFIGURATION_OPERATION_CODE"]:
                  operationType = operationTypeConstants["PROFILE"];
                  payload = {};
-                 operation = {};
-                 operation["cosuProfileRestrictionStartTime"] =
-                                  operationData["cosuProfileOperationRestrictionStartTime"];
-                 operation["cosuProfileRestrictionEndTime"] = operationData["cosuProfileOperationRestrictionEndTime"];
-
-                 deviceGlobalConfigurations = {};
-                 if (operationData["idleMediaURL"]) {
-                    deviceGlobalConfigurations["idleMediaURL"] = operationData["idleMediaURL"];
+                 var operation = {};
+                 operation["isDeviceRestrictOperationTimeEnabled"] =
+                     operationData["isDeviceRestrictOperationTimeEnabled"];
+                 operation["isDeviceGlobalConfigEnabled"] = operationData["isDeviceGlobalConfigEnabled"];
+                 if (operation["isDeviceRestrictOperationTimeEnabled"] === true) {
+                     operation["cosuProfileRestrictionStartTime"] = operationData["cosuProfileRestrictionStartTime"];
+                     operation["cosuProfileRestrictionEndTime"] = operationData["cosuProfileRestrictionEndTime"];
                  }
-                 if (operationData["kioskBackgroundImage"]) {
-                    deviceGlobalConfigurations["kioskBackgroundImage"] = operationData["kioskBackgroundImage"];
-                 }
-                 if (operationData["kioskLogoImage"]) {
-                    deviceGlobalConfigurations["kioskLogoImage"] = operationData["kioskLogoImage"];
-                 }
-                 if (operationData["kioskAppName"]) {
-                    deviceGlobalConfigurations["kioskAppName"] = operationData["kioskAppName"];
-                 }
-                 deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
-                 if (operationData["idleTimeout"]) {
-                    deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"];
-                 }
-                 deviceGlobalConfigurations["isMultiUserDevice"] = operationData["isMultiUserDevice"];
-                 deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"];
-                 deviceGlobalConfigurations["displayOrientation"] = operationData["displayOrientation"];
-
-                 browserProperties = {};
-                 if (operationData["primaryURL"]) {
-                     browserProperties["primaryURL"] = operationData["primaryURL"];
-                     browserProperties["isTopBarEnabled"] = operationData["isTopBarEnabled"];
-                     browserProperties["isAddressBarEnabled"] = operationData["isAddressBarEnabled"];
-                     browserProperties["showBackController"] = operationData["showBackController"];
-                     browserProperties["isForwardControllerEnabled"] = operationData["isForwardControllerEnabled"];
-                     browserProperties["isHomeButtonEnabled"] = operationData["isHomeButtonEnabled"];
-                     browserProperties["isReloadEnabled"] = operationData["isReloadEnabled"];
-                     browserProperties["lockToPrimaryURL"] = operationData["lockToPrimaryURL"];
-                     browserProperties["isJavascriptEnabled"] = operationData["isJavascriptEnabled"];
-                     browserProperties["isTextCopyEnabled"] = operationData["isTextCopyEnabled"];
-                     browserProperties["isDownloadsEnabled"] = operationData["isDownloadsEnabled"];
-                     browserProperties["isLockedToBrowser"] = operationData["isLockedToBrowser"];
-                     browserProperties["isFormAutoFillEnabled"] = operationData["isFormAutoFillEnabled"];
-                     browserProperties["isContentAccessEnabled"] = operationData["isContentAccessEnabled"];
-                     browserProperties["isFileAccessAllowed"] = operationData["isFileAccessAllowed"];
-                     browserProperties["isAllowedUniversalAccessFromFileURLs"] = operationData["isAllowedUniversalAccessFromFileURLs"];
-                     browserProperties["isAllowedFileAccessFromFileURLs"] = operationData["isAllowedFileAccessFromFileURLs"];
-                     browserProperties["isAppCacheEnabled"] = operationData["isAppCacheEnabled"];
-                     if (operationData["isAppCacheEnabled"] && operationData["appCachePath"]) {
-                        browserProperties["appCachePath"] = operationData["appCachePath"];
+                 if (operationData["isDeviceGlobalConfigEnabled"] === true) {
+                     var deviceGlobalConfigurations = {};
+                     if (operationData["idleMediaURL"]) {
+                         deviceGlobalConfigurations["idleMediaURL"] = operationData["idleMediaURL"];
                      }
-                     browserProperties["cacheMode"] = operationData["cacheMode"];
-                     browserProperties["isLoadsImagesAutomatically"] = operationData["isLoadsImagesAutomatically"];
-                     browserProperties["isBlockNetworkImage"] = operationData["isBlockNetworkImage"];
-                     browserProperties["isBlockNetworkLoads"] = operationData["isBlockNetworkLoads"];
-                     browserProperties["isSupportZoomEnabled"] = operationData["isSupportZoomEnabled"];
-                     browserProperties["isDisplayZoomControls"] = operationData["isDisplayZoomControls"];
-                     if (operationData["textZoom"]) {
-                        browserProperties["textZoom"] = operationData["textZoom"];
+                     if (operationData["kioskBackgroundImage"]) {
+                         deviceGlobalConfigurations["kioskBackgroundImage"] = operationData["kioskBackgroundImage"];
                      }
-                     if (operationData["defaultFontSize"]) {
-                        browserProperties["defaultFontSize"] = operationData["defaultFontSize"];
+                     if (operationData["kioskLogoImage"]) {
+                         deviceGlobalConfigurations["kioskLogoImage"] = operationData["kioskLogoImage"];
                      }
-                     if (operationData["defaultTextEncodingName"]) {
-                        browserProperties["defaultTextEncodingName"] = operationData["defaultTextEncodingName"];
+                     if (operationData["kioskAppName"]) {
+                         deviceGlobalConfigurations["kioskAppName"] = operationData["kioskAppName"];
                      }
-                     browserProperties["isDatabaseEnabled"] = operationData["isDatabaseEnabled"];
-                     browserProperties["isDomStorageEnabled"] = operationData["isDomStorageEnabled"];
-                     browserProperties["geolocationEnabled"] = operationData["geolocationEnabled"];
-                     browserProperties["isJavaScriptCanOpenWindowsAutomatically"] = operationData["isJavaScriptCanOpenWindowsAutomatically"];
-                     browserProperties["isMediaPlaybackRequiresUserGesture"] = operationData["isMediaPlaybackRequiresUserGesture"];
-                     browserProperties["isSafeBrowsingEnabled"] = operationData["isSafeBrowsingEnabled"];
-                     browserProperties["isUseWideViewPort"] = operationData["isUseWideViewPort"];
-                     if (operationData["userAgentString"]) {
-                        browserProperties["userAgentString"] = operationData["userAgentString"];
+                     deviceGlobalConfigurations["isSingleModeApp"] = operationData["isSingleModeApp"];
+                     if (deviceGlobalConfigurations["isSingleModeApp"] === true) {
+                         var selectedSingleModeAppElement = "div#install-app-enrollment .child-input";
+                         if ($(selectedSingleModeAppElement + "[data-child-key='type']").val() === "Web Clip") {
+                             var webClipApp = {
+                                 "identity": $(selectedSingleModeAppElement + "[data-child-key='packageName']").val(),
+                                 "title": $(selectedSingleModeAppElement + "[data-child-key='appName']").val()
+                             };
+                             deviceGlobalConfigurations["singleModeApp"] = JSON.stringify(webClipApp);
+                         } else {
+                             deviceGlobalConfigurations["singleModeApp"]
+                                 = $(selectedSingleModeAppElement + "[data-child-key='packageName']").val();
+                         }
                      }
-                     browserProperties["mixedContentMode"] = operationData["mixedContentMode"];
-                    deviceGlobalConfigurations.browserProperties = browserProperties;
+                     deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
+                     if (operationData["idleTimeout"]) {
+                         deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"];
+                     }
+                     deviceGlobalConfigurations["isMultiUserDevice"] = operationData["isMultiUserDevice"];
+                     deviceGlobalConfigurations["displayOrientation"] = operationData["displayOrientation"];
+                     if (deviceGlobalConfigurations["isMultiUserDevice"] === true) {
+                         deviceGlobalConfigurations["isLoginRequired"] = operationData["isLoginRequired"];
+                         deviceGlobalConfigurations["tenantDomainName"] = $("#logged-in-user").data("domain");
+                         var storeApps = $("#cosu-profile-app-configs-storeapps").data("storeapps");
+                         var primaryUserApps = {
+                             "username" : "primaryUser",
+                             "visibleAppList" : operationData["primaryUserApps"]
+                         };
+                         var userAppConfigurations = operationData["userAppConfigurations"];
+                         userAppConfigurations.push(primaryUserApps);
+                         var index;
+                         for (index = 0; index < userAppConfigurations.length; index++) {
+                             userAppConfigurations[index]["visibleAppList"] =
+                                 userAppConfigurations[index]["visibleAppList"].split(/,(?![^{]*})/)
+                                     .map(function (item) {
+                                         var packageName = item.trim();
+                                         if (packageName && storeApps) {
+                                             var i;
+                                             for (i=0; i<storeApps.length; i++) {
+                                                 if (packageName === storeApps[i]["packageName"]) {
+                                                     packageName += ":" + storeApps[i]["webUrl"];
+                                                 }
+                                             }
+                                         }
+                                         return packageName;
+                                 }).filter(Boolean);
+                         }
+                         operation["userAppConfigurations"] = operationData["userAppConfigurations"];
+                     }
+                     if (operationData["isBrowserPropertyEnabled"] === true) {
+                         var browserProperties = {};
+                         browserProperties["isBrowserPropertyEnabled"] = true;
+                         browserProperties["primaryURL"] = operationData["primaryURL"];
+                         browserProperties["isTopBarEnabled"] = operationData["isTopBarEnabled"];
+                         browserProperties["isAddressBarEnabled"] = operationData["isAddressBarEnabled"];
+                         browserProperties["showBackController"] = operationData["showBackController"];
+                         browserProperties["isForwardControllerEnabled"] = operationData["isForwardControllerEnabled"];
+                         browserProperties["isHomeButtonEnabled"] = operationData["isHomeButtonEnabled"];
+                         browserProperties["isReloadEnabled"] = operationData["isReloadEnabled"];
+                         browserProperties["lockToPrimaryURL"] = operationData["lockToPrimaryURL"];
+                         browserProperties["isJavascriptEnabled"] = operationData["isJavascriptEnabled"];
+                         browserProperties["isTextCopyEnabled"] = operationData["isTextCopyEnabled"];
+                         browserProperties["isDownloadsEnabled"] = operationData["isDownloadsEnabled"];
+                         browserProperties["isLockedToBrowser"] = operationData["isLockedToBrowser"];
+                         browserProperties["isFormAutoFillEnabled"] = operationData["isFormAutoFillEnabled"];
+                         browserProperties["isContentAccessEnabled"] = operationData["isContentAccessEnabled"];
+                         browserProperties["isFileAccessAllowed"] = operationData["isFileAccessAllowed"];
+                         browserProperties["isAllowedUniversalAccessFromFileURLs"] =
+                             operationData["isAllowedUniversalAccessFromFileURLs"];
+                         browserProperties["isAllowedFileAccessFromFileURLs"] =
+                             operationData["isAllowedFileAccessFromFileURLs"];
+                         browserProperties["isAppCacheEnabled"] = operationData["isAppCacheEnabled"];
+                         if (operationData["isAppCacheEnabled"] && operationData["appCachePath"]) {
+                             browserProperties["appCachePath"] = operationData["appCachePath"];
+                         }
+                         browserProperties["cacheMode"] = operationData["cacheMode"];
+                         browserProperties["isLoadsImagesAutomatically"] = operationData["isLoadsImagesAutomatically"];
+                         browserProperties["isBlockNetworkImage"] = operationData["isBlockNetworkImage"];
+                         browserProperties["isBlockNetworkLoads"] = operationData["isBlockNetworkLoads"];
+                         browserProperties["isSupportZoomEnabled"] = operationData["isSupportZoomEnabled"];
+                         browserProperties["isDisplayZoomControls"] = operationData["isDisplayZoomControls"];
+                         if (operationData["textZoom"]) {
+                             browserProperties["textZoom"] = operationData["textZoom"];
+                         }
+                         if (operationData["defaultFontSize"]) {
+                             browserProperties["defaultFontSize"] = operationData["defaultFontSize"];
+                         }
+                         if (operationData["defaultTextEncodingName"]) {
+                             browserProperties["defaultTextEncodingName"] = operationData["defaultTextEncodingName"];
+                         }
+                         browserProperties["isDatabaseEnabled"] = operationData["isDatabaseEnabled"];
+                         browserProperties["isDomStorageEnabled"] = operationData["isDomStorageEnabled"];
+                         browserProperties["geolocationEnabled"] = operationData["geolocationEnabled"];
+                         browserProperties["isJavaScriptCanOpenWindowsAutomatically"] =
+                             operationData["isJavaScriptCanOpenWindowsAutomatically"];
+                         browserProperties["isMediaPlaybackRequiresUserGesture"] =
+                             operationData["isMediaPlaybackRequiresUserGesture"];
+                         browserProperties["isSafeBrowsingEnabled"] = operationData["isSafeBrowsingEnabled"];
+                         browserProperties["isUseWideViewPort"] = operationData["isUseWideViewPort"];
+                         if (operationData["userAgentString"]) {
+                             browserProperties["userAgentString"] = operationData["userAgentString"];
+                         }
+                         browserProperties["mixedContentMode"] = operationData["mixedContentMode"];
+                         deviceGlobalConfigurations.browserProperties = browserProperties;
+                     }
+                     operation.deviceGlobalConfigurations = deviceGlobalConfigurations;
                  }
-                 operation.deviceGlobalConfigurations = deviceGlobalConfigurations;
                  payload.operation = operation;
-
                break;
             case androidOperationConstants["SYSTEM_UPDATE_POLICY_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
@@ -793,6 +878,7 @@ var androidOperationModule = function () {
                     operationDataObj.val(value);
                 } else if (operationDataObj.is(":checkbox")) {
                     operationDataObj.prop("checked", value);
+                    operationDataObj.trigger("change");
                 } else if (operationDataObj.is(":radio")) {
                     if (operationDataObj.val() == uiPayload[key]) {
                         operationDataObj.attr("checked", true);
@@ -917,6 +1003,7 @@ var androidOperationModule = function () {
                                     var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
                                     var childInputKey = childInput.data("child-key");
                                     var childInputValue = multiColumnKeyValuePair[childInputKey];
+
                                     // populating extracted value in the UI according to the input type
                                     if (childInput.is(":text") ||
                                         childInput.is("textarea") ||
