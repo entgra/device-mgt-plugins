@@ -223,6 +223,9 @@ public class AndroidDeviceUtils {
             throws ApplicationManagementException {
         // Parsing json string to get applications list.
         if (operation.getOperationResponse() != null) {
+            if (operation.getOperationResponse().equals("SAME_APPLICATION_LIST")) {
+                return;
+            }
             JsonElement jsonElement = new JsonParser().parse(operation.getOperationResponse());
             JsonArray jsonArray = jsonElement.getAsJsonArray();
             Application app;
@@ -294,9 +297,17 @@ public class AndroidDeviceUtils {
             deviceInfo.getDeviceDetailsMap().put("IOW", getProperty(prop.getValue(), "IOW"));
             deviceInfo.getDeviceDetailsMap().put("IRQ", getProperty(prop.getValue(), "IRQ"));
         } else if (prop.getName().equalsIgnoreCase("RAM_INFO")) {
-            deviceInfo.setTotalRAMMemory(Double.parseDouble(getProperty(prop.getValue(), "TOTAL_MEMORY")));
-            deviceInfo.setAvailableRAMMemory(Double.parseDouble(
-                    getProperty(prop.getValue(), "AVAILABLE_MEMORY")));
+            if (!getProperty(prop.getValue(), "TOTAL_MEMORY").isEmpty()) {
+                deviceInfo.setTotalRAMMemory(Double.parseDouble(getProperty(prop.getValue(), "TOTAL_MEMORY")));
+            } else {
+                deviceInfo.setTotalRAMMemory(-1D);
+            }
+            if (!getProperty(prop.getValue(), "AVAILABLE_MEMORY").isEmpty()) {
+                deviceInfo.setAvailableRAMMemory(Double.parseDouble(
+                        getProperty(prop.getValue(), "AVAILABLE_MEMORY")));
+            } else {
+                deviceInfo.setAvailableRAMMemory(-1D);
+            }
             deviceInfo.getDeviceDetailsMap().put("ramThreshold", getProperty(prop.getValue(), "THRESHOLD"));
             deviceInfo.getDeviceDetailsMap().put("ramLowMemory", getProperty(prop.getValue(), "LOW_MEMORY"));
         } else if (prop.getName().equalsIgnoreCase("BATTERY_INFO")) {
@@ -323,25 +334,44 @@ public class AndroidDeviceUtils {
             deviceInfo.getDeviceDetailsMap().put("wifiSignalStrength",
                                                  getProperty(prop.getValue(), "WIFI_SIGNAL_STRENGTH"));
         } else if (prop.getName().equalsIgnoreCase("DEVICE_INFO")) {
-            deviceInfo.setBatteryLevel(Double.parseDouble(
-                    getProperty(prop.getValue(), "BATTERY_LEVEL")));
-            deviceInfo.setInternalTotalMemory(Double.parseDouble(
-                    getProperty(prop.getValue(), "INTERNAL_TOTAL_MEMORY")));
-            deviceInfo.setInternalAvailableMemory(Double.parseDouble(
-                    getProperty(prop.getValue(), "INTERNAL_AVAILABLE_MEMORY")));
-            deviceInfo.setExternalTotalMemory(Double.parseDouble(
-                    getProperty(prop.getValue(), "EXTERNAL_TOTAL_MEMORY")));
-            deviceInfo.setExternalAvailableMemory(Double.parseDouble(
-                    getProperty(prop.getValue(), "EXTERNAL_AVAILABLE_MEMORY")));
-
+            if (!getProperty(prop.getValue(), "BATTERY_LEVEL").isEmpty()) {
+                deviceInfo.setBatteryLevel(Double.parseDouble(
+                        getProperty(prop.getValue(), "BATTERY_LEVEL")));
+            } else {
+                deviceInfo.setBatteryLevel(-1D);
+            }
+            if (!getProperty(prop.getValue(), "INTERNAL_TOTAL_MEMORY").isEmpty()) {
+                deviceInfo.setInternalTotalMemory(Double.parseDouble(
+                        getProperty(prop.getValue(), "INTERNAL_TOTAL_MEMORY")));
+            } else {
+                deviceInfo.setInternalTotalMemory(-1D);
+            }
+            if (!getProperty(prop.getValue(), "INTERNAL_AVAILABLE_MEMORY").isEmpty()) {
+                deviceInfo.setInternalAvailableMemory(Double.parseDouble(
+                        getProperty(prop.getValue(), "INTERNAL_AVAILABLE_MEMORY")));
+            } else {
+                deviceInfo.setInternalAvailableMemory(-1D);
+            }
+            if (!getProperty(prop.getValue(), "EXTERNAL_TOTAL_MEMORY").isEmpty()) {
+                deviceInfo.setExternalTotalMemory(Double.parseDouble(
+                        getProperty(prop.getValue(), "EXTERNAL_TOTAL_MEMORY")));
+            } else {
+                deviceInfo.setExternalTotalMemory(-1D);
+            }
+            if (!getProperty(prop.getValue(), "EXTERNAL_AVAILABLE_MEMORY").isEmpty()) {
+                deviceInfo.setExternalAvailableMemory(Double.parseDouble(
+                        getProperty(prop.getValue(), "EXTERNAL_AVAILABLE_MEMORY")));
+            } else {
+                deviceInfo.setExternalAvailableMemory(-1D);
+            }
             deviceInfo.getDeviceDetailsMap().put("encryptionEnabled",
-                                                 getProperty(prop.getValue(), "ENCRYPTION_ENABLED"));
+                    getProperty(prop.getValue(), "ENCRYPTION_ENABLED"));
             deviceInfo.getDeviceDetailsMap().put("passcodeEnabled",
-                                                 getProperty(prop.getValue(), "PASSCODE_ENABLED"));
+                    getProperty(prop.getValue(), "PASSCODE_ENABLED"));
             deviceInfo.getDeviceDetailsMap().put("operator",
-                                                 getProperty(prop.getValue(), "OPERATOR"));
+                    getProperty(prop.getValue(), "OPERATOR"));
             deviceInfo.getDeviceDetailsMap().put("PhoneNumber",
-                                                 getProperty(prop.getValue(), "PHONE_NUMBER"));
+                    getProperty(prop.getValue(), "PHONE_NUMBER"));
         } else if (prop.getName().equalsIgnoreCase("IMEI")) {
             deviceInfo.getDeviceDetailsMap().put("IMEI", prop.getValue());
         } else if (prop.getName().equalsIgnoreCase("IMSI")) {
