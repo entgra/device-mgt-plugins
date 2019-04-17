@@ -1722,26 +1722,45 @@
                                                class="form-control operationDataKeys"  data-key="kioskAppName"
                                                maxlength="100" placeholder="Name to appear on the agent"/>
                                     </div>
-                                    <div>
-                                        <ul class="message message-info">
-                                            <i class="icon fw fw-info"></i>
-                                            Selected initial app in
-                                            <strong>Enrollment Application Install policy config</strong>
-                                            will be selected for single application mode
-                                        </ul>
-                                    </div>
-                                    <div class="wr-input-control">
-                                        <label class="wr-input-control checkbox">
-                                            <input id="cosu-global-config-is-single-application-mode" type="checkbox"
-                                                   class="form-control operationDataKeys"
-                                                   data-key="isSingleModeApp"/>
-                                            <span class="helper">
+                                    <!--COSU single mode application-->
+                                    <div id="cosu-profile-single-mode-app-configuration" class="panel">
+                                        <div class="wr-input-control sub-title panel-title"
+                                             style="padding: 0px; padding-right:15px; font-size:15px;">
                                             Is single application mode
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"
                                                   title="Is single application mode"></span>
-                                        </span>
-                                        </label>
+                                            <label class="wr-input-control checkbox">
+                                                <input id="cosu-global-config-is-single-application-mode" type="checkbox"
+                                                       class="form-control operationDataKeys"
+                                                       data-key="isSingleModeApp"
+                                                       onchange="changeDivVisibility('single-mode-kiosk-app', this)"/>
+                                                <span class="helper"></span>
+                                            </label>
+                                        </div>
+                                        <div id="single-mode-kiosk-app" class="panel-collapse panel-body collapse-config"
+                                             role="tabpanel" style="display: none;" >
+                                            <div>
+                                                <ul class="message message-info">
+                                                    <i class="icon fw fw-info"></i>
+                                                    Selected initial app in
+                                                    <strong>Enrollment Application Install policy config</strong>
+                                                    will be selected for single application mode
+                                                </ul>
+                                            </div>
+                                            <div class="wr-input-control">
+                                                <label class="wr-input-control checkbox">
+                                                    <input id="cosu-profile-single-mode-is-kiosk-app" type="checkbox"
+                                                           class="form-control operationDataKeys"
+                                                           data-key="isSingleModeAppBuiltForKiosk" checked="checked"/>
+                                                    <span class="helper" title="Is single mode app built for Kiosk. Enable if lock task method is called in the application">
+                                                        Is application built for Kiosk
+                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <!--COSU single mode application-->
                                     <div id="cosu-profile-idle-media-configuration" class="panel">
                                         <div class="wr-input-control sub-title panel-title"
                                              style="padding: 0px; padding-right:15px; font-size:15px;">
