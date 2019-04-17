@@ -211,6 +211,10 @@ var androidOperationModule = function () {
                     payload["kioskLogoImage"] = deviceGlobalConfigurations["kioskLogoImage"];
                     payload["kioskAppName"] = deviceGlobalConfigurations["kioskAppName"];
                     payload["isSingleModeApp"] = deviceGlobalConfigurations["isSingleModeApp"];
+                    if (payload["isSingleModeApp"] === true) {
+                        payload["isSingleModeAppBuiltForKiosk"] =
+                            deviceGlobalConfigurations["isSingleModeAppBuiltForKiosk"];
+                    }
                     payload["isIdleGraphicsEnabled"] = deviceGlobalConfigurations["isIdleGraphicsEnabled"];
                     payload["idleTimeout"] = deviceGlobalConfigurations["idleTimeout"];
                     payload["isMultiUserDevice"] = deviceGlobalConfigurations["isMultiUserDevice"];
@@ -515,6 +519,8 @@ var androidOperationModule = function () {
                              deviceGlobalConfigurations["singleModeApp"]
                                  = $(selectedSingleModeAppElement + "[data-child-key='packageName']").val();
                          }
+                         deviceGlobalConfigurations["isSingleModeAppBuiltForKiosk"] =
+                             operationData["isSingleModeAppBuiltForKiosk"];
                      }
                      deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
                      if (operationData["idleTimeout"]) {
