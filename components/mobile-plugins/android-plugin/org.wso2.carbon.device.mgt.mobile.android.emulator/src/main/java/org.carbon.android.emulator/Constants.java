@@ -48,6 +48,6 @@ class Constants {
     static final String OS_TARGET = "os.target";
     // WSO2 AVD specific variables
     static final String WSO2_AVD_NAME = "ENTGRA_AVD";
-    static final String APK_LOCATION = File.separator + "resources" + File.separator + "android-agent.apk";
+    static final String APK_LOCATION = File.separator + "resources" + File.separator + "client-debug.apk";
     static final String WSO2_CONFIG_LOCATION = File.separator + "resources" + File.separator + "config.ini";
 }

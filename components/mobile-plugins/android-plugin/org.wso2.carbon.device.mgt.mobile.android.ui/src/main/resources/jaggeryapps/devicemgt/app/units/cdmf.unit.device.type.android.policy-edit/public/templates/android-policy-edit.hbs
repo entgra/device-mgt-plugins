@@ -1722,26 +1722,45 @@
                                                class="form-control operationDataKeys"  data-key="kioskAppName"
                                                maxlength="100" placeholder="Name to appear on the agent"/>
                                     </div>
-                                    <div>
-                                        <ul class="message message-info">
-                                            <i class="icon fw fw-info"></i>
-                                            Selected initial app in
-                                            <strong>Enrollment Application Install policy config</strong>
-                                            will be selected for single application mode
-                                        </ul>
-                                    </div>
-                                    <div class="wr-input-control">
-                                        <label class="wr-input-control checkbox">
-                                            <input id="cosu-global-config-is-single-application-mode" type="checkbox"
-                                                   class="form-control operationDataKeys"
-                                                   data-key="isSingleModeApp"/>
-                                            <span class="helper">
+                                    <!--COSU single mode application-->
+                                    <div id="cosu-profile-single-mode-app-configuration" class="panel">
+                                        <div class="wr-input-control sub-title panel-title"
+                                             style="padding: 0px; padding-right:15px; font-size:15px;">
                                             Is single application mode
                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"
                                                   title="Is single application mode"></span>
-                                        </span>
-                                        </label>
+                                            <label class="wr-input-control checkbox">
+                                                <input id="cosu-global-config-is-single-application-mode" type="checkbox"
+                                                       class="form-control operationDataKeys"
+                                                       data-key="isSingleModeApp"
+                                                       onchange="changeDivVisibility('single-mode-kiosk-app', this)"/>
+                                                <span class="helper"></span>
+                                            </label>
+                                        </div>
+                                        <div id="single-mode-kiosk-app" class="panel-collapse panel-body collapse-config"
+                                             role="tabpanel" style="display: none;" >
+                                            <div>
+                                                <ul class="message message-info">
+                                                    <i class="icon fw fw-info"></i>
+                                                    Selected initial app in
+                                                    <strong>Enrollment Application Install policy config</strong>
+                                                    will be selected for single application mode
+                                                </ul>
+                                            </div>
+                                            <div class="wr-input-control">
+                                                <label class="wr-input-control checkbox">
+                                                    <input id="cosu-profile-single-mode-is-kiosk-app" type="checkbox"
+                                                           class="form-control operationDataKeys"
+                                                           data-key="isSingleModeAppBuiltForKiosk" checked="checked"/>
+                                                    <span class="helper" title="Is single mode app built for Kiosk. Enable if lock task method is called in the application">
+                                                        Is application built for Kiosk
+                                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <!--COSU single mode application-->
                                     <div id="cosu-profile-idle-media-configuration" class="panel">
                                         <div class="wr-input-control sub-title panel-title"
                                              style="padding: 0px; padding-right:15px; font-size:15px;">
@@ -1948,8 +1967,8 @@
                                                            class="form-control operationDataKeys"
                                                            data-key="isTopBarEnabled"/>
                                                     <span class="helper"
-                                                          title="Enabled top control bar that displays all the controllers such as address bar, home button and forwards controllers">
-                                                        Enabled top control bar
+                                                          title="Enable top control bar that displays all the controllers such as address bar, home button and forwards controllers">
+                                                        Enable top control bar
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                 </label>
@@ -2017,8 +2036,8 @@
                                                     <input id="cosu-browser-property-lock-to-primary-url" type="checkbox"
                                                            class="form-control operationDataKeys"
                                                            data-key="lockToPrimaryURL" checked />
-                                                    <span class="helper" title="Only allowed to visit the pirmary url.">
-                                                        Only allowed to visit the pirmary url
+                                                    <span class="helper" title="Only allowed to visit the primary url.">
+                                                        Only allowed to visit the primary url
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                 </label>
@@ -2077,8 +2096,8 @@
                                                     <input id="cosu-browser-property-is-form-auto-fill-enabled" type="checkbox"
                                                            class="form-control operationDataKeys"
                                                            data-key="isFormAutoFillEnabled"/>
-                                                    <span class="helper" title="Is form auto-fille enabled.">
-                                                        Is form auto-fille enabled
+                                                    <span class="helper" title="Is form auto-fill enabled.">
+                                                        Is form auto-fill enabled
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                 </label>
@@ -2125,15 +2144,15 @@
                                                     <input id="cosu-browser-property-is-app-cache-enabled" type="checkbox"
                                                            class="form-control operationDataKeys"
                                                            data-key="isAppCacheEnabled"/>
-                                                    <span class="helper" title="Is application chche enabled.">
-                                                        Is application chche enabled
+                                                    <span class="helper" title="Is application cache enabled.">
+                                                        Is application cache enabled
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                 </label>
                                             </div>
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label">
-                                                    Application caches file path
+                                                    Application cache file path
                                                     <span class="helper" title="Sets the path to the Application Caches files. In order for the Application Caches API to be enabled, this method must be called with a path to which the application can write">
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
@@ -2210,7 +2229,7 @@
                                                            class="form-control operationDataKeys"
                                                            data-key="isDisplayZoomControls"/>
                                                     <span class="helper" title="Sets whether the browser should display on-screen zoom controls. Guesture based controllers are still available">
-                                                        Show on-screen zoom controlers
+                                                        Show on-screen zoom controllers
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>
                                                 </label>
@@ -2240,7 +2259,7 @@
                                             </div>
                                             <div class="wr-input-control">
                                                 <label class="wr-input-label">
-                                                    Defaut text encoding name
+                                                    Default text encoding name
                                                     <span class="helper" title="Sets the default text encoding name to use when decoding html pages.">
                                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                                     </span>

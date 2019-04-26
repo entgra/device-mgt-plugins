@@ -276,7 +276,7 @@ public class TryIt {
             }
         }
         System.out.println("+----------------------------------------------------------------+");
-        System.out.println("|                        Entgra Android TryIt                      |");
+        System.out.println("|                        Entgra Android TryIt                    |");
         System.out.println("+----------------------------------------------------------------+");
 
         emulatorLocation = androidSdkHome + File.separator + "tools" + File.separator + "emulator";

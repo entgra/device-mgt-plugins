@@ -584,4 +584,9 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
             throws DeviceManagementException {
         return false;
     }
+
+    @Override
+    public boolean updateEnrollment(String owner, List<String> deviceIdentifiers) {
+        return false;
+    }
 }
