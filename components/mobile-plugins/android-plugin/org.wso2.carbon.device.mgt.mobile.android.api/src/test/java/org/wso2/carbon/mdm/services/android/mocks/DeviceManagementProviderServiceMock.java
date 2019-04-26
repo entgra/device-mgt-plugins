@@ -21,6 +21,7 @@ package org.wso2.carbon.mdm.services.android.mocks;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.DeviceTypeNotFoundException;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.FeatureManager;
 import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
@@ -289,7 +290,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public FeatureManager getFeatureManager(String s) throws DeviceManagementException {
+    public FeatureManager getFeatureManager(String s) throws DeviceTypeNotFoundException {
         return null;
     }
 
