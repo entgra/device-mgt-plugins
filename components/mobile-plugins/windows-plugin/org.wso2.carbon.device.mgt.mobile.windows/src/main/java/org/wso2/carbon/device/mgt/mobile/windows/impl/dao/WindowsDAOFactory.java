@@ -20,8 +20,6 @@ package org.wso2.carbon.device.mgt.mobile.windows.impl.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.mobile.windows.exception.WindowsDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.impl.WindowsDeviceDAOImpl;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.impl.WindowsFeatureDAOImpl;
 

@@ -3,7 +3,6 @@ package org.wso2.carbon.device.mgt.mobile.windows.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.MobileDeviceManagementDAOException;
-import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.MobileDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.WindowsDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.WindowsEnrollmentTokenDAO;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.impl.WindowsEnrollmentTokenDAOImpl;
@@ -24,7 +23,7 @@ public class WindowsTokenServiceImpl implements WindowsTokenService {
             WindowsDAOFactory.beginTransaction();
             windowsEnrollmentTokenDAO.addCacheToken(entry);
             WindowsDAOFactory.commitTransaction();
-        }  finally {
+        } finally {
             WindowsDAOFactory.closeConnection();
         }
     }
@@ -52,7 +51,8 @@ public class WindowsTokenServiceImpl implements WindowsTokenService {
         return cacheEntry;
     }
 
-    @Override public MobileCacheEntry getCacheTokenFromDeviceId(String deviceId)
+    @Override
+    public MobileCacheEntry getCacheTokenFromDeviceId(String deviceId)
             throws MobileDeviceManagementDAOException {
         MobileCacheEntry cacheEntry = null;
         try {
