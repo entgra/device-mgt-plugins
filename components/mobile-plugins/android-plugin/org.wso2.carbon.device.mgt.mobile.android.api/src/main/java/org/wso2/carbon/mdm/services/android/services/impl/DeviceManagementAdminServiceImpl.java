@@ -523,11 +523,6 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
             Activity activity = AndroidDeviceUtils
                     .getOperationResponse(applicationInstallationBeanWrapper.getDeviceIDs(), operation);
             return Response.status(Response.Status.CREATED).entity(activity).build();
-        } catch (JSONException e) {
-            String errorMessage = "Invalid payload for the operation.";
-            log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -1011,7 +1006,7 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
             operation.setCode(AndroidConstants.OperationCodes.REMOTE_APP_CONFIG);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(applicationRestriction.toJSON());
-            return AndroidAPIUtils.getOperationResponse(applicationRestrictionBeanWrapper.getDeviceIDs(),
+            return (Response) AndroidAPIUtils.getOperationResponse(applicationRestrictionBeanWrapper.getDeviceIDs(),
                     operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
