@@ -16,7 +16,6 @@ public class WindowsTokenServiceImpl implements WindowsTokenService {
 
     public WindowsTokenServiceImpl() {
         windowsEnrollmentTokenDAO = new WindowsEnrollmentTokenDAOImpl();
-        WindowsDAOFactory windowsDAOFactory = new WindowsDAOFactory();
     }
 
     @Override
