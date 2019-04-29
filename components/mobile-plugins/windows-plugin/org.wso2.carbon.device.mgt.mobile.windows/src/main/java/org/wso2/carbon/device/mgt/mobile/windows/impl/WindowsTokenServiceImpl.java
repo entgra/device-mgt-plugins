@@ -3,6 +3,7 @@ package org.wso2.carbon.device.mgt.mobile.windows.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.MobileDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.MobileDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.WindowsDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.WindowsEnrollmentTokenDAO;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.impl.WindowsEnrollmentTokenDAOImpl;
@@ -15,6 +16,7 @@ public class WindowsTokenServiceImpl implements WindowsTokenService {
 
     public WindowsTokenServiceImpl() {
         windowsEnrollmentTokenDAO = new WindowsEnrollmentTokenDAOImpl();
+        WindowsDAOFactory windowsDAOFactory = new WindowsDAOFactory();
     }
 
     @Override
