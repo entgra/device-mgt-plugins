@@ -174,4 +174,18 @@
         <IdleTimeToMarkInactive>900</IdleTimeToMarkInactive>
         <IdleTimeToMarkUnreachable>600</IdleTimeToMarkUnreachable>
     </DeviceStatusTaskConfig>
+
+    <DeviceTypePlatformDetails>
+        <DeviceTypePlatformVersion>
+            <VersionName>8.0</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>8.1</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>10.0</VersionName>
+        </DeviceTypePlatformVersion>
+    </DeviceTypePlatformDetails>
 </DeviceTypeConfiguration>
