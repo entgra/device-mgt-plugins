@@ -37,7 +37,6 @@ package org.wso2.carbon.mdm.services.android.services.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
@@ -987,7 +986,7 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
         }
     }
     @POST
-    @Path("send-app-conf")
+    @Path("/send-app-conf")
     @Override
     public Response sendApplicationConfiguration(ApplicationRestrictionBeanWrapper applicationRestrictionBeanWrapper) {
         if (log.isDebugEnabled()) {
