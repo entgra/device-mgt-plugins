@@ -44,8 +44,43 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
-import org.wso2.carbon.mdm.services.android.bean.*;
-import org.wso2.carbon.mdm.services.android.bean.wrapper.*;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationInstallation;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationRestriction;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationUninstallation;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationUpdate;
+import org.wso2.carbon.mdm.services.android.bean.BlacklistApplications;
+import org.wso2.carbon.mdm.services.android.bean.Camera;
+import org.wso2.carbon.mdm.services.android.bean.DeviceEncryption;
+import org.wso2.carbon.mdm.services.android.bean.DeviceLock;
+import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
+import org.wso2.carbon.mdm.services.android.bean.FileTransfer;
+import org.wso2.carbon.mdm.services.android.bean.GlobalProxy;
+import org.wso2.carbon.mdm.services.android.bean.LockCode;
+import org.wso2.carbon.mdm.services.android.bean.Notification;
+import org.wso2.carbon.mdm.services.android.bean.PasscodePolicy;
+import org.wso2.carbon.mdm.services.android.bean.UpgradeFirmware;
+import org.wso2.carbon.mdm.services.android.bean.Vpn;
+import org.wso2.carbon.mdm.services.android.bean.WebClip;
+import org.wso2.carbon.mdm.services.android.bean.Wifi;
+import org.wso2.carbon.mdm.services.android.bean.WipeData;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.ApplicationInstallationBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.ApplicationRestrictionBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.ApplicationUninstallationBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.ApplicationUpdateBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.BlacklistApplicationsBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.CameraBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.DeviceLockBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.EncryptionBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.FileTransferBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.GlobalProxyBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.LockCodeBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.NotificationBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.PasswordPolicyBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.UpgradeFirmwareBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.VpnBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.WebClipBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.WifiBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.WipeDataBeanWrapper;
 import org.wso2.carbon.mdm.services.android.exception.BadRequestException;
 import org.wso2.carbon.mdm.services.android.exception.UnexpectedServerErrorException;
 import org.wso2.carbon.mdm.services.android.services.DeviceManagementAdminService;
@@ -496,7 +531,8 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
     @POST
     @Path("/install-application")
     @Override
-    public Response installApplication(ApplicationInstallationBeanWrapper applicationInstallationBeanWrapper) {
+    public Response installApplication(
+            ApplicationInstallationBeanWrapper applicationInstallationBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'InstallApplication' operation");
         }
@@ -579,7 +615,8 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
     @POST
     @Path("/uninstall-application")
     @Override
-    public Response uninstallApplication(ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {
+    public Response uninstallApplication(
+            ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'UninstallApplication' operation");
         }
@@ -988,7 +1025,8 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
     @POST
     @Path("/send-app-conf")
     @Override
-    public Response sendApplicationConfiguration(ApplicationRestrictionBeanWrapper applicationRestrictionBeanWrapper) {
+    public Response sendApplicationConfiguration(
+            ApplicationRestrictionBeanWrapper applicationRestrictionBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'send application configuration' operation");
         }
