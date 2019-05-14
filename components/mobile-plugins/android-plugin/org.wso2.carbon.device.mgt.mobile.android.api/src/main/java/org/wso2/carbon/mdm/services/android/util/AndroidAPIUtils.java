@@ -23,11 +23,25 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.analytics.data.publisher.service.EventsPublisherService;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
+import org.wso2.carbon.mdm.services.android.exception.BadRequestException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
+
+
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * AndroidAPIUtil class provides utility functions used by Android REST-API classes.
@@ -133,6 +147,27 @@ public class AndroidAPIUtils {
             throw new IllegalStateException(msg);
         }
         return analyticsDataAPI;
+    }
+
+    public static Response getOperationResponse(List<String> deviceIDs, Operation operation)
+            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+        if (deviceIDs == null || deviceIDs.size() == 0) {
+            String errorMessage = "Device identifier list is empty";
+            log.error(errorMessage);
+            throw new BadRequestException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+        }
+        DeviceIdentifier deviceIdentifier;
+        List<DeviceIdentifier> deviceIdentifiers = new ArrayList<>();
+        for (String deviceId : deviceIDs) {
+            deviceIdentifier = new DeviceIdentifier();
+            deviceIdentifier.setId(deviceId);
+            deviceIdentifier.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
+            deviceIdentifiers.add(deviceIdentifier);
+        }
+        Activity activity = getDeviceManagementService().addOperation(
+                DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, operation, deviceIdentifiers);
+        return Response.status(Response.Status.CREATED).entity(activity).build();
     }
 
 }
