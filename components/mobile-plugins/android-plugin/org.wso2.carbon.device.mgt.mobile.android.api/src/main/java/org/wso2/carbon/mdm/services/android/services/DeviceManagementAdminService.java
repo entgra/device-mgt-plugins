@@ -245,6 +245,12 @@ import java.util.List;
                         description = "Transferring a file to android devices",
                         key = "perm:android:file-transfer",
                         permissions = {"/device-mgt/devices/owning-device/operations/android/file-transfer"}
+                ),
+                @Scope(
+                        name = "Send app restrictions",
+                        description = "Send app restrictions to an application in the device",
+                        key = "perm:android:send-app-restrictions",
+                        permissions = {"/device-mgt/devices/owning-device/operations/android/send-app-conf"}
                 )
         }
 )
@@ -1856,6 +1862,68 @@ public interface DeviceManagementAdminService {
                     value = "The properties to set the web clip.",
                     required = true)
                     WebClipBeanWrapper webClipBeanWrapper);
+    @POST
+    @Path("/send-app-conf")
+    @ApiOperation(
+            consumes = MediaType.APPLICATION_JSON,
+            httpMethod = "POST",
+            value = "Sending an app restrictions to Android Devices",
+            notes = "Send application restrictions to Android devices.",
+            response = Activity.class,
+            tags = "Android Device Management Administrative Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE,
+                                    value = "perm:android:send-app-restrictions")
+                    })
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 201,
+                    message = "Created. \n Successfully sent the application configuration.",
+                    response = Activity.class,
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "URL of the activity instance that refers to the scheduled operation."),
+                            @ResponseHeader(
+                                    name = "Content-Type",
+                                    description = "Content type of the body"),
+                            @ResponseHeader(
+                                    name = "ETag",
+                                    description = "Entity Tag of the response resource.\n" +
+                                            "Used by caches, or in conditional requests."),
+                            @ResponseHeader(
+                                    name = "Last-Modified",
+                                    description = "Date and time the resource was last modified.\n" +
+                                            "Used by caches, or in conditional requests.")}),
+            @ApiResponse(
+                    code = 303,
+                    message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "The Source URL of the document.")}),
+            @ApiResponse(
+                    code = 400,
+                    message = "Bad Request. \n Invalid request or validation error."),
+            @ApiResponse(
+                    code = 415,
+                    message = "Unsupported media type. \n The format of the requested entity was not supported."),
+            @ApiResponse(
+                    code = 500,
+                    message = "Internal Server Error. \n " +
+                            "Server error occurred while adding a new send application config operation.")
+    })
+    Response sendApplicationConfiguration(
+            @ApiParam(
+                    name = "notification",
+                    value = "The properties required to send application restrictions. Provide the restriction you " +
+                            "wish to send and the ID of the Android device. Multiple device IDs can be added by using" +
+                            " comma separated values.",
+                    required = true)
+                    ApplicationRestrictionBeanWrapper applicationRestrictionBeanWrapper);
 
     @POST
     @Path("/configure-global-proxy")

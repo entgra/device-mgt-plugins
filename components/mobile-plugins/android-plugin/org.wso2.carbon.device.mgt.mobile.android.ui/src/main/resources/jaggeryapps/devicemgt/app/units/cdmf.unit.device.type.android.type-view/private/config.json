@@ -36,7 +36,8 @@
             "perm:android:unlock-devices",
             "perm:android:control-camera",
             "perm:android:reboot",
-            "perm:android:logcat"
+            "perm:android:logcat",
+            "perm:android:send-app-restrictions"
         ],
         "features": {
             "DEVICE_RING": {
@@ -214,6 +215,24 @@
                     }
                 ],
                 "permission": "/device-mgt/devices/owning-device/operations/android/wipe"
+            },
+            "REMOTE_APP_CONFIG": {
+                "icon": "fw-lock",
+                "formParams": [
+                    {
+                        "type": "text",
+                        "id": "app-id",
+                        "optional": false,
+                        "label": "Application identifier"
+                    },
+                    {
+                        "type": "text",
+                        "id": "payload",
+                        "optional": false,
+                        "label": "Application restriction payload"
+                    }
+                ],
+                "permission": "/device-mgt/devices/owning-device/operations/android/send-app-conf"
             }
         }
     }

@@ -37,7 +37,7 @@ package org.wso2.carbon.mdm.services.android.services.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONException;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -45,6 +45,7 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementExcept
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.mdm.services.android.bean.ApplicationInstallation;
+import org.wso2.carbon.mdm.services.android.bean.ApplicationRestriction;
 import org.wso2.carbon.mdm.services.android.bean.ApplicationUninstallation;
 import org.wso2.carbon.mdm.services.android.bean.ApplicationUpdate;
 import org.wso2.carbon.mdm.services.android.bean.BlacklistApplications;
@@ -63,6 +64,7 @@ import org.wso2.carbon.mdm.services.android.bean.WebClip;
 import org.wso2.carbon.mdm.services.android.bean.Wifi;
 import org.wso2.carbon.mdm.services.android.bean.WipeData;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.ApplicationInstallationBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.ApplicationRestrictionBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.ApplicationUninstallationBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.ApplicationUpdateBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.BlacklistApplicationsBeanWrapper;
@@ -82,6 +84,7 @@ import org.wso2.carbon.mdm.services.android.bean.wrapper.WipeDataBeanWrapper;
 import org.wso2.carbon.mdm.services.android.exception.BadRequestException;
 import org.wso2.carbon.mdm.services.android.exception.UnexpectedServerErrorException;
 import org.wso2.carbon.mdm.services.android.services.DeviceManagementAdminService;
+import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.AndroidConstants;
 import org.wso2.carbon.mdm.services.android.util.AndroidDeviceUtils;
 
@@ -528,7 +531,8 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
     @POST
     @Path("/install-application")
     @Override
-    public Response installApplication(ApplicationInstallationBeanWrapper applicationInstallationBeanWrapper) {
+    public Response installApplication(
+            ApplicationInstallationBeanWrapper applicationInstallationBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'InstallApplication' operation");
         }
@@ -554,11 +558,6 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
             Activity activity = AndroidDeviceUtils
                     .getOperationResponse(applicationInstallationBeanWrapper.getDeviceIDs(), operation);
             return Response.status(Response.Status.CREATED).entity(activity).build();
-        } catch (JSONException e) {
-            String errorMessage = "Invalid payload for the operation.";
-            log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -616,7 +615,8 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
     @POST
     @Path("/uninstall-application")
     @Override
-    public Response uninstallApplication(ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {
+    public Response uninstallApplication(
+            ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {
         if (log.isDebugEnabled()) {
             log.debug("Invoking 'UninstallApplication' operation");
         }
@@ -1020,6 +1020,46 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
             log.error(errorMessage, e);
             throw new UnexpectedServerErrorException(
                     new ErrorResponse.ErrorResponseBuilder().setCode(500L).setMessage(errorMessage).build());
+        }
+    }
+    @POST
+    @Path("/send-app-conf")
+    @Override
+    public Response sendApplicationConfiguration(
+            ApplicationRestrictionBeanWrapper applicationRestrictionBeanWrapper) {
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking 'send application configuration' operation");
+        }
+
+        try {
+            if (applicationRestrictionBeanWrapper == null || applicationRestrictionBeanWrapper.getOperation() == null) {
+                String errorMessage = "The payload of the application configuration operation is incorrect";
+                log.error(errorMessage);
+                throw new BadRequestException(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+            }
+            ApplicationRestriction applicationRestriction = applicationRestrictionBeanWrapper.getOperation();
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(AndroidConstants.OperationCodes.REMOTE_APP_CONFIG);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setPayLoad(applicationRestriction.toJSON());
+            return (Response) AndroidAPIUtils.getOperationResponse(applicationRestrictionBeanWrapper.getDeviceIDs(),
+                    operation);
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
+            throw new BadRequestException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            log.error(errorMessage, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            log.error(errorMessage, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
         }
     }
 
