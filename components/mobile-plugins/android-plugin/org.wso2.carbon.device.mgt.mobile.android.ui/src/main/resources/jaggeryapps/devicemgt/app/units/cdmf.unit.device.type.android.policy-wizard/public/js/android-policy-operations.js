@@ -524,17 +524,35 @@ var validatePolicyProfile = function () {
             operation = androidOperationConstants["VPN_OPERATION"];
             // initializing continueToCheckNextInputs to true
             continueToCheckNextInputs = true;
-
-            var openvpnConfig = $("input#openvpn-config").val();
-            if (!openvpnConfig || openvpnConfig === '') {
-                validationStatus = {
-                    "error": true,
-                    "subErrorMsg": "ovpn config file is required. You cannot proceed.",
-                    "erroneousFeature": operation
-                };
-                continueToCheckNextInputs = false;
+            let openVpnConfigEnabled = document.getElementById('vpn-body').classList.contains('in');
+            if (openVpnConfigEnabled) {
+                var openvpnConfig = $("input#openvpn-config").val();
+                if (!openvpnConfig || openvpnConfig === '') {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "ovpn config file is required. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
             }
 
+            if (validationStatus) {
+                validationStatusArray.push(validationStatus);
+            }
+
+            let alwaysOnVpnEnabled = document.getElementById('always-on-vpn-body').classList.contains('in');
+            if (alwaysOnVpnEnabled) {
+                var alwaysOnConfig = $("input#vpn-client-app").val();
+                if (!alwaysOnConfig || alwaysOnConfig === '') {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Add a valid package name for the VPN client",
+                        "erroneousFeature": "always-on-vpn"
+                    };
+                    continueToCheckNextInputs = false;
+                }
+            }
             // at-last, if the value of continueToCheckNextInputs is still true
             // this means that no error is found
             if (continueToCheckNextInputs) {

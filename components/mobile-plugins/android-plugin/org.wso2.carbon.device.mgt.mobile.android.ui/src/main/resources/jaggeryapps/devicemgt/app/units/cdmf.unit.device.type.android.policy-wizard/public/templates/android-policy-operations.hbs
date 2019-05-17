@@ -2265,7 +2265,67 @@
                         <input id="openvpn-config" class="form-control operationDataKeys" type="hidden" data-key="openvpn_config" />
                         <input id="vpn-type" class="form-control operationDataKeys" type="hidden" data-key="type" value="OpenVPN" />
                     </div>
+                    <br/>
+
                 </div>
+
+                <!-- Always on VPN connection settings -->
+
+                <div id="always-on-vpn-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Always On VPN Settings
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#always-on-vpn-body">
+                            <input type="checkbox"/>
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                    </h2>
+                    <div class="panel-title-description">
+                        Configure an always-on VPN connection through a specific VPN client application
+                    </div>
+                </div>
+
+                <div id="always-on-vpn-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                     aria-labelledby="vpn-body">
+                    <hr/>
+
+                    <div class="always-on-vpn-message">
+                        <ul class="message message-info">
+                            <i class="icon fw fw-info"></i>
+                            <a id="always-on-vpn-status-msg"> Below configurations are valid only when the Agent is
+                                <b>work-profile owner</b> or <b>device owner</b>.</a>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div id="always-on-vpn-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="vpn-client-app">
+                            VPN Client Application Package Name
+                            <span class="helper" title="Package name of the VPN client application to be configured.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="vpn-client-app" type="text" class="form-control operationDataKeys"
+                               data-key="packageName" maxlength="200" placeholder="[ Should be a valid package name ]"/>
+                    </div>
+
+
+                    <!--<div class="wr-input-control">-->
+                        <!--<label class="wr-input-control checkbox">-->
+                            <!--<input id="vpn-lock-down" type="checkbox" class="operationDataKeys"-->
+                                   <!--data-key="lockDownEnable" checked="checked"/>-->
+                            <!--<span class="helper"-->
+                                  <!--title="True to disallow networking when the VPN is not connected or false otherwise">-->
+                                <!--Lock Down VPN-->
+                                <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
+                            <!--</span>-->
+                        <!--</label>-->
+                    <!--</div>-->
+                </div>
+                <!-- Always on VPN connection settings -->
+
             </div>
         </div>
         <!-- /VPN -->

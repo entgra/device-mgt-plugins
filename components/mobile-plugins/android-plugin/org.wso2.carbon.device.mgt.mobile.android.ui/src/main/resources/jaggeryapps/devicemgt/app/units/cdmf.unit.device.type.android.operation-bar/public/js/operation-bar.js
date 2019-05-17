@@ -426,7 +426,8 @@ var generatePayload = function (operationCode, operationData, deviceList) {
             payload = {
                 "operation": {
                     "type": operationData["type"],
-                    "openvpn_config": operationData["openvpn_config"]
+                    "openvpn_config": operationData["openvpn_config"],
+                    "packageName": operationData["packageName"]
                 }
             };
             break;

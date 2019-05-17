@@ -174,7 +174,8 @@ var androidOperationModule = function () {
             case androidOperationConstants["VPN_OPERATION_CODE"]:
                 payload = {
                     "type": operationPayload["type"],
-                    "openvpn_config": operationPayload["openvpn_config"]
+                    "openvpn_config": operationPayload["openvpn_config"],
+                    "packageName": operationPayload["packageName"]
                 };
                 break;
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
@@ -439,7 +440,8 @@ var androidOperationModule = function () {
                 payload = {
                     "operation": {
                         "type": operationData["type"],
-                        "openvpn_config": operationData["openvpn_config"]
+                        "openvpn_config": operationData["openvpn_config"],
+                        "packageName": operationData["packageName"]
                     }
                 };
                 break;
