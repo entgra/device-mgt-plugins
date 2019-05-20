@@ -337,7 +337,16 @@ var generatePayload = function (operationCode, operationData, deviceList) {
                     "ENSURE_VERIFY_APPS": operationData["ensureVerifyApps"],
                     "AUTO_TIME": operationData["enableAutoTime"],
                     "SET_SCREEN_CAPTURE_DISABLED": operationData["disableScreenCapture"],
-                    "SET_STATUS_BAR_DISABLED": operationData["disableStatusBar"]
+                    "SET_STATUS_BAR_DISABLED": operationData["disableStatusBar"],
+                    "KEY_RESTRICTIONS_PENDING": operationData["keyRestrictionsPending"],
+                    "DISALLOW_SET_WALLPAPER": operationData["disallowSetWallpaper"],
+                    "DISALLOW_SET_USER_ICON": operationData["disallowSetUserIcon"],
+                    "DISALLOW_REMOVE_MANAGEMENT_PROFILE": operationData["disallowRemoveManagedProfile"],
+                    "DISALLOW_AUTOFILL": operationData["disallowAutoFill"],
+                    "DISALLOW_BLUETOOTH": operationData["disallowBluetooth"],
+                    "DISALLOW_BLUETOOTH_SHARING": operationData["disallowBluetoothSharing"],
+                    "DISALLOW_REMOVE_USER": operationData["disallowRemoveUser"],
+                    "DISALLOW_DATA_ROAMING": operationData["disallowDataRoaming"]
                 }
             };
             break;
@@ -554,5 +563,14 @@ var androidOperationConstants = {
     "APPLICATION_OPERATION_CODE": "APP-RESTRICTION",
     "SYSTEM_UPDATE_POLICY_CODE": "SYSTEM_UPDATE_POLICY",
     "KIOSK_APPS_CODE": "KIOSK_APPS",
-    "FILE_TRANSFER": "FILE_TRANSFER"
+    "FILE_TRANSFER": "FILE_TRANSFER",
+    "KEY_RESTRICTIONS_PENDING": "KEY_RESTRICTIONS_PENDING",
+    "DISALLOW_SET_WALLPAPER": "DISALLOW_SET_WALLPAPER",
+    "DISALLOW_SET_USER_ICON": "DISALLOW_SET_USER_ICON",
+    "DISALLOW_REMOVE_MANAGEMENT_PROFILE": "DISALLOW_REMOVE_MANAGEMENT_PROFILE",
+    "DISALLOW_AUTOFILL": "DISALLOW_AUTOFILL",
+    "DISALLOW_BLUETOOTH": "DISALLOW_BLUETOOTH",
+    "DISALLOW_BLUETOOTH_SHARING": "DISALLOW_BLUETOOTH_SHARING",
+    "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
+    "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING"
 };

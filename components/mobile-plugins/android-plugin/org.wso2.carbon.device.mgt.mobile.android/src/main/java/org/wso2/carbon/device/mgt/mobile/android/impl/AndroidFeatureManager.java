@@ -469,6 +469,60 @@ public class AndroidFeatureManager implements FeatureManager {
         feature.setDescription("Unlock the device");
         supportedFeatures.add(feature);
 
+        feature = new Feature();
+        feature.setCode("KEY_RESTRICTIONS_PENDING");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("DISALLOW_SET_WALLPAPER");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("DISALLOW_SET_USER_ICON");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("DISALLOW_REMOVE_MANAGEMENT_PROFILE");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("DISALLOW_AUTOFILL");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("DISALLOW_BLUETOOTH");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("DISALLOW_BLUETOOTH_SHARING");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("DISALLOW_REMOVE_USER");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("DISALLOW_DATA_ROAMING");
+        feature.setName("Device Unlock");
+        feature.setDescription("Unlock the device");
+        supportedFeatures.add(feature);
+
         return supportedFeatures;
     }
 }
