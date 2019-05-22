@@ -142,14 +142,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public Device getDevice(String s, String s1, boolean b) throws DeviceManagementException {
-        if (TestUtils.getDeviceId().equals(s)) {
-            return TestUtils.getDevice();
-        } else {
-            return null;
-        }    }
-
-    @Override
     public Device getDevice(DeviceIdentifier deviceIdentifier, Date date) throws DeviceManagementException {
         return null;
     }
@@ -172,14 +164,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
             throws DeviceManagementException {
         return null;
     }
-
-    @Override
-    public Device getDevice(String s, String s1, Date date, boolean b) throws DeviceManagementException {
-        if (TestUtils.getDeviceId().equals(s)) {
-            return TestUtils.getDevice();
-        } else {
-            return null;
-        }    }
 
     @Override
     public Device getDevice(DeviceIdentifier deviceIdentifier, EnrolmentInfo.Status status)
