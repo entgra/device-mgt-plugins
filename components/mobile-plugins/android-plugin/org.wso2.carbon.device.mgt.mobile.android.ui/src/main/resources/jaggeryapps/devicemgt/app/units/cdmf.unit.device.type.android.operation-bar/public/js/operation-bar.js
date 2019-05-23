@@ -418,7 +418,8 @@ var generatePayload = function (operationCode, operationData, deviceList) {
             payload = {
                 "operation": {
                     "type": operationData["type"],
-                    "openvpn_config": operationData["openvpn_config"]
+                    "openvpn_config": operationData["openvpn_config"],
+                    "packageName": operationData["packageName"]
                 }
             };
             break;
@@ -491,6 +492,15 @@ var generatePayload = function (operationCode, operationData, deviceList) {
                 }
             };
             break;
+        case androidOperationConstants["APP_RESTRICTION_OPERATION_CODE"]:
+            operationType = operationTypeConstants["PROFILE"];
+            payload = {
+                 "operation": {
+                 "appIdentifier": operationData["app-id"],
+                 "restrictionPayload": operationData["payload"]
+                 }
+            };
+            break;
         default:
             // If the operation is neither of above, it is a command operation
             operationType = operationTypeConstants["COMMAND"];
@@ -554,5 +564,6 @@ var androidOperationConstants = {
     "APPLICATION_OPERATION_CODE": "APP-RESTRICTION",
     "SYSTEM_UPDATE_POLICY_CODE": "SYSTEM_UPDATE_POLICY",
     "KIOSK_APPS_CODE": "KIOSK_APPS",
-    "FILE_TRANSFER": "FILE_TRANSFER"
+    "FILE_TRANSFER": "FILE_TRANSFER",
+    "APP_RESTRICTION_OPERATION_CODE": "REMOTE_APP_CONFIG"
 };

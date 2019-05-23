@@ -140,6 +140,7 @@ public final class AndroidConstants {
         public static final String WORK_PROFILE = "WORK_PROFILE";
         public static final String NOTIFIER_FREQUENCY = "NOTIFIER_FREQUENCY";
         public static final String GLOBAL_PROXY = "SET_GLOBAL_PROXY";
+        public static final String REMOTE_APP_CONFIG = "REMOTE_APP_CONFIG";
     }
 
     public final class StatusCodes {

@@ -72,7 +72,7 @@ function promptErrorPolicyPlatform(errorMsg) {
 
 $(document).ready(function () {
     tinymce.init({
-        selector: "textarea",
+        selector: "#windows-eula",
         height:500,
         theme: "modern",
         plugins: [
