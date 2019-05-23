@@ -347,6 +347,13 @@
             <Name>Unlock the device</Name>
             <Description>Unlock the device</Description>
         </Feature>
+        <Feature code="REMOTE_APP_CONFIG">
+            <Name>Send app restriction</Name>
+            <Description>Send remote configurations to app</Description>
+            <Operation context="/api/device-mgt/android/v1.0/admin/devices/send-app-conf" method="POST"
+                       type="application/json">
+            </Operation>
+        </Feature>
     </Features>
     <TaskConfiguration>
         <Enable>true</Enable>

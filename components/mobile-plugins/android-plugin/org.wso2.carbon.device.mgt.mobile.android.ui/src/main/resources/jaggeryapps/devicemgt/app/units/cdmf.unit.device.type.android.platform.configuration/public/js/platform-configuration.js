@@ -92,7 +92,7 @@ var kioskConfigs = {
 $(document).ready(function () {
     $("#fcm-inputs").hide();
     tinymce.init({
-        selector: "textarea",
+        selector: "#android-eula",
         height:500,
         theme: "modern",
         plugins: [
