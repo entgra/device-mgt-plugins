@@ -343,10 +343,6 @@
             <Name>Fetch device logcat</Name>
             <Description>Fetch device logcat</Description>
         </Feature>
-        <Feature code="KEY_RESTRICTIONS_PENDING">
-            <Name>Fetch device logcat</Name>
-            <Description>Fetch device logcat</Description>
-        </Feature>
         <Feature code="DISALLOW_SET_WALLPAPER">
             <Name>Fetch device logcat</Name>
             <Description>Fetch device logcat</Description>

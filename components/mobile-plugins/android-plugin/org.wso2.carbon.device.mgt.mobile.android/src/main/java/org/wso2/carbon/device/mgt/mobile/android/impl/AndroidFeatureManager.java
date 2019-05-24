@@ -470,12 +470,6 @@ public class AndroidFeatureManager implements FeatureManager {
         supportedFeatures.add(feature);
 
         feature = new Feature();
-        feature.setCode("KEY_RESTRICTIONS_PENDING");
-        feature.setName("Device Unlock");
-        feature.setDescription("Unlock the device");
-        supportedFeatures.add(feature);
-
-        feature = new Feature();
         feature.setCode("DISALLOW_SET_WALLPAPER");
         feature.setName("Device Unlock");
         feature.setDescription("Unlock the device");

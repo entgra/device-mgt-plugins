@@ -100,7 +100,6 @@ var androidOperationModule = function () {
         "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
         "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
         "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
-        "KEY_RESTRICTIONS_PENDING": "KEY_RESTRICTIONS_PENDING",
         "DISALLOW_SET_WALLPAPER": "DISALLOW_SET_WALLPAPER",
         "DISALLOW_SET_USER_ICON": "DISALLOW_SET_USER_ICON",
         "DISALLOW_REMOVE_MANAGEMENT_PROFILE": "DISALLOW_REMOVE_MANAGEMENT_PROFILE",
@@ -352,7 +351,6 @@ var androidOperationModule = function () {
                         "ENSURE_VERIFY_APPS": operationData["ensureVerifyApps"],
                         "AUTO_TIME": operationData["enableAutoTime"],
                         "SET_SCREEN_CAPTURE_DISABLED": operationData["disableScreenCapture"],
-                        "KEY_RESTRICTIONS_PENDING": operationData["keyRestrictionsPending"],
                         "DISALLOW_SET_WALLPAPER": operationData["disallowSetWallpaper"],
                         "DISALLOW_SET_USER_ICON": operationData["disallowSetWallpaper"],
                         "DISALLOW_REMOVE_MANAGEMENT_PROFILE": operationData["disallowRemoveManagedProfile"],
@@ -1215,9 +1213,6 @@ var androidOperationModule = function () {
                 continue;
             } else if (featureCode == androidOperationConstants["SET_STATUS_BAR_DISABLED"]) {
                 restrictions["disableStatusBar"] = restriction["enabled"];
-                continue;
-            }else if (featureCode == androidOperationConstants["KEY_RESTRICTIONS_PENDING"]) {
-                restrictions["keyRestrictionsPending"] = restriction["enabled"];
                 continue;
             }else if (featureCode == androidOperationConstants["DISALLOW_SET_WALLPAPER"]) {
                 restrictions["disallowSetWallpaper"] = restriction["enabled"];
