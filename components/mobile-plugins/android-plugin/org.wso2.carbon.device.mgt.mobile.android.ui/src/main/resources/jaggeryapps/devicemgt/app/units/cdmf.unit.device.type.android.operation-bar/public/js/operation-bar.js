@@ -500,6 +500,15 @@ var generatePayload = function (operationCode, operationData, deviceList) {
                 }
             };
             break;
+        case androidOperationConstants["APP_RESTRICTION_OPERATION_CODE"]:
+            operationType = operationTypeConstants["PROFILE"];
+            payload = {
+                 "operation": {
+                 "appIdentifier": operationData["app-id"],
+                 "restrictionPayload": operationData["payload"]
+                 }
+            };
+            break;
         default:
             // If the operation is neither of above, it is a command operation
             operationType = operationTypeConstants["COMMAND"];
@@ -564,6 +573,7 @@ var androidOperationConstants = {
     "SYSTEM_UPDATE_POLICY_CODE": "SYSTEM_UPDATE_POLICY",
     "KIOSK_APPS_CODE": "KIOSK_APPS",
     "FILE_TRANSFER": "FILE_TRANSFER",
+    "APP_RESTRICTION_OPERATION_CODE": "REMOTE_APP_CONFIG",
     "KEY_RESTRICTIONS_PENDING": "KEY_RESTRICTIONS_PENDING",
     "DISALLOW_SET_WALLPAPER": "DISALLOW_SET_WALLPAPER",
     "DISALLOW_SET_USER_ICON": "DISALLOW_SET_USER_ICON",
