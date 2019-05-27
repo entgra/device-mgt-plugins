@@ -343,6 +343,39 @@
             <Name>Fetch device logcat</Name>
             <Description>Fetch device logcat</Description>
         </Feature>
+        <Feature code="DISALLOW_SET_WALLPAPER">
+            <Name>Fetch device logcat</Name>
+            <Description>Fetch device logcat</Description>
+        </Feature>
+        <Feature code="DISALLOW_SET_USER_ICON">
+            <Name>Fetch device logcat</Name>
+            <Description>Fetch device logcat</Description>
+        </Feature>
+        <Feature code="DISALLOW_REMOVE_MANAGEMENT_PROFILE">
+            <Name>Fetch device logcat</Name>
+            <Description>Fetch device logcat</Description>
+        </Feature>
+        <Feature code="DISALLOW_AUTOFILL">
+            <Name>Fetch device logcat</Name>
+            <Description>Fetch device logcat</Description>
+        </Feature>
+        <Feature code="DISALLOW_BLUETOOTH">
+            <Name>Fetch device logcat</Name>
+            <Description>Fetch device logcat</Description>
+        </Feature>
+        <Feature code="DISALLOW_BLUETOOTH_SHARING">
+            <Name>Fetch device logcat</Name>
+            <Description>Fetch device logcat</Description>
+        </Feature>
+        <Feature code="DISALLOW_REMOVE_USER">
+            <Name>Fetch device logcat</Name>
+            <Description>Fetch device logcat</Description>
+        </Feature>
+        <Feature code="DISALLOW_DATA_ROAMING">
+            <Name>Fetch device logcat</Name>
+            <Description>Fetch device logcat</Description>
+        </Feature>
+
         <Feature code="DEVICE_UNLOCK">
             <Name>Unlock the device</Name>
             <Description>Unlock the device</Description>

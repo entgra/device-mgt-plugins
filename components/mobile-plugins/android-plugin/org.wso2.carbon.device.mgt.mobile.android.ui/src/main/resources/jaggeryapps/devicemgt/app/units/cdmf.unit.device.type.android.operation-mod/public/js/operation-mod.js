@@ -100,7 +100,15 @@ var androidOperationModule = function () {
         "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
         "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
         "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
-        "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL"
+        "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL",
+        "DISALLOW_SET_WALLPAPER": "DISALLOW_SET_WALLPAPER",
+        "DISALLOW_SET_USER_ICON": "DISALLOW_SET_USER_ICON",
+        "DISALLOW_REMOVE_MANAGEMENT_PROFILE": "DISALLOW_REMOVE_MANAGEMENT_PROFILE",
+        "DISALLOW_AUTOFILL": "DISALLOW_AUTOFILL",
+        "DISALLOW_BLUETOOTH": "DISALLOW_BLUETOOTH",
+        "DISALLOW_BLUETOOTH_SHARING": "DISALLOW_BLUETOOTH_SHARING",
+        "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
+        "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING"
     };
 
     /**
@@ -345,7 +353,14 @@ var androidOperationModule = function () {
                         "ENSURE_VERIFY_APPS": operationData["ensureVerifyApps"],
                         "AUTO_TIME": operationData["enableAutoTime"],
                         "SET_SCREEN_CAPTURE_DISABLED": operationData["disableScreenCapture"],
-                        "SET_STATUS_BAR_DISABLED": operationData["disableStatusBar"]
+                        "DISALLOW_SET_WALLPAPER": operationData["disallowSetWallpaper"],
+                        "DISALLOW_SET_USER_ICON": operationData["disallowSetWallpaper"],
+                        "DISALLOW_REMOVE_MANAGEMENT_PROFILE": operationData["disallowRemoveManagedProfile"],
+                        "DISALLOW_AUTOFILL": operationData["disallowAutoFill"],
+                        "DISALLOW_BLUETOOTH": operationData["disallowBluetooth"],
+                        "DISALLOW_BLUETOOTH_SHARING": operationData["disallowBluetoothSharing"],
+                        "DISALLOW_REMOVE_USER": operationData["disallowRemoveUser"],
+                        "DISALLOW_DATA_ROAMING": operationData["disallowDataRoaming"]
                     }
                 };
                 break;
@@ -1201,6 +1216,30 @@ var androidOperationModule = function () {
                 continue;
             } else if (featureCode == androidOperationConstants["SET_STATUS_BAR_DISABLED"]) {
                 restrictions["disableStatusBar"] = restriction["enabled"];
+                continue;
+            }else if (featureCode == androidOperationConstants["DISALLOW_SET_WALLPAPER"]) {
+                restrictions["disallowSetWallpaper"] = restriction["enabled"];
+                continue;
+            }else if (featureCode == androidOperationConstants["DISALLOW_SET_USER_ICON"]) {
+                restrictions["disallowSetUserIcon"] = restriction["enabled"];
+                continue;
+            }else if (featureCode == androidOperationConstants["DISALLOW_REMOVE_MANAGEMENT_PROFILE"]) {
+                restrictions["disallowRemoveManagedProfile"] = restriction["enabled"];
+                continue;
+            }else if (featureCode == androidOperationConstants["DISALLOW_AUTOFILL"]) {
+                restrictions["disallowAutoFill"] = restriction["enabled"];
+                continue;
+            }else if (featureCode == androidOperationConstants["DISALLOW_BLUETOOTH"]) {
+                restrictions["disallowBluetooth"] = restriction["enabled"];
+                continue;
+            }else if (featureCode == androidOperationConstants["DISALLOW_BLUETOOTH_SHARING"]) {
+                restrictions["disallowBluetoothSharing"] = restriction["enabled"];
+                continue;
+            }else if (featureCode == androidOperationConstants["DISALLOW_REMOVE_USER"]) {
+                restrictions["disallowRemoveUser"] = restriction["enabled"];
+                continue;
+            }else if (featureCode == androidOperationConstants["DISALLOW_DATA_ROAMING"]) {
+                restrictions["disallowDataRoaming"] = restriction["enabled"];
                 continue;
             }
             //push the feature-code to the configuration array
