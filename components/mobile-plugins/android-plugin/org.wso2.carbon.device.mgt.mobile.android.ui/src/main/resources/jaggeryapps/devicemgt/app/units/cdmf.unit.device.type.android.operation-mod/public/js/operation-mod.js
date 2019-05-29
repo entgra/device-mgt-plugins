@@ -108,7 +108,8 @@ var androidOperationModule = function () {
         "DISALLOW_BLUETOOTH": "DISALLOW_BLUETOOTH",
         "DISALLOW_BLUETOOTH_SHARING": "DISALLOW_BLUETOOTH_SHARING",
         "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
-        "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING"
+        "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING",
+        "CERT_ADD_OPERATION_CODE": "INSTALL_CERT"
     };
 
     /**
@@ -665,6 +666,14 @@ var androidOperationModule = function () {
                 payload = {
                     "operation": {
                         "enrollmentAppInstall": operationData["enrollmentAppInstall"]
+                    }
+                };
+                break;
+            case androidOperationConstants["CERT_ADD_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "CERT_LIST": operationData["CERT_LIST"]
                     }
                 };
                 break;
