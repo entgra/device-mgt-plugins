@@ -58,7 +58,8 @@ var androidOperationConstants = {
     "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
     "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
     "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
-    "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL"
+    "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL",
+    "CERT_ADD_OPERATION_CODE": "INSTALL_CERT"
 };
 
 /**
@@ -813,6 +814,24 @@ var validatePolicyProfile = function () {
         if ($.inArray(androidOperationConstants["ENROLLMENT_APP_INSTALL_CODE"], configuredOperations) != -1) {
             //If enrollment app install configured
             operation = androidOperationConstants["ENROLLMENT_APP_INSTALL"];
+            var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
+            if($(enrollmentAppInstallAppList).length === 0) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Applications are not selected to be installed during device enrollment.",
+                    "erroneousFeature": operation
+                };
+            } else {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+            }
+            validationStatusArray.push(validationStatus);
+        }
+        if ($.inArray(androidOperationConstants["CERT_ADD_OPERATION_CODE"], configuredOperations) != -1) {
+            //If enrollment app install configured
+            operation = androidOperationConstants["CERT_ADD_OPERATION_CODE"];
             var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
             if($(enrollmentAppInstallAppList).length === 0) {
                 validationStatus = {
