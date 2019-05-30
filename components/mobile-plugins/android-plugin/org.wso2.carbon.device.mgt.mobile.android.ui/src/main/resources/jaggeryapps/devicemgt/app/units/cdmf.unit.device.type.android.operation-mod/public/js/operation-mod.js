@@ -309,6 +309,17 @@ var androidOperationModule = function () {
                     "enrollmentAppInstall": operationPayload["enrollmentAppInstall"]
                 };
                 break;
+            case androidOperationConstants["CERT_ADD_OPERATION_CODE"]:
+                var certList = operationPayload["CERT_LIST"];
+                var listNew = [];
+                certList.forEach(function (element) {
+                   element["CERT_CONTENT"] = element["CERT_NAME"]+" File";
+                   listNew.push(element);
+                });
+                payload = {
+                    "CERT_LIST": listNew
+                };
+                break;
         }
         return payload;
     };
