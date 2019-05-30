@@ -17,6 +17,24 @@
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
+
+<!--
+  ~ Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+  ~
+  ~ Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
 <DeviceTypeConfiguration name="windows">
 
     <DeviceDetails table-id="WIN_DEVICE"/>
@@ -81,65 +99,107 @@
         <Feature code="DISENROLL">
             <Name>Disenroll</Name>
             <Description>Dis-enrol the device</Description>
-            <Operation context="/api/device-mgt/windows/v1.0/admin/devices/disenroll-devices" method="POST"
-                       type="application/json">
+            <Operation hidden="false" icon="fw-block">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/windows/v1.0/admin/devices/disenroll-devices</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/windows/disenroll</permission>
+                </metadata>
             </Operation>
         </Feature>
         <Feature code="WIPE_DATA">
             <Name>Wipe Data</Name>
             <Description>Wipe the device</Description>
-            <Operation context="/api/device-mgt/windows/v1.0/admin/devices/wipe-devices" method="POST"
-                       type="application/json">
+            <Operation hidden="false" icon="fw-delete">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/windows/v1.0/admin/devices/wipe-devices</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/windows/wipe</permission>
+                </metadata>
             </Operation>
         </Feature>
         <Feature code="DEVICE_RING">
             <Name>Ring</Name>
             <Description>Ring the device</Description>
-            <Operation context="/api/device-mgt/windows/v1.0/admin/devices/ring-devices" method="POST"
-                       type="application/json">
+            <Operation hidden="false" icon="fw-dial-up">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/windows/v1.0/admin/devices/ring-devices</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/windows/ring</permission>
+                </metadata>
             </Operation>
         </Feature>
         <Feature code="DEVICE_LOCK">
             <Name>Device Lock</Name>
             <Description>Lock the device</Description>
-            <Operation context="/api/device-mgt/windows/v1.0/admin/devices/lock-devices" method="POST"
-                       type="application/json">
+            <Operation hidden="false" icon="fw-lock">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/windows/v1.0/admin/devices/lock-devices</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/windows/lock</permission>
+                </metadata>
             </Operation>
         </Feature>
         <Feature code="LOCK_RESET">
             <Name>Device Lock Reset</Name>
             <Description>Lock Reset the device</Description>
-            <Operation context="/api/device-mgt/windows/v1.0/admin/devices/lock-reset-devices" method="POST"
-                       type="application/json">
+            <Operation hidden="false" icon="fw-security">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/windows/v1.0/admin/devices/lock-reset-devices</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/windows/lock-reset</permission>
+                </metadata>
             </Operation>
         </Feature>
         <Feature code="DEVICE_LOCATION">
             <Name>Location</Name>
             <Description>Request coordinates of device location</Description>
-            <Operation context="/api/device-mgt/windows/v1.0/admin/devices/location" method="POST"
-                       type="application/json">
+            <Operation hidden="false" icon="fw-map-location">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/windows/v1.0/admin/devices/location</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/windows/location</permission>
+                </metadata>
             </Operation>
         </Feature>
         <Feature code="DEVICE_REBOOT">
             <Name>Reboot</Name>
             <Description>Reboot the device</Description>
-            <Operation context="/api/device-mgt/windows/v1.0/admin/devices/reboot" method="POST"
-                       type="application/json">
+            <Operation hidden="false" icon="fw-refresh">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/windows/v1.0/admin/devices/reboot</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/windows/reboot</permission>
+                </metadata>
             </Operation>
         </Feature>
-        <Feature code="DEVICE_INFO">
+        <Feature type="operation" code="DEVICE_INFO">
             <Name>Device info</Name>
             <Description>Request device information</Description>
         </Feature>
-        <Feature code="PASSCODE_POLICY">
+        <Feature type="policy" code="PASSCODE_POLICY">
             <Name>Password Policy</Name>
             <Description>Set passcode policy</Description>
         </Feature>
-        <Feature code="CAMERA">
+        <Feature type="policy" code="CAMERA">
             <Name>Camera Enable/Disable</Name>
             <Description>Enable/Disable camera</Description>
         </Feature>
-        <Feature code="ENCRYPT_STORAGE">
+        <Feature type="policy" code="ENCRYPT_STORAGE">
             <Name>Encrypt Storage</Name>
             <Description>Encrypt the device storage</Description>
         </Feature>
