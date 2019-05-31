@@ -59,6 +59,15 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('cert', this)">
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-security-policy fw-stack-2x"></i>
+                </span>
+            Secure Certificate
+            <span id="cert-configured" class="has-configured status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="cert-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="cert-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         {{#unless iscloud}}
         <a href="javascript:void(0)" onclick="showAdvanceOperation('work-profile', this)">
              <span class="wr-hidden-operations-icon fw-stack">
@@ -2305,6 +2314,104 @@
             </div>
         </div>
         <!-- /VPN -->
+
+        <!-- Cert -->
+        <div class="wr-hidden-operation" data-operation="cert">
+            <div class="panel panel-default operation-data" data-operation="cert"
+                 data-operation-code="INSTALL_CERT">
+                <div id="cert-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Secure Certificate Settings
+                        <label class="wr-input-control switch hidden" data-toggle="collapse"
+                               data-target="#cert-body">
+                            <input type="checkbox"/>
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                    </h2>
+                    <div class="panel-title-description">
+                        Configure the Secure Certificate settings on Android devices.
+                    </div>
+                </div>
+                <div id="cert-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                     aria-labelledby="cert-body">
+                    <hr/>
+                    <div id="cert-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="cert-list">
+                            <br><br>Added Certificate List
+                            <span class="helper" title="Add a certificate.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <br/>
+                        <a href="#cert-grid" class="btn btn-secondary grid-input-add hidden"
+                           data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-circle-outline fw-stack-2x"></i>
+                                </span>
+
+                            Add Certificate
+                        </a>
+                        <div id="cert-list"
+                             class="operationDataKeys grouped-array-input multi-column-key-value-pair-array"
+                             data-key="CERT_LIST" data-column-count="3">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                <tr>
+                                    <th>No:</th>
+                                    <th>Certificate Name</th>
+                                    <th>Certificate File</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody data-add-form-container="#cert-grid">
+                                <tr data-help-text="add-form">
+                                    <td colspan="4">
+                                        No entries added yet .
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#cert-grid">
+                                <tr data-add-form-element="clone">
+                                    <td data-title="No:">
+                                        <span class="index"></span>
+                                    </td>
+                                    <td data-title="Cert Name">
+                                        <input type="text" class="form-control grid-input-text operationDataKeys" data-child-key="CERT_NAME"
+                                               maxlength="100" placeholder="Cert Name" disabled/>
+                                    </td>
+                                    <td data-title="Cert File">
+                                        <input type="text" class="form-control grid-input-text"
+                                               data-child-key="CERT_CONTENT_VIEW" maxlength="100" data-default=""
+                                               placeholder="Select certificate file" disabled/>
+                                    </td>
+                                    <td>
+                                            <span class="list-group-item-actions hidden">
+                                                <a href="#cert-grid" class="grid-input-remove"
+                                                   data-click-event="remove-form">
+                                                    <span class="fw-stack helper" title="Remove Entry">
+                                                        <i class="fw fw-circle-outline fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                </a>
+                                            </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Cert -->
 
         <!-- install-applications -->
         <!--<div class="wr-hidden-operation" data-operation="install-apps">-->
