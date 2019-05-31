@@ -108,7 +108,8 @@ var androidOperationModule = function () {
         "DISALLOW_BLUETOOTH": "DISALLOW_BLUETOOTH",
         "DISALLOW_BLUETOOTH_SHARING": "DISALLOW_BLUETOOTH_SHARING",
         "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
-        "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING"
+        "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING",
+        "CERT_ADD_OPERATION_CODE": "INSTALL_CERT"
     };
 
     /**
@@ -306,6 +307,17 @@ var androidOperationModule = function () {
             case androidOperationConstants["ENROLLMENT_APP_INSTALL_CODE"]:
                 payload = {
                     "enrollmentAppInstall": operationPayload["enrollmentAppInstall"]
+                };
+                break;
+            case androidOperationConstants["CERT_ADD_OPERATION_CODE"]:
+                var certList = operationPayload["CERT_LIST"];
+                var listNew = [];
+                certList.forEach(function (element) {
+                    element["CERT_CONTENT_VIEW"] = element["CERT_NAME"] + " File";
+                   listNew.push(element);
+                });
+                payload = {
+                    "CERT_LIST": listNew
                 };
                 break;
         }
@@ -665,6 +677,14 @@ var androidOperationModule = function () {
                 payload = {
                     "operation": {
                         "enrollmentAppInstall": operationData["enrollmentAppInstall"]
+                    }
+                };
+                break;
+            case androidOperationConstants["CERT_ADD_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "CERT_LIST": operationData["CERT_LIST"]
                     }
                 };
                 break;
