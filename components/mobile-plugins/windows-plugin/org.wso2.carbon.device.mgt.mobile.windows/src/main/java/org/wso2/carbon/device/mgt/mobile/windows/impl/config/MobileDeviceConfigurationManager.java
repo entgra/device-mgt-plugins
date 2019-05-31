@@ -19,7 +19,7 @@
 package org.wso2.carbon.device.mgt.mobile.windows.impl.config;
 
 import org.w3c.dom.Document;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.util.MobileDeviceManagementUtil;
 import org.wso2.carbon.utils.CarbonUtils;
 

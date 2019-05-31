@@ -18,9 +18,9 @@
 
 package org.wso2.carbon.device.mgt.mobile.windows.impl;
 
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.Feature;
 import org.wso2.carbon.device.mgt.common.FeatureManager;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.MobileDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.MobileFeatureDAO;

@@ -33,15 +33,14 @@ import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.PluginConstants;
-import org.wso2.carbon.device.mgt.mobile.windows.api.common.beans.CacheEntry;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.CertificateGenerationException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.SyncmlMessageFormatException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.WAPProvisioningException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.DeviceUtil;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.WindowsAPIUtils;
-import org.wso2.carbon.device.mgt.mobile.windows.api.operations.util.DeviceInfo;
 import org.wso2.carbon.device.mgt.mobile.windows.api.operations.util.SyncmlCredentialUtil;
 import org.wso2.carbon.device.mgt.mobile.windows.api.services.enrollment.EnrollmentService;
 import org.wso2.carbon.device.mgt.mobile.windows.api.services.enrollment.beans.*;
