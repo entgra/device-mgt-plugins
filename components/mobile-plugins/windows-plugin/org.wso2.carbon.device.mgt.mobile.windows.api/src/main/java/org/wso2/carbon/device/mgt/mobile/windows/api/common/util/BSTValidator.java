@@ -25,7 +25,7 @@ import org.apache.ws.security.message.token.BinarySecurity;
 import org.apache.ws.security.validate.Credential;
 import org.apache.ws.security.validate.Validator;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.PluginConstants;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.authenticator.OAuthValidatorFactory;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.AuthenticationException;

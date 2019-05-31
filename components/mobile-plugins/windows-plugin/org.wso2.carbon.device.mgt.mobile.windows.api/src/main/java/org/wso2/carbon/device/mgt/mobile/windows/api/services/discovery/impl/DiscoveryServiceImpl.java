@@ -20,8 +20,8 @@ package org.wso2.carbon.device.mgt.mobile.windows.api.services.discovery.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.PluginConstants;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.exceptions.WindowsDeviceEnrolmentException;
 import org.wso2.carbon.device.mgt.mobile.windows.api.common.util.WindowsAPIUtils;
@@ -30,7 +30,6 @@ import org.wso2.carbon.device.mgt.mobile.windows.api.services.discovery.beans.Di
 import org.wso2.carbon.device.mgt.mobile.windows.api.services.discovery.beans.DiscoveryResponse;
 
 import javax.jws.WebService;
-import javax.ws.rs.core.Response;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.Holder;
 import javax.xml.ws.soap.Addressing;
