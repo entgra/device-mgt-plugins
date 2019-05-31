@@ -56,7 +56,7 @@ var androidOperationConstants = {
     "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
     "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
     "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL",
-    "CERTIFICATE_INSTALL": "CERT_INSTALL"
+    "CERTIFICATE_INSTALL": "INSTALL_CERT"
 };
 
 /**
@@ -138,60 +138,6 @@ var certConfigUploaded = function (val) {
         }
     }
 };
-
-var index = 1;
-
-function addNewCert() {
-    var node = "<div class=\"wr-input-control container-fluid\">\n" +
-               "    <div class=\"row\">\n" +
-               "        <div class=\"col-md-4\">\n" +
-               "            <div class=\"row\">\n" +
-               "                <div class=\"col-md-12\">\n" +
-               "                    <label class=\"wr-input-label\" for=\"cert-name-add\">\n" +
-               "                        Certificate Name\n" +
-               "                        <span class=\"helper\" title=\"Certificate name\">\n" +
-               "                            <span class=\"wr-help-tip glyphicon glyphicon-question-sign\"></span>\n" +
-               "                        </span>\n" +
-               "                    </label>\n" +
-               "                </div>\n" +
-               "            </div>\n" +
-               "            <div class=\"row\">\n" +
-               "                <div class=\"col-md-12\">\n" +
-               "                    <input id=\"cert-name-add-" + index + "\" type=\"text\" class=\"form-control operationDataKeys\"\n" +
-               "                           maxlength=\"200\" onchange=\"certNameAdded('cert-name-add-" + index + "', " + index + ")\"/>\n" +
-               "                </div>\n" +
-               "            </div>\n" +
-               "        </div>\n" +
-               "        <div class=\"col-md-7 col-md-offset-1\">\n" +
-               "            <div class=\"row\">\n" +
-               "                <div class=\"col-md-12\">\n" +
-               "                    <label class=\"wr-input-label\" for=\"cert-file\">\n" +
-               "                        Certificate File*\n" +
-               "                        <span class=\"helper\" title=\"Certificate configurations file\">\n" +
-               "                            <span class=\"wr-help-tip glyphicon glyphicon-question-sign\"></span>\n" +
-               "                        </span>\n" +
-               "                    </label>\n" +
-               "                </div>\n" +
-               "            </div>\n" +
-               "            <div class=\"row\">\n" +
-               "                <div class=\"col-md-12\">\n" +
-               "                    <input id=\"cert-file-" + index + "\" type=\"file\" class=\"form-control operationDataKeys\"\n" +
-               "                           maxlength=\"200\" onchange=\"certConfigUploaded('cert-file-" + index + "', " + index + ")\"/>\n" +
-               "                </div>\n" +
-               "            </div>\n" +
-               "        </div>\n" +
-               "    </div>\n" +
-               "    <input id=\"cert-config-" + index + "\" class=\"form-control operationDataKeys\" type=\"hidden\"\n" +
-               "           data-key=\"cert_config\"/>\n" +
-               "    <input id=\"cert-name-" + index + "\" class=\"form-control operationDataKeys\" type=\"hidden\" data-key=\"type\"\n" +
-               "           value=\"Cert\"/>\n" +
-               "</div>\n" +
-               "<br/>";
-
-    $("#cert-input-box").append(node);
-    index++;
-}
-
 
 /**
  * Validates policy profile operations for the windows platform.
@@ -842,26 +788,29 @@ var validatePolicyProfile = function () {
         }
         if ($.inArray(androidOperationConstants["CERTIFICATE_INSTALL"], configuredOperations) != -1) {
             //If enrollment app install configured
+            let isErrorsFound = false;
             operation = androidOperationConstants["CERTIFICATE_INSTALL"];
-            let isErrorFound = false;
-            for (let j = 0; j < index; j++) {
-                if ($("#cert-config-" + index).empty()) {
-                    isErrorFound = true;
-                    validationStatus = {
-                        "error": true,
-                        "subErrorMsg": "Applications are not selected to be installed during device enrollment.",
-                        "erroneousFeature": operation
-                    };
+            var certList = $("#cert-list").find(".child-input");
+            for (let j = 0; j < certList.length; j++) {
+                if ($(certList[j]).val().trim() === "") {
+                    isErrorsFound = true;
                     break;
                 }
             }
-            if (!isErrorFound) {
+            if (isErrorsFound) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Certificates are not selected to be installed.",
+                    "erroneousFeature": operation
+                };
+                validationStatusArray.push(validationStatus);
+            } else {
                 validationStatus = {
                     "error": false,
                     "okFeature": operation
                 };
+                validationStatusArray.push(validationStatus);
             }
-            validationStatusArray.push(validationStatus);
         }
     }
     // ending validation process

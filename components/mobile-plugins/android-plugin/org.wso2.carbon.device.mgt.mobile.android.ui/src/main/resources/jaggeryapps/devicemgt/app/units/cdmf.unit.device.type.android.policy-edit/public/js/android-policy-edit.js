@@ -173,6 +173,29 @@ var ovpnConfigUploaded = function () {
     }
 };
 
+var certConfigUploaded = function (val) {
+    var certFileInput = document.getElementById("cert-file-field");
+    if ('files' in certFileInput) {
+        if (certFileInput.files.length === 1) {
+            var reader = new FileReader();
+            reader.onload = function (progressEvent) {
+                var txt = "";
+                var lines = this.result.split('\n');
+                for (var line = 0; line < lines.length; line++) {
+                    console.log(lines[line]);
+                    if (lines[line].charAt(0) !== '#') {
+                        txt += lines[line] + '\n';
+                    }
+                }
+                //document.getElementById ("cert-config").value = txt;
+                //console.log(document.getElementById ("cert-config").value);
+                $(val).next().val(txt);
+            };
+            reader.readAsText(certFileInput.files[0]);
+        }
+    }
+};
+
 /**
  * Validates policy profile operations for the windows platform.
  *
@@ -831,21 +854,29 @@ var validatePolicyProfile = function () {
         }
         if ($.inArray(androidOperationConstants["CERT_ADD_OPERATION_CODE"], configuredOperations) != -1) {
             //If enrollment app install configured
+            let isErrorsFound = false;
             operation = androidOperationConstants["CERT_ADD_OPERATION_CODE"];
-            var enrollmentAppInstallAppList = "div#install-app-enrollment .child-input";
-            if($(enrollmentAppInstallAppList).length === 0) {
+            var certList = $("#cert-list").find(".child-input");
+            for (let j = 0; j < certList.length; j++) {
+                if ($(certList[j]).val().trim() === "") {
+                    isErrorsFound = true;
+                    break;
+                }
+            }
+            if (isErrorsFound) {
                 validationStatus = {
                     "error": true,
-                    "subErrorMsg": "Applications are not selected to be installed during device enrollment.",
+                    "subErrorMsg": "Certificates are not selected to be installed.",
                     "erroneousFeature": operation
                 };
+                validationStatusArray.push(validationStatus);
             } else {
                 validationStatus = {
                     "error": false,
                     "okFeature": operation
                 };
+                validationStatusArray.push(validationStatus);
             }
-            validationStatusArray.push(validationStatus);
         }
     }
     // ending validation process
@@ -1160,6 +1191,16 @@ var applyDataTable = function() {
         lengthMenu: [5, 10, 25, 50, 100]
     });
 };
+var myFrom;
+
+function appendCertInputField(inputElement) {
+    let element = "<input id=\"cert-file-field\" type=\"file\" class=\"form-control grid-input-text\"\n" +
+                  " data-child-key=\"CERT_CONTENT_VIEW\" maxlength=\"100\" data-default=\"\"\n" +
+                  "     placeholder=\"Select certificate file\" onchange=\"certConfigUploaded(this)\"/>\n" +
+                  "<input id=\"cert-config\" class=\"form-control operationDataKeys\" type=\"hidden\"\n" +
+                  "                                                data-child-key=\"CERT_CONTENT\"/>";
+    inputElement.append(element);
+}
 
 $(document).ready(function () {
     // Maintains an array of configured features of the profile
@@ -1316,15 +1357,23 @@ $(document).ready(function () {
         updateGroupedInputVisibility(this);
     });
 
+
     // add form entry click function for grid inputs
-    $(advanceOperations).on("click", "[data-click-event=add-form]", function () {
+    $(advanceOperations).on("click", "[data-click-event=add-form]", function (event) {
         var addFormContainer = $("[data-add-form-container=" + $(this).attr("href") + "]");
         var clonedForm = $("[data-add-form=" + $(this).attr("href") + "]").clone().find("[data-add-form-element=clone]")
             .attr("data-add-form-clone", $(this).attr("href"));
-
         // adding class .child-input to capture text-input-array-values
         $("input, select", clonedForm).addClass("child-input");
-
+        if ($(this).attr("href") === "#cert-grid") {
+            if (event.originalEvent !== undefined) {
+                let inputElement = $(clonedForm).children('td.cert-file-tr');
+                inputElement.find("input[type=text]").remove();
+                inputElement.find("input[type=hidden]").remove();
+                appendCertInputField(inputElement);
+                $("input, select", clonedForm).addClass("child-input");
+            }
+        }
         $(addFormContainer).append(clonedForm);
         setId(addFormContainer);
         showHideHelpText(addFormContainer);

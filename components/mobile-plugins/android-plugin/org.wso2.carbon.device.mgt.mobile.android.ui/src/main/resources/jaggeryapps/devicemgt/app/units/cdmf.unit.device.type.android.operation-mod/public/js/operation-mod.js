@@ -313,7 +313,7 @@ var androidOperationModule = function () {
                 var certList = operationPayload["CERT_LIST"];
                 var listNew = [];
                 certList.forEach(function (element) {
-                   element["CERT_CONTENT"] = element["CERT_NAME"]+" File";
+                    element["CERT_CONTENT_VIEW"] = element["CERT_NAME"] + " File";
                    listNew.push(element);
                 });
                 payload = {
