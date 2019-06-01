@@ -658,6 +658,7 @@
             <Operation>DEVICE_INFO</Operation>
             <Operation>APPLICATION_LIST</Operation>
             <Operation>DEVICE_LOCATION</Operation>
+            <Operation>SERVER_VERSION</Operation>
     </InitialOperationConfig>
     <!--This configures the Task service for the android device-type. Given below are the property definitions.
         <RequireStatusMonitoring> - This will enable or disable status monitoring for that particular device-type.
