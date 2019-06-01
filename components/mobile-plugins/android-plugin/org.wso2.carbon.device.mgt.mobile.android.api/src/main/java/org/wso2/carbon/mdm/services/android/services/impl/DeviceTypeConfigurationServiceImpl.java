@@ -134,6 +134,7 @@ public class DeviceTypeConfigurationServiceImpl implements DeviceTypeConfigurati
         try {
             configuration.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
             List<ConfigurationEntry> configs = configuration.getConfiguration();
+            NotifierFrequency notifierFrequency = new NotifierFrequency();
             for (ConfigurationEntry entry : configs) {
                 if (AndroidConstants.TenantConfigProperties.LICENSE_KEY.equals(entry.getName())) {
                     License license = new License();
@@ -145,30 +146,18 @@ public class DeviceTypeConfigurationServiceImpl implements DeviceTypeConfigurati
                             MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, license);
                     licenseEntry = entry;
                 } else if (AndroidConstants.TenantConfigProperties.NOTIFIER_FREQUENCY.equals(entry.getName())) {
-                    List<Device> deviceList = AndroidAPIUtils.
-                            getDeviceManagementService().
-                            getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, false);
-                    List<DeviceIdentifier> deviceIdList = new ArrayList<>();
-                    for (Device device : deviceList) {
-                        if (EnrolmentInfo.Status.REMOVED != device.getEnrolmentInfo().getStatus()) {
-                            deviceIdList.add(new DeviceIdentifier(device.getDeviceIdentifier(), device.getType()));
-                        }
+                    if (entry.getValue() != null) {
+                        notifierFrequency.setValue(Integer.parseInt(entry.getValue().toString()));
+                    } else {
+                        return Response.status(Response.Status.BAD_REQUEST)
+                                .entity("No value specified for notifierFrequency.").build();
                     }
-                    if (!deviceIdList.isEmpty()) {
-                        if (entry.getValue() != null) {
-                            NotifierFrequency notifierFrequency = new NotifierFrequency();
-                            notifierFrequency.setValue(Integer.parseInt(entry.getValue().toString()));
-                            ProfileOperation operation = new ProfileOperation();
-                            operation.setCode(AndroidConstants.OperationCodes.NOTIFIER_FREQUENCY);
-                            operation.setPayLoad(notifierFrequency.toJSON());
-                            operation.setEnabled(true);
-                            AndroidAPIUtils.getDeviceManagementService().addOperation(
-                                    DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
-                                    operation, deviceIdList);
-                        } else {
-                            return Response.status(Response.Status.BAD_REQUEST)
-                                    .entity("No value specified for notifierFrequency.").build();
-                        }
+                } else if (AndroidConstants.TenantConfigProperties.NOTIFIER_TYPE.equals(entry.getName())) {
+                    if (entry.getValue() != null) {
+                        notifierFrequency.setType(Integer.parseInt(entry.getValue().toString()));
+                    } else {
+                        return Response.status(Response.Status.BAD_REQUEST)
+                                .entity("No value specified for notifierType.").build();
                     }
                 }
             }
@@ -178,6 +167,7 @@ public class DeviceTypeConfigurationServiceImpl implements DeviceTypeConfigurati
             }
             configuration.setConfiguration(configs);
             AndroidAPIUtils.getDeviceManagementService().saveConfiguration(configuration);
+            notifyDevices(notifierFrequency);
         } catch (DeviceManagementException e) {
             msg = "Error occurred while modifying configuration settings of Android platform";
             log.error(msg, e);
@@ -203,6 +193,27 @@ public class DeviceTypeConfigurationServiceImpl implements DeviceTypeConfigurati
                 .entity("Android platform configuration has been updated successfully.").build();
     }
 
+    private void notifyDevices(NotifierFrequency notifierFrequency) throws DeviceManagementException,
+            OperationManagementException, InvalidDeviceException {
+        List<Device> deviceList = AndroidAPIUtils.
+                getDeviceManagementService().
+                getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, false);
+        List<DeviceIdentifier> deviceIdList = new ArrayList<>();
+        for (Device device : deviceList) {
+            if (EnrolmentInfo.Status.REMOVED != device.getEnrolmentInfo().getStatus()) {
+                deviceIdList.add(new DeviceIdentifier(device.getDeviceIdentifier(), device.getType()));
+            }
+        }
+        if (!deviceIdList.isEmpty()) {
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(AndroidConstants.OperationCodes.NOTIFIER_FREQUENCY);
+            operation.setPayLoad(notifierFrequency.toJSON());
+            operation.setEnabled(true);
+            AndroidAPIUtils.getDeviceManagementService().addOperation(
+                    DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
+                    operation, deviceIdList);
+        }
+    }
 
     @GET
     @Path("/license")
