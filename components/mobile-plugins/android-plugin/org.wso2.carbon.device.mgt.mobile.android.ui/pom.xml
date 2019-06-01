@@ -33,6 +33,19 @@
     <name>WSO2 Carbon - Mobile Android UI</name>
     <packaging>pom</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.entgra.emm</groupId>
+            <artifactId>io.entgra.emm.android.agent.release</artifactId>
+            <type>apk</type>
+        </dependency>
+        <dependency>
+            <groupId>io.entgra.emm</groupId>
+            <artifactId>io.entgra.emm.android.agent.debug</artifactId>
+            <type>apk</type>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -55,6 +68,24 @@
                                     <outputDirectory>${project.basedir}/target/
                                     </outputDirectory>
                                     <destFileName>JavaApp.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>io.entgra.emm</groupId>
+                                    <artifactId>io.entgra.emm.android.agent.release</artifactId>
+                                    <type>apk</type>
+                                    <version>${android.agent.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.basedir}/target/</outputDirectory>
+                                    <destFileName>android-agent.apk</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>io.entgra.emm</groupId>
+                                    <artifactId>io.entgra.emm.android.agent.debug</artifactId>
+                                    <type>apk</type>
+                                    <version>${android.agent.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.basedir}/target/</outputDirectory>
+                                    <destFileName>client-debug.apk</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>

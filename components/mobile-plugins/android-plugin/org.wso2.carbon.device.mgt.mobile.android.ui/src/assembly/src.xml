@@ -42,5 +42,13 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
+        <file>
+            <source>
+                ${basedir}/target/android-agent.apk
+            </source>
+            <outputDirectory>/devicemgt/app/units/cdmf.unit.device.type.android.type-view/public/assets/
+            </outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
     </files>
 </assembly>

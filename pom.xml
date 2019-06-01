@@ -1186,6 +1186,18 @@
                 <artifactId>feign-okhttp</artifactId>
                 <version>${github.openfeign.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.entgra.emm</groupId>
+                <artifactId>io.entgra.emm.android.agent.release</artifactId>
+                <type>apk</type>
+                <version>${android.agent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.entgra.emm</groupId>
+                <artifactId>io.entgra.emm.android.agent.debug</artifactId>
+                <type>apk</type>
+                <version>${android.agent.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1238,6 +1250,9 @@
 
         <!-- Carbon Device Management Plugins -->
         <carbon.devicemgt.plugins.version>4.2.6-SNAPSHOT</carbon.devicemgt.plugins.version>
+
+        <!-- Android Agent Artifact Version-->
+        <android.agent.version>3.6.0</android.agent.version>
 
         <!-- Carbon Commons -->
         <carbon.commons.version>4.6.21</carbon.commons.version>
