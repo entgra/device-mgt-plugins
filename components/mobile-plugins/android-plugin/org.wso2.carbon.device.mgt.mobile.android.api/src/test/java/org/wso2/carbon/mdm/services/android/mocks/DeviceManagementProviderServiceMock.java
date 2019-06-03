@@ -18,17 +18,7 @@
 
 package org.wso2.carbon.mdm.services.android.mocks;
 
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceTypeNotFoundException;
-import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
-import org.wso2.carbon.device.mgt.common.FeatureManager;
-import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
-import org.wso2.carbon.device.mgt.common.MonitoringOperation;
-import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
-import org.wso2.carbon.device.mgt.common.PaginationRequest;
-import org.wso2.carbon.device.mgt.common.PaginationResult;
+import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
@@ -357,6 +347,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public boolean deleteDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override
     public boolean isEnrolled(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
         return false;
     }
@@ -528,12 +523,22 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public List<String> getStartupOperations(String s) {
+        return null;
+    }
+
+    @Override
     public int getDeviceMonitoringFrequency(String s) {
         return 0;
     }
 
     @Override
     public OperationMonitoringTaskConfig getDeviceMonitoringConfig(String s) {
+        return null;
+    }
+
+    @Override
+    public StartupOperationConfig getStartupOperationConfig(String s) {
         return null;
     }
 
