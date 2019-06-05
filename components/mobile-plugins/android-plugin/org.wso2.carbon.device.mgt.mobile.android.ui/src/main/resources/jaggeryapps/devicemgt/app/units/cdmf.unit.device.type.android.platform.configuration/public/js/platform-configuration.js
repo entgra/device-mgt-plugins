@@ -84,6 +84,7 @@ var kioskConfigs = {
     "adminComponentName" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME",
     "wifiSSID" : "android.app.extra.PROVISIONING_WIFI_SSID",
     "wifiPassword" : "android.app.extra.PROVISIONING_WIFI_PASSWORD",
+    "wifiSecurity" : "android.app.extra.PROVISIONING_WIFI_SECURITY_TYPE",
     "skipEncryption" : "android.app.extra.PROVISIONING_SKIP_ENCRYPTION",
     "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM",
     "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION"
@@ -139,6 +140,8 @@ $(document).ready(function () {
                         $("input#android-kiosk-config-admin-component").val(config.value);
                     } else if (config.name === kioskConfigs["wifiSSID"]) {
                         $("input#android-kiosk-config-wifi-ssid").val(config.value);
+                    } else if (config.name === kioskConfigs["wifiSecurity"]) {
+                        $("#android-kiosk-config-wifi-sec").val(config.value);
                     } else if (config.name === kioskConfigs["wifiPassword"]) {
                         $("input#android-kiosk-config-wifi-password").val(config.value);
                     } else if (config.name === kioskConfigs["checksum"]) {
@@ -190,6 +193,7 @@ $(document).ready(function () {
         var wifiSSID = $("input#android-kiosk-config-wifi-ssid").val();
         var wifiPassword = $("input#android-kiosk-config-wifi-password").val();
         var encryption = $("#android-kiosk-config-encryption").find("option:selected").attr("value");
+        var wifiSecurity = $("#android-kiosk-config-wifi-sec").find("option:selected").attr("value");
 
         if (notifierType === notifierTypeConstants["LOCAL"] && !notifierFrequency) {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");
@@ -259,6 +263,12 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            var kioskWifiSecurity = {
+                "name": kioskConfigs["wifiSecurity"],
+                "value": wifiSecurity,
+                "contentType": "text"
+            };
+
             var kioskWifiPassword = {
                 "name": kioskConfigs["wifiPassword"],
                 "value": wifiPassword,
@@ -281,6 +291,7 @@ $(document).ready(function () {
             configList.push(kioskEncryption);
             configList.push(kioskWifiSSID);
             configList.push(kioskWifiPassword);
+            configList.push(kioskWifiSecurity);
 
             if (notifierType === notifierTypeConstants["FCM"]) {
                 configList.push(fcmKey);
