@@ -23,7 +23,7 @@ public class WindowsTokenServiceImpl implements WindowsTokenService {
             WindowsDAOFactory.beginTransaction();
             windowsEnrollmentTokenDAO.addCacheToken(entry);
             WindowsDAOFactory.commitTransaction();
-        }  finally {
+        } finally {
             WindowsDAOFactory.closeConnection();
         }
     }
@@ -51,7 +51,8 @@ public class WindowsTokenServiceImpl implements WindowsTokenService {
         return cacheEntry;
     }
 
-    @Override public MobileCacheEntry getCacheTokenFromDeviceId(String deviceId)
+    @Override
+    public MobileCacheEntry getCacheTokenFromDeviceId(String deviceId)
             throws MobileDeviceManagementDAOException {
         MobileCacheEntry cacheEntry = null;
         try {

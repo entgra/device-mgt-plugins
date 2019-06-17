@@ -20,8 +20,6 @@ package org.wso2.carbon.device.mgt.mobile.windows.impl.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.mobile.windows.exception.WindowsDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.impl.WindowsDeviceDAOImpl;
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dao.impl.WindowsFeatureDAOImpl;
 
@@ -77,6 +75,15 @@ public class WindowsDAOFactory extends AbstractMobileDeviceManagementDAOFactory 
         if (currentConnection.get() == null) {
             Connection conn;
             try {
+                if (dataSource == null) {
+                    try {
+                        String dataSourceName = "jdbc/MobileWindowsDM_DS";
+                        Context ctx = new InitialContext();
+                        dataSource = (DataSource) ctx.lookup(dataSourceName);
+                    } catch (NamingException e) {
+                        throw new MobileDeviceManagementDAOException("Error occurred while initializing datasource", e);
+                    }
+                }
                 conn = dataSource.getConnection();
                 currentConnection.set(conn);
             } catch (SQLException e) {

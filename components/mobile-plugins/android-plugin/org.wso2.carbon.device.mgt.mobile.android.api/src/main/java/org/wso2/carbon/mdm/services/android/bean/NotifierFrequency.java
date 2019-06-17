@@ -27,8 +27,19 @@ import java.io.Serializable;
         description = "This class represents notification frequency configuration.")
 public class NotifierFrequency extends AndroidOperation implements Serializable {
 
+    @ApiModelProperty(name = "type", value = "Notification type", required = true)
+    private int type;
+
     @ApiModelProperty(name = "value", value = "Notification polling frequency", required = true)
     private int value;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public int getValue() {
         return value;

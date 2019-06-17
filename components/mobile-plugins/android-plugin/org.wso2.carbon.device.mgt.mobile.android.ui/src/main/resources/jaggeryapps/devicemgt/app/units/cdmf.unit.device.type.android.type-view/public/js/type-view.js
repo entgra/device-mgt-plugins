@@ -35,6 +35,7 @@ var kioskConfigs = {
     "adminComponentName" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME",
     "wifiSSID" : "android.app.extra.PROVISIONING_WIFI_SSID",
     "wifiPassword" : "android.app.extra.PROVISIONING_WIFI_PASSWORD",
+    "wifiSecurity" : "android.app.extra.PROVISIONING_WIFI_SECURITY_TYPE",
     "skipEncryption" : "android.app.extra.PROVISIONING_SKIP_ENCRYPTION",
     "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM",
     "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION",
@@ -107,6 +108,8 @@ function generateKIOSKQRCode(qrCodeClass) {
                     } else if (config.name === kioskConfigs["wifiSSID"]) {
                         payload[config.name] = config.value;
                     } else if (config.name === kioskConfigs["wifiPassword"]) {
+                        payload[config.name] = config.value;
+                    } else if (config.name === kioskConfigs["wifiSecurity"]) {
                         payload[config.name] = config.value;
                     } else if (config.name === kioskConfigs["checksum"]) {
                         payload[config.name] = config.value;

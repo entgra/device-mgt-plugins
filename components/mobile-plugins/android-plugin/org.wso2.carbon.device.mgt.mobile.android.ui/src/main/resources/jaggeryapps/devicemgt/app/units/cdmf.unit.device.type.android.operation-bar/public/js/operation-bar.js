@@ -17,6 +17,24 @@
  */
 
 /*
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/*
  * On operation click function.
  * @param selection: Selected operation
  */
@@ -115,41 +133,41 @@ function submitForm(formId) {
     $('#' + formId + " .lbl-execution").removeClass("hidden");
     var form = $("#" + formId);
     var uri = form.attr("action");
-    var deviceId = form.data("device-id");
+    var deviceIdList = form.data("device-id");
     var contentType = form.data("content-type");
     var operationCode = form.data("operation-code");
-    var uriencodedQueryStr = "";
-    var uriencodedFormStr = "";
+    var uriEncodedQueryStr = "";
+    var uriEncodedFormStr = "";
     var payload = {};
     form.find("input").each(function () {
         var input = $(this);
-        if (input.data("param-type") == "path") {
+        var prefix;
+        if (input.data("param-type") === "path") {
             uri = uri.replace("{" + input.attr("id") + "}", input.val());
-        } else if (input.data("param-type") == "query") {
-            var prefix = (uriencodedQueryStr == "") ? "?" : "&";
-            uriencodedQueryStr += prefix + input.attr("id") + "=" + input.val();
-        } else if (input.data("param-type") == "form") {
-            var prefix = (uriencodedFormStr == "") ? "" : "&";
-            uriencodedFormStr += prefix + input.attr("id") + "=" + input.val();
-            if (input.attr("type") == "text" || input.attr("type") == "password") {
+        } else if (input.data("param-type") === "query") {
+            prefix = !uriEncodedQueryStr ? "?" : "&";
+            uriEncodedQueryStr += prefix + input.attr("id") + "=" + input.val();
+        } else if (input.data("param-type") === "form") {
+            prefix = !uriEncodedFormStr ? "" : "&";
+            uriEncodedFormStr += prefix + input.attr("id") + "=" + input.val();
+            if (input.attr("type") === "text" || input.attr("type") === "password") {
                 payload[input.attr("id")] = input.val();
-            } else if (input.attr("type") == "checkbox") {
+            } else if (input.attr("type") === "checkbox") {
                 payload[input.attr("id")] = input.is(":checked");
-            } else if (input.attr("type") == "radio") {
+            } else if (input.attr("type") === "radio") {
                 payload[input.attr("id")] = input.is(":checked");
             }
         }
     });
-    uri += uriencodedQueryStr;
+    uri += uriEncodedQueryStr;
     var httpMethod = form.attr("method").toUpperCase();
-    //var contentType = form.attr("enctype");
-    var validaterString = validatePayload(operationCode, payload);
+    var validateString = validatePayload(operationCode, payload);
 
-    if (validaterString == "OK") {
+    if (validateString === "OK") {
 
-        if (contentType == undefined || contentType == "") {
+        if (!contentType) {
             contentType = "application/x-www-form-urlencoded";
-            payload = uriencodedFormStr;
+            payload = uriEncodedFormStr;
         }
 
         //setting responses callbacks
@@ -179,7 +197,7 @@ function submitForm(formId) {
             // console.log(response);
             title.html("An Error Occurred!");
             statusIcon.attr("class", defaultStatusClasses + " fw-error");
-            var reason = (response.responseText == "null") ? response.statusText : response.responseText;
+            var reason = (response.responseText === "null") ? response.statusText : response.responseText;
             try {
                 reason = JSON.parse(reason).message;
             } catch (err) {
@@ -191,15 +209,15 @@ function submitForm(formId) {
             $(modalPopupContent).html(content.html());
         };
         //executing http request
-        if (httpMethod == "GET") {
+        if (httpMethod === "GET") {
             invokerUtil.get(uri, successCallBack, errorCallBack, contentType);
-        } else if (httpMethod == "POST") {
-            var deviceList = [deviceId];
+        } else if (httpMethod === "POST") {
+            var deviceList = deviceIdList.split(",");
             payload = generatePayload(operationCode, payload, deviceList);
             invokerUtil.post(uri, payload, successCallBack, errorCallBack, contentType);
-        } else if (httpMethod == "PUT") {
+        } else if (httpMethod === "PUT") {
             invokerUtil.put(uri, payload, successCallBack, errorCallBack, contentType);
-        } else if (httpMethod == "DELETE") {
+        } else if (httpMethod === "DELETE") {
             invokerUtil.delete(uri, successCallBack, errorCallBack, contentType);
         } else {
             title.html("An Error Occurred!");
@@ -210,7 +228,7 @@ function submitForm(formId) {
         }
     } else {
         resetLoader(formId);
-        $(".modal #operation-error-msg span").text(validaterString);
+        $(".modal #operation-error-msg span").text(validateString);
         $(".modal #operation-error-msg").removeClass("hidden");
     }
 }
@@ -337,7 +355,15 @@ var generatePayload = function (operationCode, operationData, deviceList) {
                     "ENSURE_VERIFY_APPS": operationData["ensureVerifyApps"],
                     "AUTO_TIME": operationData["enableAutoTime"],
                     "SET_SCREEN_CAPTURE_DISABLED": operationData["disableScreenCapture"],
-                    "SET_STATUS_BAR_DISABLED": operationData["disableStatusBar"]
+                    "SET_STATUS_BAR_DISABLED": operationData["disableStatusBar"],
+                    "DISALLOW_SET_WALLPAPER": operationData["disallowSetWallpaper"],
+                    "DISALLOW_SET_USER_ICON": operationData["disallowSetUserIcon"],
+                    "DISALLOW_REMOVE_MANAGEMENT_PROFILE": operationData["disallowRemoveManagedProfile"],
+                    "DISALLOW_AUTOFILL": operationData["disallowAutoFill"],
+                    "DISALLOW_BLUETOOTH": operationData["disallowBluetooth"],
+                    "DISALLOW_BLUETOOTH_SHARING": operationData["disallowBluetoothSharing"],
+                    "DISALLOW_REMOVE_USER": operationData["disallowRemoveUser"],
+                    "DISALLOW_DATA_ROAMING": operationData["disallowDataRoaming"]
                 }
             };
             break;
@@ -468,7 +494,7 @@ var generatePayload = function (operationCode, operationData, deviceList) {
             break;
         case androidOperationConstants["SYSTEM_UPDATE_POLICY_CODE"]:
             operationType = operationTypeConstants["PROFILE"];
-            if (operationData["cosuSystemUpdatePolicyType"] != "window") {
+            if (operationData["cosuSystemUpdatePolicyType"] !== "window") {
                 payload = {
                     "operation": {
                         "type": operationData["cosuSystemUpdatePolicyType"]
@@ -508,7 +534,7 @@ var generatePayload = function (operationCode, operationData, deviceList) {
             payload = deviceList;
     }
 
-    if (operationType == operationTypeConstants["PROFILE"] && deviceList) {
+    if (operationType === operationTypeConstants["PROFILE"] && deviceList) {
         payload["deviceIDs"] = deviceList;
     }
     return payload;
@@ -565,5 +591,13 @@ var androidOperationConstants = {
     "SYSTEM_UPDATE_POLICY_CODE": "SYSTEM_UPDATE_POLICY",
     "KIOSK_APPS_CODE": "KIOSK_APPS",
     "FILE_TRANSFER": "FILE_TRANSFER",
-    "APP_RESTRICTION_OPERATION_CODE": "REMOTE_APP_CONFIG"
+    "APP_RESTRICTION_OPERATION_CODE": "REMOTE_APP_CONFIG",
+    "DISALLOW_SET_WALLPAPER": "DISALLOW_SET_WALLPAPER",
+    "DISALLOW_SET_USER_ICON": "DISALLOW_SET_USER_ICON",
+    "DISALLOW_REMOVE_MANAGEMENT_PROFILE": "DISALLOW_REMOVE_MANAGEMENT_PROFILE",
+    "DISALLOW_AUTOFILL": "DISALLOW_AUTOFILL",
+    "DISALLOW_BLUETOOTH": "DISALLOW_BLUETOOTH",
+    "DISALLOW_BLUETOOTH_SHARING": "DISALLOW_BLUETOOTH_SHARING",
+    "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
+    "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING"
 };
