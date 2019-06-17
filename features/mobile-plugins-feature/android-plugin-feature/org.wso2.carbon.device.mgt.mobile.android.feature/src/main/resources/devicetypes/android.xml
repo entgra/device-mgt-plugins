@@ -395,4 +395,46 @@
         <IdleTimeToMarkInactive>900</IdleTimeToMarkInactive>
         <IdleTimeToMarkUnreachable>600</IdleTimeToMarkUnreachable>
     </DeviceStatusTaskConfig>
+
+    <DeviceTypePlatformDetails>
+        <DeviceTypePlatformVersion>
+            <VersionName>4.0</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>4.1</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>4.4</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>5.0</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>6.0</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>6.0</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>7.0</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>8.0</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>9.0</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>10.0</VersionName>
+        </DeviceTypePlatformVersion>
+    </DeviceTypePlatformDetails>
 </DeviceTypeConfiguration>
