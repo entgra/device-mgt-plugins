@@ -160,6 +160,7 @@ public final class AndroidConstants {
         public static final String LANGUAGE_US = "en_US";
         public static final String CONTENT_TYPE_TEXT = "text";
         public static final String NOTIFIER_FREQUENCY = "notifierFrequency";
+        public static final String NOTIFIER_TYPE = "notifierType";
         public static final String SERVER_VERSION = "serverVersion";
     }
 

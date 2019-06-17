@@ -55,7 +55,8 @@ var androidOperationConstants = {
     "COSU_PROFILE_CONFIGURATION_OPERATION": "cosu-profile-configuration",
     "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
     "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
-    "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL"
+    "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL",
+    "CERTIFICATE_INSTALL": "INSTALL_CERT"
 };
 
 /**
@@ -110,6 +111,30 @@ var ovpnConfigUploaded = function () {
                 console.log(txt);
             };
             reader.readAsText(ovpnFileInput.files[0]);
+        }
+    }
+};
+
+
+var certConfigUploaded = function (val) {
+    var certFileInput = document.getElementById("cert-file-field");
+    if ('files' in certFileInput) {
+        if (certFileInput.files.length === 1) {
+            var reader = new FileReader();
+            reader.onload = function(progressEvent){
+                var txt = "";
+                var lines = this.result.split('\n');
+                for(var line = 0; line < lines.length; line++){
+                    console.log(lines[line]);
+                    if (lines[line].charAt(0) !== '#') {
+                        txt += lines[line] + '\n';
+                    }
+                }
+                //document.getElementById ("cert-config").value = txt;
+                //console.log(document.getElementById ("cert-config").value);
+                $(val).next().val(txt);
+            };
+            reader.readAsText(certFileInput.files[0]);
         }
     }
 };
@@ -760,6 +785,32 @@ var validatePolicyProfile = function () {
                 };
             }
             validationStatusArray.push(validationStatus);
+        }
+        if ($.inArray(androidOperationConstants["CERTIFICATE_INSTALL"], configuredOperations) != -1) {
+            //If enrollment app install configured
+            let isErrorsFound = false;
+            operation = androidOperationConstants["CERTIFICATE_INSTALL"];
+            var certList = $("#cert-list").find(".child-input");
+            for (let j = 0; j < certList.length; j++) {
+                if ($(certList[j]).val().trim() === "") {
+                    isErrorsFound = true;
+                    break;
+                }
+            }
+            if (isErrorsFound) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Certificates are not selected to be installed.",
+                    "erroneousFeature": operation
+                };
+                validationStatusArray.push(validationStatus);
+            } else {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+                validationStatusArray.push(validationStatus);
+            }
         }
     }
     // ending validation process

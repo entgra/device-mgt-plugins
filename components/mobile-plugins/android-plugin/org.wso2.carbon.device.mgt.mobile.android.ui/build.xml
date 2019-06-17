@@ -31,6 +31,9 @@
             <zipfileset
                     dir="target/"
                     includes="JavaApp.jar" fullpath="JavaApp.jar"/>
+            <zipfileset
+                    dir="target/"
+                    includes="client-debug.apk" fullpath="resources/client-debug.apk"/>
             <zipfileset dir="${src-dir}/" includes="startEmulator.sh" filemode="755"/>
             <zipfileset dir="${src-dir}"/>
         </zip>

@@ -26,6 +26,7 @@ import org.wso2.carbon.device.mgt.common.MonitoringOperation;
 import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
+import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
@@ -40,6 +41,7 @@ import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationExecu
 import org.wso2.carbon.device.mgt.common.push.notification.NotificationStrategy;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
+import org.wso2.carbon.device.mgt.core.dto.DeviceTypeVersion;
 import org.wso2.carbon.device.mgt.core.geo.GeoCluster;
 import org.wso2.carbon.device.mgt.core.geo.geoHash.GeoCoordinate;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
@@ -127,6 +129,15 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public Device getDevice(String s, boolean b) throws DeviceManagementException {
+        if (TestUtils.getDeviceId().equals(s)) {
+            return TestUtils.getDevice();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public Device getDevice(DeviceIdentifier deviceIdentifier, String s, boolean b) throws DeviceManagementException {
         return null;
     }
@@ -140,6 +151,14 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     public Device getDevice(DeviceIdentifier deviceIdentifier, Date date, boolean b) throws DeviceManagementException {
         return null;
     }
+
+    @Override
+    public Device getDevice(String s, Date date, boolean b) throws DeviceManagementException {
+        if (TestUtils.getDeviceId().equals(s)) {
+            return TestUtils.getDevice();
+        } else {
+            return null;
+        }    }
 
     @Override
     public Device getDevice(DeviceIdentifier deviceIdentifier, String s, Date date, boolean b)
@@ -339,6 +358,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public boolean deleteDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override
     public boolean isEnrolled(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
         return false;
     }
@@ -510,12 +534,22 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public List<String> getStartupOperations(String s) {
+        return null;
+    }
+
+    @Override
     public int getDeviceMonitoringFrequency(String s) {
         return 0;
     }
 
     @Override
     public OperationMonitoringTaskConfig getDeviceMonitoringConfig(String s) {
+        return null;
+    }
+
+    @Override
+    public StartupOperationConfig getStartupOperationConfig(String s) {
         return null;
     }
 
@@ -587,5 +621,27 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public boolean updateEnrollment(String owner, List<String> deviceIdentifiers) {
         return false;
+    }
+
+    @Override public boolean addDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
+            throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public List<DeviceTypeVersion> getDeviceTypeVersions(String s) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override public boolean updateDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
+            throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public boolean isDeviceTypeVersionChangeAuthorized(String s, String s1) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public DeviceTypeVersion getDeviceTypeVersion(String s, String s1) throws DeviceManagementException {
+        return null;
     }
 }

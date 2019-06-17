@@ -16,6 +16,24 @@
  * under the License.
  */
 
+/*
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.wso2.carbon.device.mgt.mobile.windows.impl.dao;
 
 import org.wso2.carbon.device.mgt.mobile.windows.impl.dto.MobileFeature;
@@ -107,4 +125,32 @@ public interface MobileFeatureDAO {
 	 * @throws MobileDeviceManagementDAOException
 	 */
 	List<MobileFeature> getAllFeatures() throws MobileDeviceManagementDAOException;
+
+	/**
+	 * Get all the MobileFeatures by a given ui visibility
+	 *
+	 * @param isHidden Whether the operation is hidden from UI or not.
+	 * @return {@link MobileFeature} object list.
+	 * @throws MobileDeviceManagementDAOException If an error occurred while retrieving the Feature list
+	 */
+	List<MobileFeature> getAllFeatures(boolean isHidden) throws MobileDeviceManagementDAOException;
+
+	/**
+	 * Retrieve all MobileFeatures of a given feature type
+	 *
+	 * @param featureType Feature type.
+	 * @return {@link MobileFeature} object list.
+	 * @throws MobileDeviceManagementDAOException If an error occurred while retrieving the Feature list
+	 */
+	List<MobileFeature> getFeaturesByFeatureType(String featureType) throws MobileDeviceManagementDAOException;
+
+	/**
+	 * Retrieve all MobileFeatures of a given feature type and ui visibility
+	 *
+	 * @param featureType Feature type.
+	 * @param isHidden    Whether the operation is hidden from UI or not.
+	 * @return {@link MobileFeature} object list.
+	 * @throws MobileDeviceManagementDAOException If an error occurred while retrieving the Feature list
+	 */
+	List<MobileFeature> getFeaturesByFeatureType(String featureType, boolean isHidden) throws MobileDeviceManagementDAOException;
 }

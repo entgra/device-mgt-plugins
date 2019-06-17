@@ -101,9 +101,9 @@
                                         {{#equal this.type "select"}}
                                             <div class="form-group">
                                                 <select class="form-control" id="{{this.id}}">
-                                                    <option>{{this.valueOne}}</option>
-                                                    <option>{{this.valueTwo}}</option>
-                                                    <option>{{this.valueThree}}</option>
+                                                    {{#each this.value}}
+                                                        <option>{{this}}</option>
+                                                    {{/each}}
                                                 </select>
                                             </div>
                                         {{/equal}}
