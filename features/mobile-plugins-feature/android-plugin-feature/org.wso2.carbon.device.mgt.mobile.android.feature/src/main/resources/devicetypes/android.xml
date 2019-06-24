@@ -132,7 +132,8 @@
                         <uiParam optional="true">
                             <type>checkbox</type>
                             <id>hard-lock</id>
-                            <label>Hard lock enabled</label>
+                            <label>Hard lock enabled (OEM Mode Only)</label>
+                            <helper>This feature is only available in OEM Mode.</helper>
                         </uiParam>
                     </uiParams>
                 </params>
