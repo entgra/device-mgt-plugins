@@ -78,6 +78,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -446,26 +447,39 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     @DELETE
     @Path("/{id}")
     @Override
-    public Response disEnrollDevice(@PathParam("id") String id) {
+    public Response disEnrollDevice(@PathParam("id") String id,
+                                    @QueryParam("permanentDelete") boolean permanentDelete) {
         boolean result;
         DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
         try {
-            result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
+            if (permanentDelete) {
+                result = AndroidAPIUtils.getDeviceManagementService().deleteDevice(deviceIdentifier);
+            } else {
+                result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
+            }
             if (result) {
+                String msg = "Android device that carries id '" + id + "' is successfully ";
                 Message responseMessage = new Message();
                 responseMessage.setResponseCode(Response.Status.OK.toString());
-                responseMessage.setResponseMessage("Android device that carries id '" + id +
-                        "' has successfully dis-enrolled");
+                if (permanentDelete) {
+                    responseMessage.setResponseMessage(msg + "deleted");
+                } else {
+                    responseMessage.setResponseMessage(msg + "dis-enrolled");
+                }
                 return Response.status(Response.Status.OK).entity(responseMessage).build();
             } else {
                 Message responseMessage = new Message();
                 responseMessage.setResponseCode(Response.Status.NOT_FOUND.toString());
-                responseMessage.setResponseMessage("Android device that carries id '" + id +
-                        "' has not been dis-enrolled");
+                responseMessage.setResponseMessage("Android device that carries id '" + id + "' is not available");
                 return Response.status(Response.Status.NOT_FOUND).entity(responseMessage).build();
             }
         } catch (DeviceManagementException e) {
-            String msg = "Error occurred while dis-enrolling the Android device that carries the id '" + id + "'";
+            String msg = "Error occurred while %s the Android device that carries the id '" + id + "'";
+            if (permanentDelete) {
+                msg = String.format(msg, "deleting");
+            } else {
+                msg = String.format(msg, "dis-enrolling");
+            }
             log.error(msg, e);
             throw new UnexpectedServerErrorException(
                     new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
