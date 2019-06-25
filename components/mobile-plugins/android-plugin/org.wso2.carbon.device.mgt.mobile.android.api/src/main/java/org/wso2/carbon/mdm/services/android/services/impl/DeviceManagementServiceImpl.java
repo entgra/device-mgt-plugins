@@ -455,6 +455,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             if (permanentDelete) {
                 result = AndroidAPIUtils.getDeviceManagementService().deleteDevice(deviceIdentifier);
             } else {
+                AndroidDeviceUtils.updateDisEnrollOperationStatus(deviceIdentifier);
                 result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
             }
             if (result) {
