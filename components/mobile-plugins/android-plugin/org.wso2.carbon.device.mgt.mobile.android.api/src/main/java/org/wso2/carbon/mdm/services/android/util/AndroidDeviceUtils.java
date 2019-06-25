@@ -572,4 +572,25 @@ public class AndroidDeviceUtils {
         }
     }
 
+    /**
+     * Update status of pending operations to error when a dis-enroll operation is triggered.
+     *
+     * @param deviceIdentifier Identifier of the device
+     * @throws DeviceManagementException
+     */
+    public static void updateDisEnrollOperationStatus(DeviceIdentifier deviceIdentifier)
+            throws DeviceManagementException {
+        try {
+            List<? extends Operation> pendingOperations = getPendingOperations(deviceIdentifier);
+            for (Operation operation : pendingOperations) {
+                operation.setStatus(Operation.Status.ERROR);
+                AndroidAPIUtils.getDeviceManagementService().updateOperation(deviceIdentifier, operation);
+            }
+        } catch (OperationManagementException e) {
+            String msg = "Error occurred while retrieving pending operations to update operation statuses of " +
+                         "device to be dis-enrolled";
+            log.error(msg);
+            throw new DeviceManagementException(msg, e);
+        }
+    }
 }
