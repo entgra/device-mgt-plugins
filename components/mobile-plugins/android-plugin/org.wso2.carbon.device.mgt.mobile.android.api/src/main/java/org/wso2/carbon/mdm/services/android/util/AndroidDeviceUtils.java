@@ -582,9 +582,11 @@ public class AndroidDeviceUtils {
             throws DeviceManagementException {
         try {
             List<? extends Operation> pendingOperations = getPendingOperations(deviceIdentifier);
-            for (Operation operation : pendingOperations) {
-                operation.setStatus(Operation.Status.ERROR);
-                AndroidAPIUtils.getDeviceManagementService().updateOperation(deviceIdentifier, operation);
+            if (pendingOperations != null && !pendingOperations.isEmpty()) {
+                for (Operation operation : pendingOperations) {
+                    operation.setStatus(Operation.Status.ERROR);
+                    AndroidAPIUtils.getDeviceManagementService().updateOperation(deviceIdentifier, operation);
+                }
             }
         } catch (OperationManagementException e) {
             String msg = "Error occurred while retrieving pending operations to update operation statuses of " +
