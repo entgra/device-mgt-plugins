@@ -57,6 +57,7 @@ import org.wso2.carbon.apimgt.application.extension.dto.ApiApplicationKey;
 import org.wso2.carbon.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -236,6 +237,14 @@ public class AndroidDeviceUtils {
             } catch (DeviceDetailsMgtException e) {
                 throw new OperationManagementException("Error occurred while updating the device location.", e);
             }
+        } else if (AndroidConstants.OperationCodes.INSTALL_APPLICATION.equals(operation.getCode())) {
+            try {
+                updateAppSubStatus(operation.getId(), operation.getStatus().toString());
+            } catch (org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException e) {
+                String msg = "Error occurred while updating the app subscription for device.";
+                log.error(msg);
+                throw new OperationManagementException(msg, e);
+            }
         }
         AndroidAPIUtils.getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
@@ -292,6 +301,15 @@ public class AndroidDeviceUtils {
                 (DeviceInformationManager) ctx.getOSGiService(DeviceInformationManager.class, null);
 
         informationManager.addDeviceLocation(deviceLocation);
+    }
+
+    private static void updateAppSubStatus(int operationId, String status)
+            throws org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ApplicationManager applicationManager =
+                (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
+
+        applicationManager.updateSubsStatus(operationId, status);
     }
 
     private static void updateDeviceInfo(DeviceIdentifier deviceId, DeviceInfo deviceInfo)
