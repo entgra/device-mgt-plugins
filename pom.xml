@@ -567,19 +567,9 @@
 
             <!-- AppM dependencies -->
             <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.mobile</artifactId>
-                <version>${carbon.appmgt.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.ws.commons.axiom</groupId>
-                        <artifactId>axiom-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.ws.commons.axiom</groupId>
-                        <artifactId>axiom-impl</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.wso2.carbon.devicemgt</groupId>
+                <artifactId>org.wso2.carbon.device.application.mgt.common</artifactId>
+                <version>${carbon.devicemgt.version}</version>
             </dependency>
 
             <!--Osgi dependencies-->
@@ -1244,10 +1234,6 @@
         <!-- Carbon Device Management -->
         <carbon.devicemgt.version>3.2.7-SNAPSHOT</carbon.devicemgt.version>
         <carbon.devicemgt.version.range>[3.1.0, 4.0.0)</carbon.devicemgt.version.range>
-
-        <!--todo remove following dependency-->
-        <!-- Carbon App Management -->
-        <carbon.appmgt.version>1.5.5</carbon.appmgt.version>
 
         <!-- Carbon Device Management Plugins -->
         <carbon.devicemgt.plugins.version>4.2.7-SNAPSHOT</carbon.devicemgt.plugins.version>
