@@ -239,9 +239,13 @@ public class AndroidDeviceUtils {
             }
         } else if (AndroidConstants.OperationCodes.INSTALL_APPLICATION.equals(operation.getCode())) {
             try {
-                updateAppSubStatus(operation.getId(), operation.getStatus().toString());
+                updateAppSubStatus(deviceIdentifier, operation.getId(), operation.getStatus().toString());
             } catch (org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException e) {
                 String msg = "Error occurred while updating the app subscription for device.";
+                log.error(msg);
+                throw new OperationManagementException(msg, e);
+            } catch (DeviceManagementException e) {
+                String msg = "Error occurred while getting device data for device identifier.";
                 log.error(msg);
                 throw new OperationManagementException(msg, e);
             }
@@ -303,13 +307,14 @@ public class AndroidDeviceUtils {
         informationManager.addDeviceLocation(deviceLocation);
     }
 
-    private static void updateAppSubStatus(int operationId, String status)
-            throws org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException {
+    private static void updateAppSubStatus(DeviceIdentifier deviceIdentifier, int operationId, String status)
+            throws org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException,
+            DeviceManagementException {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         ApplicationManager applicationManager =
                 (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
-
-        applicationManager.updateSubsStatus(operationId, status);
+        Device device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+        applicationManager.updateSubsStatus(device.getId(), operationId, status);
     }
 
     private static void updateDeviceInfo(DeviceIdentifier deviceId, DeviceInfo deviceInfo)
