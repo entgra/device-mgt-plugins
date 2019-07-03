@@ -300,7 +300,7 @@ public class DeviceManagementServiceTests {
     public void testDisEnrollDeviceSuccess()
             throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
         mockDeviceManagementService();
-        Response response = deviceManagementService.disEnrollDevice(TestUtils.getDeviceId());
+        Response response = deviceManagementService.disEnrollDevice(TestUtils.getDeviceId(), false);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
     }
@@ -309,7 +309,7 @@ public class DeviceManagementServiceTests {
     public void testDisenrollUnSuccess()
             throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
         mockDeviceManagementService();
-        Response response = deviceManagementService.disEnrollDevice("1234");
+        Response response = deviceManagementService.disEnrollDevice("1234", false);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
     }

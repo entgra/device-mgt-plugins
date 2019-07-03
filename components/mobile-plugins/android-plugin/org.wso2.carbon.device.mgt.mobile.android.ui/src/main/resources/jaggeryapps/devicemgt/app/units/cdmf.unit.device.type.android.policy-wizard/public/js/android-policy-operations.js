@@ -115,11 +115,10 @@ var ovpnConfigUploaded = function () {
     }
 };
 
-
 var certConfigUploaded = function (val) {
-    var certFileInput = document.getElementById("cert-file-field");
-    if ('files' in certFileInput) {
-        if (certFileInput.files.length === 1) {
+    var certFileInput = $(val);
+    if (certFileInput[0].files) {
+        if (certFileInput[0].files.length === 1) {
             var reader = new FileReader();
             reader.onload = function(progressEvent){
                 var txt = "";
@@ -134,7 +133,7 @@ var certConfigUploaded = function (val) {
                 //console.log(document.getElementById ("cert-config").value);
                 $(val).next().val(txt);
             };
-            reader.readAsText(certFileInput.files[0]);
+            reader.readAsText(certFileInput[0].files[0]);
         }
     }
 };

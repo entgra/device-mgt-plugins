@@ -132,7 +132,8 @@
                         <uiParam optional="true">
                             <type>checkbox</type>
                             <id>hard-lock</id>
-                            <label>Hard lock enabled</label>
+                            <label>Hard lock enabled (OEM Mode Only)</label>
+                            <helper>This feature is only available in OEM Mode.</helper>
                         </uiParam>
                     </uiParams>
                 </params>
@@ -613,8 +614,8 @@
             <Description>Unlock the device</Description>
         </Feature>
         <Feature type="operation" code="REMOTE_APP_CONFIG">
-            <Name>Wipe Data</Name>
-            <Description>Factory reset the device</Description>
+            <Name>Send app restriction</Name>
+            <Description>Send remote configurations to an app</Description>
             <Operation disabled="false" hidden="false" icon="fw-gadget">
                 <params>
                     <uiParams>
