@@ -92,6 +92,7 @@ var androidOperationModule = function () {
         "AUTO_TIME": "AUTO_TIME",
         "SET_SCREEN_CAPTURE_DISABLED": "SET_SCREEN_CAPTURE_DISABLED",
         "SET_STATUS_BAR_DISABLED": "SET_STATUS_BAR_DISABLED",
+        "SET_BACKUP_SERVICE_ENABLED": "SET_BACKUP_SERVICE_ENABLED",
         "APPLICATION_OPERATION_CODE": "APP-RESTRICTION",
         "SYSTEM_UPDATE_POLICY_CODE": "SYSTEM_UPDATE_POLICY",
         "KIOSK_APPS_CODE": "KIOSK_APPS",
@@ -365,6 +366,7 @@ var androidOperationModule = function () {
                         "ENSURE_VERIFY_APPS": operationData["ensureVerifyApps"],
                         "AUTO_TIME": operationData["enableAutoTime"],
                         "SET_SCREEN_CAPTURE_DISABLED": operationData["disableScreenCapture"],
+                        "SET_BACKUP_SERVICE_ENABLED": operationData["enableBackupService"],
                         "DISALLOW_SET_WALLPAPER": operationData["disallowSetWallpaper"],
                         "DISALLOW_SET_USER_ICON": operationData["disallowSetWallpaper"],
                         "DISALLOW_REMOVE_MANAGEMENT_PROFILE": operationData["disallowRemoveManagedProfile"],
@@ -1140,6 +1142,9 @@ var androidOperationModule = function () {
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_ADJUST_VOLUME"]) {
                 restrictions["disallowAdjustVolumeEnabled"] = restriction["enabled"];
+                continue;
+            } else if (featureCode == androidOperationConstants["SET_BACKUP_SERVICE_ENABLED"]) {
+                restrictions["enableBackupService"] = restriction["enabled"];
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_BLUETOOTH"]) {
                 restrictions["disallowConfigBluetooth"] = restriction["enabled"];
