@@ -1242,7 +1242,7 @@
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
 
         <!-- Carbon Device Management -->
-        <carbon.devicemgt.version>3.2.7-SNAPSHOT</carbon.devicemgt.version>
+        <carbon.devicemgt.version>3.2.7</carbon.devicemgt.version>
         <carbon.devicemgt.version.range>[3.1.0, 4.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon App Management -->
@@ -1252,7 +1252,7 @@
         <carbon.devicemgt.plugins.version>4.2.7-SNAPSHOT</carbon.devicemgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
-        <android.agent.version>3.6.0</android.agent.version>
+        <android.agent.version>3.6.3</android.agent.version>
 
         <!-- Carbon Commons -->
         <carbon.commons.version>4.6.21</carbon.commons.version>
