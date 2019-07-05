@@ -209,11 +209,19 @@ public class AndroidFeatureManager implements FeatureManager {
         feature.setName("wifi");
         feature.setDescription("Setting up wifi configuration");
         supportedFeatures.add(feature);
+
         feature = new Feature();
         feature.setCode("CAMERA");
         feature.setName("camera");
         feature.setDescription("Enable or disable camera");
         supportedFeatures.add(feature);
+
+        feature = new Feature();
+        feature.setCode("BACKUP_SERVICE");
+        feature.setName("Set Backup Service");
+        feature.setDescription("set backup service");
+        supportedFeatures.add(feature);
+
         feature = new Feature();
         feature.setCode("EMAIL");
         feature.setName("Email");

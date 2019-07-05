@@ -50,6 +50,7 @@ var androidOperationModule = function () {
         "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
         "VPN_OPERATION_CODE": "VPN",
         "CAMERA_OPERATION_CODE": "CAMERA",
+        "BACKUP_SERVICE_CODE": "BACKUP_SERVICE",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
         "WIFI_OPERATION_CODE": "WIFI",
         "GLOBAL_PROXY_OPERATION_CODE": "GLOBAL_PROXY",
@@ -333,6 +334,7 @@ var androidOperationModule = function () {
                 payload = {
                     "operation": {
                         "CAMERA": operationData["cameraEnabled"],
+                        "BACKUP_SERVICE": operationData["enableBackupService"],
                         "DISALLOW_ADJUST_VOLUME": operationData["disallowAdjustVolumeEnabled"],
                         "DISALLOW_CONFIG_BLUETOOTH": operationData["disallowConfigBluetooth"],
                         "DISALLOW_CONFIG_CELL_BROADCASTS": operationData["disallowConfigCellBroadcasts"],
@@ -707,6 +709,7 @@ var androidOperationModule = function () {
             "WIFI": "configure-wifi",
             "GLOBAL_PROXY": "configure-global-proxy",
             "CAMERA": "control-camera",
+            "BACKUP_SERVICE": "enable-backup",
             "VPN": "configure-vpn",
             "DEVICE_LOCK": "lock-devices",
             "DEVICE_UNLOCK": "unlock-devices",
@@ -1140,6 +1143,9 @@ var androidOperationModule = function () {
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_ADJUST_VOLUME"]) {
                 restrictions["disallowAdjustVolumeEnabled"] = restriction["enabled"];
+                continue;
+            } else if (featureCode == androidOperationConstants["BACKUP_SERVICE_CODE"]) {
+                restrictions["enableBackupService"] = restriction["enabled"];
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_BLUETOOTH"]) {
                 restrictions["disallowConfigBluetooth"] = restriction["enabled"];
