@@ -605,6 +605,10 @@
             <Name>Fetch device logcat</Name>
             <Description>Fetch device logcat</Description>
         </Feature>
+        <Feature type="policy" code="BACKUP_SERVICE">
+            <Name>Enable Backup Service</Name>
+            <Description>Enable or disable backup service</Description>
+        </Feature>
         <Feature type="operation" hidden="false" code="DEVICE_UNLOCK">
             <Name>Unlock the device</Name>
             <Description>Unlock the device</Description>

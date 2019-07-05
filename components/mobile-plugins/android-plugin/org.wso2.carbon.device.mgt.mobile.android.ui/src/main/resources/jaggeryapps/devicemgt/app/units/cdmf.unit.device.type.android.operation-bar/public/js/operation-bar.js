@@ -323,6 +323,7 @@ var generatePayload = function (operationCode, operationData, deviceList) {
             payload = {
                 "operation": {
                     "CAMERA": operationData["cameraEnabled"],
+                    "BACKUP_SERVICE": operationData["enableBackupService"],
                     "DISALLOW_ADJUST_VOLUME": operationData["disallowAdjustVolumeEnabled"],
                     "DISALLOW_CONFIG_BLUETOOTH": operationData["disallowConfigBluetooth"],
                     "DISALLOW_CONFIG_CELL_BROADCASTS": operationData["disallowConfigCellBroadcasts"],
@@ -546,6 +547,7 @@ var androidOperationConstants = {
     "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
     "VPN_OPERATION_CODE": "VPN",
     "CAMERA_OPERATION_CODE": "CAMERA",
+    "BACKUP_SERVICE_CODE": "BACKUP_SERVICE",
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION_CODE": "WIFI",
     "WIPE_OPERATION_CODE": "WIPE_DATA",
