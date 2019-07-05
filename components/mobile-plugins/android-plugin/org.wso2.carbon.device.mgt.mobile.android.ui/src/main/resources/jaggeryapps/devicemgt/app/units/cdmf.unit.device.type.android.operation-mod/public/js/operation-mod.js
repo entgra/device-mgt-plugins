@@ -50,6 +50,7 @@ var androidOperationModule = function () {
         "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
         "VPN_OPERATION_CODE": "VPN",
         "CAMERA_OPERATION_CODE": "CAMERA",
+        "BACKUP_SERVICE_CODE": "BACKUP_SERVICE",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
         "WIFI_OPERATION_CODE": "WIFI",
         "GLOBAL_PROXY_OPERATION_CODE": "GLOBAL_PROXY",
@@ -92,7 +93,6 @@ var androidOperationModule = function () {
         "AUTO_TIME": "AUTO_TIME",
         "SET_SCREEN_CAPTURE_DISABLED": "SET_SCREEN_CAPTURE_DISABLED",
         "SET_STATUS_BAR_DISABLED": "SET_STATUS_BAR_DISABLED",
-        "SET_BACKUP_SERVICE_ENABLED": "SET_BACKUP_SERVICE_ENABLED",
         "APPLICATION_OPERATION_CODE": "APP-RESTRICTION",
         "SYSTEM_UPDATE_POLICY_CODE": "SYSTEM_UPDATE_POLICY",
         "KIOSK_APPS_CODE": "KIOSK_APPS",
@@ -334,6 +334,7 @@ var androidOperationModule = function () {
                 payload = {
                     "operation": {
                         "CAMERA": operationData["cameraEnabled"],
+                        "BACKUP_SERVICE": operationData["enableBackupService"],
                         "DISALLOW_ADJUST_VOLUME": operationData["disallowAdjustVolumeEnabled"],
                         "DISALLOW_CONFIG_BLUETOOTH": operationData["disallowConfigBluetooth"],
                         "DISALLOW_CONFIG_CELL_BROADCASTS": operationData["disallowConfigCellBroadcasts"],
@@ -366,7 +367,6 @@ var androidOperationModule = function () {
                         "ENSURE_VERIFY_APPS": operationData["ensureVerifyApps"],
                         "AUTO_TIME": operationData["enableAutoTime"],
                         "SET_SCREEN_CAPTURE_DISABLED": operationData["disableScreenCapture"],
-                        "SET_BACKUP_SERVICE_ENABLED": operationData["enableBackupService"],
                         "DISALLOW_SET_WALLPAPER": operationData["disallowSetWallpaper"],
                         "DISALLOW_SET_USER_ICON": operationData["disallowSetWallpaper"],
                         "DISALLOW_REMOVE_MANAGEMENT_PROFILE": operationData["disallowRemoveManagedProfile"],
@@ -709,6 +709,7 @@ var androidOperationModule = function () {
             "WIFI": "configure-wifi",
             "GLOBAL_PROXY": "configure-global-proxy",
             "CAMERA": "control-camera",
+            "BACKUP_SERVICE": "enable-backup",
             "VPN": "configure-vpn",
             "DEVICE_LOCK": "lock-devices",
             "DEVICE_UNLOCK": "unlock-devices",
@@ -1143,7 +1144,7 @@ var androidOperationModule = function () {
             } else if (featureCode == androidOperationConstants["DISALLOW_ADJUST_VOLUME"]) {
                 restrictions["disallowAdjustVolumeEnabled"] = restriction["enabled"];
                 continue;
-            } else if (featureCode == androidOperationConstants["SET_BACKUP_SERVICE_ENABLED"]) {
+            } else if (featureCode == androidOperationConstants["BACKUP_SERVICE_CODE"]) {
                 restrictions["enableBackupService"] = restriction["enabled"];
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_BLUETOOTH"]) {

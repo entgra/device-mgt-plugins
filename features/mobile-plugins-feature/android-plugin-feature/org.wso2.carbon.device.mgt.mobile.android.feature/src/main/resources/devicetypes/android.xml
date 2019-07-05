@@ -605,7 +605,7 @@
             <Name>Fetch device logcat</Name>
             <Description>Fetch device logcat</Description>
         </Feature>
-        <Feature type="policy" code="SET_BACKUP_SERVICE_ENABLED">
+        <Feature type="policy" code="BACKUP_SERVICE">
             <Name>Enable Backup Service</Name>
             <Description>Enable or disable backup service</Description>
         </Feature>

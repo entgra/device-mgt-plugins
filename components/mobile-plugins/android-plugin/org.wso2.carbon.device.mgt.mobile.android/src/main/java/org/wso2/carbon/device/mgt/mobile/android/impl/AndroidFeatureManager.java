@@ -217,9 +217,9 @@ public class AndroidFeatureManager implements FeatureManager {
         supportedFeatures.add(feature);
 
         feature = new Feature();
-        feature.setCode("SET_BACKUP_SERVICE_ENABLED");
-        feature.setName("Enable Backup Service");
-        feature.setDescription("enable or disable backup service");
+        feature.setCode("BACKUP_SERVICE");
+        feature.setName("Set Backup Service");
+        feature.setDescription("set backup service");
         supportedFeatures.add(feature);
 
         feature = new Feature();
