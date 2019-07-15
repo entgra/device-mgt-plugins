@@ -116,9 +116,6 @@
         <android.plugin>${mobile.plugins}/android-plugin</android.plugin>
         <android.mobile>${basedir}/../${android.plugin}/org.wso2.carbon.device.mgt.mobile.android</android.mobile>
         <android.api>${basedir}/../${android.plugin}/org.wso2.carbon.device.mgt.mobile.android.api</android.api>
-        <windows.plugin>${mobile.plugins}/windows-plugin</windows.plugin>
-        <windows.mobile>${basedir}/../${windows.plugin}/org.wso2.carbon.device.mgt.mobile.windows</windows.mobile>
-        <windows.api>${basedir}/../${windows.plugin}/org.wso2.carbon.device.mgt.mobile.windows.api</windows.api>
     </properties>
 
     <build>
@@ -350,24 +347,6 @@
                                                             </classfiles>
                                                             <sourcefiles encoding="UTF-8">
                                                                 <fileset dir="${android.api}/${source}" />
-                                                            </sourcefiles>
-                                                        </group>
-                                                    </group>
-                                                    <group name="windows-plugin">
-                                                        <group name="org.wso2.carbon.device.mgt.mobile.windows">
-                                                            <classfiles>
-                                                                <fileset dir="${windows.mobile}/${target}/${classes}" />
-                                                            </classfiles>
-                                                            <sourcefiles encoding="UTF-8">
-                                                                <fileset dir="${windows.mobile}/${source}" />
-                                                            </sourcefiles>
-                                                        </group>
-                                                        <group name="org.wso2.carbon.device.mgt.mobile.windows.api">
-                                                            <classfiles>
-                                                                <fileset dir="${windows.api}/${target}/${classes}" />
-                                                            </classfiles>
-                                                            <sourcefiles encoding="UTF-8">
-                                                                <fileset dir="${windows.api}/${source}" />
                                                             </sourcefiles>
                                                         </group>
                                                     </group>
