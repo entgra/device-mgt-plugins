@@ -96,7 +96,7 @@
     </DataSource>
 
     <Features>
-        <Feature code="DISENROLL">
+        <Feature type="operation" code="DISENROLL">
             <Name>Disenroll</Name>
             <Description>Dis-enrol the device</Description>
             <Operation hidden="false" icon="fw-block">
@@ -109,7 +109,7 @@
                 </metadata>
             </Operation>
         </Feature>
-        <Feature code="WIPE_DATA">
+        <Feature type="operation" code="WIPE_DATA">
             <Name>Wipe Data</Name>
             <Description>Wipe the device</Description>
             <Operation hidden="false" icon="fw-delete">
@@ -122,7 +122,7 @@
                 </metadata>
             </Operation>
         </Feature>
-        <Feature code="DEVICE_RING">
+        <Feature type="operation" code="DEVICE_RING">
             <Name>Ring</Name>
             <Description>Ring the device</Description>
             <Operation hidden="false" icon="fw-dial-up">
@@ -135,7 +135,7 @@
                 </metadata>
             </Operation>
         </Feature>
-        <Feature code="DEVICE_LOCK">
+        <Feature type="operation" code="DEVICE_LOCK">
             <Name>Device Lock</Name>
             <Description>Lock the device</Description>
             <Operation hidden="false" icon="fw-lock">
@@ -148,7 +148,7 @@
                 </metadata>
             </Operation>
         </Feature>
-        <Feature code="LOCK_RESET">
+        <Feature type="operation" code="LOCK_RESET">
             <Name>Device Lock Reset</Name>
             <Description>Lock Reset the device</Description>
             <Operation hidden="false" icon="fw-security">
@@ -161,7 +161,7 @@
                 </metadata>
             </Operation>
         </Feature>
-        <Feature code="DEVICE_LOCATION">
+        <Feature type="operation" code="DEVICE_LOCATION">
             <Name>Location</Name>
             <Description>Request coordinates of device location</Description>
             <Operation hidden="false" icon="fw-map-location">
@@ -174,7 +174,7 @@
                 </metadata>
             </Operation>
         </Feature>
-        <Feature code="DEVICE_REBOOT">
+        <Feature type="operation" code="DEVICE_REBOOT">
             <Name>Reboot</Name>
             <Description>Reboot the device</Description>
             <Operation hidden="false" icon="fw-refresh">

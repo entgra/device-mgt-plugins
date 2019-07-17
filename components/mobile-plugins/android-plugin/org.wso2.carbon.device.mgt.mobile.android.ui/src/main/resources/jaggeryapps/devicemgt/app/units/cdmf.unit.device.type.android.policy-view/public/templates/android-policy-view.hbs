@@ -61,9 +61,9 @@
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('cert', this)">
                 <span class="wr-hidden-operations-icon fw-stack">
-                    <i class="fw fw-security-policy fw-stack-2x"></i>
+                    <i class="fw fw-pages fw-stack-2x"></i>
                 </span>
-            Secure Certificate
+            Certificate Install
             <span id="cert-configured" class="has-configured status-icon hidden"><i class="fw fw-success"></i></span>
             <span id="cert-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
             <span id="cert-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
@@ -756,8 +756,14 @@
                             </span>
                         </label>
                     </div>
-                    <br>
-
+                <div class="">
+                    <ul class="message message-info">
+                        <i class="icon fw fw-info"></i>
+                        <a id="policy-listing-status-msg">Below restrictions will be applicable when the agent is the
+                            <b>device owner</b> and Android version 6.0 (Marshmallow) or higher.</a>
+                    </ul>
+                </div>
+                <br>
                 <div class="wr-input-control">
                     <label class="wr-input-control checkbox">
                         <input id="disallow-set-wallpeper" type="checkbox"
@@ -860,6 +866,18 @@
                             </span>
                     </label>
                 </div>
+
+                <div class="wr-input-control">
+                    <label class="wr-input-control checkbox">
+                        <input id="backup-service-enabled" type="checkbox" class="operationDataKeys"
+                               data-key="enableBackupService" disabled/>
+                        <span class="helper" title="Having this checked would enable backup service.">
+                                        Enable device backup service
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                    </label>
+                </div>
+                <br>
             {{/unless}}
                 </div>
             </div>
@@ -2321,7 +2339,7 @@
                  data-operation-code="INSTALL_CERT">
                 <div id="cert-heading" class="panel-heading" role="tab">
                     <h2 class="sub-title panel-title">
-                        Secure Certificate Settings
+                        Certificate Install Settings
                         <label class="wr-input-control switch hidden" data-toggle="collapse"
                                data-target="#cert-body">
                             <input type="checkbox"/>
@@ -2330,7 +2348,7 @@
                         </label>
                     </h2>
                     <div class="panel-title-description">
-                        Configure the Secure Certificate settings on Android devices.
+                        Configure the certificate install settings on Android devices.
                     </div>
                 </div>
                 <div id="cert-body" class="panel-collapse panel-body collapse" role="tabpanel"
