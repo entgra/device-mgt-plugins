@@ -221,6 +221,12 @@ public class AndroidDeviceManager implements DeviceManager {
     }
 
     @Override
+    public boolean deleteDevice(DeviceIdentifier deviceId, Device device) throws DeviceManagementException {
+        //Returning false since AndroidDeviceManager is not used instead DeviceTypeManager is used.
+        return false;
+    }
+
+    @Override
     public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
         boolean isEnrolled = false;
         try {

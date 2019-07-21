@@ -51,6 +51,7 @@ import org.wso2.carbon.mdm.services.android.utils.TestUtils;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DeviceManagementProviderServiceMock implements DeviceManagementProviderService {
     @Override
@@ -149,6 +150,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public Device getDevice(DeviceIdentifier deviceIdentifier, Date date, boolean b) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<Device> getDevicesBasedOnProperties(Map map) throws DeviceManagementException {
         return null;
     }
 
