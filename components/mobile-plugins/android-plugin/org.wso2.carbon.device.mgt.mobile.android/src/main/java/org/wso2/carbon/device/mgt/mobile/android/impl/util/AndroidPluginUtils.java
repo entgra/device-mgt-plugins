@@ -19,7 +19,6 @@
 package org.wso2.carbon.device.mgt.mobile.android.impl.util;
 
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
-import org.wso2.carbon.device.mgt.mobile.android.impl.AndroidDeviceManagementService;
 
 /**
  * Contains utility methods used by Android plugin.
@@ -28,7 +27,7 @@ public class AndroidPluginUtils {
 
     public static License getDefaultLicense() {
         License license = new License();
-        license.setName(AndroidDeviceManagementService.DEVICE_TYPE_ANDROID);
+//        license.setName(AndroidDeviceManagementService.DEVICE_TYPE_ANDROID);
         license.setLanguage("en_US");
         license.setVersion("1.0.0");
         license.setText("This End User License Agreement (\"Agreement\") is a legal agreement between you (\"You\") " +

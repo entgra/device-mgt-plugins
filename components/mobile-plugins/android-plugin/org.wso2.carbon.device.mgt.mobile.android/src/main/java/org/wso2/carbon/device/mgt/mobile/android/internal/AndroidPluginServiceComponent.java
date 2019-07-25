@@ -20,14 +20,15 @@ package org.wso2.carbon.device.mgt.mobile.android.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
-import org.wso2.carbon.device.mgt.mobile.android.impl.AndroidDeviceManagementService;
+import org.wso2.carbon.device.mgt.mobile.android.AndroidPluginService;
+import org.wso2.carbon.device.mgt.mobile.android.impl.AndroidPluginServiceImpl;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
 /**
- * @scr.component name="org.wso2.carbon.device.mgt.mobile.android.impl.internal.AndroidDeviceManagementServiceComponent"
+ * @scr.component name="org.wso2.carbon.device.mgt.mobile.android.impl.internal.AndroidPluginServiceComponent"
  * immediate="true"
  * @scr.reference name="org.wso2.carbon.ndatasource"
  * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
@@ -43,9 +44,9 @@ import org.wso2.carbon.registry.core.service.RegistryService;
  * initializing APIMgtDAOs attempting to register APIs programmatically. APIMgtDAO needs to be proper cleaned up
  * to avoid as an ideal fix
  */
-public class AndroidDeviceManagementServiceComponent {
+public class AndroidPluginServiceComponent {
 
-    private static final Log log = LogFactory.getLog(AndroidDeviceManagementServiceComponent.class);
+    private static final Log log = LogFactory.getLog(AndroidPluginServiceComponent.class);
 
     protected void activate(ComponentContext ctx) {
 
@@ -53,9 +54,11 @@ public class AndroidDeviceManagementServiceComponent {
             log.debug("Activating Android Mobile Device Management Service Component");
         }
         try {
-            DeviceManagementService androidDeviceManagementService = new AndroidDeviceManagementService();
+            BundleContext bundleContext = ctx.getBundleContext();
+            AndroidPluginService androidPluginService = new AndroidPluginServiceImpl();
             AndroidDeviceManagementDataHolder.getInstance().setAndroidDeviceManagementService(
-                    androidDeviceManagementService);
+                    androidPluginService);
+            bundleContext.registerService(AndroidPluginService.class.getName(), androidPluginService, null);
             if (log.isDebugEnabled()) {
                 log.debug("Android Mobile Device Management Service Component has been successfully activated");
             }

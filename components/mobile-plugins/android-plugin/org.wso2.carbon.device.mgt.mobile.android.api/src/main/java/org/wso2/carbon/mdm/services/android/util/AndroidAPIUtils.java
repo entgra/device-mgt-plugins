@@ -34,6 +34,7 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementExcept
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.mobile.android.AndroidPluginService;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.exception.BadRequestException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -52,6 +53,18 @@ public class AndroidAPIUtils {
 
     private AndroidAPIUtils(){
         throw new IllegalStateException("Utility class");
+    }
+
+    public static AndroidPluginService getAndroidPluginService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        AndroidPluginService androidPluginService =
+                (AndroidPluginService) ctx.getOSGiService(AndroidPluginService.class, null);
+        if (androidPluginService == null) {
+            String msg = "Android plugin service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return androidPluginService;
     }
 
     public static String getAuthenticatedUser() {
