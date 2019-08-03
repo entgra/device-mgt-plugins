@@ -36,26 +36,13 @@ package org.wso2.carbon.device.mgt.mobile.android.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceManager;
-import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
-import org.wso2.carbon.device.mgt.common.ProvisioningConfig;
-import org.wso2.carbon.device.mgt.common.InitialOperationConfig;
-import org.wso2.carbon.device.mgt.common.DeviceStatusTaskPluginConfig;
-import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
-import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
-import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
-import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
-import org.wso2.carbon.device.mgt.common.general.GeneralConfig;
-import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
-import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationSubscriber;
-import org.wso2.carbon.device.mgt.common.push.notification.PushNotificationConfig;
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.device.mgt.mobile.android.AndroidPluginService;
-import org.wso2.carbon.device.mgt.mobile.android.impl.util.AndroidPluginConstants;
-import org.wso2.carbon.device.mgt.mobile.android.internal.AndroidDeviceManagementDataHolder;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dao.AndroidDAOFactory;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dao.EnterpriseDAO;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dao.EnterpriseManagementDAOException;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -63,9 +50,54 @@ import java.util.List;
  */
 public class AndroidPluginServiceImpl implements AndroidPluginService {
 
+    private static final Log log = LogFactory.getLog(AndroidPluginServiceImpl.class);
+    private EnterpriseDAO enterpriseDAO;
+
+    public AndroidPluginServiceImpl() {
+        enterpriseDAO = AndroidDAOFactory.getEnterpriseDAO();
+    }
 
     @Override
-    public String addEnterpriseUser() {
-        return "bla";
+    public void addEnterpriseUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseServiceException {
+        if (log.isDebugEnabled()) {
+            log.debug("Calling add user service by device identifier: " + androidEnterpriseUser.getEmmDeviceId());
+        }
+        try {
+            AndroidDAOFactory.beginTransaction();
+            this.enterpriseDAO.addUser(androidEnterpriseUser);
+            AndroidDAOFactory.commitTransaction();
+        } catch (EnterpriseManagementDAOException e) {
+            String msg = "Error occurred while adding the user "
+                    + CarbonContext.getThreadLocalCarbonContext().getUsername();
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        } finally {
+            AndroidDAOFactory.closeConnection();
+        }
+    }
+
+    @Override
+    public List<AndroidEnterpriseUser> getEnterpriseUser() throws EnterpriseServiceException {
+
+        List<AndroidEnterpriseUser> androidEnterpriseUsers;
+        if (log.isDebugEnabled()) {
+            log.debug("Calling get user service by device identifier: " + CarbonContext
+                    .getThreadLocalCarbonContext().getUsername());
+        }
+        try {
+            AndroidDAOFactory.openConnection();
+            androidEnterpriseUsers = this.enterpriseDAO.getUser(CarbonContext
+                    .getThreadLocalCarbonContext().getUsername(), CarbonContext.getThreadLocalCarbonContext()
+                    .getTenantId());
+
+        } catch (EnterpriseManagementDAOException e) {
+            String msg = "Error occurred while adding the user "
+                    + CarbonContext.getThreadLocalCarbonContext().getUsername();
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        } finally {
+            AndroidDAOFactory.closeConnection();
+        }
+        return androidEnterpriseUsers;
     }
 }

@@ -45,6 +45,9 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.Feature;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.mobile.android.impl.config.datasource.AndroidDataSourceConfigurations;
+import org.wso2.carbon.device.mgt.mobile.android.impl.config.datasource.MobileDataSourceConfig;
+import org.wso2.carbon.device.mgt.mobile.android.impl.config.datasource.MobileDataSourceConfigurations;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.impl.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.MobileDevice;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.MobileDeviceOperationMapping;
@@ -55,8 +58,11 @@ import org.wso2.carbon.device.mgt.mobile.android.internal.AndroidDeviceManagemen
 import org.wso2.carbon.registry.api.RegistryException;
 import org.wso2.carbon.registry.api.Resource;
 import org.wso2.carbon.registry.core.Registry;
+import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
@@ -358,4 +364,37 @@ public class MobileDeviceManagementUtil {
         }
         return missingFeatures;
     }
+
+	public static final String IOS_DB_CONFIG_PATH = CarbonUtils.getCarbonConfigDirPath() + File.separator +
+			"/android-dbconfig.xml";
+
+	public static AndroidDataSourceConfigurations iosDataSourceConfigurations;
+	public static AndroidDataSourceConfigurations getIosDataSourceConfigurations() {
+		return iosDataSourceConfigurations;
+	}
+
+	public static synchronized void initConfig() throws DeviceManagementException {
+		try {
+			File mobileDeviceMgtConfig = new File(IOS_DB_CONFIG_PATH);
+			Document doc = convertToDocuments(mobileDeviceMgtConfig);
+			JAXBContext iosDeviceMgtContext = JAXBContext.newInstance(AndroidDataSourceConfigurations.class);
+			Unmarshaller unmarshaller = iosDeviceMgtContext.createUnmarshaller();
+			iosDataSourceConfigurations = (AndroidDataSourceConfigurations) unmarshaller.unmarshal(doc);
+		} catch (Exception e) {
+			throw new DeviceManagementException(
+					"Error occurred while initializing Mobile Device Management config", e);
+		}
+	}
+
+	public static Document convertToDocuments(File file) throws DeviceManagementException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		try {
+			DocumentBuilder docBuilder = factory.newDocumentBuilder();
+			return docBuilder.parse(file);
+		} catch (Exception e) {
+			throw new DeviceManagementException("Error occurred while parsing file, while converting " +
+					"to a org.w3c.dom.Document : " + e.getMessage(), e);
+		}
+	}
 }

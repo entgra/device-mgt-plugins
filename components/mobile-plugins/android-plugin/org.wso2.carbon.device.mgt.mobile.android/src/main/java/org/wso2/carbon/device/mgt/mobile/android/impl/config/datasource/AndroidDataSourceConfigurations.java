@@ -16,16 +16,22 @@
  *   under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.android;
+package org.wso2.carbon.device.mgt.mobile.android.impl.config.datasource;
 
-import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
-import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 
-import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public interface AndroidPluginService {
+@XmlRootElement(name = "iosDBConfigurations")
+public class AndroidDataSourceConfigurations {
 
-    void addEnterpriseUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseServiceException;
+    private MobileDataSourceConfig iosDataSourceConfiguration;
+    @XmlElement(name = "DataSourceConfiguration")
+    public MobileDataSourceConfig getIosDataSourceConfiguration() {
+        return iosDataSourceConfiguration;
+    }
 
-    List<AndroidEnterpriseUser> getEnterpriseUser() throws EnterpriseServiceException;
+    public void setIosDataSourceConfiguration(MobileDataSourceConfig iosDataSourceConfiguration) {
+        this.iosDataSourceConfiguration = iosDataSourceConfiguration;
+    }
 }

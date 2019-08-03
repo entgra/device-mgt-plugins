@@ -18,7 +18,23 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.impl.dao;
 
-public interface MobileDeviceManagementDAOFactory {
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 
+import java.util.List;
 
+/**
+ * This class represents the key operations associated with working with Enterprise data
+ */
+public interface EnterpriseDAO {
+
+	/**
+	 * Add a new user to Enterprise.
+	 *
+	 * @param androidEnterpriseUser Enterprise user and device details.
+	 * @return User addition status.
+	 * @throws EnterpriseManagementDAOException
+	 */
+	 boolean addUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseManagementDAOException;
+
+	List<AndroidEnterpriseUser> getUser(String username, int tenantId) throws EnterpriseManagementDAOException;
 }

@@ -24,6 +24,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.device.mgt.mobile.android.AndroidPluginService;
 import org.wso2.carbon.device.mgt.mobile.android.impl.AndroidPluginServiceImpl;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dao.AbstractMobileDeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.mobile.android.impl.util.MobileDeviceManagementUtil;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
@@ -55,6 +57,12 @@ public class AndroidPluginServiceComponent {
         }
         try {
             BundleContext bundleContext = ctx.getBundleContext();
+
+
+            MobileDeviceManagementUtil.initConfig();
+            AbstractMobileDeviceManagementDAOFactory.init("android", MobileDeviceManagementUtil
+                    .getIosDataSourceConfigurations().getIosDataSourceConfiguration());
+
             AndroidPluginService androidPluginService = new AndroidPluginServiceImpl();
             AndroidDeviceManagementDataHolder.getInstance().setAndroidDeviceManagementService(
                     androidPluginService);
