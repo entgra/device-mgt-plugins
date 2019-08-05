@@ -323,4 +323,35 @@ $(document).ready(function () {
             );
         }
     });
+
+    function getSign(serverUrl, emmToken) {
+        var requestData = {};
+        requestData.callbackURL = "https://192.168.8.151:8280";
+
+        invokerUtil.postExternal(
+            serverUrl,
+            requestData,
+            function(data) {
+                console.log("weda")
+            },
+            function(data) {
+                if (data["status"] == 500) {
+                    $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
+                } else {
+                    $(errorMsg).text(data);
+                }
+                $(errorMsgWrapper).removeClass("hidden");
+            },
+            "application/json",
+            "application/json",
+            false,
+            emmToken
+        );
+    }
+
+    $("button#afw-configure").click(function () {
+        var serverDetails = $("input#afw-server-details").val();
+        var emmToken = $("input#afw-backend-token").val();
+        getSign(serverDetails, emmToken)
+    });
 });
