@@ -226,6 +226,18 @@ public class DeviceManagementServiceTests {
         property.setName("LONGITUDE");
         property.setValue("6.9");
         properties.add(property);
+        property = new Device.Property();
+        property.setName("ALTITUDE");
+        property.setValue("-59.8373726");
+        properties.add(property);
+        property = new Device.Property();
+        property.setName("SPEED");
+        property.setValue("0.5123423333");
+        properties.add(property);
+        property = new Device.Property();
+        property.setName("BEARING");
+        property.setValue("44.0");
+        properties.add(property);
         androidDevice.setProperties(properties);
 
         Response response = deviceManagementService.enrollDevice(androidDevice);
