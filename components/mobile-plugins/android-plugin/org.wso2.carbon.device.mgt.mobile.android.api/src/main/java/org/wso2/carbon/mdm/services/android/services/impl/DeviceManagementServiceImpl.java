@@ -507,19 +507,19 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             if (propertyName == null) continue;
             if (propertyName.equals("LATITUDE")) {
                 latitude = property.getValue();
-                //if (!longitude.isEmpty() && !altitude.isEmpty()) break;
-            } if (propertyName.equals("LONGITUDE")) {
+            }
+            if (propertyName.equals("LONGITUDE")) {
                 longitude = property.getValue();
-                //if (!latitude.isEmpty() && !altitude.isEmpty()) break;
-            }if (propertyName.equals("ALTITUDE")) {
+            }
+            if (propertyName.equals("ALTITUDE")) {
                 altitude = property.getValue();
 
-            }if (propertyName.equals("SPEED")) {
+            }
+            if (propertyName.equals("SPEED")) {
                 speed = property.getValue();
-
-            }if (propertyName.equals("BEARING")) {
+            }
+            if (propertyName.equals("BEARING")) {
                 bearing = property.getValue();
-//
             }
         }
 
