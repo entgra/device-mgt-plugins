@@ -37,6 +37,7 @@ public class MobileDevice implements Serializable {
     private String altitude;
     private String speed;
     private String bearing;
+    private String distance;
     private String imei;
     private String imsi;
     private String serial;
@@ -106,6 +107,14 @@ public class MobileDevice implements Serializable {
 
     public String getBearing() {
         return bearing;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
 
     public void setBearing(String bearing) {

@@ -82,6 +82,7 @@ public class MobileDeviceManagementUtil {
 	private static final String MOBILE_DEVICE_LATITUDE = "LATITUDE";
 	private static final String MOBILE_DEVICE_LONGITUDE = "LONGITUDE";
 	private static final String MOBILE_DEVICE_ALTITUDE = "ALTITUDE";
+	private static final String MOBILE_DEVICE_DISTANCE = "DISTANCE";
 	private static final String MOBILE_DEVICE_SPEED = "SPEED";
 	private static final String MOBILE_DEVICE_BEARING = "BEARING";
 	private static final String MOBILE_DEVICE_SERIAL = "SERIAL";
@@ -136,6 +137,7 @@ public class MobileDeviceManagementUtil {
 			mobileDevice.setLatitude(getPropertyValue(device, MOBILE_DEVICE_LATITUDE));
 			mobileDevice.setLongitude(getPropertyValue(device, MOBILE_DEVICE_LONGITUDE));
 			mobileDevice.setAltitude(getPropertyValue(device, MOBILE_DEVICE_ALTITUDE));
+			mobileDevice.setDistance(getPropertyValue(device, MOBILE_DEVICE_DISTANCE));
 			mobileDevice.setSpeed(getPropertyValue(device, MOBILE_DEVICE_SPEED));
 			mobileDevice.setBearing(getPropertyValue(device, MOBILE_DEVICE_BEARING));
 			mobileDevice.setSerial(getPropertyValue(device, MOBILE_DEVICE_SERIAL));
@@ -168,6 +170,7 @@ public class MobileDeviceManagementUtil {
 			propertyList.add(getProperty(MOBILE_DEVICE_VENDOR, mobileDevice.getVendor()));
 			propertyList.add(getProperty(MOBILE_DEVICE_BEARING, mobileDevice.getBearing()));
 			propertyList.add(getProperty(MOBILE_DEVICE_SPEED, mobileDevice.getSpeed()));
+			propertyList.add(getProperty(MOBILE_DEVICE_DISTANCE, mobileDevice.getDistance()));
 
             if(mobileDevice.getLatitude() != null) {
                 propertyList.add(getProperty(MOBILE_DEVICE_LATITUDE, mobileDevice.getLatitude()));

@@ -61,6 +61,7 @@ public class EventReceiverServiceImpl implements EventReceiverService {
     private static final String LATITUDE = "latitude";
     private static final String ALTITUDE = "altitude";
     private static final String SPEED = "speed";
+    private static final String DISTANCE = "distance";
     private static final String BEARING = "bearing";
     private static final String TIME_STAMP = "timeStamp";
     private static final String LOCATION_EVENT_TYPE = "location";
@@ -106,7 +107,8 @@ public class EventReceiverServiceImpl implements EventReceiverService {
                 jsonObject.get(LONGITUDE).getAsDouble(),
                 jsonObject.get(ALTITUDE).getAsDouble(),
                 jsonObject.get(SPEED).getAsFloat(),
-                jsonObject.get(BEARING).getAsFloat()
+                jsonObject.get(BEARING).getAsFloat(),
+                jsonObject.get(DISTANCE).getAsDouble()
         };
         try {
             if (AndroidAPIUtils.getEventPublisherService().publishEvent(
