@@ -238,6 +238,20 @@ public class AndroidDeviceUtils {
             }
         }
         AndroidAPIUtils.getDeviceManagementService().updateOperation(deviceIdentifier, operation);
+        // This has to be bellow other if blocks, since updateOperation would fail if we execute against a disenrolled
+        // device.
+        if (!Operation.Status.ERROR.equals(operation.getStatus()) && AndroidConstants.
+                OperationCodes.WIPE_DATA.equals(operation.getCode())) {
+            if (log.isDebugEnabled()) {
+                log.debug("Received wipe data from device '" + deviceId + "'");
+            }
+            try {
+                AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
+            } catch (DeviceManagementException e) {
+                throw new OperationManagementException("Error occurred while unenrolling the device.", e);
+            }
+
+        }
     }
 
     public static List<? extends Operation> getPendingOperations
