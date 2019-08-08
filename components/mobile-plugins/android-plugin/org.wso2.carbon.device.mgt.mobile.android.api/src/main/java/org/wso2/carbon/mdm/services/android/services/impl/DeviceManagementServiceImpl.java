@@ -498,7 +498,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             throws DeviceManagementException {
 
         DeviceLocation location = null;
-        String latitude = "", longitude = "", altitude = "", speed = "", bearing = "";
+        String latitude = "", longitude = "", altitude = "", speed = "", bearing = "", distance = "";
 
         if (properties == null) return null;
 
@@ -521,6 +521,9 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             if (propertyName.equals("BEARING")) {
                 bearing = property.getValue();
             }
+            if (propertyName.equals("DISTANCE")) {
+                distance = property.getValue();
+            }
         }
 
         if (!latitude.isEmpty() && !longitude.isEmpty()) {
@@ -530,6 +533,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             location.setAltitude(Double.valueOf(altitude));
             location.setSpeed(Float.valueOf(speed));
             location.setBearing(Float.valueOf(bearing));
+            location.setDistance(Double.valueOf(distance));
             location.setDeviceIdentifier(deviceIdentifier);
             Device savedDevice = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier, false);
             location.setDeviceId(savedDevice.getId());

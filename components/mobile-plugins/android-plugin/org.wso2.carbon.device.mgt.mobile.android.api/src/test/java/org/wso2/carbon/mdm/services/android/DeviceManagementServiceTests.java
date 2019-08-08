@@ -238,6 +238,10 @@ public class DeviceManagementServiceTests {
         property.setName("BEARING");
         property.setValue("44.0");
         properties.add(property);
+        property = new Device.Property();
+        property.setName("DISTANCE");
+        property.setValue("44.0");
+        properties.add(property);
         androidDevice.setProperties(properties);
 
         Response response = deviceManagementService.enrollDevice(androidDevice);

@@ -331,6 +331,7 @@ public class AndroidDeviceManager implements DeviceManager {
         existingMobileDevice.setAltitude(mobileDevice.getAltitude());
         existingMobileDevice.setSpeed(mobileDevice.getSpeed());
         existingMobileDevice.setBearing(mobileDevice.getBearing());
+        existingMobileDevice.setDistance(mobileDevice.getDistance());
         existingMobileDevice.setDeviceProperties(mobileDevice.getDeviceProperties());
 
         try {
