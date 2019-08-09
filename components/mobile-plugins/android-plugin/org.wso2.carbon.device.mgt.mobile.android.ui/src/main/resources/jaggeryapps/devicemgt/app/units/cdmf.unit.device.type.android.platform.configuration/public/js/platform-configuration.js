@@ -90,6 +90,16 @@ var kioskConfigs = {
     "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION"
 };
 
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
 $(document).ready(function () {
     $("#fcm-inputs").hide();
     tinymce.init({
@@ -106,6 +116,12 @@ $(document).ready(function () {
     });
 
     var androidConfigAPI = "/api/device-mgt/android/v1.0/configuration";
+
+    var enterpriseSuccess = getParameterByName('enterprise-success');
+    if (enterpriseSuccess) {
+        $("#config-save-form").addClass("hidden");
+        $("#record-created-msg").removeClass("hidden");
+    }
 
     /**
      * Following requests would execute
@@ -150,7 +166,12 @@ $(document).ready(function () {
                         $("input#android-kiosk-config-download-url").val(config.value);
                     } else if (config.name === kioskConfigs["skipEncryption"]) {
                         $("#android-kiosk-config-encryption").val(config.value);
+                    } else if (config.name === "esa") {
+                        $("#afw-esa").val(config.value);
+                    } else if (config.name === "enterpriseId") {
+                        $("#afw-enterprise-id").val(config.value);
                     }
+
                 }
             }
         }, function (data) {
@@ -185,6 +206,8 @@ $(document).ready(function () {
         var androidLicense = tinyMCE.activeEditor.getContent();
         var errorMsgWrapper = "#android-config-error-msg";
         var errorMsg = "#android-config-error-msg span";
+        var esa = $("input#afw-esa").val();
+        var enterpriseId = $("input#afw-enterprise-id").val();
 
         // KIOSK configs
         var adminComponentName = $("input#android-kiosk-config-admin-component").val();
@@ -281,6 +304,18 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            var esa = {
+                "name": "esa",
+                "value": esa,
+                "contentType": "text"
+            };
+
+            var enterpriseId = {
+                "name": "enterpriseId",
+                "value": enterpriseId,
+                "contentType": "text"
+            };
+
             configList.push(type);
             configList.push(frequency);
             configList.push(androidEula);
@@ -292,6 +327,7 @@ $(document).ready(function () {
             configList.push(kioskWifiSSID);
             configList.push(kioskWifiPassword);
             configList.push(kioskWifiSecurity);
+            configList.push(esa);
 
             if (notifierType === notifierTypeConstants["FCM"]) {
                 configList.push(fcmKey);
@@ -319,39 +355,51 @@ $(document).ready(function () {
                         $(errorMsg).text("An unexpected error occurred.");
                     }
                     $(errorMsgWrapper).removeClass("hidden");
+                    $(window).scrollTop(0);
                 }
             );
         }
     });
 
-    function getSign(serverUrl, emmToken) {
-        var requestData = {};
-        requestData.callbackURL = "https://192.168.8.151:8280";
+    function getSignupUrl(serverUrl, emmToken) {
 
-        invokerUtil.postExternal(
-            serverUrl,
-            requestData,
-            function(data) {
-                console.log("weda")
+        var appContext = window.location.href;
+        var tokenURL = appContext.replace("platform-configuration", "api/enterprise/token");
+        var callbackURL = appContext.replace("platform-configuration", "api/enterprise/enroll-complete");
+
+        var requestData = {};
+        requestData.externalToken = emmToken;
+        requestData.endpoint = serverUrl;
+        requestData.callbackURL = callbackURL;
+
+        $.ajax({
+            type: "POST",
+            url: tokenURL,
+            data: JSON.stringify(requestData),
+            contentType: "application/json",
+            success: function(response) {
+                window.location.replace(response.signupURL);
             },
-            function(data) {
-                if (data["status"] == 500) {
-                    $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
+            error: function(data) {
+                var errorMsgWrapper = "#android-config-error-msg";
+                var errorMsg = "#android-config-error-msg span";
+                if (data.status == 500) {
+                    $(errorMsg).text("Exception occurred at backend.");
+                } else if (data.status == 403) {
+                    $(errorMsg).text("Action was not permitted.");
                 } else {
-                    $(errorMsg).text(data);
+                    $(errorMsg).text("An unexpected error occurred.");
                 }
                 $(errorMsgWrapper).removeClass("hidden");
+                $(window).scrollTop(0);
             },
-            "application/json",
-            "application/json",
-            false,
-            emmToken
-        );
+            dataType: 'json'
+        });
     }
 
-    $("button#afw-configure").click(function () {
+    $("button#afw-configure").click(function() {
         var serverDetails = $("input#afw-server-details").val();
         var emmToken = $("input#afw-backend-token").val();
-        getSign(serverDetails, emmToken)
+        getSignupUrl(serverDetails, emmToken)
     });
 });
