@@ -17,6 +17,7 @@
  */
 package org.wso2.carbon.mdm.services.android.services;
 
+import com.google.api.services.androidenterprise.model.Device;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,6 +32,7 @@ import io.swagger.annotations.Tag;
 import org.wso2.carbon.apimgt.annotations.api.Scope;
 import org.wso2.carbon.apimgt.annotations.api.Scopes;
 import org.wso2.carbon.mdm.services.android.bean.DeviceState;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseInstallPolicy;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseUser;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EventBeanWrapper;
 import org.wso2.carbon.mdm.services.android.util.AndroidConstants;
@@ -147,14 +149,14 @@ public interface AndroidEnterpriseService {
 //######################################################################################################################
 //######################################################################################################################
 
-    @PUT
-    @Path("/user")
+    @POST
+    @Path("/install-app")
     @ApiOperation(
             produces = MediaType.APPLICATION_JSON,
             consumes = MediaType.APPLICATION_JSON,
-            httpMethod = "PUT",
-            value = "Update User",
-            notes = "Update a new user to enterprise system.",
+            httpMethod = "POST",
+            value = "Add User",
+            notes = "Add a new user to enterprise system.",
             tags = "Android Enterprise Service",
             extensions = {
                     @Extension(properties = {
@@ -164,7 +166,7 @@ public interface AndroidEnterpriseService {
     )
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message = "Created. \n Successfully updated the user",
+                    @ApiResponse(code = 201, message = "Created. \n Successfully added new user",
                             responseHeaders = {
                                     @ResponseHeader(
                                             name = "Content-Location",
@@ -197,23 +199,84 @@ public interface AndroidEnterpriseService {
                     @ApiResponse(
                             code = 500,
                             message = "Internal Server Error. \n " +
-                                    "Server error occurred while  updating the user.")
+                                    "Server error occurred while adding new user.")
             })
-    Response updateUser(
-            @QueryParam("username") String username);
+    Response updateUser(@ApiParam(
+            name = "device",
+            value = "Enterprise user and device data.")
+                             EnterpriseInstallPolicy device);
 
 //######################################################################################################################
 //######################################################################################################################
 //######################################################################################################################
 
-    @DELETE
-    @Path("/user")
+//    @DELETE
+//    @Path("/user")
+//    @ApiOperation(
+//            produces = MediaType.APPLICATION_JSON,
+//            consumes = MediaType.APPLICATION_JSON,
+//            httpMethod = "DELETE",
+//            value = "Update User",
+//            notes = "Update a new user to enterprise system.",
+//            tags = "Android Enterprise Service",
+//            extensions = {
+//                    @Extension(properties = {
+//                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:modify")
+//                    })
+//            }
+//    )
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(code = 200, message = "Created. \n Successfully deleted the user",
+//                            responseHeaders = {
+//                                    @ResponseHeader(
+//                                            name = "Content-Location",
+//                                            description = "The URL of the added policy."),
+//                                    @ResponseHeader(
+//                                            name = "Content-Type",
+//                                            description = "The content type of the body"),
+//                                    @ResponseHeader(
+//                                            name = "ETag",
+//                                            description = "Entity Tag of the response resource.\n" +
+//                                                    "Used by caches, or in conditional requests."),
+//                                    @ResponseHeader(
+//                                            name = "Last-Modified",
+//                                            description = "Date and time the resource was last modified.\n" +
+//                                                    "Used by caches, or in conditional requests.")
+//                            }),
+//                    @ApiResponse(
+//                            code = 303,
+//                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+//                            responseHeaders = {
+//                                    @ResponseHeader(
+//                                            name = "Content-Location",
+//                                            description = "The Source URL of the document.")}),
+//                    @ApiResponse(
+//                            code = 400,
+//                            message = "Bad Request. \n Invalid request or validation error."),
+//                    @ApiResponse(
+//                            code = 415,
+//                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
+//                    @ApiResponse(
+//                            code = 500,
+//                            message = "Internal Server Error. \n " +
+//                                    "Server error occurred while deleting the user.")
+//            })
+//    Response deleteUser(
+//            @QueryParam("username") String username);
+//
+//######################################################################################################################
+//######################################################################################################################
+//######################################################################################################################
+
+    @GET
+    @Path("/store-url")
     @ApiOperation(
             produces = MediaType.APPLICATION_JSON,
             consumes = MediaType.APPLICATION_JSON,
-            httpMethod = "DELETE",
-            value = "Update User",
-            notes = "Update a new user to enterprise system.",
+            httpMethod = "GET",
+            value = "Get store Url",
+            notes = "Get private Google playstore store Url.",
             tags = "Android Enterprise Service",
             extensions = {
                     @Extension(properties = {
@@ -223,7 +286,7 @@ public interface AndroidEnterpriseService {
     )
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message = "Created. \n Successfully deleted the user",
+                    @ApiResponse(code = 200, message = "Created. \n Successfully fetched playstore url",
                             responseHeaders = {
                                     @ResponseHeader(
                                             name = "Content-Location",
@@ -256,189 +319,134 @@ public interface AndroidEnterpriseService {
                     @ApiResponse(
                             code = 500,
                             message = "Internal Server Error. \n " +
-                                    "Server error occurred while deleting the user.")
+                                    "Server error occurred while getting playstore url")
             })
-    Response deleteUser(
-            @QueryParam("username") String username);
+    Response getStoreUrl(@QueryParam("approveApps") boolean approveApps,
+                         @QueryParam("searchEnabled") boolean searchEnabled,
+                         @QueryParam("isPrivateAppsEnabled") boolean isPrivateAppsEnabled,
+                         @QueryParam("isWebAppEnabled") boolean isWebAppEnabled,
+                         @QueryParam("isOrganizeAppPageVisible") boolean isOrganizeAppPageVisible);
 
-//######################################################################################################################
-//######################################################################################################################
-//######################################################################################################################
-
-    @GET
-    @Path("/user")
-    @ApiOperation(
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON,
-            httpMethod = "GET",
-            value = "Update User",
-            notes = "Update a new user to enterprise system.",
-            tags = "Android Enterprise Service",
-            extensions = {
-                    @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:modify")
-                    })
-            }
-    )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(code = 200, message = "Created. \n Successfully updated the user",
-                            responseHeaders = {
-                                    @ResponseHeader(
-                                            name = "Content-Location",
-                                            description = "The URL of the added policy."),
-                                    @ResponseHeader(
-                                            name = "Content-Type",
-                                            description = "The content type of the body"),
-                                    @ResponseHeader(
-                                            name = "ETag",
-                                            description = "Entity Tag of the response resource.\n" +
-                                                    "Used by caches, or in conditional requests."),
-                                    @ResponseHeader(
-                                            name = "Last-Modified",
-                                            description = "Date and time the resource was last modified.\n" +
-                                                    "Used by caches, or in conditional requests.")
-                            }),
-                    @ApiResponse(
-                            code = 303,
-                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
-                            responseHeaders = {
-                                    @ResponseHeader(
-                                            name = "Content-Location",
-                                            description = "The Source URL of the document.")}),
-                    @ApiResponse(
-                            code = 400,
-                            message = "Bad Request. \n Invalid request or validation error."),
-                    @ApiResponse(
-                            code = 415,
-                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
-                    @ApiResponse(
-                            code = 500,
-                            message = "Internal Server Error. \n " +
-                                    "Server error occurred while  updating the user.")
-            })
-    Response getUser(
-            @QueryParam("username") String username);
-
-//######################################################################################################################
-//######################################################################################################################
-//######################################################################################################################
-
-    @GET
-    @Path("/users")
-    @ApiOperation(
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON,
-            httpMethod = "GET",
-            value = "Get Users",
-            notes = "Get users in enterprise.",
-            tags = "Android Enterprise Service",
-            extensions = {
-                    @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:view")
-                    })
-            }
-    )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(code = 200, message = "Created. \n Successfully updated the users",
-                            responseHeaders = {
-                                    @ResponseHeader(
-                                            name = "Content-Location",
-                                            description = "The URL of the added policy."),
-                                    @ResponseHeader(
-                                            name = "Content-Type",
-                                            description = "The content type of the body"),
-                                    @ResponseHeader(
-                                            name = "ETag",
-                                            description = "Entity Tag of the response resource.\n" +
-                                                    "Used by caches, or in conditional requests."),
-                                    @ResponseHeader(
-                                            name = "Last-Modified",
-                                            description = "Date and time the resource was last modified.\n" +
-                                                    "Used by caches, or in conditional requests.")
-                            }),
-                    @ApiResponse(
-                            code = 303,
-                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
-                            responseHeaders = {
-                                    @ResponseHeader(
-                                            name = "Content-Location",
-                                            description = "The Source URL of the document.")}),
-                    @ApiResponse(
-                            code = 400,
-                            message = "Bad Request. \n Invalid request or validation error."),
-                    @ApiResponse(
-                            code = 415,
-                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
-                    @ApiResponse(
-                            code = 500,
-                            message = "Internal Server Error. \n " +
-                                    "Server error occurred while updating the users.")
-            })
-    Response getUsers(
-            @QueryParam("username") String username,
-            @QueryParam("limit") String limit,
-            @QueryParam("offset") String offset);
-
-//######################################################################################################################
-//######################################################################################################################
-//######################################################################################################################
-
-    @GET
-    @Path("/generateToken")
-    @ApiOperation(
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON,
-            httpMethod = "GET",
-            value = "Update User",
-            notes = "Update a new user to enterprise system.",
-            tags = "Android Enterprise Service",
-            extensions = {
-                    @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:view")
-                    })
-            }
-    )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(code = 200, message = "Created. \n Successfully updated the user",
-                            responseHeaders = {
-                                    @ResponseHeader(
-                                            name = "Content-Location",
-                                            description = "The URL of the added policy."),
-                                    @ResponseHeader(
-                                            name = "Content-Type",
-                                            description = "The content type of the body"),
-                                    @ResponseHeader(
-                                            name = "ETag",
-                                            description = "Entity Tag of the response resource.\n" +
-                                                    "Used by caches, or in conditional requests."),
-                                    @ResponseHeader(
-                                            name = "Last-Modified",
-                                            description = "Date and time the resource was last modified.\n" +
-                                                    "Used by caches, or in conditional requests.")
-                            }),
-                    @ApiResponse(
-                            code = 303,
-                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
-                            responseHeaders = {
-                                    @ResponseHeader(
-                                            name = "Content-Location",
-                                            description = "The Source URL of the document.")}),
-                    @ApiResponse(
-                            code = 400,
-                            message = "Bad Request. \n Invalid request or validation error."),
-                    @ApiResponse(
-                            code = 415,
-                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
-                    @ApiResponse(
-                            code = 500,
-                            message = "Internal Server Error. \n " +
-                                    "Server error occurred while  updating the user.")
-            })
-    Response generateToken(
-            @QueryParam("username") String username);
+//
+////######################################################################################################################
+////######################################################################################################################
+////######################################################################################################################
+//
+//    @GET
+//    @Path("/users")
+//    @ApiOperation(
+//            produces = MediaType.APPLICATION_JSON,
+//            consumes = MediaType.APPLICATION_JSON,
+//            httpMethod = "GET",
+//            value = "Get Users",
+//            notes = "Get users in enterprise.",
+//            tags = "Android Enterprise Service",
+//            extensions = {
+//                    @Extension(properties = {
+//                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:view")
+//                    })
+//            }
+//    )
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(code = 200, message = "Created. \n Successfully updated the users",
+//                            responseHeaders = {
+//                                    @ResponseHeader(
+//                                            name = "Content-Location",
+//                                            description = "The URL of the added policy."),
+//                                    @ResponseHeader(
+//                                            name = "Content-Type",
+//                                            description = "The content type of the body"),
+//                                    @ResponseHeader(
+//                                            name = "ETag",
+//                                            description = "Entity Tag of the response resource.\n" +
+//                                                    "Used by caches, or in conditional requests."),
+//                                    @ResponseHeader(
+//                                            name = "Last-Modified",
+//                                            description = "Date and time the resource was last modified.\n" +
+//                                                    "Used by caches, or in conditional requests.")
+//                            }),
+//                    @ApiResponse(
+//                            code = 303,
+//                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+//                            responseHeaders = {
+//                                    @ResponseHeader(
+//                                            name = "Content-Location",
+//                                            description = "The Source URL of the document.")}),
+//                    @ApiResponse(
+//                            code = 400,
+//                            message = "Bad Request. \n Invalid request or validation error."),
+//                    @ApiResponse(
+//                            code = 415,
+//                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
+//                    @ApiResponse(
+//                            code = 500,
+//                            message = "Internal Server Error. \n " +
+//                                    "Server error occurred while updating the users.")
+//            })
+//    Response getUsers(
+//            @QueryParam("username") String username,
+//            @QueryParam("limit") String limit,
+//            @QueryParam("offset") String offset);
+//
+////######################################################################################################################
+////######################################################################################################################
+////######################################################################################################################
+//
+//    @GET
+//    @Path("/generateToken")
+//    @ApiOperation(
+//            produces = MediaType.APPLICATION_JSON,
+//            consumes = MediaType.APPLICATION_JSON,
+//            httpMethod = "GET",
+//            value = "Update User",
+//            notes = "Update a new user to enterprise system.",
+//            tags = "Android Enterprise Service",
+//            extensions = {
+//                    @Extension(properties = {
+//                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:view")
+//                    })
+//            }
+//    )
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(code = 200, message = "Created. \n Successfully updated the user",
+//                            responseHeaders = {
+//                                    @ResponseHeader(
+//                                            name = "Content-Location",
+//                                            description = "The URL of the added policy."),
+//                                    @ResponseHeader(
+//                                            name = "Content-Type",
+//                                            description = "The content type of the body"),
+//                                    @ResponseHeader(
+//                                            name = "ETag",
+//                                            description = "Entity Tag of the response resource.\n" +
+//                                                    "Used by caches, or in conditional requests."),
+//                                    @ResponseHeader(
+//                                            name = "Last-Modified",
+//                                            description = "Date and time the resource was last modified.\n" +
+//                                                    "Used by caches, or in conditional requests.")
+//                            }),
+//                    @ApiResponse(
+//                            code = 303,
+//                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+//                            responseHeaders = {
+//                                    @ResponseHeader(
+//                                            name = "Content-Location",
+//                                            description = "The Source URL of the document.")}),
+//                    @ApiResponse(
+//                            code = 400,
+//                            message = "Bad Request. \n Invalid request or validation error."),
+//                    @ApiResponse(
+//                            code = 415,
+//                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
+//                    @ApiResponse(
+//                            code = 500,
+//                            message = "Internal Server Error. \n " +
+//                                    "Server error occurred while  updating the user.")
+//            })
+//    Response generateToken(
+//            @QueryParam("username") String username);
 
 
 }

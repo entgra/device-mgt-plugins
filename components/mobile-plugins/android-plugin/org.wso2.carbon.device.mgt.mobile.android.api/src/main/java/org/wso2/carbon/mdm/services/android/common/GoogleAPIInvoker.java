@@ -27,11 +27,19 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.androidenterprise.AndroidEnterprise;
 import com.google.api.services.androidenterprise.AndroidEnterpriseScopes;
+import com.google.api.services.androidenterprise.model.AdministratorWebToken;
+import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpec;
+import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecPlaySearch;
+import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecPrivateApps;
+import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecStoreBuilder;
+import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecWebApps;
 import com.google.api.services.androidenterprise.model.AuthenticationToken;
+import com.google.api.services.androidenterprise.model.Device;
 import com.google.api.services.androidenterprise.model.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseTokenUrl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,6 +49,13 @@ import java.nio.charset.StandardCharsets;
 public class GoogleAPIInvoker {
 
     private static final Log log = LogFactory.getLog(GoogleAPIInvoker.class);
+    private String esa;
+
+    public GoogleAPIInvoker(String esa) {
+        this.esa = esa;
+    }
+
+    private GoogleAPIInvoker(){}
 
     public String insertUser(String enterpriseId, String username) throws EnterpriseServiceException {
         AndroidEnterprise androidEnterprise = createAndroidEnterprise();
@@ -68,7 +83,44 @@ public class GoogleAPIInvoker {
                     .generateAuthenticationToken(enterpriseId, userId).execute();
             return tokenResponse.getToken();
         } catch (IOException e) {
-            String msg = "Error occurred while accessing Google APIs";
+            String msg = "Error occurred while accessing Google APIs getToken";
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        }
+    }
+
+    public Device installApps(String enterpriseId, String userId , Device device) throws EnterpriseServiceException{
+        AndroidEnterprise androidEnterprise = createAndroidEnterprise();
+        try {
+            Device deviceResponse = androidEnterprise.devices().update(enterpriseId,
+                    userId, device.getAndroidId(), device)
+                    .execute();
+            return deviceResponse;
+        } catch (IOException e) {
+            String msg = "Error occurred while accessing Google APIs installApps";
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        }
+    }
+
+    public String getAdministratorWebToken(EnterpriseTokenUrl enterpriseTokenUrl) throws EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = createAndroidEnterprise();
+        AdministratorWebTokenSpec tokenSpec = new AdministratorWebTokenSpec();
+        tokenSpec.setParent(enterpriseTokenUrl.getParentHost());
+        tokenSpec.setPlaySearch(new AdministratorWebTokenSpecPlaySearch()
+                .setApproveApps(enterpriseTokenUrl.isApproveApps())
+                .setEnabled(enterpriseTokenUrl.isSearchEnabled()));
+        tokenSpec.setPrivateApps(new AdministratorWebTokenSpecPrivateApps()
+                .setEnabled(enterpriseTokenUrl.isPrivateAppsEnabled()));
+        tokenSpec.setWebApps(new AdministratorWebTokenSpecWebApps().setEnabled(enterpriseTokenUrl.isWebAppEnabled()));
+        tokenSpec.setStoreBuilder(new AdministratorWebTokenSpecStoreBuilder()
+                .setEnabled(enterpriseTokenUrl.isOrganizeAppPageVisible()));
+        try {
+            AdministratorWebToken token = androidEnterprise.enterprises()
+                    .createWebToken(enterpriseTokenUrl.getEnterpriseId(), tokenSpec).execute();
+            return token.getToken();
+        } catch (IOException e) {
+            String msg = "Error occurred while accessing Google APIs installApps";
             log.error(msg, e);
             throw new EnterpriseServiceException(msg, e);
         }
@@ -80,8 +132,7 @@ public class GoogleAPIInvoker {
         HttpTransport httpTransport = new NetHttpTransport();
         JacksonFactory jsonFactory = new JacksonFactory();
 
-        String x = "";
-        InputStream inputStream = new ByteArrayInputStream(x.getBytes(StandardCharsets.UTF_8));
+        InputStream inputStream = new ByteArrayInputStream(esa.getBytes(StandardCharsets.UTF_8));
 
         final Credential credential;
         try {
@@ -99,7 +150,6 @@ public class GoogleAPIInvoker {
                 credential.initialize(request);
             }
         };
-
 
         return new AndroidEnterprise.Builder(httpTransport, jsonFactory, httpRequestInitializer)
                 .build();

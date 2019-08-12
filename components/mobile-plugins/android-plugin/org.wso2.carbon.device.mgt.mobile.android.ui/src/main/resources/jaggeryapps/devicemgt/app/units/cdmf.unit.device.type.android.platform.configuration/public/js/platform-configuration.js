@@ -328,6 +328,7 @@ $(document).ready(function () {
             configList.push(kioskWifiPassword);
             configList.push(kioskWifiSecurity);
             configList.push(esa);
+            configList.push(enterpriseId);
 
             if (notifierType === notifierTypeConstants["FCM"]) {
                 configList.push(fcmKey);

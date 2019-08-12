@@ -27,5 +27,5 @@ public interface AndroidPluginService {
 
     void addEnterpriseUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseServiceException;
 
-    List<AndroidEnterpriseUser> getEnterpriseUser() throws EnterpriseServiceException;
+    List<AndroidEnterpriseUser> getEnterpriseUser(String username) throws EnterpriseServiceException;
 }

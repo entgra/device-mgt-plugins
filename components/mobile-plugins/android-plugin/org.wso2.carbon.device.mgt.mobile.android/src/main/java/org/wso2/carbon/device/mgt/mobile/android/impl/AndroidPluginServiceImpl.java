@@ -77,7 +77,7 @@ public class AndroidPluginServiceImpl implements AndroidPluginService {
     }
 
     @Override
-    public List<AndroidEnterpriseUser> getEnterpriseUser() throws EnterpriseServiceException {
+    public List<AndroidEnterpriseUser> getEnterpriseUser(String username) throws EnterpriseServiceException {
 
         List<AndroidEnterpriseUser> androidEnterpriseUsers;
         if (log.isDebugEnabled()) {
@@ -86,8 +86,7 @@ public class AndroidPluginServiceImpl implements AndroidPluginService {
         }
         try {
             AndroidDAOFactory.openConnection();
-            androidEnterpriseUsers = this.enterpriseDAO.getUser(CarbonContext
-                    .getThreadLocalCarbonContext().getUsername(), CarbonContext.getThreadLocalCarbonContext()
+            androidEnterpriseUsers = this.enterpriseDAO.getUser(username, CarbonContext.getThreadLocalCarbonContext()
                     .getTenantId());
 
         } catch (EnterpriseManagementDAOException e) {

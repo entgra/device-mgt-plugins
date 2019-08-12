@@ -65,6 +65,9 @@ import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceInfo;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
@@ -594,5 +597,37 @@ public class AndroidDeviceUtils {
             log.error(msg);
             throw new DeviceManagementException(msg, e);
         }
+    }
+
+    public static String getAndroidConfig(String key) throws DeviceManagementException {
+        String value = null;
+        PlatformConfiguration configuration =  AndroidAPIUtils.getDeviceManagementService().
+                        getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+        if (configuration != null && configuration.getConfiguration() != null && configuration
+                .getConfiguration().size() > 0) {
+            List<ConfigurationEntry> configurations = configuration.getConfiguration();
+            for (ConfigurationEntry configurationEntry : configurations) {
+                if (configurationEntry.getName().equals(key)) {
+                    value = (String)configurationEntry.getValue();
+                    break;
+                }
+            }
+        }
+        return value;
+    }
+
+    public static String getAndroidConfig(PlatformConfiguration configuration, String key) {
+        String value = null;
+        if (configuration != null && configuration.getConfiguration() != null && configuration
+                .getConfiguration().size() > 0) {
+            List<ConfigurationEntry> configurations = configuration.getConfiguration();
+            for (ConfigurationEntry configurationEntry : configurations) {
+                if (configurationEntry.getName().equals(key)) {
+                    value = (String)configurationEntry.getValue();
+                    break;
+                }
+            }
+        }
+        return value;
     }
 }
