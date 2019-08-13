@@ -35,6 +35,7 @@ import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpec
 import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecWebApps;
 import com.google.api.services.androidenterprise.model.AuthenticationToken;
 import com.google.api.services.androidenterprise.model.Device;
+import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import com.google.api.services.androidenterprise.model.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +59,7 @@ public class GoogleAPIInvoker {
     private GoogleAPIInvoker(){}
 
     public String insertUser(String enterpriseId, String username) throws EnterpriseServiceException {
-        AndroidEnterprise androidEnterprise = createAndroidEnterprise();
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
 
         User user = new User();
         user.setAccountIdentifier(username);
@@ -77,7 +78,7 @@ public class GoogleAPIInvoker {
     }
 
     public String getToken(String enterpriseId, String userId) throws EnterpriseServiceException{
-        AndroidEnterprise androidEnterprise = createAndroidEnterprise();
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
         try {
             AuthenticationToken tokenResponse = androidEnterprise.users()
                     .generateAuthenticationToken(enterpriseId, userId).execute();
@@ -90,7 +91,7 @@ public class GoogleAPIInvoker {
     }
 
     public Device installApps(String enterpriseId, String userId , Device device) throws EnterpriseServiceException{
-        AndroidEnterprise androidEnterprise = createAndroidEnterprise();
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
         try {
             Device deviceResponse = androidEnterprise.devices().update(enterpriseId,
                     userId, device.getAndroidId(), device)
@@ -104,7 +105,7 @@ public class GoogleAPIInvoker {
     }
 
     public String getAdministratorWebToken(EnterpriseTokenUrl enterpriseTokenUrl) throws EnterpriseServiceException {
-        AndroidEnterprise androidEnterprise = createAndroidEnterprise();
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
         AdministratorWebTokenSpec tokenSpec = new AdministratorWebTokenSpec();
         tokenSpec.setParent(enterpriseTokenUrl.getParentHost());
         tokenSpec.setPlaySearch(new AdministratorWebTokenSpecPlaySearch()
@@ -126,8 +127,23 @@ public class GoogleAPIInvoker {
         }
     }
 
-    private AndroidEnterprise createAndroidEnterprise() throws EnterpriseServiceException {
+    public ProductsListResponse listProduct(String enterpriseId, String token) throws EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        try {
+            if (token == null) {
+                return androidEnterprise.products().list(enterpriseId).setMaxResults(100l).setApproved(true).execute();
+            } else {
+                return androidEnterprise.products().list(enterpriseId).setMaxResults(100l).setToken(token)
+                        .setApproved(true).execute();
+            }
+        } catch (IOException e) {
+            String msg = "Error occurred while accessing Google APIs installApps";
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        }
+    }
 
+    private AndroidEnterprise getEnterpriseClient() throws EnterpriseServiceException {
 
         HttpTransport httpTransport = new NetHttpTransport();
         JacksonFactory jsonFactory = new JacksonFactory();

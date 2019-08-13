@@ -57,12 +57,11 @@ import org.wso2.carbon.apimgt.application.extension.dto.ApiApplicationKey;
 import org.wso2.carbon.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
-import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
@@ -70,6 +69,8 @@ import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManageme
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceInfo;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
@@ -239,6 +240,18 @@ public class AndroidDeviceUtils {
             } catch (DeviceDetailsMgtException e) {
                 throw new OperationManagementException("Error occurred while updating the device location.", e);
             }
+        } else if (AndroidConstants.OperationCodes.INSTALL_APPLICATION.equals(operation.getCode())) {
+            try {
+                updateAppSubStatus(deviceIdentifier, operation.getId(), operation.getStatus().toString());
+            } catch (org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException e) {
+                String msg = "Error occurred while updating the app subscription for device.";
+                log.error(msg);
+                throw new OperationManagementException(msg, e);
+            } catch (DeviceManagementException e) {
+                String msg = "Error occurred while getting device data for device identifier.";
+                log.error(msg);
+                throw new OperationManagementException(msg, e);
+            }
         }
         AndroidAPIUtils.getDeviceManagementService().updateOperation(deviceIdentifier, operation);
     }
@@ -295,6 +308,16 @@ public class AndroidDeviceUtils {
                 (DeviceInformationManager) ctx.getOSGiService(DeviceInformationManager.class, null);
 
         informationManager.addDeviceLocation(deviceLocation);
+    }
+
+    private static void updateAppSubStatus(DeviceIdentifier deviceIdentifier, int operationId, String status)
+            throws org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException,
+            DeviceManagementException {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ApplicationManager applicationManager =
+                (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
+        Device device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+        applicationManager.updateSubsStatus(device.getId(), operationId, status);
     }
 
     private static void updateDeviceInfo(DeviceIdentifier deviceId, DeviceInfo deviceInfo)

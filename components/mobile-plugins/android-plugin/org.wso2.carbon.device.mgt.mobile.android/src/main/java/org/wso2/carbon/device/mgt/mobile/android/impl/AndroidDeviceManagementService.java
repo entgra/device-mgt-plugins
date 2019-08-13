@@ -1,20 +1,19 @@
 /*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
- * you may obtain a copy of the License at
+ * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  *
  * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
@@ -32,16 +31,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.extension.siddhi.device.test.util;
 
+package org.wso2.carbon.device.mgt.mobile.android.impl;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManager;
-import org.wso2.carbon.device.mgt.common.DeviceStatusTaskPluginConfig;
-import org.wso2.carbon.device.mgt.common.InitialOperationConfig;
-import org.wso2.carbon.device.mgt.common.MonitoringOperation;
 import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
 import org.wso2.carbon.device.mgt.common.ProvisioningConfig;
+import org.wso2.carbon.device.mgt.common.InitialOperationConfig;
+import org.wso2.carbon.device.mgt.common.DeviceStatusTaskPluginConfig;
 import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.general.GeneralConfig;
 import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
@@ -49,39 +52,34 @@ import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationSubsc
 import org.wso2.carbon.device.mgt.common.push.notification.PushNotificationConfig;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.common.type.mgt.DeviceTypePlatformDetails;
+import org.wso2.carbon.device.mgt.mobile.android.impl.util.AndroidPluginConstants;
+import org.wso2.carbon.device.mgt.mobile.android.internal.AndroidDeviceManagementDataHolder;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class TestDeviceManagementService implements DeviceManagementService {
+/**
+ * This represents the Android implementation of DeviceManagerService.
+ */
+public class AndroidDeviceManagementService implements DeviceManagementService {
 
-    private String providerType;
-    private String tenantDomain;
-
-    public TestDeviceManagementService(String deviceType, String tenantDomain) {
-        providerType = deviceType;
-        this.tenantDomain = tenantDomain;
-    }
+    private static final Log log = LogFactory.getLog(AndroidDeviceManagementService.class);
+    private DeviceManager deviceManager;
+    public static final String DEVICE_TYPE_ANDROID = "android";
+    private static final String SUPER_TENANT_DOMAIN = "carbon.super";
+    private static final String NOTIFIER_PROPERTY = "notifierType";
+    private static final String FCM_API_KEY = "fcmAPIKey";
+    private static final String FCM_SENDER_ID = "fcmSenderId";
+    private PolicyMonitoringManager policyMonitoringManager;
 
     @Override
     public String getType() {
-        return providerType;
+        return AndroidDeviceManagementService.DEVICE_TYPE_ANDROID;
     }
 
     @Override
     public OperationMonitoringTaskConfig getOperationMonitoringConfig() {
-        OperationMonitoringTaskConfig taskConfig = new OperationMonitoringTaskConfig();
-        taskConfig.setEnabled(true);
-        taskConfig.setFrequency(3000);
-        List<MonitoringOperation> monitoringOperations = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            MonitoringOperation monitoringOperation = new MonitoringOperation();
-            monitoringOperation.setTaskName("OPERATION-" + i);
-            monitoringOperation.setRecurrentTimes(i);
-            monitoringOperations.add(monitoringOperation);
-        }
-        taskConfig.setMonitoringOperation(monitoringOperations);
-        return taskConfig;
+        return null;
     }
 
     @Override
@@ -91,7 +89,7 @@ public class TestDeviceManagementService implements DeviceManagementService {
 
     @Override
     public DeviceManager getDeviceManager() {
-        return new TestDeviceManager();
+        return deviceManager;
     }
 
     @Override
@@ -101,7 +99,7 @@ public class TestDeviceManagementService implements DeviceManagementService {
 
     @Override
     public ProvisioningConfig getProvisioningConfig() {
-        return new ProvisioningConfig(tenantDomain, false);
+        return new ProvisioningConfig(SUPER_TENANT_DOMAIN, true);
     }
 
     @Override
@@ -111,7 +109,7 @@ public class TestDeviceManagementService implements DeviceManagementService {
 
     @Override
     public PolicyMonitoringManager getPolicyMonitoringManager() {
-        return null;
+        return policyMonitoringManager;
     }
 
     @Override
@@ -141,4 +139,13 @@ public class TestDeviceManagementService implements DeviceManagementService {
 
     @Override
     public DeviceTypePlatformDetails getDeviceTypePlatformDetails() { return null; }
+
+    private String getConfigProperty(List<ConfigurationEntry> configs, String propertyName) {
+        for (ConfigurationEntry entry : configs) {
+            if (propertyName.equals(entry.getName())) {
+                return entry.getValue().toString();
+            }
+        }
+        return null;
+    }
 }

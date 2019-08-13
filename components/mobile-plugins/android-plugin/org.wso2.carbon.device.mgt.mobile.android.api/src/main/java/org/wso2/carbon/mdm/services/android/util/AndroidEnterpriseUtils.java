@@ -26,9 +26,18 @@ import com.google.api.services.androidenterprise.model.ProductPolicy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseConfigs;
+import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseApp;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseInstallPolicy;
+import org.wso2.carbon.mdm.services.android.exception.NotFoundException;
+import org.wso2.carbon.mdm.services.android.exception.UnexpectedServerErrorException;
 
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +76,33 @@ public class AndroidEnterpriseUtils {
         policy.setProductAvailabilityPolicy(enterpriseInstallPolicy.getProductAvailabilityPolicy());
         device.setPolicy(policy);
         return device;
+    }
+
+    public static EnterpriseConfigs getEnterpriseConfigs() {
+        PlatformConfiguration configuration;
+        try {
+            configuration = AndroidAPIUtils.getDeviceManagementService().
+                    getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Error while fetching tenant configurations for tenant " +
+                    PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId();
+            log.error(errorMessage);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
+
+        }
+        String enterpriseId = AndroidDeviceUtils.getAndroidConfig(configuration,"enterpriseId");
+        String esa = AndroidDeviceUtils.getAndroidConfig(configuration,"esa");
+        if (enterpriseId == null || enterpriseId.isEmpty() || esa == null || esa.isEmpty()) {
+            String errorMessage = "Tenant is not configured to handle Android for work. Please contact Entgra.";
+            log.error(errorMessage);
+            throw new NotFoundException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage(errorMessage).build());
+        }
+        EnterpriseConfigs enterpriseConfigs = new EnterpriseConfigs();
+        enterpriseConfigs.setEnterpriseId(enterpriseId);
+        enterpriseConfigs.setEsa(esa);
+        return enterpriseConfigs;
     }
 
 }

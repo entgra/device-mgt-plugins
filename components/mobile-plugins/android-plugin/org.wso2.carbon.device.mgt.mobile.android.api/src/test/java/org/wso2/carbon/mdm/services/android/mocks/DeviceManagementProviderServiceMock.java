@@ -18,19 +18,30 @@
 
 package org.wso2.carbon.mdm.services.android.mocks;
 
-import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
+import org.wso2.carbon.device.mgt.common.FeatureManager;
+import org.wso2.carbon.device.mgt.common.MonitoringOperation;
+import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
+import org.wso2.carbon.device.mgt.common.PaginationRequest;
+import org.wso2.carbon.device.mgt.common.PaginationResult;
+import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceTypeNotFoundException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.common.policy.mgt.Policy;
 import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
 import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationExecutionFailedException;
 import org.wso2.carbon.device.mgt.common.push.notification.NotificationStrategy;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
+import org.wso2.carbon.device.mgt.core.dto.DeviceTypeVersion;
 import org.wso2.carbon.device.mgt.core.geo.GeoCluster;
 import org.wso2.carbon.device.mgt.core.geo.geoHash.GeoCoordinate;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
@@ -616,5 +627,27 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public boolean updateEnrollment(String owner, List<String> deviceIdentifiers) {
         return false;
+    }
+
+    @Override public boolean addDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
+            throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public List<DeviceTypeVersion> getDeviceTypeVersions(String s) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override public boolean updateDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
+            throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public boolean isDeviceTypeVersionChangeAuthorized(String s, String s1) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public DeviceTypeVersion getDeviceTypeVersion(String s, String s1) throws DeviceManagementException {
+        return null;
     }
 }

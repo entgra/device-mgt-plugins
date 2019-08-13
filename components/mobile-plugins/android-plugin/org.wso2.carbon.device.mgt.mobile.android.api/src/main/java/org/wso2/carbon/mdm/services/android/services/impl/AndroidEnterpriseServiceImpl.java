@@ -18,27 +18,25 @@
  */
 package org.wso2.carbon.mdm.services.android.services.impl;
 
+import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseConfigs;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseTokenUrl;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseInstallPolicy;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseUser;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.TokenWrapper;
 import org.wso2.carbon.mdm.services.android.common.GoogleAPIInvoker;
 import org.wso2.carbon.mdm.services.android.exception.NotFoundException;
 import org.wso2.carbon.mdm.services.android.services.AndroidEnterpriseService;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
-import org.wso2.carbon.mdm.services.android.util.AndroidDeviceUtils;
 import org.wso2.carbon.mdm.services.android.util.AndroidEnterpriseUtils;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -54,7 +52,6 @@ import java.util.List;
 public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
     private static final Log log = LogFactory.getLog(AndroidEnterpriseServiceImpl.class);
 
-
     @Override
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -62,25 +59,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
     @Path("/user")
     public Response addUser(EnterpriseUser enterpriseUser) {
 
-        PlatformConfiguration configuration;
-        try {
-            configuration = AndroidAPIUtils.getDeviceManagementService().
-                    getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-        } catch (DeviceManagementException e) {
-            return Response.serverError().entity(
-                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when reading configs").build())
-                    .build();
-        }
-        String enterpriseId = AndroidDeviceUtils.getAndroidConfig(configuration,"enterpriseId");
-        String esa = AndroidDeviceUtils.getAndroidConfig(configuration,"esa");
-
-        if (enterpriseId == null || enterpriseId.isEmpty() || esa == null || esa.isEmpty()) {
-            String errorMessage = "Tenant is not configured to handle Android for work. Please contact Entgra.";
-            log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage(errorMessage).build());
-        }
-
+        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
         String token;
         boolean deviceIdExist = false;
 
@@ -88,7 +67,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
             String googleUserId;
             List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
                     .getEnterpriseUser(CarbonContext.getThreadLocalCarbonContext().getUsername());
-            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(esa);
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
             if (androidEnterpriseUsers != null && androidEnterpriseUsers.size() > 0) {
                 googleUserId = androidEnterpriseUsers.get(0).getGoogleUserId();
                 // If this device is also present, only need to provide a token for this request.
@@ -99,18 +78,19 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                     }
                 }
             } else {
-                googleUserId = googleAPIInvoker.insertUser(enterpriseId, CarbonContext.getThreadLocalCarbonContext()
+                googleUserId = googleAPIInvoker.insertUser(enterpriseConfigs.getEnterpriseId(), CarbonContext
+                        .getThreadLocalCarbonContext()
                         .getUsername());
             }
             // Fetching an auth token from Google EMM API
-            token = googleAPIInvoker.getToken(enterpriseId, googleUserId);
+            token = googleAPIInvoker.getToken(enterpriseConfigs.getEnterpriseId(), googleUserId);
 
             if (!deviceIdExist) {
                 AndroidEnterpriseUser androidEnterpriseUser = new AndroidEnterpriseUser();
                 androidEnterpriseUser.setEmmUsername(CarbonContext.getThreadLocalCarbonContext().getUsername());
                 androidEnterpriseUser.setTenantId(CarbonContext.getThreadLocalCarbonContext().getTenantId());
                 androidEnterpriseUser.setAndroidPlayDeviceId(enterpriseUser.getAndroidPlayDeviceId());
-                androidEnterpriseUser.setEnterpriseId(enterpriseId);
+                androidEnterpriseUser.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
                 androidEnterpriseUser.setEmmDeviceId(enterpriseUser.getEmmDeviceIdentifier());
                 androidEnterpriseUser.setGoogleUserId(googleUserId);
 
@@ -136,34 +116,19 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
     @Path("/install-app")
     public Response updateUser(EnterpriseInstallPolicy device) {
 
-        PlatformConfiguration configuration;
         boolean sentToDevice = false;
-        try {
-            configuration = AndroidAPIUtils.getDeviceManagementService().
-                    getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-        } catch (DeviceManagementException e) {
-            return Response.serverError().entity(
-                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when reading configs").build())
-                    .build();
-        }
-        String enterpriseId = AndroidDeviceUtils.getAndroidConfig(configuration,"enterpriseId");
-        String esa = AndroidDeviceUtils.getAndroidConfig(configuration,"esa");
-        if (enterpriseId == null || enterpriseId.isEmpty() || esa == null || esa.isEmpty()) {
-            String errorMessage = "Tenant is not configured to handle Android for work. Please contact Entgra.";
-            log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage(errorMessage).build());
-        }
+        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
 
         try {
             List<AndroidEnterpriseUser> enterpriseUserInstances = AndroidAPIUtils.getAndroidPluginService()
                     .getEnterpriseUser(device.getUsername());
-            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(esa);
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
             for (AndroidEnterpriseUser userDetail : enterpriseUserInstances) {
                 if (userDetail.getEnterpriseId() != null && !userDetail.getEnterpriseId().isEmpty() && userDetail
                         .getEmmUsername() != null && userDetail.getEmmUsername().equals(device.getUsername()) && device
                         .getAndroidId().equals(userDetail.getAndroidPlayDeviceId())) {
-                    googleAPIInvoker.installApps(enterpriseId, userDetail.getGoogleUserId(), AndroidEnterpriseUtils
+                    googleAPIInvoker.installApps(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
+                            AndroidEnterpriseUtils
                             .convertToDeviceInstance(device));
                     sentToDevice = true;
                 }
@@ -187,38 +152,28 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
     @Override
     @GET
     @Path("/store-url")
-    public Response getStoreUrl(boolean approveApps, boolean searchEnabled, boolean isPrivateAppsEnabled,
-                                boolean isWebAppEnabled, boolean isOrganizeAppPageVisible) {
+    public Response getStoreUrl(@QueryParam("approveApps") boolean approveApps,
+                                @QueryParam("searchEnabled") boolean searchEnabled,
+                                @QueryParam("isPrivateAppsEnabled") boolean isPrivateAppsEnabled,
+                                @QueryParam("isWebAppEnabled") boolean isWebAppEnabled,
+                                @QueryParam("isOrganizeAppPageVisible") boolean isOrganizeAppPageVisible,
+                                @QueryParam("host") String host) {
 
-        PlatformConfiguration configuration;
-        try {
-            configuration = AndroidAPIUtils.getDeviceManagementService().
-                    getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-        } catch (DeviceManagementException e) {
-            return Response.serverError().entity(
-                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when reading configs").build())
-                    .build();
-        }
-        String enterpriseId = AndroidDeviceUtils.getAndroidConfig(configuration,"enterpriseId");
-        String esa = AndroidDeviceUtils.getAndroidConfig(configuration,"esa");
-        if (enterpriseId == null || enterpriseId.isEmpty() || esa == null || esa.isEmpty()) {
-            String errorMessage = "Tenant is not configured to handle Android for work. Please contact Entgra.";
-            log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage(errorMessage).build());
-        }
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(esa);
+        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         EnterpriseTokenUrl enterpriseTokenUrl = new EnterpriseTokenUrl();
-        enterpriseTokenUrl.setEnterpriseId(enterpriseId);
+        enterpriseTokenUrl.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
         enterpriseTokenUrl.setApproveApps(approveApps);
         enterpriseTokenUrl.setSearchEnabled(searchEnabled);
         enterpriseTokenUrl.setPrivateAppsEnabled(isPrivateAppsEnabled);
         enterpriseTokenUrl.setWebAppEnabled(isWebAppEnabled);
         enterpriseTokenUrl.setOrganizeAppPageVisible(isOrganizeAppPageVisible);
-        enterpriseTokenUrl.setParentHost("https://localhost:9443");
+        enterpriseTokenUrl.setParentHost(host);
         try {
             String token = googleAPIInvoker.getAdministratorWebToken(enterpriseTokenUrl);
-            return Response.status(Response.Status.OK).entity(token).build();
+            TokenWrapper tokenWrapper = new TokenWrapper();
+            tokenWrapper.setToken(token);
+            return Response.status(Response.Status.OK).entity(tokenWrapper).build();
         } catch (EnterpriseServiceException e) {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when calling get web token").build())
@@ -226,30 +181,46 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
         }
     }
 
-//    @Override
-//    @DELETE
-//    @Path("/user")
-//    public Response deleteUser(@QueryParam("username") String username) {
-//        return null;
-//    }
-//
-//    @Override
-//    @GET
-//    @Path("/user")
-//    public Response getUser(@QueryParam("username") String username) {
-//        return null;
-//    }
-//
-//    @Override
-//    @GET
-//    @Path("/users")
-//    public Response getUsers(@QueryParam("username") String username, @QueryParam("limit") String limit
-//            , @QueryParam("offset") String offset) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Response generateToken(String username) {
-//        return null;
-//    }
+    @Override
+    @GET
+    @Path("/products/sync")
+    public Response syncApps() {
+        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+        try {
+            ProductsListResponse productsListResponse = googleAPIInvoker
+                    .listProduct(enterpriseConfigs.getEnterpriseId(), null);
+            persistProducts(productsListResponse);
+
+            recursiveSync(googleAPIInvoker, enterpriseConfigs.getEnterpriseId(), productsListResponse);
+            TokenWrapper tokenWrapper = new TokenWrapper();
+            tokenWrapper.setToken("asdsa");
+            return Response.status(Response.Status.OK).entity(tokenWrapper).build();
+        } catch (EnterpriseServiceException e) {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when calling sync").build())
+                    .build();
+        }
+    }
+
+    private void recursiveSync(GoogleAPIInvoker googleAPIInvoker, String enterpriseId, ProductsListResponse productsListResponse) throws EnterpriseServiceException {
+        if (productsListResponse == null || productsListResponse.getTokenPagination() == null
+                || productsListResponse.getTokenPagination().getNextPageToken() == null) {
+            return;
+        }
+
+        ProductsListResponse productsListResponseNext = googleAPIInvoker.listProduct(enterpriseId,
+                productsListResponse.getTokenPagination().getNextPageToken());
+        persistProducts(productsListResponse);
+        if (productsListResponseNext != null && productsListResponseNext.getTokenPagination() != null &&
+                productsListResponseNext.getTokenPagination().getNextPageToken() != null && !productsListResponseNext
+                .getTokenPagination().getNextPageToken().isEmpty()) {
+            recursiveSync(googleAPIInvoker, enterpriseId, productsListResponse);
+        }
+    }
+
+    private void persistProducts(ProductsListResponse productListResponse) {
+
+    }
+
 }
