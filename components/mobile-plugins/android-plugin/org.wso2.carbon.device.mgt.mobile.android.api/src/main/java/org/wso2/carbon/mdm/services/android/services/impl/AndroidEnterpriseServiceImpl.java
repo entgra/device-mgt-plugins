@@ -22,11 +22,14 @@ import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseConfigs;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseTokenUrl;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
+import org.wso2.carbon.mdm.services.android.bean.GoogleAppSyncResponse;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseInstallPolicy;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseUser;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.TokenWrapper;
@@ -34,6 +37,7 @@ import org.wso2.carbon.mdm.services.android.common.GoogleAPIInvoker;
 import org.wso2.carbon.mdm.services.android.exception.NotFoundException;
 import org.wso2.carbon.mdm.services.android.services.AndroidEnterpriseService;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
+import org.wso2.carbon.mdm.services.android.util.AndroidDeviceUtils;
 import org.wso2.carbon.mdm.services.android.util.AndroidEnterpriseUtils;
 
 import javax.ws.rs.Consumes;
@@ -190,37 +194,42 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
         try {
             ProductsListResponse productsListResponse = googleAPIInvoker
                     .listProduct(enterpriseConfigs.getEnterpriseId(), null);
-            persistProducts(productsListResponse);
+            AndroidEnterpriseUtils.persistApp(productsListResponse);
 
-            recursiveSync(googleAPIInvoker, enterpriseConfigs.getEnterpriseId(), productsListResponse);
-            TokenWrapper tokenWrapper = new TokenWrapper();
-            tokenWrapper.setToken("asdsa");
-            return Response.status(Response.Status.OK).entity(tokenWrapper).build();
+            int total = recursiveSync(googleAPIInvoker, enterpriseConfigs.getEnterpriseId(), productsListResponse);
+            GoogleAppSyncResponse appSyncResponse = new GoogleAppSyncResponse();
+            appSyncResponse.setTotalApps(total);
+            return Response.status(Response.Status.OK).entity(appSyncResponse).build();
         } catch (EnterpriseServiceException e) {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when calling sync").build())
                     .build();
+        } catch (ApplicationManagementException e) {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when persisting app").build())
+                    .build();
         }
     }
 
-    private void recursiveSync(GoogleAPIInvoker googleAPIInvoker, String enterpriseId, ProductsListResponse productsListResponse) throws EnterpriseServiceException {
+    private int recursiveSync(GoogleAPIInvoker googleAPIInvoker, String enterpriseId, ProductsListResponse
+            productsListResponse) throws EnterpriseServiceException, ApplicationManagementException {
+        // Are there more pages
         if (productsListResponse == null || productsListResponse.getTokenPagination() == null
                 || productsListResponse.getTokenPagination().getNextPageToken() == null) {
-            return;
+            return 0;
         }
 
+        // Get next page
         ProductsListResponse productsListResponseNext = googleAPIInvoker.listProduct(enterpriseId,
                 productsListResponse.getTokenPagination().getNextPageToken());
-        persistProducts(productsListResponse);
+        AndroidEnterpriseUtils.persistApp(productsListResponseNext);
         if (productsListResponseNext != null && productsListResponseNext.getTokenPagination() != null &&
                 productsListResponseNext.getTokenPagination().getNextPageToken() != null && !productsListResponseNext
                 .getTokenPagination().getNextPageToken().isEmpty()) {
-            recursiveSync(googleAPIInvoker, enterpriseId, productsListResponse);
+            return recursiveSync(googleAPIInvoker, enterpriseId, productsListResponseNext)
+                    + productsListResponse.getPageInfo().getTotalResults();
         }
-    }
-
-    private void persistProducts(ProductsListResponse productListResponse) {
-
+        return 0;
     }
 
 }

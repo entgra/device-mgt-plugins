@@ -35,8 +35,11 @@ import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpec
 import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecWebApps;
 import com.google.api.services.androidenterprise.model.AuthenticationToken;
 import com.google.api.services.androidenterprise.model.Device;
+import com.google.api.services.androidenterprise.model.LocalizedText;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
+import com.google.api.services.androidenterprise.model.StorePage;
 import com.google.api.services.androidenterprise.model.User;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
@@ -46,6 +49,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class GoogleAPIInvoker {
 
@@ -141,6 +145,18 @@ public class GoogleAPIInvoker {
             log.error(msg, e);
             throw new EnterpriseServiceException(msg, e);
         }
+    }
+
+    public StorePage createPage(String enterpriseId, String name) throws EnterpriseServiceException, IOException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        List<LocalizedText> names =
+                ImmutableList.of(
+                        new LocalizedText().setLocale("en").setText(name));
+        StorePage storePage = new StorePage();
+        storePage.setName(names);
+        return androidEnterprise.storelayoutpages()
+                .insert(enterpriseId, storePage)
+                .execute();
     }
 
     private AndroidEnterprise getEnterpriseClient() throws EnterpriseServiceException {
