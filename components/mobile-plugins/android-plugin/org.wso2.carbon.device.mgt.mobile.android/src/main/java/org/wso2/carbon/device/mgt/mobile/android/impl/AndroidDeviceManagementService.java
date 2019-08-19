@@ -84,8 +84,7 @@ public class AndroidDeviceManagementService implements DeviceManagementService {
 
     @Override
     public void init() throws DeviceManagementException {
-        this.deviceManager = new AndroidDeviceManager();
-        this.policyMonitoringManager = new AndroidPolicyMonitoringManager();
+
     }
 
     @Override
@@ -105,29 +104,6 @@ public class AndroidDeviceManagementService implements DeviceManagementService {
 
     @Override
     public PushNotificationConfig getPushNotificationConfig() {
-        try {
-            DeviceManagementService deviceManagementService = AndroidDeviceManagementDataHolder.getInstance().
-                    getAndroidDeviceManagementService();
-            if (deviceManagementService != null && deviceManagementService.getDeviceManager() != null) {
-                PlatformConfiguration androidConfig = deviceManagementService.getDeviceManager().getConfiguration();
-                if (androidConfig != null) {
-                    List<ConfigurationEntry> configuration = androidConfig.getConfiguration();
-                    String notifierValue = this.getConfigProperty(configuration, NOTIFIER_PROPERTY);
-                    if (notifierValue != null && !notifierValue.isEmpty()) {
-                        int notifierType = Integer.parseInt(notifierValue);
-                        if (notifierType == 2) {
-                            HashMap<String, String> config = new HashMap<>();
-                            config.put(FCM_API_KEY, this.getConfigProperty(configuration, FCM_API_KEY));
-                            config.put(FCM_SENDER_ID, this.getConfigProperty(configuration, FCM_SENDER_ID));
-                            return new PushNotificationConfig(AndroidPluginConstants.NotifierType.FCM, false,
-                                    config);
-                        }
-                    }
-                }
-            }
-        } catch (DeviceManagementException e) {
-            log.error("Unable to get the Android platform configuration from registry.");
-        }
         return null;
     }
 

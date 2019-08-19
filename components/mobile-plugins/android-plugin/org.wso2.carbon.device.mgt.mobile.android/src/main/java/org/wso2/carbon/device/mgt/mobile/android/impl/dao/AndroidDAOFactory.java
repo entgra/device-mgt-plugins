@@ -21,8 +21,7 @@ package org.wso2.carbon.device.mgt.mobile.android.impl.dao;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.mobile.android.impl.dao.impl.AndroidDeviceDAOImpl;
-import org.wso2.carbon.device.mgt.mobile.android.impl.dao.impl.AndroidFeatureDAOImpl;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dao.impl.EnterpriseDAOImpl;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -38,38 +37,52 @@ public class AndroidDAOFactory extends AbstractMobileDeviceManagementDAOFactory 
         this.dataSource = getDataSourceMap().get(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
     }
 
-    @Override
-    public MobileDeviceDAO getMobileDeviceDAO() {
-        return new AndroidDeviceDAOImpl();
+    public static EnterpriseDAO getEnterpriseDAO() {
+        if (dataSource == null) {
+            dataSource = getDataSourceMap().get(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+        }
+
+        return new EnterpriseDAOImpl();
     }
 
-    public MobileFeatureDAO getMobileFeatureDAO() {
-        return new AndroidFeatureDAOImpl();
-    }
-
-    public static void beginTransaction() throws MobileDeviceManagementDAOException {
+    public static void beginTransaction() throws EnterpriseManagementDAOException {
         try {
             Connection conn = dataSource.getConnection();
             conn.setAutoCommit(false);
             currentConnection.set(conn);
         } catch (SQLException e) {
-            throw new MobileDeviceManagementDAOException("Error occurred while retrieving datasource connection", e);
+            throw new EnterpriseManagementDAOException("Error occurred while retrieving datasource connection", e);
         }
     }
 
-    public static Connection getConnection() throws MobileDeviceManagementDAOException {
+    public static void openConnection() throws EnterpriseManagementDAOException {
+        Connection conn = currentConnection.get();
+        if (conn != null) {
+            throw new EnterpriseManagementDAOException("A transaction is already active within the context of " +
+                    "this particular thread. Therefore, calling 'beginTransaction/openConnection' while another " +
+                    "transaction is already active is a sign of improper transaction handling");
+        }
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new EnterpriseManagementDAOException("Error occurred while opening connection", e);
+        }
+        currentConnection.set(conn);
+    }
+
+    public static Connection getConnection() throws EnterpriseManagementDAOException {
         if (currentConnection.get() == null) {
             try {
                 currentConnection.set(dataSource.getConnection());
             } catch (SQLException e) {
-                throw new MobileDeviceManagementDAOException("Error occurred while retrieving data source connection",
+                throw new EnterpriseManagementDAOException("Error occurred while retrieving data source connection",
                         e);
             }
         }
         return currentConnection.get();
     }
 
-    public static void commitTransaction() throws MobileDeviceManagementDAOException {
+    public static void commitTransaction() throws EnterpriseManagementDAOException {
         try {
             Connection conn = currentConnection.get();
             if (conn != null) {
@@ -81,11 +94,11 @@ public class AndroidDAOFactory extends AbstractMobileDeviceManagementDAOFactory 
                 }
             }
         } catch (SQLException e) {
-            throw new MobileDeviceManagementDAOException("Error occurred while committing the transaction", e);
+            throw new EnterpriseManagementDAOException("Error occurred while committing the transaction", e);
         }
     }
 
-    public static void closeConnection() throws MobileDeviceManagementDAOException {
+    public static void closeConnection() {
         Connection conn = currentConnection.get();
         try {
             if (conn != null) {
@@ -97,7 +110,7 @@ public class AndroidDAOFactory extends AbstractMobileDeviceManagementDAOFactory 
         currentConnection.remove();
     }
 
-    public static void rollbackTransaction() throws MobileDeviceManagementDAOException {
+    public static void rollbackTransaction() {
         try {
             Connection conn = currentConnection.get();
             if (conn != null) {
@@ -109,7 +122,7 @@ public class AndroidDAOFactory extends AbstractMobileDeviceManagementDAOFactory 
                 }
             }
         } catch (SQLException e) {
-            throw new MobileDeviceManagementDAOException("Error occurred while rollback the transaction", e);
+            log.warn("Error occurred while roll-backing the transaction", e);
         }
     }
 
