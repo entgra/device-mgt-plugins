@@ -21,9 +21,11 @@ package org.wso2.carbon.device.mgt.mobile.android.impl.dao.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.AndroidDAOFactory;
-import org.wso2.carbon.device.mgt.mobile.android.impl.dao.MobileDeviceDAO;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dao.EnterpriseDAO;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dao.EnterpriseManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.util.MobileDeviceManagementDAOUtil;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.MobileDevice;
 import org.wso2.carbon.device.mgt.mobile.android.impl.util.AndroidPluginConstants;
 
@@ -31,118 +33,95 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Implements MobileDeviceDAO for Android Devices.
+ * Implements EnterpriseDAO for Android Devices.
  */
-public class AndroidDeviceDAOImpl implements MobileDeviceDAO{
+public class EnterpriseDAOImpl implements EnterpriseDAO {
 
-	private static final Log log = LogFactory.getLog(AndroidDeviceDAOImpl.class);
+	private static final Log log = LogFactory.getLog(EnterpriseDAOImpl.class);
 
-	@Override
-	public MobileDevice getMobileDevice(String mblDeviceId) throws MobileDeviceManagementDAOException {
+	public List<AndroidEnterpriseUser> getUser(String username, int tenantId) throws EnterpriseManagementDAOException {
 		Connection conn;
 		PreparedStatement stmt = null;
-		MobileDevice mobileDevice = null;
+		List<AndroidEnterpriseUser> enterpriseUsers = new ArrayList<>();
         ResultSet rs = null;
 		try {
 			conn = AndroidDAOFactory.getConnection();
 			String selectDBQuery =
-					"SELECT DEVICE_ID, FCM_TOKEN, DEVICE_INFO, DEVICE_MODEL, SERIAL, " +
-					"VENDOR, MAC_ADDRESS, DEVICE_NAME, LATITUDE, LONGITUDE, IMEI, IMSI, OS_VERSION, OS_BUILD_DATE" +
-					" FROM AD_DEVICE WHERE DEVICE_ID = ?";
+					"SELECT * FROM AD_ENTERPRISE_USER_DEVICE WHERE EMM_USERNAME = ? AND TENANT_ID = ?";
 			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setString(1, mblDeviceId);
+			stmt.setString(1, username);
+			stmt.setInt(2, tenantId);
+
 			rs = stmt.executeQuery();
 
-			if (rs.next()) {
-				mobileDevice = new MobileDevice();
-				mobileDevice.setMobileDeviceId(rs.getString(AndroidPluginConstants.DEVICE_ID));
-				mobileDevice.setModel(rs.getString(AndroidPluginConstants.DEVICE_MODEL));
-				mobileDevice.setSerial(rs.getString(AndroidPluginConstants.SERIAL));
-				mobileDevice.setVendor(rs.getString(AndroidPluginConstants.VENDOR));
-				mobileDevice.setLatitude(rs.getString(AndroidPluginConstants.LATITUDE));
-				mobileDevice.setLongitude(rs.getString(AndroidPluginConstants.LONGITUDE));
-				mobileDevice.setImei(rs.getString(AndroidPluginConstants.IMEI));
-				mobileDevice.setImsi(rs.getString(AndroidPluginConstants.IMSI));
-				mobileDevice.setOsVersion(rs.getString(AndroidPluginConstants.OS_VERSION));
-				mobileDevice.setOsBuildDate(rs.getString(AndroidPluginConstants.OS_BUILD_DATE));
-
-				Map<String, String> propertyMap = new HashMap<String, String>();
-				propertyMap.put(AndroidPluginConstants.FCM_TOKEN, rs.getString(AndroidPluginConstants.FCM_TOKEN));
-				propertyMap.put(AndroidPluginConstants.DEVICE_INFO, rs.getString(AndroidPluginConstants.DEVICE_INFO));
-				propertyMap.put(AndroidPluginConstants.DEVICE_NAME, rs.getString(AndroidPluginConstants.DEVICE_NAME));
-				mobileDevice.setDeviceProperties(propertyMap);
-
-				if (log.isDebugEnabled()) {
-					log.debug("Android device " + mblDeviceId + " data has been fetched from " +
-					          "Android database.");
-				}
+			while (rs.next()) {
+				AndroidEnterpriseUser enterpriseUser  = new AndroidEnterpriseUser();
+				enterpriseUser.setEmmUsername(rs.getString("EMM_USERNAME"));
+				enterpriseUser.setTenantId(rs.getInt("TENANT_ID"));
+				enterpriseUser.setLastUpdatedTime(rs.getString("LAST_UPDATED_TIMESTAMP"));
+				enterpriseUser.setAndroidPlayDeviceId(rs.getString("ANDROID_PLAY_DEVICE_ID"));
+				enterpriseUser.setEnterpriseId(rs.getString("ENTERPRISE_ID"));
+				enterpriseUser.setGoogleUserId(rs.getString("GOOGLE_USER_ID"));
+				enterpriseUser.setEmmDeviceId(rs.getString("EMM_DEVICE_ID"));
+				enterpriseUsers.add(enterpriseUser);
 			}
 		} catch (SQLException e) {
-			String msg = "Error occurred while fetching Android device : '" + mblDeviceId + "'";
+			String msg = "Error occurred while fetching user : '" + username + "'";
 			log.error(msg, e);
-			throw new MobileDeviceManagementDAOException(msg, e);
+			throw new EnterpriseManagementDAOException(msg, e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(stmt, rs);
             AndroidDAOFactory.closeConnection();
 		}
 
-		return mobileDevice;
+		return enterpriseUsers;
 	}
 
-	@Override
-	public boolean addMobileDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException {
+	public boolean addUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseManagementDAOException {
 		boolean status = false;
 		Connection conn;
 		PreparedStatement stmt = null;
 		try {
 			conn = AndroidDAOFactory.getConnection();
 			String createDBQuery =
-					"INSERT INTO AD_DEVICE(DEVICE_ID, FCM_TOKEN, DEVICE_INFO, SERIAL, " +
-					"VENDOR, MAC_ADDRESS, DEVICE_NAME, LATITUDE, LONGITUDE, IMEI, IMSI, " +
-					"OS_VERSION, DEVICE_MODEL, OS_BUILD_DATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					"INSERT INTO AD_ENTERPRISE_USER_DEVICE(EMM_USERNAME, TENANT_ID, LAST_UPDATED_TIMESTAMP" +
+							", ANDROID_PLAY_DEVICE_ID, ENTERPRISE_ID, GOOGLE_USER_ID, EMM_DEVICE_ID)"
+							+ " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 			stmt = conn.prepareStatement(createDBQuery);
-			stmt.setString(1, mobileDevice.getMobileDeviceId());
+			stmt.setString(1, androidEnterpriseUser.getEmmUsername());
+			stmt.setInt(2, androidEnterpriseUser.getTenantId());
+			stmt.setTimestamp(3, new Timestamp(new Date().getTime()));
+			stmt.setString(4, androidEnterpriseUser.getAndroidPlayDeviceId());
+			stmt.setString(5, androidEnterpriseUser.getEnterpriseId());
+			stmt.setString(6, androidEnterpriseUser.getGoogleUserId());
+			stmt.setString(7, androidEnterpriseUser.getEmmDeviceId());
 
-            Map<String, String> properties = mobileDevice.getDeviceProperties();
-			stmt.setString(2, properties.get(AndroidPluginConstants.FCM_TOKEN));
-			stmt.setString(3, properties.get(AndroidPluginConstants.DEVICE_INFO));
-			stmt.setString(4, mobileDevice.getSerial());
-			stmt.setString(5, mobileDevice.getVendor());
-			stmt.setString(6, mobileDevice.getMobileDeviceId());
-			stmt.setString(7, properties.get(AndroidPluginConstants.DEVICE_NAME));
-			stmt.setString(8, mobileDevice.getLatitude());
-			stmt.setString(9, mobileDevice.getLongitude());
-			stmt.setString(10, mobileDevice.getImei());
-			stmt.setString(11, mobileDevice.getImsi());
-			stmt.setString(12, mobileDevice.getOsVersion());
-			stmt.setString(13, mobileDevice.getModel());
-			stmt.setString(14, mobileDevice.getOsBuildDate());
 			int rows = stmt.executeUpdate();
 			if (rows > 0) {
 				status = true;
 				if (log.isDebugEnabled()) {
-					log.debug("Android device " + mobileDevice.getMobileDeviceId() + " data has been" +
-					          " added to the Android database.");
+					log.debug("Added user " + androidEnterpriseUser.getEmmUsername());
 				}
 			}
 		} catch (SQLException e) {
-			throw new MobileDeviceManagementDAOException("Error occurred while adding the Android device '" +
-                    mobileDevice.getMobileDeviceId() + "' information to the Android plugin data store.", e);
+			throw new EnterpriseManagementDAOException("Error occurred while adding the user "
+					+ androidEnterpriseUser.getEmmUsername(), e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
 		}
 		return status;
 	}
 
-	@Override
-	public boolean updateMobileDevice(MobileDevice mobileDevice) throws MobileDeviceManagementDAOException {
+	public boolean updateMobileDevice(MobileDevice mobileDevice) throws EnterpriseManagementDAOException {
 		boolean status = false;
 		Connection conn;
 		PreparedStatement stmt = null;
@@ -181,16 +160,15 @@ public class AndroidDeviceDAOImpl implements MobileDeviceDAO{
 			String msg = "Error occurred while modifying the Android device '" +
 			             mobileDevice.getMobileDeviceId() + "' data.";
 			log.error(msg, e);
-			throw new MobileDeviceManagementDAOException(msg, e);
+			throw new EnterpriseManagementDAOException(msg, e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
 		}
 		return status;
 	}
 
-	@Override
 	public boolean deleteMobileDevice(String mblDeviceId)
-			throws MobileDeviceManagementDAOException {
+			throws EnterpriseManagementDAOException {
 		boolean status = false;
 		Connection conn;
 		PreparedStatement stmt = null;
@@ -209,7 +187,7 @@ public class AndroidDeviceDAOImpl implements MobileDeviceDAO{
 				}
 			}
 		} catch (SQLException e) {
-			throw new MobileDeviceManagementDAOException("Error occurred while deleting android device '" +
+			throw new EnterpriseManagementDAOException("Error occurred while deleting android device '" +
                     mblDeviceId + "'", e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
@@ -217,8 +195,7 @@ public class AndroidDeviceDAOImpl implements MobileDeviceDAO{
 		return status;
 	}
 
-	@Override
-	public List<MobileDevice> getAllMobileDevices() throws MobileDeviceManagementDAOException {
+	public List<MobileDevice> getAllMobileDevices() throws EnterpriseManagementDAOException {
 		Connection conn;
 		PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -259,7 +236,7 @@ public class AndroidDeviceDAOImpl implements MobileDeviceDAO{
 			}
 			return mobileDevices;
 		} catch (SQLException e) {
-			throw new MobileDeviceManagementDAOException("Error occurred while fetching all Android device data", e);
+			throw new EnterpriseManagementDAOException("Error occurred while fetching all Android device data", e);
 		} finally {
 			MobileDeviceManagementDAOUtil.cleanupResources(stmt, rs);
             AndroidDAOFactory.closeConnection();
