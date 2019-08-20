@@ -126,12 +126,14 @@ public class AndroidEnterpriseUtils {
         return enterpriseConfigs;
     }
 
+    public static ApplicationManager getAppManagerServer() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        return (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
+    }
 
     public static void persistApp(ProductsListResponse productListResponse) throws ApplicationManagementException {
 
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ApplicationManager applicationManager =
-                (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
+        ApplicationManager applicationManager = getAppManagerServer();
         List<Category> categories = applicationManager.getRegisteredCategories();
         if (productListResponse != null && productListResponse.getProduct() != null
                 && productListResponse.getProduct().size() >0) {
