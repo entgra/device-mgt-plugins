@@ -37,18 +37,26 @@ import com.google.api.services.androidenterprise.model.AuthenticationToken;
 import com.google.api.services.androidenterprise.model.Device;
 import com.google.api.services.androidenterprise.model.LocalizedText;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
+import com.google.api.services.androidenterprise.model.StoreCluster;
+import com.google.api.services.androidenterprise.model.StoreLayout;
+import com.google.api.services.androidenterprise.model.StoreLayoutClustersListResponse;
+import com.google.api.services.androidenterprise.model.StoreLayoutPagesListResponse;
 import com.google.api.services.androidenterprise.model.StorePage;
 import com.google.api.services.androidenterprise.model.User;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseStoreCluster;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePackages;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePage;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseTokenUrl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleAPIInvoker {
@@ -147,15 +155,117 @@ public class GoogleAPIInvoker {
         }
     }
 
-    public StorePage createPage(String enterpriseId, String name) throws EnterpriseServiceException, IOException {
+    public String insertPage(String enterpriseId, EnterpriseStorePage storePage) throws IOException,
+            EnterpriseServiceException {
         AndroidEnterprise androidEnterprise = getEnterpriseClient();
         List<LocalizedText> names =
-                ImmutableList.of(
-                        new LocalizedText().setLocale("en").setText(name));
-        StorePage storePage = new StorePage();
-        storePage.setName(names);
-        return androidEnterprise.storelayoutpages()
-                .insert(enterpriseId, storePage)
+                ImmutableList.of(new LocalizedText().setLocale(storePage.getLocale()).setText(storePage.getPageName()));
+        StorePage page = new StorePage();
+        page.setName(names);
+        return androidEnterprise.storelayoutpages().insert(enterpriseId, page).execute().getId();
+    }
+
+    public String updatePage(String enterpriseId, EnterpriseStorePage storePage) throws IOException,
+            EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        List<LocalizedText> names =
+                ImmutableList.of(new LocalizedText().setLocale(storePage.getLocale()).setText(storePage.getPageName()));
+        StorePage page = new StorePage();
+        page.setName(names);
+        page.setLink(storePage.getLinks());
+        return androidEnterprise.storelayoutpages().update(enterpriseId, storePage.getPageId(), page).execute().getId();
+    }
+
+    public void deletePage(String enterpriseId, String pageId) throws IOException,
+            EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        androidEnterprise.storelayoutpages().delete(enterpriseId, pageId).execute();
+    }
+
+    public StoreLayoutPagesListResponse listPages(String enterpriseId) throws IOException,
+            EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        return androidEnterprise.storelayoutpages().list(enterpriseId).execute();
+    }
+
+    public StoreLayout setStoreLayout(String enterpriseId, String homepageId)
+            throws EnterpriseServiceException, IOException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        StoreLayout storeLayout = new StoreLayout();
+        storeLayout.setHomepageId(homepageId);
+
+        return androidEnterprise
+                .enterprises()
+                .setStoreLayout(enterpriseId, storeLayout)
+                .execute();
+    }
+
+    public String insertCluster(String enterpriseId, EnterpriseStoreCluster storeCluster) throws IOException ,
+            EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        StoreCluster cluster = new StoreCluster();
+        List<LocalizedText> names =
+                ImmutableList.of(new LocalizedText().setLocale("en").setText(storeCluster.getName()));
+        cluster.setName(names);
+        List<String> productIds = new ArrayList<>();
+        for (EnterpriseStorePackages packages : storeCluster.getProducts()) {
+            productIds.add(packages.getPackageId());
+        }
+        cluster.setProductId(productIds);
+        cluster.setOrderInPage(storeCluster.getOrderInPage());
+        return androidEnterprise.storelayoutclusters()
+                .insert(enterpriseId, storeCluster.getPageId(), cluster)
+                .execute()
+                .getId();
+    }
+
+    public String updateCluster(String enterpriseId, EnterpriseStoreCluster storeCluster) throws IOException ,
+            EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        StoreCluster cluster = new StoreCluster();
+        List<LocalizedText> names =
+                ImmutableList.of(new LocalizedText().setLocale("en").setText(storeCluster.getName()));
+        cluster.setName(names);
+        List<String> productIds = new ArrayList<>();
+        for (EnterpriseStorePackages packages : storeCluster.getProducts()) {
+            productIds.add(packages.getPackageId());
+        }
+        cluster.setProductId(productIds);
+        cluster.setOrderInPage(storeCluster.getOrderInPage());
+        cluster.setId(storeCluster.getClusterId());
+        return androidEnterprise.storelayoutclusters()
+                .update(enterpriseId, storeCluster.getPageId(), storeCluster.getClusterId(), cluster)
+                .execute()
+                .getId();
+    }
+
+    public StoreLayoutClustersListResponse getClusters(String enterpriseId, String pageId)
+            throws IOException, EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        return androidEnterprise.storelayoutclusters().list(enterpriseId, pageId).execute();
+    }
+
+    public void deleteCluster(String enterpriseId, String pageId, String clusterId)
+            throws IOException, EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        androidEnterprise.storelayoutclusters().delete(enterpriseId, pageId, clusterId).execute();
+    }
+
+    // Update the pages to include quick links to other pages.
+    public void addLinks(String enterpriseId, String pageId, List<String> links)
+            throws IOException , EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        androidEnterprise.storelayoutpages()
+                .patch(enterpriseId, pageId, new StorePage().setLink(links)).execute();
+    }
+
+    public StoreLayout getStoreLayout(String enterpriseId)
+            throws IOException, EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+
+        return androidEnterprise
+                .enterprises()
+                .getStoreLayout(enterpriseId)
                 .execute();
     }
 
