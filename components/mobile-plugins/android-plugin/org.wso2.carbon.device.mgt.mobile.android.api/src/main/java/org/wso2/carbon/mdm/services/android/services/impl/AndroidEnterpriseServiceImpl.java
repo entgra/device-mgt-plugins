@@ -131,7 +131,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @POST
-    @Path("/install-app")
+    @Path("/available-app")
     public Response updateUser(EnterpriseInstallPolicy device) {
 
         boolean sentToDevice = false;
@@ -210,7 +210,8 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                     .listProduct(enterpriseConfigs.getEnterpriseId(), null);
             AndroidEnterpriseUtils.persistApp(productsListResponse);
 
-            int total = recursiveSync(googleAPIInvoker, enterpriseConfigs.getEnterpriseId(), productsListResponse);
+            int total = productsListResponse.getProduct().size()
+                    + recursiveSync(googleAPIInvoker, enterpriseConfigs.getEnterpriseId(), productsListResponse);
             GoogleAppSyncResponse appSyncResponse = new GoogleAppSyncResponse();
             appSyncResponse.setTotalApps(total);
             return Response.status(Response.Status.OK).entity(appSyncResponse).build();
@@ -238,12 +239,12 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                 productsListResponse.getTokenPagination().getNextPageToken());
         AndroidEnterpriseUtils.persistApp(productsListResponseNext);
         if (productsListResponseNext != null && productsListResponseNext.getTokenPagination() != null &&
-                productsListResponseNext.getTokenPagination().getNextPageToken() != null && !productsListResponseNext
-                .getTokenPagination().getNextPageToken().isEmpty()) {
+                productsListResponseNext.getTokenPagination().getNextPageToken() != null) {
             return recursiveSync(googleAPIInvoker, enterpriseId, productsListResponseNext)
-                    + productsListResponse.getPageInfo().getTotalResults();
+                    + productsListResponseNext.getProduct().size();
+        } else {
+            return productsListResponseNext.getProduct().size();
         }
-        return 0;
     }
 
     @POST

@@ -153,7 +153,7 @@ public interface AndroidEnterpriseService {
 //######################################################################################################################
 
     @POST
-    @Path("/install-app")
+    @Path("/available-app")
     @ApiOperation(
             produces = MediaType.APPLICATION_JSON,
             consumes = MediaType.APPLICATION_JSON,
