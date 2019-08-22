@@ -20,12 +20,12 @@
                 data-deviceinfoservice="{{device.deviceInfoServiceAPI}}"
                 data-devicelocationservice="{{device.deviceLocationServiceAPI}}">
             {{device.owner}}'s {{device.name}}
-              <a id="device-info-tooltip" href="#" data-toggle="tooltip" title="Device Identifier: {{device.deviceIdentifier}}
+            </h1>
+            <a id="device-info-tooltip" href="#" data-toggle="tooltip" title="Device Identifier: {{device.deviceIdentifier}}
               Firmware Build Date: {{device.osBuildDate}}
               UDID: {{device.udid}}">
                 <i class="fw fw-info"></i>
-              </a>
-            </h1>
+            </a>
             {{#if device.model}}
               <h4>{{device.vendor}} {{device.model}}</h4>
             {{/if}}
