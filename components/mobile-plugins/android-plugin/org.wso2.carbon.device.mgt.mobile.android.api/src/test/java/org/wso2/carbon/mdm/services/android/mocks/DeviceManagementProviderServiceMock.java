@@ -19,6 +19,7 @@
 package org.wso2.carbon.mdm.services.android.mocks;
 
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.DeviceConfiguration;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
@@ -620,9 +621,9 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public DeviceConfiguration getDevicesConfiguration(Map<String, String> map)
-            throws DeviceManagementException, DeviceNotFoundException, InvalidArgumentException,
-                   UnauthorizedDeviceAccessException {
+    public DeviceConfiguration getDeviceConfiguration(Map<String, String> propertyMap)
+            throws DeviceManagementException, DeviceNotFoundException, UnauthorizedDeviceAccessException,
+                   AmbiguousConfigurationException{
         return null;
     }
 }
