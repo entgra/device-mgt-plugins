@@ -36,7 +36,6 @@ package org.wso2.carbon.device.mgt.mobile.android.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManager;
 import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
 import org.wso2.carbon.device.mgt.common.ProvisioningConfig;
@@ -46,11 +45,13 @@ import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.general.GeneralConfig;
 import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
 import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationSubscriber;
 import org.wso2.carbon.device.mgt.common.push.notification.PushNotificationConfig;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.common.type.mgt.DeviceTypePlatformDetails;
 import org.wso2.carbon.device.mgt.mobile.android.impl.util.AndroidPluginConstants;
 import org.wso2.carbon.device.mgt.mobile.android.internal.AndroidDeviceManagementDataHolder;
 
@@ -159,6 +160,9 @@ public class AndroidDeviceManagementService implements DeviceManagementService {
     public GeneralConfig getGeneralConfig() {
         return null;
     }
+
+    @Override
+    public DeviceTypePlatformDetails getDeviceTypePlatformDetails() { return null; }
 
     private String getConfigProperty(List<ConfigurationEntry> configs, String propertyName) {
         for (ConfigurationEntry entry : configs) {
