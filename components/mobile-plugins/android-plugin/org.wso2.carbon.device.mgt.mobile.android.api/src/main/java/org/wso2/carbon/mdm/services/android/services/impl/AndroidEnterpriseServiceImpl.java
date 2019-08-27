@@ -36,6 +36,7 @@ import org.wso2.carbon.mdm.services.android.bean.EnterpriseConfigs;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStoreCluster;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePackages;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePage;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePageLinks;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseTokenUrl;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.GoogleAppSyncResponse;
@@ -557,6 +558,27 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching all details in PageId "
                             + pageId).build()).build();
+        }
+    }
+
+    @PUT
+    @Path("/store-layout/page-link")
+    @Override
+    public Response updateLinks(EnterpriseStorePageLinks link) {
+        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+        try {
+            googleAPIInvoker.addLinks(enterpriseConfigs.getEnterpriseId(),
+                    link.getPageId(), link.getLinks());
+            return Response.status(Response.Status.OK).build();
+        } catch (IOException e) {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching all pages").build())
+                    .build();
+        } catch (EnterpriseServiceException e) {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching page "
+                            + " , Due to an error with ESA").build()).build();
         }
     }
 

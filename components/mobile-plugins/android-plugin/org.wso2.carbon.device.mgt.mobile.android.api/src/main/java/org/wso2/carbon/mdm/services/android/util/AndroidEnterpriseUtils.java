@@ -238,7 +238,7 @@ public class AndroidEnterpriseUtils {
         }
 
         File file = new File(System.getProperty("java.io.tmpdir") + File.separator + filename);
-        InputStream targetStream = null;
+        InputStream targetStream;
         try {
             targetStream = new FileInputStream(file);
         } catch (FileNotFoundException e) {

@@ -34,6 +34,7 @@ import org.wso2.carbon.apimgt.annotations.api.Scopes;
 import org.wso2.carbon.mdm.services.android.bean.DeviceState;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStoreCluster;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePage;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePageLinks;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseInstallPolicy;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseUser;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EventBeanWrapper;
@@ -960,4 +961,61 @@ public interface AndroidEnterpriseService {
 //######################################################################################################################
 //######################################################################################################################
 //######################################################################################################################
+
+    @PUT
+    @Path("/store-layout/page-link")
+    @ApiOperation(
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON,
+            httpMethod = "POST",
+            value = "Add New Cluster",
+            notes = "Add a new cluster to enterprise system.",
+            tags = "Android Enterprise Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:modify")
+                    })
+            }
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 201, message = "Created. \n Successfully added new cluster",
+                            responseHeaders = {
+                                    @ResponseHeader(
+                                            name = "Content-Location",
+                                            description = "The URL of the added policy."),
+                                    @ResponseHeader(
+                                            name = "Content-Type",
+                                            description = "The content type of the body"),
+                                    @ResponseHeader(
+                                            name = "ETag",
+                                            description = "Entity Tag of the response resource.\n" +
+                                                    "Used by caches, or in conditional requests."),
+                                    @ResponseHeader(
+                                            name = "Last-Modified",
+                                            description = "Date and time the resource was last modified.\n" +
+                                                    "Used by caches, or in conditional requests.")
+                            }),
+                    @ApiResponse(
+                            code = 303,
+                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+                            responseHeaders = {
+                                    @ResponseHeader(
+                                            name = "Content-Location",
+                                            description = "The Source URL of the document.")}),
+                    @ApiResponse(
+                            code = 400,
+                            message = "Bad Request. \n Invalid request or validation error."),
+                    @ApiResponse(
+                            code = 415,
+                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
+                    @ApiResponse(
+                            code = 500,
+                            message = "Internal Server Error. \n " +
+                                    "Server error occurred while adding new cluster.")
+            })
+    Response updateLinks(@ApiParam(
+            name = "links",
+            value = "Enterprise page links.")
+                                 EnterpriseStorePageLinks links);
 }
