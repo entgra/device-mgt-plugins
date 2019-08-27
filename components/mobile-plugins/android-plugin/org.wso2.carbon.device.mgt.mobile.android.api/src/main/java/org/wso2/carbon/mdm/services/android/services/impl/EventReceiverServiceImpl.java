@@ -24,10 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
 import org.wso2.carbon.device.mgt.analytics.data.publisher.exception.DataPublisherConfigurationException;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 import org.wso2.carbon.mdm.services.android.bean.DeviceState;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
@@ -59,6 +56,10 @@ public class EventReceiverServiceImpl implements EventReceiverService {
 
     private static final String LONGITUDE = "longitude";
     private static final String LATITUDE = "latitude";
+    private static final String ALTITUDE = "altitude";
+    private static final String SPEED = "speed";
+    private static final String DISTANCE = "distance";
+    private static final String BEARING = "bearing";
     private static final String TIME_STAMP = "timeStamp";
     private static final String LOCATION_EVENT_TYPE = "location";
 
@@ -100,7 +101,11 @@ public class EventReceiverServiceImpl implements EventReceiverService {
         Object[] payload = {
                 jsonObject.get(TIME_STAMP).getAsLong(),
                 jsonObject.get(LATITUDE).getAsDouble(),
-                jsonObject.get(LONGITUDE).getAsDouble()
+                jsonObject.get(LONGITUDE).getAsDouble(),
+                jsonObject.get(ALTITUDE).getAsDouble(),
+                jsonObject.get(SPEED).getAsFloat(),
+                jsonObject.get(BEARING).getAsFloat(),
+                jsonObject.get(DISTANCE).getAsDouble()
         };
         try {
             if (AndroidAPIUtils.getEventPublisherService().publishEvent(
