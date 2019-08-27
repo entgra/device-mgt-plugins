@@ -31,7 +31,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.application.mgt.common.ApplicationArtifact;
+import org.wso2.carbon.device.application.mgt.common.LifecycleChanger;
 import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
+import org.wso2.carbon.device.application.mgt.common.response.Application;
 import org.wso2.carbon.device.application.mgt.common.response.Category;
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
 import org.wso2.carbon.device.application.mgt.common.wrapper.PublicAppReleaseWrapper;
@@ -48,8 +50,10 @@ import org.wso2.carbon.mdm.services.android.exception.UnexpectedServerErrorExcep
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.InputStream;
 import java.nio.channels.Channels;
@@ -145,6 +149,7 @@ public class AndroidEnterpriseUtils {
                 PublicAppReleaseWrapper appReleaseWrapper = new PublicAppReleaseWrapper();
                 publicAppWrapper.setName(product.getTitle());
                 publicAppWrapper.setDescription(product.getDescription());
+                publicAppWrapper.setCategories(Arrays.asList(new String[]{"GooglePlaySyncedApp"}));//Default category
                 for (Category category :categories) {
                     if(product.getCategory().equalsIgnoreCase(category.getCategoryName())) {
                         publicAppWrapper.setCategories(Arrays.asList(new String[]{category.getCategoryName()}));
@@ -175,7 +180,7 @@ public class AndroidEnterpriseUtils {
                 String iconName = product.getIconUrl().split(".com/")[1];
                 applicationArtifact.setIconName(iconName);
 
-                try {
+
                     InputStream iconInputStream = getInputStream(iconName, product.getIconUrl());
                     applicationArtifact.setIconStream(iconInputStream);
                     Map<String, InputStream> screenshotMap = new HashMap<>();
@@ -187,27 +192,62 @@ public class AndroidEnterpriseUtils {
                         screenshotMap.put(screenshotName, screenshotInputStream);
                     }
                     applicationArtifact.setScreenshots(screenshotMap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                applicationManager.createPublicApp(publicAppWrapper, applicationArtifact, true);
+
+                Application application = applicationManager.createPublicApp(publicAppWrapper, applicationArtifact);
+                if (application != null && (application.getApplicationReleases().get(0).getCurrentStatus() == null
+                        || application.getApplicationReleases().get(0).getCurrentStatus().equals("CREATED"))) {
+                    String uuid = application.getApplicationReleases().get(0).getUuid();
+                    LifecycleChanger lifecycleChanger = new LifecycleChanger();
+                    lifecycleChanger.setAction("IN-REVIEW");
+                    applicationManager.changeLifecycleState(uuid, lifecycleChanger);
+                    lifecycleChanger.setAction("APPROVED");
+                    applicationManager.changeLifecycleState(uuid, lifecycleChanger);
+                    lifecycleChanger.setAction("PUBLISHED");
+                    applicationManager.changeLifecycleState(uuid, lifecycleChanger);
+                }
             }
         }
     }
 
-    private static InputStream getInputStream(String filename, String url) throws IOException{
-        URL website = new URL(url);
-        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-        FileOutputStream fos = new FileOutputStream(System.getProperty("java.io.tmpdir")
-                + File.separator + filename);
-        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-        fos.close();
-        rbc.close();
-        InputStream targetStream = new FileInputStream(new File(System.getProperty("java.io.tmpdir")
-                +File.separator + filename));
-        Files.deleteIfExists(Paths.get(System.getProperty("java.io.tmpdir")
-                +File.separator + filename));
+    private static InputStream getInputStream(String filename, String url) throws ApplicationManagementException {
+        URL website;
+        try {
+            website = new URL(url);
+        } catch (MalformedURLException e) {
+            String msg = "Error occurred while converting the url " + url;
+            log.error(msg);
+            throw new ApplicationManagementException(msg, e);
+        }
+        ReadableByteChannel rbc = null;
+        FileOutputStream fos = null;
+        try {
+            rbc = Channels.newChannel(website.openStream());
+            fos = new FileOutputStream(System.getProperty("java.io.tmpdir")
+                    + File.separator + filename);
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        }catch (IOException e) {
+            String msg = "Error occurred while opening stream for url " + url;
+            log.error(msg);
+            throw new ApplicationManagementException(msg, e);
+        } finally {
+            try {
+                fos.close();
+                rbc.close();
+            } catch (IOException e) {}
+        }
+
+        File file = new File(System.getProperty("java.io.tmpdir") + File.separator + filename);
+        InputStream targetStream;
+        try {
+            targetStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            String msg = "Error occurred while reading the tmp file  " + System.getProperty("java.io.tmpdir")
+                    + File.separator + filename;
+            log.error(msg);
+            throw new ApplicationManagementException(msg, e);
+        }
+        file.deleteOnExit();
         return targetStream;
     }
 
