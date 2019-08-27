@@ -192,6 +192,7 @@ public class GoogleAPIInvoker {
             throws EnterpriseServiceException, IOException {
         AndroidEnterprise androidEnterprise = getEnterpriseClient();
         StoreLayout storeLayout = new StoreLayout();
+        storeLayout.setStoreLayoutType("custom");
         storeLayout.setHomepageId(homepageId);
 
         return androidEnterprise
