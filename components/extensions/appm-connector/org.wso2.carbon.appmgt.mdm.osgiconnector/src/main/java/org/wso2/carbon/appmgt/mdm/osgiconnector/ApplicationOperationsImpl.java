@@ -109,8 +109,13 @@ public class ApplicationOperationsImpl implements ApplicationOperations {
                             .getDeviceManagementService(applicationOperationAction.getTenantId()).
                                     getAllDevicesOfRole(userRole);
                     for (org.wso2.carbon.device.mgt.common.Device device : deviceList) {
-                        if (MDMAppConstants.ACTIVE.equalsIgnoreCase(device.getEnrolmentInfo().getStatus().toString())) {
-                            deviceIdentifiers.add(getDeviceIdentifierByDevice(device));
+                        if (MDMAppConstants.WEBAPP.equals(applicationOperationAction.getApp().getPlatform())
+                                || applicationOperationAction.getApp().getPlatform()
+                                .equalsIgnoreCase(device.getType())) {
+                            if (MDMAppConstants.ACTIVE
+                                    .equalsIgnoreCase(device.getEnrolmentInfo().getStatus().toString())) {
+                                deviceIdentifiers.add(getDeviceIdentifierByDevice(device));
+                            }
                         }
                     }
                 }
