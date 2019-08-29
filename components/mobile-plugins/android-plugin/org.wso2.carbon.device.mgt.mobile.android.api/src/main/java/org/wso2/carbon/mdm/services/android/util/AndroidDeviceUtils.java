@@ -254,6 +254,20 @@ public class AndroidDeviceUtils {
             }
         }
         AndroidAPIUtils.getDeviceManagementService().updateOperation(deviceIdentifier, operation);
+        // This has to be bellow other if blocks, since updateOperation would fail if we execute against a disenrolled
+        // device.
+        if (!Operation.Status.ERROR.equals(operation.getStatus()) && AndroidConstants.
+                OperationCodes.WIPE_DATA.equals(operation.getCode())) {
+            if (log.isDebugEnabled()) {
+                log.debug("Received wipe data from device '" + deviceId + "'");
+            }
+            try {
+                AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
+            } catch (DeviceManagementException e) {
+                throw new OperationManagementException("Error occurred while unenrolling the device.", e);
+            }
+
+        }
     }
 
     public static List<? extends Operation> getPendingOperations
@@ -548,11 +562,9 @@ public class AndroidDeviceUtils {
         return errorResponse;
     }
 
-    public static void installEnrollmentApplications(ProfileFeature feature, String deviceId)
+    public static void installEnrollmentApplications(ProfileFeature feature, DeviceIdentifier deviceIdentifier)
             throws PolicyManagementException {
-        String appId = "";
-        String payload;
-        StringRequestEntity requestEntity;
+        String uuid = "";
         HttpClient httpClient;
         PostMethod request;
         try {
@@ -565,36 +577,44 @@ public class AndroidDeviceUtils {
                     System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_HOST) +
                     AndroidConstants.ApplicationInstall.COLON +
                     System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_PORT) +
-                    AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CONTEXT;
+                    AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_URL;
             JsonElement appListElement = new JsonParser().parse(feature.getContent().toString()).getAsJsonObject()
                     .get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
+            String payload = "[{\"id\":\"" + deviceIdentifier.getId() + "\", \"type\":\""
+                             + deviceIdentifier.getType() + "\"}]";
+            StringRequestEntity requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON
+                    , AndroidConstants.ApplicationInstall.ENCODING);
             JsonArray appListArray = appListElement.getAsJsonArray();
             for (JsonElement appElement : appListArray) {
-                appId = appElement.getAsJsonObject().
-                        get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_ID).getAsString();
-                payload = "{\"appId\": \"" + appId + "\", \"scheduleTime\":\"2013-12-25T15:25:30-05:00\"," +
-                        "\"deviceIds\": [\"{\\\"id\\\":\\\"" + deviceId + "\\\", \\\"type\\\":\\\"android\\\"}\"]}";
-                requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON,
-                        AndroidConstants.ApplicationInstall.ENCODING);
+                uuid = appElement.getAsJsonObject().
+                        get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_UUID).getAsString();
+                requestUrl = requestUrl.replace("{uuid}", uuid);
                 httpClient = new HttpClient();
                 request = new PostMethod(requestUrl);
-                request.addRequestHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION,
-                        AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo.getAccessToken());
+                request.addRequestHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION
+                        , AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo.getAccessToken());
                 request.setRequestEntity(requestEntity);
                 httpClient.executeMethod(request);
             }
         } catch (UserStoreException e) {
-            throw new PolicyManagementException("Error while accessing user store for user with iOS device id: " +
-                    deviceId, e);
+            String msg = "Error while accessing user store for user with Android device id: " +
+                         deviceIdentifier.getId();
+            log.error(msg, e);
+            throw new PolicyManagementException(msg, e);
         } catch (APIManagerException e) {
-            throw new PolicyManagementException("Error while retrieving access token for Android device id: " +
-                    deviceId, e);
+            String msg = "Error while retrieving access token for Android device id: " + deviceIdentifier.getId();
+            log.error(msg, e);
+            throw new PolicyManagementException(msg, e);
         } catch (HttpException e) {
-            throw new PolicyManagementException("Error while calling the app store to install enrollment app with " +
-                    "id: " + appId + " on device with id: " + deviceId, e);
+            String msg = "Error while calling the app store to install enrollment app with uuid: " + uuid +
+                         " on device with id: " + deviceIdentifier.getId();
+            log.error(msg, e);
+            throw new PolicyManagementException(msg, e);
         } catch (IOException e) {
-            throw new PolicyManagementException("Error while installing the enrollment app with id: " + appId +
-                    " on device with id: " + deviceId, e);
+            String msg = "Error while installing the enrollment with uuid: " + uuid + " on device with id: " +
+                         deviceIdentifier.getId();
+            log.error(msg, e);
+            throw new PolicyManagementException(msg, e);
         }
     }
 
