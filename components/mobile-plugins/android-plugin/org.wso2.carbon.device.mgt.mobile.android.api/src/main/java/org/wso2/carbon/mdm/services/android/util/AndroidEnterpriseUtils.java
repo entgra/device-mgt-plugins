@@ -144,6 +144,10 @@ public class AndroidEnterpriseUtils {
 
             for (Product product : productListResponse.getProduct()) {
 
+                if (product.getAppVersion() == null) { // This is to handled removed apps from playstore
+                    continue;
+                }
+
                 // Generate App wrapper
                 PublicAppWrapper publicAppWrapper = new PublicAppWrapper();
                 PublicAppReleaseWrapper appReleaseWrapper = new PublicAppReleaseWrapper();

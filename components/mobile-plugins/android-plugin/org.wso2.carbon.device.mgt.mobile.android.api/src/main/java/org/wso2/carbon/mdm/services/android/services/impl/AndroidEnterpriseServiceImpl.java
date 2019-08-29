@@ -31,6 +31,7 @@ import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManage
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseConfigs;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStoreCluster;
@@ -77,6 +78,19 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
     @POST
     @Path("/user")
     public Response addUser(EnterpriseUser enterpriseUser) {
+        if (enterpriseUser == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Message body is empty or incorrect").build())
+                    .build();
+        } else if (enterpriseUser.getEmmDeviceIdentifier() == null || enterpriseUser.getEmmDeviceIdentifier().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("EMM ID is incorrect").build())
+                    .build();
+        } else if (enterpriseUser.getAndroidPlayDeviceId() == null || enterpriseUser.getAndroidPlayDeviceId().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Google Play ID is incorrect").build())
+                    .build();
+        }
 
         EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
         String token;
@@ -176,6 +190,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                                 @QueryParam("isPrivateAppsEnabled") boolean isPrivateAppsEnabled,
                                 @QueryParam("isWebAppEnabled") boolean isWebAppEnabled,
                                 @QueryParam("isOrganizeAppPageVisible") boolean isOrganizeAppPageVisible,
+                                @QueryParam("isManagedConfigEnabled") boolean isManagedConfigEnabled,
                                 @QueryParam("host") String host) {
 
         EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
@@ -188,6 +203,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
         enterpriseTokenUrl.setWebAppEnabled(isWebAppEnabled);
         enterpriseTokenUrl.setOrganizeAppPageVisible(isOrganizeAppPageVisible);
         enterpriseTokenUrl.setParentHost(host);
+        enterpriseTokenUrl.setManagedConfigEnabled(isManagedConfigEnabled);
         try {
             String token = googleAPIInvoker.getAdministratorWebToken(enterpriseTokenUrl);
             TokenWrapper tokenWrapper = new TokenWrapper();
@@ -580,6 +596,95 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching page "
                             + " , Due to an error with ESA").build()).build();
         }
+    }
+
+    @Override
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("/managed-configs/package/{packageName}")
+    public Response getConfig(@PathParam("packageName") String packageName) {
+        if (packageName== null || packageName.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Package name is incorrect").build()).build();
+        }
+
+        AndroidEnterpriseManagedConfig managedConfig;
+        try {
+            managedConfig = AndroidAPIUtils.getAndroidPluginService().getConfigByPackageName(packageName);
+        } catch (EnterpriseServiceException e) {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
+        }
+        return Response.status(Response.Status.OK).entity(managedConfig).build();
+    }
+
+    @Override
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    @Path("/managed-configs")
+    public Response addManagedConfigs(AndroidEnterpriseManagedConfig managedConfig) {
+        if (managedConfig == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Message body is empty or incorrect").build())
+                    .build();
+        } else if (managedConfig.getPackageName() == null || managedConfig.getPackageName().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Package name is incorrect").build()).build();
+        } else if (managedConfig.getProfileName() == null || managedConfig.getProfileName().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Profile name is incorrect").build()).build();
+        }
+
+        try {
+           AndroidAPIUtils.getAndroidPluginService().addConfig(managedConfig);
+        } catch (EnterpriseServiceException e) {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
+        }
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @Override
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @PUT
+    @Path("/managed-configs")
+    public Response updateManagedConfigs(AndroidEnterpriseManagedConfig managedConfig) {
+        if (managedConfig == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Message body is empty or incorrect").build())
+                    .build();
+        } else if (managedConfig.getProfileName() == null || managedConfig.getProfileName().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Profile name is incorrect").build()).build();
+        }
+
+        try {
+            AndroidAPIUtils.getAndroidPluginService().updateMobileDevice(managedConfig);
+        } catch (EnterpriseServiceException e) {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
+        }
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @Override
+    @DELETE
+    @Path("/managed-configs/mcm/{mcmId}")
+    public Response deleteManagedConfigs(@PathParam("mcmId") String mcmId) {
+        if (mcmId == null || mcmId.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("MCM Id is incorrect").build()).build();
+        }
+
+        try {
+            AndroidAPIUtils.getAndroidPluginService().deleteMobileDevice(mcmId);
+        } catch (EnterpriseServiceException e) {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
+        }
+        return Response.status(Response.Status.OK).build();
     }
 
 }

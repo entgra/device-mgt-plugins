@@ -28,6 +28,7 @@ public class EnterpriseTokenUrl {
     boolean isPrivateAppsEnabled;
     boolean isWebAppEnabled;
     boolean isOrganizeAppPageVisible;
+    boolean isManagedConfigEnabled;
 
     public String getEnterpriseId() {
         return enterpriseId;
@@ -83,5 +84,13 @@ public class EnterpriseTokenUrl {
 
     public void setOrganizeAppPageVisible(boolean organizeAppPageVisible) {
         isOrganizeAppPageVisible = organizeAppPageVisible;
+    }
+
+    public boolean isManagedConfigEnabled() {
+        return isManagedConfigEnabled;
+    }
+
+    public void setManagedConfigEnabled(boolean managedConfigEnabled) {
+        isManagedConfigEnabled = managedConfigEnabled;
     }
 }

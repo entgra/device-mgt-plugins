@@ -41,6 +41,7 @@ import org.wso2.carbon.device.mgt.mobile.android.AndroidPluginService;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.AndroidDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.EnterpriseDAO;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.EnterpriseManagementDAOException;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 
 import java.util.List;
@@ -70,6 +71,7 @@ public class AndroidPluginServiceImpl implements AndroidPluginService {
             String msg = "Error occurred while adding the user "
                     + CarbonContext.getThreadLocalCarbonContext().getUsername();
             log.error(msg, e);
+            AndroidDAOFactory.rollbackTransaction();
             throw new EnterpriseServiceException(msg, e);
         } finally {
             AndroidDAOFactory.closeConnection();
@@ -98,5 +100,95 @@ public class AndroidPluginServiceImpl implements AndroidPluginService {
             AndroidDAOFactory.closeConnection();
         }
         return androidEnterpriseUsers;
+    }
+
+    @Override
+    public AndroidEnterpriseManagedConfig getConfigByPackageName(String packageName) throws EnterpriseServiceException {
+        AndroidEnterpriseManagedConfig enterpriseManagedConfig;
+        if (log.isDebugEnabled()) {
+            log.debug("Calling get user service by device identifier: " + CarbonContext
+                    .getThreadLocalCarbonContext().getUsername());
+        }
+        try {
+            AndroidDAOFactory.openConnection();
+            enterpriseManagedConfig = this.enterpriseDAO.getConfigByPackageName(packageName, CarbonContext
+                    .getThreadLocalCarbonContext().getTenantId());
+
+        } catch (EnterpriseManagementDAOException e) {
+            String msg = "Error occurred while getting configs for the package  " + packageName;
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        } finally {
+            AndroidDAOFactory.closeConnection();
+        }
+        return enterpriseManagedConfig;
+    }
+
+    @Override
+    public void addConfig(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseServiceException {
+        if (log.isDebugEnabled()) {
+            log.debug("Calling add managed config for package : " + managedConfig.getPackageName());
+        }
+
+        // Block from fetching other tenants data.
+        managedConfig.setTenantID(CarbonContext.getThreadLocalCarbonContext().getTenantId());
+        try {
+            AndroidDAOFactory.beginTransaction();
+            this.enterpriseDAO.addConfig(managedConfig);
+            AndroidDAOFactory.commitTransaction();
+        } catch (EnterpriseManagementDAOException e) {
+            String msg = "Error occurred while adding managed configs for package " + managedConfig.getPackageName();
+            log.error(msg, e);
+            AndroidDAOFactory.rollbackTransaction();
+            throw new EnterpriseServiceException(msg, e);
+        } finally {
+            AndroidDAOFactory.closeConnection();
+        }
+    }
+
+    @Override
+    public boolean updateMobileDevice(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseServiceException {
+        boolean status;
+        if (log.isDebugEnabled()) {
+            log.debug("Calling update managed config for mcm id : " + managedConfig.getMcmId());
+        }
+
+        // Block from fetching other tenants data.
+        managedConfig.setTenantID(CarbonContext.getThreadLocalCarbonContext().getTenantId());
+        try {
+            AndroidDAOFactory.beginTransaction();
+            status = this.enterpriseDAO.updateConfig(managedConfig);
+            AndroidDAOFactory.commitTransaction();
+        } catch (EnterpriseManagementDAOException e) {
+            String msg = "Error occurred while updating managed configs for mcm id " + managedConfig.getMcmId();
+            log.error(msg, e);
+            AndroidDAOFactory.rollbackTransaction();
+            throw new EnterpriseServiceException(msg, e);
+        } finally {
+            AndroidDAOFactory.closeConnection();
+        }
+        return status;
+    }
+
+    @Override
+    public boolean deleteMobileDevice(String id) throws EnterpriseServiceException {
+        boolean status;
+        if (log.isDebugEnabled()) {
+            log.debug("Calling update managed config for mcm id : " + id);
+        }
+
+        try {
+            AndroidDAOFactory.beginTransaction();
+            status = this.enterpriseDAO.deleteConfig(id,CarbonContext.getThreadLocalCarbonContext().getTenantId());
+            AndroidDAOFactory.commitTransaction();
+        } catch (EnterpriseManagementDAOException e) {
+            String msg = "Error occurred while updating managed configs for mcm id " + id;
+            log.error(msg, e);
+            AndroidDAOFactory.rollbackTransaction();
+            throw new EnterpriseServiceException(msg, e);
+        } finally {
+            AndroidDAOFactory.closeConnection();
+        }
+        return status;
     }
 }

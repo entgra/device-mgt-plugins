@@ -19,6 +19,7 @@
 package org.wso2.carbon.device.mgt.mobile.android;
 
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 
 import java.util.List;
@@ -28,4 +29,12 @@ public interface AndroidPluginService {
     void addEnterpriseUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseServiceException;
 
     List<AndroidEnterpriseUser> getEnterpriseUser(String username) throws EnterpriseServiceException;
+
+    AndroidEnterpriseManagedConfig getConfigByPackageName(String packageName) throws EnterpriseServiceException;
+
+    void addConfig(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseServiceException;
+
+    boolean updateMobileDevice(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseServiceException;
+
+    boolean deleteMobileDevice(String id) throws EnterpriseServiceException;
 }
