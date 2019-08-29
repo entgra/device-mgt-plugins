@@ -19,7 +19,9 @@
 package org.wso2.carbon.mdm.services.android.mocks;
 
 import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.DeviceConfiguration;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
@@ -616,5 +618,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public boolean updateEnrollment(String owner, List<String> deviceIdentifiers) {
         return false;
+    }
+
+    @Override
+    public DeviceConfiguration getDeviceConfiguration(Map<String, String> propertyMap)
+            throws DeviceManagementException, DeviceNotFoundException, UnauthorizedDeviceAccessException,
+                   AmbiguousConfigurationException{
+        return null;
     }
 }
