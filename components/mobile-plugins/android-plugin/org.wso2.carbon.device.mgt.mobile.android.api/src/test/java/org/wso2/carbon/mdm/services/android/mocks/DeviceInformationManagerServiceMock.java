@@ -1,6 +1,5 @@
 package org.wso2.carbon.mdm.services.android.mocks;
 
-import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceInfo;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
@@ -41,8 +40,4 @@ public class DeviceInformationManagerServiceMock implements DeviceInformationMan
         return null;
     }
 
-    @Override
-    public void addDeviceLocationHistory(Device device, DeviceLocation deviceLocation) throws DeviceDetailsMgtException {
-
-    }
 }
