@@ -328,6 +328,10 @@ public class AndroidDeviceManager implements DeviceManager {
         // Updating current object features using newer ones
         existingMobileDevice.setLatitude(mobileDevice.getLatitude());
         existingMobileDevice.setLongitude(mobileDevice.getLongitude());
+        existingMobileDevice.setAltitude(mobileDevice.getAltitude());
+        existingMobileDevice.setSpeed(mobileDevice.getSpeed());
+        existingMobileDevice.setBearing(mobileDevice.getBearing());
+        existingMobileDevice.setDistance(mobileDevice.getDistance());
         existingMobileDevice.setDeviceProperties(mobileDevice.getDeviceProperties());
 
         try {

@@ -29,6 +29,7 @@ import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
+import org.wso2.carbon.device.mgt.common.device.details.DeviceLocationHistory;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceTypeNotFoundException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
@@ -587,6 +588,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public List<DeviceType> getDeviceTypes() throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<DeviceLocationHistory> getDeviceLocationInfo(String s, String s1, long l, long l1) throws DeviceManagementException {
         return null;
     }
 
