@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
- * you may obtain a copy of the License at
+ * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.impl.dao;
 
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 
 import java.util.List;
@@ -34,7 +35,16 @@ public interface EnterpriseDAO {
 	 * @return User addition status.
 	 * @throws EnterpriseManagementDAOException
 	 */
-	 boolean addUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseManagementDAOException;
+	boolean addUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseManagementDAOException;
 
 	List<AndroidEnterpriseUser> getUser(String username, int tenantId) throws EnterpriseManagementDAOException;
+
+	AndroidEnterpriseManagedConfig getConfigByPackageName(String packageName, int tenantId)
+			throws EnterpriseManagementDAOException;
+
+	boolean addConfig(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseManagementDAOException;
+
+	boolean updateConfig(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseManagementDAOException;
+
+	boolean deleteConfig(String id, int tenantId) throws EnterpriseManagementDAOException;
 }

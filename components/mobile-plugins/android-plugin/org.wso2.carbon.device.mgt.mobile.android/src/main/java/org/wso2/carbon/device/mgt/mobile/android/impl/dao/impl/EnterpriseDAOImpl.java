@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2019, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
- * you may obtain a copy of the License at
+ * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -25,6 +25,7 @@ import org.wso2.carbon.device.mgt.mobile.android.impl.dao.EnterpriseDAO;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.EnterpriseManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.MobileDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.util.MobileDeviceManagementDAOUtil;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.MobileDevice;
 import org.wso2.carbon.device.mgt.mobile.android.impl.util.AndroidPluginConstants;
@@ -45,202 +46,210 @@ import java.util.Map;
  */
 public class EnterpriseDAOImpl implements EnterpriseDAO {
 
-	private static final Log log = LogFactory.getLog(EnterpriseDAOImpl.class);
+    private static final Log log = LogFactory.getLog(EnterpriseDAOImpl.class);
 
-	public List<AndroidEnterpriseUser> getUser(String username, int tenantId) throws EnterpriseManagementDAOException {
-		Connection conn;
-		PreparedStatement stmt = null;
-		List<AndroidEnterpriseUser> enterpriseUsers = new ArrayList<>();
+    public List<AndroidEnterpriseUser> getUser(String username, int tenantId) throws EnterpriseManagementDAOException {
+        Connection conn;
+        PreparedStatement stmt = null;
+        List<AndroidEnterpriseUser> enterpriseUsers = new ArrayList<>();
         ResultSet rs = null;
-		try {
-			conn = AndroidDAOFactory.getConnection();
-			String selectDBQuery =
-					"SELECT * FROM AD_ENTERPRISE_USER_DEVICE WHERE EMM_USERNAME = ? AND TENANT_ID = ?";
-			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setString(1, username);
-			stmt.setInt(2, tenantId);
+        try {
+            conn = AndroidDAOFactory.getConnection();
+            String selectDBQuery =
+                    "SELECT * FROM AD_ENTERPRISE_USER_DEVICE WHERE EMM_USERNAME = ? AND TENANT_ID = ?";
+            stmt = conn.prepareStatement(selectDBQuery);
+            stmt.setString(1, username);
+            stmt.setInt(2, tenantId);
 
-			rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
 
-			while (rs.next()) {
-				AndroidEnterpriseUser enterpriseUser  = new AndroidEnterpriseUser();
-				enterpriseUser.setEmmUsername(rs.getString("EMM_USERNAME"));
-				enterpriseUser.setTenantId(rs.getInt("TENANT_ID"));
-				enterpriseUser.setLastUpdatedTime(rs.getString("LAST_UPDATED_TIMESTAMP"));
-				enterpriseUser.setAndroidPlayDeviceId(rs.getString("ANDROID_PLAY_DEVICE_ID"));
-				enterpriseUser.setEnterpriseId(rs.getString("ENTERPRISE_ID"));
-				enterpriseUser.setGoogleUserId(rs.getString("GOOGLE_USER_ID"));
-				enterpriseUser.setEmmDeviceId(rs.getString("EMM_DEVICE_ID"));
-				enterpriseUsers.add(enterpriseUser);
-			}
-		} catch (SQLException e) {
-			String msg = "Error occurred while fetching user : '" + username + "'";
-			log.error(msg, e);
-			throw new EnterpriseManagementDAOException(msg, e);
-		} finally {
-			MobileDeviceManagementDAOUtil.cleanupResources(stmt, rs);
+            while (rs.next()) {
+                AndroidEnterpriseUser enterpriseUser = new AndroidEnterpriseUser();
+                enterpriseUser.setEmmUsername(rs.getString("EMM_USERNAME"));
+                enterpriseUser.setTenantId(rs.getInt("TENANT_ID"));
+                enterpriseUser.setLastUpdatedTime(rs.getString("LAST_UPDATED_TIMESTAMP"));
+                enterpriseUser.setAndroidPlayDeviceId(rs.getString("ANDROID_PLAY_DEVICE_ID"));
+                enterpriseUser.setEnterpriseId(rs.getString("ENTERPRISE_ID"));
+                enterpriseUser.setGoogleUserId(rs.getString("GOOGLE_USER_ID"));
+                enterpriseUser.setEmmDeviceId(rs.getString("EMM_DEVICE_ID"));
+                enterpriseUsers.add(enterpriseUser);
+            }
+        } catch (SQLException e) {
+            String msg = "Error occurred while fetching user : '" + username + "'";
+            log.error(msg, e);
+            throw new EnterpriseManagementDAOException(msg, e);
+        } finally {
+            MobileDeviceManagementDAOUtil.cleanupResources(stmt, rs);
             AndroidDAOFactory.closeConnection();
-		}
+        }
 
-		return enterpriseUsers;
-	}
+        return enterpriseUsers;
+    }
 
-	public boolean addUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseManagementDAOException {
-		boolean status = false;
-		Connection conn;
-		PreparedStatement stmt = null;
-		try {
-			conn = AndroidDAOFactory.getConnection();
-			String createDBQuery =
-					"INSERT INTO AD_ENTERPRISE_USER_DEVICE(EMM_USERNAME, TENANT_ID, LAST_UPDATED_TIMESTAMP" +
-							", ANDROID_PLAY_DEVICE_ID, ENTERPRISE_ID, GOOGLE_USER_ID, EMM_DEVICE_ID)"
-							+ " VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public boolean addUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseManagementDAOException {
+        boolean status = false;
+        Connection conn;
+        PreparedStatement stmt = null;
+        try {
+            conn = AndroidDAOFactory.getConnection();
+            String createDBQuery =
+                    "INSERT INTO AD_ENTERPRISE_USER_DEVICE(EMM_USERNAME, TENANT_ID, LAST_UPDATED_TIMESTAMP" +
+                            ", ANDROID_PLAY_DEVICE_ID, ENTERPRISE_ID, GOOGLE_USER_ID, EMM_DEVICE_ID)"
+                            + " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-			stmt = conn.prepareStatement(createDBQuery);
-			stmt.setString(1, androidEnterpriseUser.getEmmUsername());
-			stmt.setInt(2, androidEnterpriseUser.getTenantId());
-			stmt.setTimestamp(3, new Timestamp(new Date().getTime()));
-			stmt.setString(4, androidEnterpriseUser.getAndroidPlayDeviceId());
-			stmt.setString(5, androidEnterpriseUser.getEnterpriseId());
-			stmt.setString(6, androidEnterpriseUser.getGoogleUserId());
-			stmt.setString(7, androidEnterpriseUser.getEmmDeviceId());
+            stmt = conn.prepareStatement(createDBQuery);
+            stmt.setString(1, androidEnterpriseUser.getEmmUsername());
+            stmt.setInt(2, androidEnterpriseUser.getTenantId());
+            stmt.setTimestamp(3, new Timestamp(new Date().getTime()));
+            stmt.setString(4, androidEnterpriseUser.getAndroidPlayDeviceId());
+            stmt.setString(5, androidEnterpriseUser.getEnterpriseId());
+            stmt.setString(6, androidEnterpriseUser.getGoogleUserId());
+            stmt.setString(7, androidEnterpriseUser.getEmmDeviceId());
 
-			int rows = stmt.executeUpdate();
-			if (rows > 0) {
-				status = true;
-				if (log.isDebugEnabled()) {
-					log.debug("Added user " + androidEnterpriseUser.getEmmUsername());
-				}
-			}
-		} catch (SQLException e) {
-			throw new EnterpriseManagementDAOException("Error occurred while adding the user "
-					+ androidEnterpriseUser.getEmmUsername(), e);
-		} finally {
-			MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
-		}
-		return status;
-	}
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                status = true;
+                if (log.isDebugEnabled()) {
+                    log.debug("Added user " + androidEnterpriseUser.getEmmUsername());
+                }
+            }
+        } catch (SQLException e) {
+            throw new EnterpriseManagementDAOException("Error occurred while adding the user "
+                    + androidEnterpriseUser.getEmmUsername(), e);
+        } finally {
+            MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
+        }
+        return status;
+    }
 
-	public boolean updateMobileDevice(MobileDevice mobileDevice) throws EnterpriseManagementDAOException {
-		boolean status = false;
-		Connection conn;
-		PreparedStatement stmt = null;
-		try {
-			conn = AndroidDAOFactory.getConnection();
-			String updateDBQuery =
-					"UPDATE AD_DEVICE SET FCM_TOKEN = ?, DEVICE_INFO = ?, SERIAL = ?, VENDOR = ?, " +
-					"MAC_ADDRESS = ?, DEVICE_NAME = ?, LATITUDE = ?, LONGITUDE = ?, IMEI = ?, " +
-					"IMSI = ?, OS_VERSION = ?, DEVICE_MODEL = ?, OS_BUILD_DATE = ? WHERE DEVICE_ID = ?";
-			stmt = conn.prepareStatement(updateDBQuery);
-
-			Map<String, String> properties = mobileDevice.getDeviceProperties();
-			stmt.setString(1, properties.get(AndroidPluginConstants.FCM_TOKEN));
-			stmt.setString(2, properties.get(AndroidPluginConstants.DEVICE_INFO));
-			stmt.setString(3, mobileDevice.getSerial());
-			stmt.setString(4, mobileDevice.getVendor());
-			stmt.setString(5, properties.get(AndroidPluginConstants.MAC_ADDRESS));
-			stmt.setString(6, properties.get(AndroidPluginConstants.DEVICE_NAME));
-			stmt.setString(7, mobileDevice.getLatitude());
-			stmt.setString(8, mobileDevice.getLongitude());
-			stmt.setString(9, mobileDevice.getImei());
-			stmt.setString(10, mobileDevice.getImsi());
-			stmt.setString(11, mobileDevice.getOsVersion());
-			stmt.setString(12, mobileDevice.getModel());
-			stmt.setString(13, mobileDevice.getOsBuildDate());
-			stmt.setString(14, mobileDevice.getMobileDeviceId());
-			int rows = stmt.executeUpdate();
-			if (rows > 0) {
-				status = true;
-				if (log.isDebugEnabled()) {
-					log.debug("Android device " + mobileDevice.getMobileDeviceId() + " data has been" +
-					          " modified.");
-				}
-			}
-		} catch (SQLException e) {
-			String msg = "Error occurred while modifying the Android device '" +
-			             mobileDevice.getMobileDeviceId() + "' data.";
-			log.error(msg, e);
-			throw new EnterpriseManagementDAOException(msg, e);
-		} finally {
-			MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
-		}
-		return status;
-	}
-
-	public boolean deleteMobileDevice(String mblDeviceId)
-			throws EnterpriseManagementDAOException {
-		boolean status = false;
-		Connection conn;
-		PreparedStatement stmt = null;
-		try {
-			conn = AndroidDAOFactory.getConnection();
-			String deleteDBQuery =
-					"DELETE FROM AD_DEVICE WHERE DEVICE_ID = ?";
-			stmt = conn.prepareStatement(deleteDBQuery);
-			stmt.setString(1, mblDeviceId);
-			int rows = stmt.executeUpdate();
-			if (rows > 0) {
-				status = true;
-				if (log.isDebugEnabled()) {
-					log.debug("Android device " + mblDeviceId + " data has deleted" +
-					          " from the Android database.");
-				}
-			}
-		} catch (SQLException e) {
-			throw new EnterpriseManagementDAOException("Error occurred while deleting android device '" +
-                    mblDeviceId + "'", e);
-		} finally {
-			MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
-		}
-		return status;
-	}
-
-	public List<MobileDevice> getAllMobileDevices() throws EnterpriseManagementDAOException {
-		Connection conn;
-		PreparedStatement stmt = null;
+    public AndroidEnterpriseManagedConfig getConfigByPackageName(String packageName, int tenantId)
+            throws EnterpriseManagementDAOException {
+        Connection conn;
+        PreparedStatement stmt = null;
         ResultSet rs = null;
-		MobileDevice mobileDevice;
-		List<MobileDevice> mobileDevices = new ArrayList<MobileDevice>();
-		try {
-			conn = AndroidDAOFactory.getConnection();
-			String selectDBQuery =
-					"SELECT DEVICE_ID, FCM_TOKEN, DEVICE_INFO, DEVICE_MODEL, SERIAL, " +
-					"VENDOR, MAC_ADDRESS, DEVICE_NAME, LATITUDE, LONGITUDE, IMEI, IMSI, OS_VERSION, OS_BUILD_DATE " +
-					"FROM AD_DEVICE";
-			stmt = conn.prepareStatement(selectDBQuery);
-			rs = stmt.executeQuery();
+        AndroidEnterpriseManagedConfig managedConfig = null;
+        try {
+            conn = AndroidDAOFactory.getConnection();
+            String selectDBQuery =
+                    "SELECT * FROM AD_ENTERPRISE_MANAGED_CONFIGS WHERE PACKAGE_NAME = ? AND TENANT_ID = ?";
+            stmt = conn.prepareStatement(selectDBQuery);
+            stmt.setString(1, packageName);
+            stmt.setInt(2, tenantId);
 
-			while (rs.next()) {
-				mobileDevice = new MobileDevice();
-				mobileDevice.setMobileDeviceId(rs.getString(AndroidPluginConstants.DEVICE_ID));
-				mobileDevice.setModel(rs.getString(AndroidPluginConstants.DEVICE_MODEL));
-				mobileDevice.setSerial(rs.getString(AndroidPluginConstants.SERIAL));
-				mobileDevice.setVendor(rs.getString(AndroidPluginConstants.VENDOR));
-				mobileDevice.setLatitude(rs.getString(AndroidPluginConstants.LATITUDE));
-				mobileDevice.setLongitude(rs.getString(AndroidPluginConstants.LONGITUDE));
-				mobileDevice.setImei(rs.getString(AndroidPluginConstants.IMEI));
-				mobileDevice.setImsi(rs.getString(AndroidPluginConstants.IMSI));
-				mobileDevice.setOsVersion(rs.getString(AndroidPluginConstants.OS_VERSION));
-				mobileDevice.setOsBuildDate(rs.getString(AndroidPluginConstants.OS_BUILD_DATE));
+            rs = stmt.executeQuery();
 
-				Map<String, String> propertyMap = new HashMap<>();
-				propertyMap.put(AndroidPluginConstants.FCM_TOKEN, rs.getString(AndroidPluginConstants.FCM_TOKEN));
-				propertyMap.put(AndroidPluginConstants.DEVICE_INFO, rs.getString(AndroidPluginConstants.DEVICE_INFO));
-				propertyMap.put(AndroidPluginConstants.DEVICE_NAME, rs.getString(AndroidPluginConstants.DEVICE_NAME));
-				mobileDevice.setDeviceProperties(propertyMap);
-
-				mobileDevices.add(mobileDevice);
-			}
-			if (log.isDebugEnabled()) {
-				log.debug("All Android device details have fetched from Android database.");
-			}
-			return mobileDevices;
-		} catch (SQLException e) {
-			throw new EnterpriseManagementDAOException("Error occurred while fetching all Android device data", e);
-		} finally {
-			MobileDeviceManagementDAOUtil.cleanupResources(stmt, rs);
+            if (rs.next()) {
+                managedConfig = new AndroidEnterpriseManagedConfig();
+                managedConfig.setId(rs.getInt("ID"));
+                managedConfig.setMcmId(rs.getString("MCM_ID"));
+                managedConfig.setProfileName(rs.getString("PROFILE_NAME"));
+                managedConfig.setPackageName(rs.getString("PACKAGE_NAME"));
+                managedConfig.setTenantID(rs.getInt("TENANT_ID"));
+                managedConfig.setLastUpdatedTime(rs.getString("LAST_UPDATED_TIMESTAMP"));
+            }
+        } catch (SQLException e) {
+            String msg = "Error occurred while fetching config for package name : '" + packageName + "'";
+            log.error(msg, e);
+            throw new EnterpriseManagementDAOException(msg, e);
+        } finally {
+            MobileDeviceManagementDAOUtil.cleanupResources(stmt, rs);
             AndroidDAOFactory.closeConnection();
-		}
-	}
+        }
+        return managedConfig;
+    }
+
+    public boolean addConfig(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseManagementDAOException {
+        boolean status = false;
+        Connection conn;
+        PreparedStatement stmt = null;
+        try {
+            conn = AndroidDAOFactory.getConnection();
+            String createDBQuery =
+                    "INSERT INTO AD_ENTERPRISE_MANAGED_CONFIGS(MCM_ID, PROFILE_NAME, PACKAGE_NAME" +
+                            ", TENANT_ID, LAST_UPDATED_TIMESTAMP) VALUES (?, ?, ?, ?, ?)";
+
+            stmt = conn.prepareStatement(createDBQuery);
+            stmt.setString(1, managedConfig.getMcmId());
+            stmt.setString(2, managedConfig.getProfileName());
+            stmt.setString(3, managedConfig.getPackageName());
+            stmt.setInt(4, managedConfig.getTenantID());
+            stmt.setTimestamp(5, new Timestamp(new Date().getTime()));
+
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                status = true;
+                if (log.isDebugEnabled()) {
+                    log.debug("Added config for package " + managedConfig.getPackageName());
+                }
+            }
+        } catch (SQLException e) {
+            throw new EnterpriseManagementDAOException("Error occurred while adding the config for package "
+                    + managedConfig.getPackageName(), e);
+        } finally {
+            MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
+        }
+        return status;
+    }
+
+    public boolean updateConfig(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseManagementDAOException {
+        boolean status = false;
+        Connection conn;
+        PreparedStatement stmt = null;
+        try {
+            conn = AndroidDAOFactory.getConnection();
+            String updateDBQuery =
+                    "UPDATE AD_ENTERPRISE_MANAGED_CONFIGS SET PROFILE_NAME = ?, LAST_UPDATED_TIMESTAMP = ?" +
+                            " WHERE MCM_ID = ? AND TENANT_ID = ?";
+            stmt = conn.prepareStatement(updateDBQuery);
+
+            stmt.setString(1, managedConfig.getProfileName());
+            stmt.setString(2, managedConfig.getLastUpdatedTime());
+            stmt.setString(3, managedConfig.getMcmId());
+            stmt.setInt(4, managedConfig.getTenantID());
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                status = true;
+                if (log.isDebugEnabled()) {
+                    log.debug("Managed config for mcm id " + managedConfig.getMcmId() + " data has been" +
+                            " modified.");
+                }
+            }
+        } catch (SQLException e) {
+            String msg = "Error occurred while modifying the details for  mcm id '" +
+                    managedConfig.getMcmId() + "' data.";
+            log.error(msg, e);
+            throw new EnterpriseManagementDAOException(msg, e);
+        } finally {
+            MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
+        }
+        return status;
+    }
+
+    public boolean deleteConfig(String id, int tenantId)
+            throws EnterpriseManagementDAOException {
+        boolean status = false;
+        Connection conn;
+        PreparedStatement stmt = null;
+        try {
+            conn = AndroidDAOFactory.getConnection();
+            String deleteDBQuery =
+                    "DELETE FROM AD_ENTERPRISE_MANAGED_CONFIGS WHERE MCM_ID = ? AND TENANT_ID = ?";
+            stmt = conn.prepareStatement(deleteDBQuery);
+            stmt.setString(1, id);
+            stmt.setInt(2, tenantId);
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                status = true;
+                if (log.isDebugEnabled()) {
+                    log.debug("Error when deleting MCM ID " + id);
+                }
+            }
+        } catch (SQLException e) {
+            throw new EnterpriseManagementDAOException("Error occurred while deleting MCM ID '" + id + "'", e);
+        } finally {
+            MobileDeviceManagementDAOUtil.cleanupResources(stmt, null);
+        }
+        return status;
+    }
 
 }
