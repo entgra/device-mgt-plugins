@@ -18,7 +18,10 @@
  */
 package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
+import com.google.api.services.androidenterprise.model.VariableSet;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class EnterpriseApp implements Serializable {
     private static final long serialVersionUID = 45598101734L;
@@ -29,6 +32,9 @@ public class EnterpriseApp implements Serializable {
     String chargingStateConstraint;
     String deviceIdleStateConstraint;
     String networkTypeConstraint;
+
+    String mcmId;
+    List<VariableSet> variableSet;
 
     public String getProductId() {
         return productId;
@@ -76,5 +82,21 @@ public class EnterpriseApp implements Serializable {
 
     public void setNetworkTypeConstraint(String networkTypeConstraint) {
         this.networkTypeConstraint = networkTypeConstraint;
+    }
+
+    public String getMcmId() {
+        return mcmId;
+    }
+
+    public void setMcmId(String mcmId) {
+        this.mcmId = mcmId;
+    }
+
+    public List<VariableSet> getVariableSet() {
+        return variableSet;
+    }
+
+    public void setVariableSet(List<VariableSet> variableSet) {
+        this.variableSet = variableSet;
     }
 }

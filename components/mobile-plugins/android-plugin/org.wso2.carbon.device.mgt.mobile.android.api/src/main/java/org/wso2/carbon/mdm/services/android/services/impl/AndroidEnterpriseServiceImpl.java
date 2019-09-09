@@ -158,11 +158,10 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
             GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
             for (AndroidEnterpriseUser userDetail : enterpriseUserInstances) {
                 if (userDetail.getEnterpriseId() != null && !userDetail.getEnterpriseId().isEmpty() && userDetail
-                        .getEmmUsername() != null && userDetail.getEmmUsername().equals(device.getUsername()) && device
-                        .getAndroidId().equals(userDetail.getAndroidPlayDeviceId())) {
+                        .getEmmUsername() != null && userDetail.getEmmUsername().equals(device.getUsername())
+                        && device.getAndroidId().equals(userDetail.getAndroidPlayDeviceId())) {
                     googleAPIInvoker.installApps(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
-                            AndroidEnterpriseUtils
-                            .convertToDeviceInstance(device));
+                            AndroidEnterpriseUtils.convertToDeviceInstance(device));
                     sentToDevice = true;
                 }
             }

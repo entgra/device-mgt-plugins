@@ -21,7 +21,9 @@ package org.wso2.carbon.mdm.services.android.util;
 import com.google.api.services.androidenterprise.model.AppVersion;
 import com.google.api.services.androidenterprise.model.AutoInstallConstraint;
 import com.google.api.services.androidenterprise.model.AutoInstallPolicy;
+import com.google.api.services.androidenterprise.model.ConfigurationVariables;
 import com.google.api.services.androidenterprise.model.Device;
+import com.google.api.services.androidenterprise.model.ManagedConfiguration;
 import com.google.api.services.androidenterprise.model.Policy;
 import com.google.api.services.androidenterprise.model.Product;
 import com.google.api.services.androidenterprise.model.ProductPolicy;
@@ -93,6 +95,16 @@ public class AndroidEnterpriseUtils {
 
             productPolicy.setAutoInstallPolicy(autoInstallPolicy);
             productPolicy.setProductId(app.getProductId());
+
+            if (app.getMcmId() != null && app.getVariableSet() != null && app.getVariableSet().size() > 0) {
+                ManagedConfiguration managedConfiguration = new ManagedConfiguration();
+                ConfigurationVariables configurationVariables = new ConfigurationVariables();
+                configurationVariables.setMcmId(app.getMcmId());
+                configurationVariables.setVariableSet(app.getVariableSet());
+                managedConfiguration.setConfigurationVariables(configurationVariables);
+                productPolicy.setManagedConfiguration(managedConfiguration);
+            }
+
             policyList.add(productPolicy);
         }
 
