@@ -35,4 +35,6 @@ public class WebsocketConstants {
     public static final String PASSWORD = "password";
     public static final String DEVICE_ID = "deviceId";
     public static final String DEVICE_TYPE = "deviceType";
+    public static final String EVENT = "event";
+    public static final String META_DATA = "metaData";
 }
