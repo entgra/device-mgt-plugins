@@ -31,6 +31,7 @@ import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 import org.wso2.carbon.apimgt.annotations.api.Scope;
 import org.wso2.carbon.apimgt.annotations.api.Scopes;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.mdm.services.android.bean.DeviceState;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStoreCluster;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePage;
@@ -291,6 +292,11 @@ public interface AndroidEnterpriseService {
             name = "isOrganizeAppPageVisible",
             value = "Boolean flag indicating whether to permanently delete the device.",
             required = false) @QueryParam("isOrganizeAppPageVisible") boolean isOrganizeAppPageVisible,
+
+            @ApiParam(
+                    name = "isManagedConfigEnabled",
+                    value = "Boolean flag indicating whether to permanently delete the device.",
+                    required = false) @QueryParam("isManagedConfigEnabled") boolean isManagedConfigEnabled,
 
             @ApiParam(name = "host",
             value = "Boolean flag indicating whether to permanently delete the device.",
@@ -1018,4 +1024,252 @@ public interface AndroidEnterpriseService {
             name = "links",
             value = "Enterprise page links.")
                                  EnterpriseStorePageLinks links);
+
+//######################################################################################################################
+//######################################################################################################################
+//######################################################################################################################
+
+    @GET
+    @Path("/managed-configs/package/{packageName}")
+    @ApiOperation(
+            produces = MediaType.APPLICATION_JSON,
+            httpMethod = "GET",
+            value = "Getting managed configs",
+            notes = "Getting managed configs.",
+            tags = "Device Type Management Administrative Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:view")
+                    })
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Created. \n Successfully fetched managed configs",
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "The URL of the added policy."),
+                            @ResponseHeader(
+                                    name = "Content-Type",
+                                    description = "The content type of the body"),
+                            @ResponseHeader(
+                                    name = "ETag",
+                                    description = "Entity Tag of the response resource.\n" +
+                                            "Used by caches, or in conditional requests."),
+                            @ResponseHeader(
+                                    name = "Last-Modified",
+                                    description = "Date and time the resource was last modified.\n" +
+                                            "Used by caches, or in conditional requests.")
+                    }),
+            @ApiResponse(
+                    code = 303,
+                    message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "The Source URL of the document.")}),
+            @ApiResponse(
+                    code = 400,
+                    message = "Bad Request. \n Invalid request or validation error."),
+            @ApiResponse(
+                    code = 415,
+                    message = "Unsupported media type. \n The format of the requested entity was not supported."),
+            @ApiResponse(
+                    code = 500,
+                    message = "Internal Server Error. \n " +
+                            "Server error occurred while getting managed configs.")
+    })
+    Response getConfig(@ApiParam(
+                    name = "packageName",
+                    value = "The package name")
+            @PathParam("packageName") String packageName);
+
+
+//######################################################################################################################
+//######################################################################################################################
+//######################################################################################################################
+
+    @POST
+    @Path("/managed-configs")
+    @ApiOperation(
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON,
+            httpMethod = "POST",
+            value = "Add New config",
+            notes = "Add a new config to enterprise system.",
+            tags = "Android Enterprise Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:modify")
+                    })
+            }
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 201, message = "Created. \n Successfully added new config",
+                            responseHeaders = {
+                                    @ResponseHeader(
+                                            name = "Content-Location",
+                                            description = "The URL of the added policy."),
+                                    @ResponseHeader(
+                                            name = "Content-Type",
+                                            description = "The content type of the body"),
+                                    @ResponseHeader(
+                                            name = "ETag",
+                                            description = "Entity Tag of the response resource.\n" +
+                                                    "Used by caches, or in conditional requests."),
+                                    @ResponseHeader(
+                                            name = "Last-Modified",
+                                            description = "Date and time the resource was last modified.\n" +
+                                                    "Used by caches, or in conditional requests.")
+                            }),
+                    @ApiResponse(
+                            code = 303,
+                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+                            responseHeaders = {
+                                    @ResponseHeader(
+                                            name = "Content-Location",
+                                            description = "The Source URL of the document.")}),
+                    @ApiResponse(
+                            code = 400,
+                            message = "Bad Request. \n Invalid request or validation error."),
+                    @ApiResponse(
+                            code = 415,
+                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
+                    @ApiResponse(
+                            code = 500,
+                            message = "Internal Server Error. \n " +
+                                    "Server error occurred while adding new config.")
+            })
+
+    Response addManagedConfigs(@ApiParam(
+            name = "managedConfig",
+            value = "Enterprise managed conf.") AndroidEnterpriseManagedConfig managedConfig);
+
+//######################################################################################################################
+//######################################################################################################################
+//######################################################################################################################
+
+    @PUT
+    @Path("/managed-configs")
+    @ApiOperation(
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON,
+            httpMethod = "PUT",
+            value = "Update config",
+            notes = "Update config to enterprise system.",
+            tags = "Android Enterprise Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:modify")
+                    })
+            }
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Created. \n Successfully updated new config",
+                            responseHeaders = {
+                                    @ResponseHeader(
+                                            name = "Content-Location",
+                                            description = "The URL of the added policy."),
+                                    @ResponseHeader(
+                                            name = "Content-Type",
+                                            description = "The content type of the body"),
+                                    @ResponseHeader(
+                                            name = "ETag",
+                                            description = "Entity Tag of the response resource.\n" +
+                                                    "Used by caches, or in conditional requests."),
+                                    @ResponseHeader(
+                                            name = "Last-Modified",
+                                            description = "Date and time the resource was last modified.\n" +
+                                                    "Used by caches, or in conditional requests.")
+                            }),
+                    @ApiResponse(
+                            code = 303,
+                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+                            responseHeaders = {
+                                    @ResponseHeader(
+                                            name = "Content-Location",
+                                            description = "The Source URL of the document.")}),
+                    @ApiResponse(
+                            code = 400,
+                            message = "Bad Request. \n Invalid request or validation error."),
+                    @ApiResponse(
+                            code = 415,
+                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
+                    @ApiResponse(
+                            code = 500,
+                            message = "Internal Server Error. \n " +
+                                    "Server error occurred while updating new config.")
+            })
+
+    Response updateManagedConfigs(@ApiParam(
+            name = "managedConfig",
+            value = "Enterprise managed conf.") AndroidEnterpriseManagedConfig managedConfig);
+
+
+//######################################################################################################################
+//######################################################################################################################
+//######################################################################################################################
+
+    @DELETE
+    @Path("/managed-configs/mcm/{mcmId}")
+    @ApiOperation(
+            produces = MediaType.APPLICATION_JSON,
+            httpMethod = "DELETE",
+            value = "Deleting Details of a config",
+            notes = "Deleting the details of a config.",
+            tags = "Device Type Management Administrative Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:modify")
+                    })
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Created. \n Successfully deleted config",
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "The URL of the added policy."),
+                            @ResponseHeader(
+                                    name = "Content-Type",
+                                    description = "The content type of the body"),
+                            @ResponseHeader(
+                                    name = "ETag",
+                                    description = "Entity Tag of the response resource.\n" +
+                                            "Used by caches, or in conditional requests."),
+                            @ResponseHeader(
+                                    name = "Last-Modified",
+                                    description = "Date and time the resource was last modified.\n" +
+                                            "Used by caches, or in conditional requests.")
+                    }),
+            @ApiResponse(
+                    code = 303,
+                    message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "The Source URL of the document.")}),
+            @ApiResponse(
+                    code = 400,
+                    message = "Bad Request. \n Invalid request or validation error."),
+            @ApiResponse(
+                    code = 415,
+                    message = "Unsupported media type. \n The format of the requested entity was not supported."),
+            @ApiResponse(
+                    code = 500,
+                    message = "Internal Server Error. \n " +
+                            "Server error occurred while deleting config.")
+    })
+    Response deleteManagedConfigs(@ApiParam(
+            name = "mcmId",
+            value = "The mcm Id")
+                                  @PathParam("mcmId") String packageName);
+
+
+//######################################################################################################################
+//######################################################################################################################
+//######################################################################################################################
+
 }

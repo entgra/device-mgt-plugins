@@ -29,6 +29,7 @@ import com.google.api.services.androidenterprise.AndroidEnterprise;
 import com.google.api.services.androidenterprise.AndroidEnterpriseScopes;
 import com.google.api.services.androidenterprise.model.AdministratorWebToken;
 import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpec;
+import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecManagedConfigurations;
 import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecPlaySearch;
 import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecPrivateApps;
 import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecStoreBuilder;
@@ -128,6 +129,8 @@ public class GoogleAPIInvoker {
         tokenSpec.setWebApps(new AdministratorWebTokenSpecWebApps().setEnabled(enterpriseTokenUrl.isWebAppEnabled()));
         tokenSpec.setStoreBuilder(new AdministratorWebTokenSpecStoreBuilder()
                 .setEnabled(enterpriseTokenUrl.isOrganizeAppPageVisible()));
+        tokenSpec.setManagedConfigurations(new AdministratorWebTokenSpecManagedConfigurations()
+                .setEnabled(enterpriseTokenUrl.isManagedConfigEnabled()));
         try {
             AdministratorWebToken token = androidEnterprise.enterprises()
                     .createWebToken(enterpriseTokenUrl.getEnterpriseId(), tokenSpec).execute();
