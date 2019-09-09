@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.databridge.commons.Attribute;
 import org.wso2.carbon.databridge.commons.StreamDefinition;
 import org.wso2.carbon.device.mgt.output.adapter.websocket.constants.WebsocketConstants;
 import org.wso2.carbon.device.mgt.output.adapter.websocket.internal.WebsocketEventAdaptorServiceDataHolder;
@@ -39,7 +38,6 @@ import org.wso2.carbon.event.stream.core.EventStreamService;
 import org.wso2.carbon.event.stream.core.exception.EventStreamConfigurationException;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -50,7 +48,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Contains the life cycle of executions regarding the UI Adapter
+ * Contains the life cycle of executions regarding the UI Adapter.
  */
 
 public class WebsocketEventAdapter implements OutputEventAdapter {
@@ -137,8 +135,8 @@ public class WebsocketEventAdapter implements OutputEventAdapter {
         String adapterName = streamSpecifAdapterMap.get(streamId);
 
         if (adapterName != null) {
-            throw new OutputEventAdapterException(("An Output websocket event adapter \"" + adapterName + "\" is already" +
-                    " exist for stream id \"" + streamId + "\""));
+            throw new OutputEventAdapterException(("An Output websocket event adapter \"" + adapterName + "\" is " +
+                    "already exist for stream id \"" + streamId + "\""));
         } else {
             streamSpecifAdapterMap.put(streamId, eventAdapterConfiguration.getName());
 
@@ -287,17 +285,46 @@ public class WebsocketEventAdapter implements OutputEventAdapter {
         return validSessions;
     }
 
-    private boolean validateJsonMessageAgainstEventFilters(String eventString, WebSocketSessionRequest webSocketSessionRequest) {
+    private boolean validateJsonMessageAgainstEventFilters(String eventString,
+                                                           WebSocketSessionRequest webSocketSessionRequest) {
         Map<String, String> queryParamValuePairs = webSocketSessionRequest.getQueryParamValuePairs();
         String deviceId = queryParamValuePairs.get(WebsocketConstants.DEVICE_ID);
         String deviceType = queryParamValuePairs.get(WebsocketConstants.DEVICE_TYPE);
-        JSONObject eventObj = new JSONObject(eventString);
-        if (deviceId != null && !deviceId.equals(eventObj.getString(WebsocketConstants.DEVICE_ID))) {
-            return false;
+        JSONObject rootObj = new JSONObject(eventString);
+        if (deviceId == null && deviceType == null) {
+            return true;
         }
-        if (deviceType != null && !deviceType.equals(eventObj.getString(WebsocketConstants.DEVICE_TYPE))) {
-            return false;
+
+        if (deviceType != null) {
+            if (rootObj.has(WebsocketConstants.DEVICE_TYPE)) {
+                if (!deviceType.equals(rootObj.getString(WebsocketConstants.DEVICE_TYPE))) {
+                    return false;
+                }
+            } else if (rootObj.has(WebsocketConstants.EVENT)) {
+                JSONObject eventObj = (JSONObject) rootObj.get(WebsocketConstants.EVENT);
+                if (eventObj.has(WebsocketConstants.META_DATA)) {
+                    JSONObject metaDataObj = (JSONObject) eventObj.get(WebsocketConstants.META_DATA);
+                    if (metaDataObj.has(WebsocketConstants.DEVICE_TYPE)
+                            && !deviceType.equals(metaDataObj.getString(WebsocketConstants.DEVICE_TYPE))) {
+                        return false;
+                    }
+                }
+            }
         }
+
+        if (deviceId != null) {
+            if (rootObj.has(WebsocketConstants.DEVICE_ID)) {
+                return deviceId.equals(rootObj.getString(WebsocketConstants.DEVICE_ID));
+            } else if (rootObj.has(WebsocketConstants.EVENT)) {
+                JSONObject eventObj = (JSONObject) rootObj.get(WebsocketConstants.EVENT);
+                if (eventObj.has(WebsocketConstants.META_DATA)) {
+                    JSONObject metaDataObj = (JSONObject) eventObj.get(WebsocketConstants.META_DATA);
+                    return !metaDataObj.has(WebsocketConstants.DEVICE_ID)
+                            || deviceId.equals(metaDataObj.getString(WebsocketConstants.DEVICE_ID));
+                }
+            }
+        }
+
         return true;
     }
 
