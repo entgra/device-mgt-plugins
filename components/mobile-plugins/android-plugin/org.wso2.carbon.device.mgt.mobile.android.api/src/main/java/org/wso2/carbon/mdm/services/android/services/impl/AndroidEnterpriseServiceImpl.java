@@ -318,6 +318,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
 
     @DELETE
     @Path("/store-layout/page/{id}")
+    @Consumes(MediaType.WILDCARD)
     @Override
     public Response deletePage(@PathParam("id") String id) {
         if (id == null || id.isEmpty()) {
@@ -481,6 +482,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
 
     @DELETE
     @Path("/store-layout/cluster/{clusterId}/page/{pageId}")
+    @Consumes(MediaType.WILDCARD)
     @Override
     public Response deleteCluster( @PathParam("clusterId") String clusterId,  @PathParam("pageId")  String pageId) {
         if (clusterId == null || clusterId.isEmpty()) {
@@ -671,6 +673,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
     @Override
     @DELETE
     @Path("/managed-configs/mcm/{mcmId}")
+    @Consumes(MediaType.WILDCARD)
     public Response deleteManagedConfigs(@PathParam("mcmId") String mcmId) {
         if (mcmId == null || mcmId.isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity(
