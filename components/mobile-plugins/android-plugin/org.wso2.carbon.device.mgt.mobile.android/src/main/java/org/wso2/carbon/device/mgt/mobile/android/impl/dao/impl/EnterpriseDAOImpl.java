@@ -203,7 +203,7 @@ public class EnterpriseDAOImpl implements EnterpriseDAO {
             stmt = conn.prepareStatement(updateDBQuery);
 
             stmt.setString(1, managedConfig.getProfileName());
-            stmt.setString(2, managedConfig.getLastUpdatedTime());
+            stmt.setTimestamp(2, new Timestamp(new Date().getTime()));
             stmt.setString(3, managedConfig.getMcmId());
             stmt.setInt(4, managedConfig.getTenantID());
             int rows = stmt.executeUpdate();

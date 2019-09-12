@@ -486,6 +486,7 @@ public interface AndroidEnterpriseService {
 
     @DELETE
     @Path("/store-layout/page/{id}")
+    @Consumes(MediaType.WILDCARD)
     @ApiOperation(
             produces = MediaType.APPLICATION_JSON,
             httpMethod = "DELETE",
@@ -846,6 +847,7 @@ public interface AndroidEnterpriseService {
 
     @DELETE
     @Path("/store-layout/cluster/{clusterId}/page/{pageId}")
+    @Consumes(MediaType.WILDCARD)
     @ApiOperation(
             produces = MediaType.APPLICATION_JSON,
             httpMethod = "DELETE",
@@ -1214,6 +1216,7 @@ public interface AndroidEnterpriseService {
 
     @DELETE
     @Path("/managed-configs/mcm/{mcmId}")
+    @Consumes(MediaType.WILDCARD)
     @ApiOperation(
             produces = MediaType.APPLICATION_JSON,
             httpMethod = "DELETE",
