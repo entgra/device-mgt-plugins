@@ -29,11 +29,18 @@ import com.google.api.services.androidenterprise.model.Product;
 import com.google.api.services.androidenterprise.model.ProductPolicy;
 
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.application.mgt.common.ApplicationArtifact;
 import org.wso2.carbon.device.application.mgt.common.LifecycleChanger;
+import org.wso2.carbon.device.application.mgt.common.dto.ApplicationPolicyDTO;
 import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
 import org.wso2.carbon.device.application.mgt.common.response.Application;
 import org.wso2.carbon.device.application.mgt.common.response.Category;
@@ -43,6 +50,8 @@ import org.wso2.carbon.device.application.mgt.common.wrapper.PublicAppWrapper;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseConfigs;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseApp;
@@ -60,8 +69,6 @@ import java.net.URL;
 import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -116,7 +123,20 @@ public class AndroidEnterpriseUtils {
     }
 
     public static EnterpriseConfigs getEnterpriseConfigs() {
-        PlatformConfiguration configuration;
+        EnterpriseConfigs enterpriseConfigs = getEnterpriseConfigsFromGoogle();
+        if (enterpriseConfigs.getErrorResponse() != null) {
+            if (enterpriseConfigs.getErrorResponse().getCode() == 500l) {
+                throw new UnexpectedServerErrorException(enterpriseConfigs.getErrorResponse());
+            } else if (enterpriseConfigs.getErrorResponse().getCode() == 500l) {
+                throw new NotFoundException(enterpriseConfigs.getErrorResponse());
+            }
+        }
+        return enterpriseConfigs;
+    }
+
+    public static EnterpriseConfigs getEnterpriseConfigsFromGoogle() {
+        PlatformConfiguration configuration = null;
+        EnterpriseConfigs enterpriseConfigs = new EnterpriseConfigs();
         try {
             configuration = AndroidAPIUtils.getDeviceManagementService().
                     getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
@@ -124,19 +144,21 @@ public class AndroidEnterpriseUtils {
             String errorMessage = "Error while fetching tenant configurations for tenant " +
                     PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId();
             log.error(errorMessage);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
-
+            // Error is being used in enterprise APIs as well as from getpending operations which should not fail as
+            // these errors can cause due to issues misconfigurations in policy/esa configs which can cause to break all
+            // operations, if the error is thrown to cfx error handler
+            enterpriseConfigs.setErrorResponse(new ErrorResponse.ErrorResponseBuilder().setCode(500l)
+                    .setMessage(errorMessage).build());
         }
         String enterpriseId = AndroidDeviceUtils.getAndroidConfig(configuration,"enterpriseId");
         String esa = AndroidDeviceUtils.getAndroidConfig(configuration,"esa");
         if (enterpriseId == null || enterpriseId.isEmpty() || esa == null || esa.isEmpty()) {
             String errorMessage = "Tenant is not configured to handle Android for work. Please contact Entgra.";
             log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage(errorMessage).build());
+            enterpriseConfigs.setErrorResponse(new ErrorResponse.ErrorResponseBuilder().setCode(404l)
+                    .setMessage(errorMessage).build());
         }
-        EnterpriseConfigs enterpriseConfigs = new EnterpriseConfigs();
+
         enterpriseConfigs.setEnterpriseId(enterpriseId);
         enterpriseConfigs.setEsa(esa);
         return enterpriseConfigs;
@@ -168,7 +190,7 @@ public class AndroidEnterpriseUtils {
                 publicAppWrapper.setCategories(Arrays.asList(new String[]{"GooglePlaySyncedApp"}));//Default category
                 for (Category category :categories) {
                     if(product.getCategory().equalsIgnoreCase(category.getCategoryName())) {
-                        publicAppWrapper.setCategories(Arrays.asList(new String[]{category.getCategoryName()}));
+                        publicAppWrapper.setCategories(Arrays.asList(new String[]{category.getCategoryName(), "GooglePlaySyncedApp"}));
                         break;
                     }
                 }
@@ -277,5 +299,51 @@ public class AndroidEnterpriseUtils {
             }
         }
         return highestVersionString;
+    }
+
+    public static EnterpriseInstallPolicy getDeviceAppPolicy(String appPolicy,
+                                                             ProfileFeature feature,
+                                                             AndroidEnterpriseUser userDetail) {
+        EnterpriseInstallPolicy enterpriseInstallPolicy = new EnterpriseInstallPolicy();
+        List<EnterpriseApp> apps = new ArrayList<>();
+        JsonElement appListElement;
+        if (appPolicy == null) {
+            appListElement = new JsonParser().parse(feature.getContent().toString()).getAsJsonObject()
+                    .get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
+        } else {
+            appListElement = new JsonParser().parse(appPolicy).getAsJsonObject()
+                    .get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
+        }
+        JsonArray appListArray = appListElement.getAsJsonArray();
+
+        JsonObject googlePolicyPayload = appListArray.get(0).getAsJsonObject();
+//                        get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD).getAsString()).getAsJsonObject();
+        enterpriseInstallPolicy.setAutoUpdatePolicy(googlePolicyPayload.get("autoUpdatePolicy").getAsString());
+        enterpriseInstallPolicy.setProductSetBehavior(googlePolicyPayload.get("productSetBehavior").getAsString());
+
+//        enterpriseInstallPolicy.setProductAvailabilityPolicy(googlePolicyPayload.get("productAvailabilityPolicy").getAsString());
+        enterpriseInstallPolicy.setManagementType("managedProfile");
+        enterpriseInstallPolicy.setKind("androidenterprise#device");
+        enterpriseInstallPolicy.setAndroidId(userDetail.getAndroidPlayDeviceId());
+        enterpriseInstallPolicy.setUsername(userDetail.getEmmUsername());
+
+        for (JsonElement appElement : appListArray) {
+
+            JsonElement policy = appElement.getAsJsonObject().
+                    get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD);
+            if (policy != null) {
+                JsonObject googlePolicyForApp = new JsonParser().parse(policy.getAsString()).getAsJsonObject();
+                EnterpriseApp enterpriseApp = new EnterpriseApp();
+                enterpriseApp.setProductId("app:" + googlePolicyForApp.get("packageName").getAsString());
+                enterpriseApp.setAutoInstallMode(googlePolicyForApp.get("autoInstallMode").getAsString());
+                enterpriseApp.setAutoInstallPriority(googlePolicyForApp.get("autoInstallPriority").getAsInt());
+                enterpriseApp.setChargingStateConstraint(googlePolicyForApp.get("chargingStateConstraint").getAsString());
+                enterpriseApp.setDeviceIdleStateConstraint(googlePolicyForApp.get("deviceIdleStateConstraint").getAsString());
+                enterpriseApp.setNetworkTypeConstraint(googlePolicyForApp.get("networkTypeConstraint").getAsString());
+                apps.add(enterpriseApp);
+            }
+        }
+        enterpriseInstallPolicy.setApps(apps);
+        return enterpriseInstallPolicy;
     }
 }

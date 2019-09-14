@@ -186,7 +186,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 
         List<? extends Operation> pendingOperations;
         try {
-            pendingOperations = AndroidDeviceUtils.getPendingOperations(deviceIdentifier);
+            pendingOperations = AndroidDeviceUtils.getPendingOperations(deviceIdentifier, true);
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
             log.error(msg, e);

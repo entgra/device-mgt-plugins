@@ -39,6 +39,8 @@ public interface EnterpriseDAO {
 
 	List<AndroidEnterpriseUser> getUser(String username, int tenantId) throws EnterpriseManagementDAOException;
 
+	AndroidEnterpriseUser getUserByDevice(String deviceId, int tenantId) throws EnterpriseManagementDAOException;
+
 	AndroidEnterpriseManagedConfig getConfigByPackageName(String packageName, int tenantId)
 			throws EnterpriseManagementDAOException;
 

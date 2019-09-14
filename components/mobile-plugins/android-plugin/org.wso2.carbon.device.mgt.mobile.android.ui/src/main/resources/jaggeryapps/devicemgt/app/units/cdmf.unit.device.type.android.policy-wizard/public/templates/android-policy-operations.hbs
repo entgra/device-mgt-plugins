@@ -2959,6 +2959,7 @@
             </div>
         </div>
 
+
         <!--enrolment-app-install-->
         <div class="wr-hidden-operation" data-operation="enrollment-app-install">
             <div class="panel panel-default operation-data" data-operation="enrollment-app-install"
@@ -2994,15 +2995,16 @@
 
                     <div id="install-app-enrollment"
                          class="operationDataKeys grouped-array-input multi-column-key-value-pair-array specific-enrollment-app-install"
-                         data-key="enrollmentAppInstall" data-column-count="5">
+                         data-key="enrollmentAppInstall" data-column-count="11">
                         <table class="table table-responsive table-striped data-table" id="enrollment-app-install-table">
                             <thead>
-                                <tr class="sort-row">
-                                    <th>Application Name</th>
-                                    <th>Type</th>
-                                    <th>Version</th>
-                                    <th></th>
-                                </tr>
+                            <tr class="sort-row">
+                                <th>Application Name</th>
+                                <th>Type</th>
+                                <th>Version</th>
+                                <th>Auto Install</th>
+                                <th>Work Profile Availability</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {{#each storeapps}}
@@ -3015,23 +3017,32 @@
                                         {{this.type}}
                                         <input class="enrollment-app-install-input" type="hidden" data-child-key="type" value="{{this.type}}"/>
                                     </td>
-                                    <td data-title="enrollment-app-install-app-version">
+                                    <td data-title="enrollment-app-install-app-name">
                                         {{this.version}}
                                         <input class="enrollment-app-install-input" type="hidden" data-child-key="version" value="{{this.version}}"/>
                                     </td>
                                     <td data-title="enrollment-app-install-app-selection">
                                         <input class="enrollment-app-install-input" type="hidden" data-child-key="uuid" value="{{this.uuid}}"/>
                                         <input class="enrollment-app-install-input" type="hidden" data-child-key="appId"  value="{{this.appId}}"/>
-                                        <a href="#enrollment-app-install-grid" data-click-event="add-enrollment-app">
-                                            <span>
-                                                <i class="fa fa-plus-circle fa-2x"></i>
-                                            </span>
-                                        </a>
-                                        <a href="#enrollment-app-install-grid" data-click-event="remove-enrollment-app" hidden>
-                                            <span>
-                                                <i class="fa fa-minus-circle fa-2x"></i>
-                                            </span>
-                                        </a>
+                                        <input class="enrollment-app-install-input" type="checkbox"
+                                               data-app-id="{{this.appId}}"
+                                               data-child-key="enrollmentAppInstall" onclick="enrollmentAppInstallClick (this)"
+                                               data-enrollment-app-install="{{this.enrollmentAppInstall}}" />
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="packageName"  value="{{this.packageName}}"/>
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="productSetBehavior"  value="{{this.productSetBehavior}}"/>
+                                        <input class="enrollment-app-install-input" type="hidden" data-child-key="autoUpdatePolicy"  value="{{this.autoUpdatePolicy}}"/>
+                                    </td>
+                                    <td data-title="enrollment-app-install-app-configurations">
+                                        <input class="enrollment-app-install-input" type="checkbox"
+                                               onclick="appAvailabilityClick(this)"
+                                               data-app-id="{{this.appId}}"
+                                               data-app-name="{{this.appName}}" data-child-key="installGooglePolicy"
+                                               value="{{this.installGooglePolicy}}"
+                                               data-package-name="{{this.packageName}}" />
+                                        <input class="enrollment-app-install-input" type="hidden"
+                                               value="{{this.installGooglePolicyPayload}}"
+                                               data-app-id="{{this.appId}}"
+                                               data-child-key="installGooglePolicyPayload" />
                                     </td>
                                 </tr>
                             {{else}}
@@ -3040,10 +3051,144 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                 </tr>
                             {{/each}}
                             </tbody>
                         </table>
+
+                        <div id="app-availability-config-form" hidden="true">
+                            <br><br>
+                            <h2 class="sub-title"> App Install Policy(Work profile only)</h2>
+                            <h2 id="app-availability-config-form-title" class="sub-title panel-title"></h2>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="app-availability-auto-install-mode">
+                                    App Initial Install Mode
+                                    <span class="helper" title="The auto install mode for the first time">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <select id="app-availability-auto-install-mode" class="form-control operationDataKeys"
+                                        data-key="autoInstallMode" data-default="0">
+
+                                    <option value="autoInstallOnce">
+                                        Auto install once only when enrolling
+                                    </option>
+                                    <option value="doNotAutoInstall">Do not install automatically</option>
+                                    <option value="forceAutoInstall">Auto install even if uninstalled manually</option>
+                                </select>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="app-availability-install-priority">
+                                    Priority level when installing the app
+                                    <span class="helper" title="Priority level when installing the app among many other apps">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <select id="app-availability-install-priority" class="form-control operationDataKeys"
+                                        data-key="autoInstallPriority" data-default="0">
+
+                                    <option value="10">
+                                        Highest
+                                    </option>
+                                    <option value="20">High</option>
+                                    <option value="30">Medium</option>
+                                    <option value="40">Low</option>
+                                    <option value="50">Lowest</option>
+                                </select>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="app-availability-install-charging">
+                                    Device charging state when installing apps
+                                    <span class="helper" title="Device charging state when installing apps">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <select id="app-availability-install-charging" class="form-control operationDataKeys"
+                                        data-key="chargingStateConstraint" data-default="0">
+
+                                    <option value="chargingRequired">Device must be charging</option>
+                                    <option value="chargingNotRequired">Device does not need to be charging</option>
+                                </select>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="app-availability-install-idle">
+                                    Device processor state when installing
+                                    <span class="helper" title="Device processor state when installing">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <select id="app-availability-install-idle" class="form-control operationDataKeys"
+                                        data-key="deviceIdleStateConstraint" data-default="0">
+
+                                    <option value="deviceIdleNotRequired">
+                                        Device does not need to be idling
+                                    </option>
+                                    <option value="deviceIdleRequired">Device must be idling</option>
+                                </select>
+                            </div>
+
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="app-availability-install-network">
+                                    Device network state when installing
+                                    <span class="helper" title="Device processor state when installing">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <select id="app-availability-install-network" class="form-control operationDataKeys"
+                                        data-key="networkTypeConstraint" data-default="0">
+
+                                    <option value="anyNetwork">
+                                        Device can be in any network
+                                    </option>
+                                    <option value="unmeteredNetwork">Device must be in an unmetered network</option>
+                                </select>
+                            </div>
+
+                            <input class="wr-btn wizard-stepper" type="button" value="Save" id="app-install-config-save"
+                                   onclick="changeSavedAppInstallData(this)" data-app-id="" data-package-name=""/>
+
+                        </div>
+                    </div>
+                    <div id="app-availability-global-config-form">
+                        <br><br>
+                        <h2 class="sub-title">Work profile global user configurations</h2>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="auto-update-policy">
+                                App Auto Update Policy
+                                <span class="helper" title="The auto-update policy for apps installed on the device">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <select id="auto-update-policy" class="form-control operationDataKeys"
+                                    data-key="autoUpdatePolicy" data-default="0" onchange="changeSavedGlobalAppConfig(this)">
+                                <option value="wifiOnly">
+                                    When connected to WiFi
+                                </option>
+                                <option value="always">Auto Update Anytime</option>
+                                <option value="choiceToTheUser">Ask User To Update</option>
+                                <option value="never">Disable Auto Update</option>
+                            </select>
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="product-set-behaviour">
+                                App Availability To A User
+                                <span class="helper" title="The availability granted to the user for the specified app">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <select id="product-set-behaviour" class="form-control operationDataKeys"
+                                    data-key="productSetBehavior" data-default="0" onchange="changeSavedGlobalAppConfig(this)">
+                                <option value="allApproved">All Approved Apps For Enterprise</option>
+                                <option value="includeAll">All Apps From Playstore</option>
+                                <option value="whitelist">Only Whitelisted Apps</option>productAvailabilityPolicy
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>

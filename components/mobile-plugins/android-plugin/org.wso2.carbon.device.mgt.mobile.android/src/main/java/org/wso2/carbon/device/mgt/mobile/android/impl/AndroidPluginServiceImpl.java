@@ -103,6 +103,30 @@ public class AndroidPluginServiceImpl implements AndroidPluginService {
     }
 
     @Override
+    public AndroidEnterpriseUser getEnterpriseUserByDevice(String deviceId) throws EnterpriseServiceException {
+
+        AndroidEnterpriseUser androidEnterpriseUsers;
+        if (log.isDebugEnabled()) {
+            log.debug("Calling get user service by device identifier: " + CarbonContext
+                    .getThreadLocalCarbonContext().getUsername());
+        }
+        try {
+            AndroidDAOFactory.openConnection();
+            androidEnterpriseUsers = this.enterpriseDAO.getUserByDevice(deviceId, CarbonContext.getThreadLocalCarbonContext()
+                    .getTenantId());
+
+        } catch (EnterpriseManagementDAOException e) {
+            String msg = "Error occurred while adding the user "
+                    + CarbonContext.getThreadLocalCarbonContext().getUsername();
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        } finally {
+            AndroidDAOFactory.closeConnection();
+        }
+        return androidEnterpriseUsers;
+    }
+
+    @Override
     public AndroidEnterpriseManagedConfig getConfigByPackageName(String packageName) throws EnterpriseServiceException {
         AndroidEnterpriseManagedConfig enterpriseManagedConfig;
         if (log.isDebugEnabled()) {

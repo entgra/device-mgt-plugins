@@ -30,7 +30,16 @@ public class EnterpriseInstallPolicy implements Serializable {
     String androidId;
     String autoUpdatePolicy;
     String productAvailabilityPolicy;
+    String productSetBehavior;
     List<EnterpriseApp> apps;
+
+    public String getProductSetBehavior() {
+        return productSetBehavior;
+    }
+
+    public void setProductSetBehavior(String productSetBehavior) {
+        this.productSetBehavior = productSetBehavior;
+    }
 
     public String getUsername() {
         return username;

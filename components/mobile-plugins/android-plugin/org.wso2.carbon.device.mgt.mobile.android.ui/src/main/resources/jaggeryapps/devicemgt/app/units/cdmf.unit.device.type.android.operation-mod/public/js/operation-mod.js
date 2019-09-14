@@ -1018,22 +1018,65 @@ var androidOperationModule = function () {
                         if (value) {
                             if (operationDataObj.hasClass("specific-enrollment-app-install")) {
                                 if ($(".enrollment-app-install-input", this).length > 0) {
+                                    $("select#enrollment-app-install-table_length").val("100").change();
                                     for (i=0; i<value.length; i++) {
                                         $(".enrollment-app-install-input", this).each(function() {
                                             childInput = $(this);
                                             var childInputKey = childInput.data("child-key");
-                                            if (childInputKey === "appId" && value[i].appId === childInput.val()) {
-                                                childInput.parent().find("a").filterByData("click-event", "add-enrollment-app").click();
+                                            if (childInputKey == "productSetBehavior" && value[i].productSetBehavior) {
+                                                $('select#product-set-behaviour').attr('data-product-set-behavior',
+                                                                                                value[i].productSetBehavior);
+                                            }
+                                            if (childInputKey == "autoUpdatePolicy" && value[i].autoUpdatePolicy) {
+                                                $('select#auto-update-policy').attr('data-auto-update-policy',
+                                                                                                value[i].autoUpdatePolicy);
+                                            }
+                                            if (childInputKey === "installGooglePolicy"
+                                                && value[i].appId === childInput[0].getAttribute("data-app-id")){
+                                                if (value[i].installGooglePolicy) {
+                                                    childInput.parent().find("input").filterByData("child-key", "installGooglePolicyPayload").val(value[i].installGooglePolicyPayload);
+                                                    childInput.filterByData("child-key", "installGooglePolicy").prop('checked', true);
+                                                    childInput.parents("tr").last().find("input").each(function () {
+                                                        if(!$(this).hasClass("child-input")) {
+                                                            $(this).addClass("child-input");
+                                                        }
+                                                    });
+                                                }
+                                            } else if (childInputKey === "enrollmentAppInstall"
+                                                && value[i].appId === childInput[0].getAttribute("data-app-id")){
+                                                if (value[i].enrollmentAppInstall) {
+                                                    childInput.filterByData("child-key", "enrollmentAppInstall").prop('checked', true);
+                                                    childInput.parents("tr").last().find("input").each(function () {
+                                                        if(!$(this).hasClass("child-input")) {
+                                                            $(this).addClass("child-input");
+                                                        }
+                                                    });
+                                                }
                                             }
                                         });
                                     }
                                 } else {
                                     $('[data-add-form-container="#enrollment-app-install-grid"]').empty();
                                     for (i=0; i<value.length; i++) {
+
+                                        var enrollmentAppInstallInput = '<input type="checkbox" disabled/>';
+                                        if (value[i].enrollmentAppInstall) {
+                                            enrollmentAppInstallInput = '<input type="checkbox" checked disabled/>';
+                                        }
+
+                                        var installGooglePolicy = '<input type="checkbox" disabled/>';
+                                        if (value[i].installGooglePolicy) {
+                                            installGooglePolicy = '<input type="checkbox" checked disabled/>';
+                                        }
+
+
                                         var content = '<tr><td data-title="enrollment-app-install-app-name">'
                                             + value[i].appName + '</td><td data-title="enrollment-app-install-app-type">'
                                             + value[i].type + '</td><td data-title="enrollment-app-install-version">'
-                                            + value[i].version + '</td></tr>';
+                                            + value[i].version + '</td>'
+                                            + '<td>' + enrollmentAppInstallInput + '</td>'
+                                            + '<td>' + installGooglePolicy + '</td>'
+                                            +'</tr>';
                                         $('[data-add-form-container="#enrollment-app-install-grid"]').append(content);
                                     }
                                 }
