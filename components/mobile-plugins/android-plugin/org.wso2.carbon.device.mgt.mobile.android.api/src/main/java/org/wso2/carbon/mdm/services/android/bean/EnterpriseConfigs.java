@@ -4,6 +4,15 @@ public class EnterpriseConfigs {
 
     String enterpriseId;
     String esa;
+    ErrorResponse errorResponse;
+
+    public ErrorResponse getErrorResponse() {
+        return errorResponse;
+    }
+
+    public void setErrorResponse(ErrorResponse errorResponse) {
+        this.errorResponse = errorResponse;
+    }
 
     public String getEnterpriseId() {
         return enterpriseId;

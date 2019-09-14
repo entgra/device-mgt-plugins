@@ -30,6 +30,8 @@ public interface AndroidPluginService {
 
     List<AndroidEnterpriseUser> getEnterpriseUser(String username) throws EnterpriseServiceException;
 
+    AndroidEnterpriseUser getEnterpriseUserByDevice(String deviceId) throws EnterpriseServiceException;
+
     AndroidEnterpriseManagedConfig getConfigByPackageName(String packageName) throws EnterpriseServiceException;
 
     void addConfig(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseServiceException;

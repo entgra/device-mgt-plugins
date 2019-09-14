@@ -36,7 +36,9 @@ import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpec
 import com.google.api.services.androidenterprise.model.AdministratorWebTokenSpecWebApps;
 import com.google.api.services.androidenterprise.model.AuthenticationToken;
 import com.google.api.services.androidenterprise.model.Device;
+import com.google.api.services.androidenterprise.model.Install;
 import com.google.api.services.androidenterprise.model.LocalizedText;
+import com.google.api.services.androidenterprise.model.ProductSet;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import com.google.api.services.androidenterprise.model.StoreCluster;
 import com.google.api.services.androidenterprise.model.StoreLayout;
@@ -103,7 +105,7 @@ public class GoogleAPIInvoker {
         }
     }
 
-    public Device installApps(String enterpriseId, String userId , Device device) throws EnterpriseServiceException{
+    public Device approveAppsForUser(String enterpriseId, String userId , Device device) throws EnterpriseServiceException{
         AndroidEnterprise androidEnterprise = getEnterpriseClient();
         try {
             Device deviceResponse = androidEnterprise.devices().update(enterpriseId,
@@ -112,6 +114,38 @@ public class GoogleAPIInvoker {
             return deviceResponse;
         } catch (IOException e) {
             String msg = "Error occurred while accessing Google APIs installApps";
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        }
+    }
+
+    public Install installApps(String enterpriseId, String userId , String deviceId, String productId) throws
+            EnterpriseServiceException{
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        try {
+            Install install = new Install();
+            install.setKind("androidenterprise#install");
+            install.setProductId(productId);
+            return androidEnterprise.installs().update(enterpriseId, userId, deviceId, productId, install).execute();
+        } catch (IOException e) {
+            String msg = "Error occurred while accessing Google APIs installApps";
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        }
+    }
+
+    public void approveAppsForUser(String enterpriseId, String userId , List<String> products, String approvalType)
+            throws EnterpriseServiceException{
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        try {
+            ProductSet productSet = new ProductSet();
+            productSet.setKind("androidenterprise#productSet");
+            productSet.setProductId(products);
+            productSet.setProductSetBehavior(approvalType);
+
+            androidEnterprise.users().setAvailableProductSet(enterpriseId, userId, productSet).execute();
+        } catch (IOException e) {
+            String msg = "Error occurred while accessing Google APIs approveAppsForUser";
             log.error(msg, e);
             throw new EnterpriseServiceException(msg, e);
         }

@@ -26,10 +26,12 @@ import com.google.api.services.androidenterprise.model.StoreLayoutPagesListRespo
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.device.application.mgt.common.dto.ApplicationPolicyDTO;
 import org.wso2.carbon.device.application.mgt.common.dto.ApplicationReleaseDTO;
 import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
@@ -41,15 +43,19 @@ import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePageLinks;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseTokenUrl;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.GoogleAppSyncResponse;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseApp;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseInstallPolicy;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseUser;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.TokenWrapper;
 import org.wso2.carbon.mdm.services.android.common.GoogleAPIInvoker;
+import org.wso2.carbon.mdm.services.android.exception.BadRequestException;
 import org.wso2.carbon.mdm.services.android.exception.NotFoundException;
 import org.wso2.carbon.mdm.services.android.services.AndroidEnterpriseService;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
+import org.wso2.carbon.mdm.services.android.util.AndroidConstants;
 import org.wso2.carbon.mdm.services.android.util.AndroidDeviceUtils;
 import org.wso2.carbon.mdm.services.android.util.AndroidEnterpriseUtils;
+import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -160,7 +166,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                 if (userDetail.getEnterpriseId() != null && !userDetail.getEnterpriseId().isEmpty() && userDetail
                         .getEmmUsername() != null && userDetail.getEmmUsername().equals(device.getUsername())
                         && device.getAndroidId().equals(userDetail.getAndroidPlayDeviceId())) {
-                    googleAPIInvoker.installApps(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
+                    googleAPIInvoker.approveAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
                             AndroidEnterpriseUtils.convertToDeviceInstance(device));
                     sentToDevice = true;
                 }
@@ -684,6 +690,86 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
         }
         return Response.status(Response.Status.OK).build();
+    }
+
+
+    @Override
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    @Path("/change-app")
+    public Response updateUser(ApplicationPolicyDTO applicationPolicyDTO) {
+
+        boolean sentToDevice = false;
+        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
+        for (DeviceIdentifier deviceIdentifier : applicationPolicyDTO.getDeviceIdentifierList()) {
+            try {
+
+                AndroidEnterpriseUser userDetail = AndroidAPIUtils.getAndroidPluginService()
+                        .getEnterpriseUserByDevice(deviceIdentifier.getId());
+                    if (userDetail != null && userDetail.getEnterpriseId() != null && !userDetail.getEnterpriseId()
+                            .isEmpty() && userDetail.getEmmUsername() != null) {
+
+                        if (applicationPolicyDTO.getPolicy() == null) {
+                            ProfileFeature feature = AndroidDeviceUtils.getEnrollmentFeature(deviceIdentifier);
+                            EnterpriseInstallPolicy enterpriseInstallPolicy = AndroidEnterpriseUtils
+                                    .getDeviceAppPolicy(null, feature, userDetail);
+
+                            List<String> apps = new ArrayList<>();
+                            boolean isAppWhitelisted = false;
+                            for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
+                                apps.add(enterpriseApp.getProductId());
+                                String packageName = enterpriseApp.getProductId().replace("app:", "");
+                                if (applicationPolicyDTO.getApplicationDTO().getPackageName().equals(packageName)) {
+                                    isAppWhitelisted = true;
+                                }
+                            }
+
+                            if (enterpriseInstallPolicy.getProductSetBehavior().equals(AndroidConstants
+                                    .ApplicationInstall.BEHAVIOUR_WHITELISTED_APPS_ONLY)) {
+                                // This app can only be installed if the app is approved by whitelist to user.
+                                if (!isAppWhitelisted) {
+                                    String errorMessage = "App: " + applicationPolicyDTO.getApplicationDTO()
+                                            .getPackageName() + " for device " + deviceIdentifier.getId();
+                                    log.error(errorMessage);
+                                    throw new BadRequestException(
+                                            new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.BAD_REQUEST
+                                                    .getStatusCode()).setMessage(errorMessage).build());
+                                }
+                            }
+                            googleAPIInvoker.installApps(enterpriseConfigs.getEnterpriseId(), userDetail
+                                    .getGoogleUserId(), userDetail.getAndroidPlayDeviceId(), "app:" +
+                                    applicationPolicyDTO.getApplicationDTO().getPackageName());
+                        }
+
+                        sentToDevice = true;
+                    }
+
+            } catch (EnterpriseServiceException e) {
+                String errorMessage = "App install failed for device " + deviceIdentifier.getId();
+                log.error(errorMessage);
+                throw new NotFoundException(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.NOT_FOUND
+                                .getStatusCode()).setMessage(errorMessage).build());
+            } catch (FeatureManagementException e) {
+                String errorMessage = "Could not fetch effective policy for device " + deviceIdentifier.getId();
+                log.error(errorMessage);
+                throw new NotFoundException(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.INTERNAL_SERVER_ERROR
+                                .getStatusCode()).setMessage(errorMessage).build());
+            }
+
+        }
+
+        if (sentToDevice) {
+            return Response.status(Response.Status.OK).build();
+        } else {
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Could not install on the device of user "
+                            ).build()).build();
+        }
     }
 
 }

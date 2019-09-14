@@ -86,6 +86,45 @@ public class EnterpriseDAOImpl implements EnterpriseDAO {
         return enterpriseUsers;
     }
 
+    public AndroidEnterpriseUser getUserByDevice(String deviceId, int tenantId) throws
+            EnterpriseManagementDAOException {
+        Connection conn;
+        PreparedStatement stmt = null;
+        AndroidEnterpriseUser enterpriseUser = null;
+        ResultSet rs = null;
+        try {
+            conn = AndroidDAOFactory.getConnection();
+            String selectDBQuery =
+                    "SELECT * FROM AD_ENTERPRISE_USER_DEVICE WHERE EMM_DEVICE_ID = ? AND TENANT_ID = ? " +
+                            "ORDER BY LAST_UPDATED_TIMESTAMP DESC";
+            stmt = conn.prepareStatement(selectDBQuery);
+            stmt.setString(1, deviceId);
+            stmt.setInt(2, tenantId);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                enterpriseUser = new AndroidEnterpriseUser();
+                enterpriseUser.setEmmUsername(rs.getString("EMM_USERNAME"));
+                enterpriseUser.setTenantId(rs.getInt("TENANT_ID"));
+                enterpriseUser.setLastUpdatedTime(rs.getString("LAST_UPDATED_TIMESTAMP"));
+                enterpriseUser.setAndroidPlayDeviceId(rs.getString("ANDROID_PLAY_DEVICE_ID"));
+                enterpriseUser.setEnterpriseId(rs.getString("ENTERPRISE_ID"));
+                enterpriseUser.setGoogleUserId(rs.getString("GOOGLE_USER_ID"));
+                enterpriseUser.setEmmDeviceId(rs.getString("EMM_DEVICE_ID"));
+            }
+        } catch (SQLException e) {
+            String msg = "Error occurred while fetching user for device : '" + deviceId + "'";
+            log.error(msg, e);
+            throw new EnterpriseManagementDAOException(msg, e);
+        } finally {
+            MobileDeviceManagementDAOUtil.cleanupResources(stmt, rs);
+            AndroidDAOFactory.closeConnection();
+        }
+
+        return enterpriseUser;
+    }
+
     public boolean addUser(AndroidEnterpriseUser androidEnterpriseUser) throws EnterpriseManagementDAOException {
         boolean status = false;
         Connection conn;
