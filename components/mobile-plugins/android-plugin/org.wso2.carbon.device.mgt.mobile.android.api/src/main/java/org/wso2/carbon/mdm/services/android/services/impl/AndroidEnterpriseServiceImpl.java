@@ -712,39 +712,48 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                     if (userDetail != null && userDetail.getEnterpriseId() != null && !userDetail.getEnterpriseId()
                             .isEmpty() && userDetail.getEmmUsername() != null) {
 
-                        if (applicationPolicyDTO.getPolicy() == null) {
-                            ProfileFeature feature = AndroidDeviceUtils.getEnrollmentFeature(deviceIdentifier);
-                            EnterpriseInstallPolicy enterpriseInstallPolicy = AndroidEnterpriseUtils
-                                    .getDeviceAppPolicy(null, feature, userDetail);
+                        if (applicationPolicyDTO.getAction().equals(AndroidConstants.ApplicationInstall.INSTALL)) {
+                            if (applicationPolicyDTO.getPolicy() == null) {
+                                ProfileFeature feature = AndroidDeviceUtils.getEnrollmentFeature(deviceIdentifier);
+                                EnterpriseInstallPolicy enterpriseInstallPolicy = AndroidEnterpriseUtils
+                                        .getDeviceAppPolicy(null, feature, userDetail);
 
-                            List<String> apps = new ArrayList<>();
-                            boolean isAppWhitelisted = false;
-                            for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
-                                apps.add(enterpriseApp.getProductId());
-                                String packageName = enterpriseApp.getProductId().replace("app:", "");
-                                if (applicationPolicyDTO.getApplicationDTO().getPackageName().equals(packageName)) {
-                                    isAppWhitelisted = true;
+                                List<String> apps = new ArrayList<>();
+                                boolean isAppWhitelisted = false;
+                                for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
+                                    apps.add(enterpriseApp.getProductId());
+                                    String packageName = enterpriseApp.getProductId().replace("app:", "");
+                                    if (applicationPolicyDTO.getApplicationDTO().getPackageName().equals(packageName)) {
+                                        isAppWhitelisted = true;
+                                    }
                                 }
-                            }
 
-                            if (enterpriseInstallPolicy.getProductSetBehavior().equals(AndroidConstants
-                                    .ApplicationInstall.BEHAVIOUR_WHITELISTED_APPS_ONLY)) {
-                                // This app can only be installed if the app is approved by whitelist to user.
-                                if (!isAppWhitelisted) {
-                                    String errorMessage = "App: " + applicationPolicyDTO.getApplicationDTO()
-                                            .getPackageName() + " for device " + deviceIdentifier.getId();
-                                    log.error(errorMessage);
-                                    throw new BadRequestException(
-                                            new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.BAD_REQUEST
-                                                    .getStatusCode()).setMessage(errorMessage).build());
+                                if (enterpriseInstallPolicy.getProductSetBehavior().equals(AndroidConstants
+                                        .ApplicationInstall.BEHAVIOUR_WHITELISTED_APPS_ONLY)) {
+                                    // This app can only be installed if the app is approved by whitelist to user.
+                                    if (!isAppWhitelisted) {
+                                        String errorMessage = "App: " + applicationPolicyDTO.getApplicationDTO()
+                                                .getPackageName() + " for device " + deviceIdentifier.getId();
+                                        log.error(errorMessage);
+                                        throw new BadRequestException(
+                                                new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.BAD_REQUEST
+                                                        .getStatusCode()).setMessage(errorMessage).build());
+                                    }
                                 }
+                                googleAPIInvoker.installApps(enterpriseConfigs.getEnterpriseId(), userDetail
+                                        .getGoogleUserId(), userDetail.getAndroidPlayDeviceId(), "app:" +
+                                        applicationPolicyDTO.getApplicationDTO().getPackageName());
+
+                                sentToDevice = true;
                             }
-                            googleAPIInvoker.installApps(enterpriseConfigs.getEnterpriseId(), userDetail
+                        } else if (applicationPolicyDTO.getAction().equals(AndroidConstants.ApplicationInstall.UNINSTALL)) {
+
+                            googleAPIInvoker.uninstallApps(enterpriseConfigs.getEnterpriseId(), userDetail
                                     .getGoogleUserId(), userDetail.getAndroidPlayDeviceId(), "app:" +
                                     applicationPolicyDTO.getApplicationDTO().getPackageName());
+                            sentToDevice = true;
                         }
 
-                        sentToDevice = true;
                     }
 
             } catch (EnterpriseServiceException e) {

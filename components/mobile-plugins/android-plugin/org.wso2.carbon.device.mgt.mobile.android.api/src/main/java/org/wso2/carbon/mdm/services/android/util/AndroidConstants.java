@@ -202,6 +202,8 @@ public final class AndroidConstants {
         public static final String AUTHORIZATION = "Authorization";
         public static final String AUTHORIZATION_HEADER_VALUE = "Bearer ";
         public static final String BEHAVIOUR_WHITELISTED_APPS_ONLY = "whitelist";
+        public static final String INSTALL = "INSTALL";
+        public static final String UNINSTALL = "UNINSTALL";
     }
 
     public final class ErrorMessages {

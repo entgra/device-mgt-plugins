@@ -134,6 +134,18 @@ public class GoogleAPIInvoker {
         }
     }
 
+    public void uninstallApps(String enterpriseId, String userId , String deviceId, String productId) throws
+            EnterpriseServiceException{
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+        try {
+            androidEnterprise.installs().delete(enterpriseId, userId, deviceId, productId).execute();
+        } catch (IOException e) {
+            String msg = "Error occurred while accessing Google APIs installApps";
+            log.error(msg, e);
+            throw new EnterpriseServiceException(msg, e);
+        }
+    }
+
     public void approveAppsForUser(String enterpriseId, String userId , List<String> products, String approvalType)
             throws EnterpriseServiceException{
         AndroidEnterprise androidEnterprise = getEnterpriseClient();
