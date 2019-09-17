@@ -20,6 +20,7 @@ package org.wso2.carbon.mdm.services.android.mocks;
 
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceTransferRequest;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.FeatureManager;
 import org.wso2.carbon.device.mgt.common.MonitoringOperation;
@@ -659,6 +660,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     public DeviceConfiguration getDeviceConfiguration(Map<String, String> propertyMap)
             throws DeviceManagementException, DeviceNotFoundException, UnauthorizedDeviceAccessException,
             AmbiguousConfigurationException {
+        return null;
+    }
+
+    @Override
+    public List<String> transferDeviceToTenant(DeviceTransferRequest deviceTransferRequest)
+            throws DeviceManagementException, DeviceNotFoundException {
         return null;
     }
 }
