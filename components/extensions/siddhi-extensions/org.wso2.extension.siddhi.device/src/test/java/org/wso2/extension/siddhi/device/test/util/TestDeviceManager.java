@@ -63,10 +63,6 @@ public class TestDeviceManager implements DeviceManager {
         return true;
     }
 
-    @Override
-    public boolean deleteDevice(DeviceIdentifier deviceId, Device device) throws DeviceManagementException {
-        return true;
-    }
 
     @Override
     public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
@@ -134,6 +130,10 @@ public class TestDeviceManager implements DeviceManager {
     @Override
     public boolean requireDeviceAuthorization() {
         return false;
+    }
+
+    public void deleteDevices(List<String> deviceIdentifiers) throws DeviceManagementException {
+        //Does nothing since AndroidDeviceManager is not used instead DeviceTypeManager is used.
     }
 
 }

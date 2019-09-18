@@ -423,10 +423,6 @@ public interface DeviceManagementService {
             @ApiParam(
                     name = "id",
                     value = "The unique device identifier.")
-            @PathParam("id") String id,
-            @ApiParam(
-                    name = "permanentDelete",
-                    value = "Boolean flag indicating whether to permanently delete the device.")
-            @QueryParam("permanentDelete") boolean permanentDelete);
+            @PathParam("id") String id);
 
 }

@@ -355,11 +355,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public boolean deleteDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-        return false;
-    }
-
-    @Override
     public boolean isEnrolled(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
         return false;
     }
@@ -626,4 +621,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
                    AmbiguousConfigurationException{
         return null;
     }
+
+    public boolean deleteDevices(List<String> deviceIdentifiers) throws DeviceManagementException, InvalidDeviceException {return false;}
 }
