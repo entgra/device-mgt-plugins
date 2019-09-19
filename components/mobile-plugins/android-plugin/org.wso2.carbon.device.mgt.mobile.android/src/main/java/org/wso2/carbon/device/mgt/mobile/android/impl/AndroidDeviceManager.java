@@ -369,6 +369,7 @@ public class AndroidDeviceManager implements DeviceManager {
         return devices;
     }
 
+    @Override
     public void deleteDevices(List<String> deviceIdentifiers) throws DeviceManagementException {
         //Does nothing since AndroidDeviceManager is not used instead DeviceTypeManager is used.
     }
