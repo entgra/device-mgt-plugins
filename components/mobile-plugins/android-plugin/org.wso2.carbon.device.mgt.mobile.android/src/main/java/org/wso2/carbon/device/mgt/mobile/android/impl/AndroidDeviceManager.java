@@ -220,11 +220,6 @@ public class AndroidDeviceManager implements DeviceManager {
         return true;
     }
 
-    @Override
-    public boolean deleteDevice(DeviceIdentifier deviceId, Device device) throws DeviceManagementException {
-        //Returning false since AndroidDeviceManager is not used instead DeviceTypeManager is used.
-        return false;
-    }
 
     @Override
     public boolean isEnrolled(DeviceIdentifier deviceId) throws DeviceManagementException {
@@ -372,6 +367,11 @@ public class AndroidDeviceManager implements DeviceManager {
                     e);
         }
         return devices;
+    }
+
+    @Override
+    public void deleteDevices(List<String> deviceIdentifiers) throws DeviceManagementException {
+        //Does nothing since AndroidDeviceManager is not used instead DeviceTypeManager is used.
     }
 
 }
