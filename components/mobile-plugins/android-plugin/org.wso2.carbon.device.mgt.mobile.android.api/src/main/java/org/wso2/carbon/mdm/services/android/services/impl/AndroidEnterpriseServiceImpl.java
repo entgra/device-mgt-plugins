@@ -18,6 +18,7 @@
  */
 package org.wso2.carbon.mdm.services.android.services.impl;
 
+import com.google.api.services.androidenterprise.model.AppRestrictionsSchema;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import com.google.api.services.androidenterprise.model.StoreCluster;
 import com.google.api.services.androidenterprise.model.StoreLayout;
@@ -166,7 +167,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                 if (userDetail.getEnterpriseId() != null && !userDetail.getEnterpriseId().isEmpty() && userDetail
                         .getEmmUsername() != null && userDetail.getEmmUsername().equals(device.getUsername())
                         && device.getAndroidId().equals(userDetail.getAndroidPlayDeviceId())) {
-                    googleAPIInvoker.approveAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
+                    googleAPIInvoker.updateAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
                             AndroidEnterpriseUtils.convertToDeviceInstance(device));
                     sentToDevice = true;
                 }
@@ -642,10 +643,11 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
         }
 
         try {
-           AndroidAPIUtils.getAndroidPluginService().addConfig(managedConfig);
+            AndroidAPIUtils.getAndroidPluginService().addConfig(managedConfig);
         } catch (EnterpriseServiceException e) {
             return Response.serverError().entity(
-                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs for "
+                                    +  managedConfig.getPackageName()).build()).build();
         }
         return Response.status(Response.Status.CREATED).build();
     }

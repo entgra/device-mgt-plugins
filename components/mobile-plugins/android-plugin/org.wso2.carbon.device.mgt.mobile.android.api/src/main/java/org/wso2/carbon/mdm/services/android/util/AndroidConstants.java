@@ -62,6 +62,14 @@ public final class AndroidConstants {
     public static final String APPLICATION_JSON = "application/json";
     public static final String SCOPE = "scope";
 
+    public static final String USER_CLAIM_EMAIL_ADDRESS = "http://wso2.org/claims/emailaddress";
+    public static final String USER_CLAIM_FIRST_NAME = "http://wso2.org/claims/givenname";
+    public static final String USER_CLAIM_LAST_NAME = "http://wso2.org/claims/lastname";
+
+    public static final String USER_CLAIM_EMAIL_ADDRESS_PLACEHOLDER = "$email";
+    public static final String USER_CLAIM_FIRST_NAME_PLACEHOLDER = "$firstName";
+    public static final String USER_CLAIM_LAST_NAME_PLACEHOLDER = "$lastName";
+
     public final class DeviceProperties {
         private DeviceProperties() {
             throw new AssertionError();

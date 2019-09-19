@@ -355,8 +355,14 @@ public class AndroidDeviceUtils {
                         }
                         googleAPIInvoker.approveAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail
                                 .getGoogleUserId(), apps, enterpriseInstallPolicy.getProductSetBehavior());
-                        googleAPIInvoker.approveAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
+                        googleAPIInvoker.updateAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
                                 AndroidEnterpriseUtils.convertToDeviceInstance(enterpriseInstallPolicy));
+
+//                        for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
+//                            googleAPIInvoker.addManagedConfigForDevice(enterpriseConfigs.getEnterpriseId(), userDetail
+//                                    .getGoogleUserId(), enterpriseInstallPolicy.getAndroidId(), enterpriseApp.getProductId());
+//                        }
+
                     }
                 }
             }

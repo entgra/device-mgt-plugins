@@ -38,6 +38,8 @@ import com.google.api.services.androidenterprise.model.AuthenticationToken;
 import com.google.api.services.androidenterprise.model.Device;
 import com.google.api.services.androidenterprise.model.Install;
 import com.google.api.services.androidenterprise.model.LocalizedText;
+import com.google.api.services.androidenterprise.model.ManagedConfiguration;
+import com.google.api.services.androidenterprise.model.ManagedConfigurationsSettingsListResponse;
 import com.google.api.services.androidenterprise.model.ProductSet;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import com.google.api.services.androidenterprise.model.StoreCluster;
@@ -54,6 +56,7 @@ import org.wso2.carbon.mdm.services.android.bean.EnterpriseStoreCluster;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePackages;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePage;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseTokenUrl;
+import org.wso2.carbon.mdm.services.android.util.AndroidEnterpriseUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -105,7 +108,8 @@ public class GoogleAPIInvoker {
         }
     }
 
-    public Device approveAppsForUser(String enterpriseId, String userId , Device device) throws EnterpriseServiceException{
+    public Device updateAppsForUser(String enterpriseId, String userId , Device device) throws
+            EnterpriseServiceException{
         AndroidEnterprise androidEnterprise = getEnterpriseClient();
         try {
             Device deviceResponse = androidEnterprise.devices().update(enterpriseId,

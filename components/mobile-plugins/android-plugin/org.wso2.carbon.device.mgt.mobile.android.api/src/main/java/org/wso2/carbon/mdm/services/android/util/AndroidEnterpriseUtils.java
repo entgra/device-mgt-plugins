@@ -29,18 +29,16 @@ import com.google.api.services.androidenterprise.model.Product;
 import com.google.api.services.androidenterprise.model.ProductPolicy;
 
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
+import com.google.api.services.androidenterprise.model.VariableSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.application.mgt.common.ApplicationArtifact;
 import org.wso2.carbon.device.application.mgt.common.LifecycleChanger;
-import org.wso2.carbon.device.application.mgt.common.dto.ApplicationPolicyDTO;
 import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
 import org.wso2.carbon.device.application.mgt.common.response.Application;
 import org.wso2.carbon.device.application.mgt.common.response.Category;
@@ -51,13 +49,19 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
+import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
+import org.wso2.carbon.mdm.services.android.bean.BasicUserInfo;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseConfigs;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseApp;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseInstallPolicy;
 import org.wso2.carbon.mdm.services.android.exception.NotFoundException;
 import org.wso2.carbon.mdm.services.android.exception.UnexpectedServerErrorException;
+import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.api.UserStoreManager;
+import org.wso2.carbon.user.core.service.RealmService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,8 +82,13 @@ import java.util.Map;
 public class AndroidEnterpriseUtils {
 
     private static Log log = LogFactory.getLog(AndroidEnterpriseUtils.class);
+    private static List<String> templates = Arrays.asList(AndroidConstants
+            .USER_CLAIM_EMAIL_ADDRESS_PLACEHOLDER, AndroidConstants.USER_CLAIM_FIRST_NAME_PLACEHOLDER,
+            AndroidConstants.USER_CLAIM_LAST_NAME_PLACEHOLDER);
 
-    public static Device convertToDeviceInstance(EnterpriseInstallPolicy enterpriseInstallPolicy) {
+
+    public static Device convertToDeviceInstance(EnterpriseInstallPolicy enterpriseInstallPolicy)
+            throws EnterpriseServiceException {
         Device device = new Device();
         device.setManagementType(enterpriseInstallPolicy.getManagementType());
         device.setKind(enterpriseInstallPolicy.getKind());
@@ -103,11 +112,34 @@ public class AndroidEnterpriseUtils {
             productPolicy.setAutoInstallPolicy(autoInstallPolicy);
             productPolicy.setProductId(app.getProductId());
 
-            if (app.getMcmId() != null && app.getVariableSet() != null && app.getVariableSet().size() > 0) {
+            // TODO: Cache this against package name
+            AndroidEnterpriseManagedConfig configs = AndroidAPIUtils.getAndroidPluginService()
+                    .getConfigByPackageName(app.getProductId().replaceFirst("app:", ""));
+
+            if (configs != null && configs.getMcmId() != null) {
                 ManagedConfiguration managedConfiguration = new ManagedConfiguration();
                 ConfigurationVariables configurationVariables = new ConfigurationVariables();
-                configurationVariables.setMcmId(app.getMcmId());
-                configurationVariables.setVariableSet(app.getVariableSet());
+                configurationVariables.setKind("androidenterprise#configurationVariables");
+                configurationVariables.setMcmId(configs.getMcmId());
+
+                List<VariableSet> variableSets = new ArrayList<>();
+                BasicUserInfo userInfo = getBasicUserInfo(PrivilegedCarbonContext.getThreadLocalCarbonContext().getUsername());
+                for (String key : templates) {
+                    VariableSet variableSet = new VariableSet();
+                    variableSet.setKind("androidenterprise#variableSet");
+
+                    variableSet.setPlaceholder(key);
+                    String value = getPlaceholderValue(userInfo, key);
+                    if (value == null) {
+                        continue;
+                    }
+                    variableSet.setUserValue(value);
+                    variableSets.add(variableSet);
+                }
+
+                if (variableSets != null && variableSets.size() > 0) {
+                    configurationVariables.setVariableSet(variableSets);
+                }
                 managedConfiguration.setConfigurationVariables(configurationVariables);
                 productPolicy.setManagedConfiguration(managedConfiguration);
             }
@@ -120,6 +152,71 @@ public class AndroidEnterpriseUtils {
         policy.setProductAvailabilityPolicy(enterpriseInstallPolicy.getProductAvailabilityPolicy());
         device.setPolicy(policy);
         return device;
+    }
+
+    private static String getPlaceholderValue(BasicUserInfo userInfo, String key) {
+        if (userInfo != null) {
+            switch (key) {
+                case AndroidConstants.USER_CLAIM_EMAIL_ADDRESS_PLACEHOLDER:
+                    return userInfo.getEmailAddress();
+                case AndroidConstants.USER_CLAIM_FIRST_NAME_PLACEHOLDER:
+                    return userInfo.getFirstname();
+                case AndroidConstants.USER_CLAIM_LAST_NAME_PLACEHOLDER:
+                    return userInfo.getLastname();
+            }
+        }
+        return null;
+    }
+
+    private static UserStoreManager getUserStoreManager() throws EnterpriseServiceException {
+        RealmService realmService;
+        UserStoreManager userStoreManager = null;
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+        if (realmService == null) {
+            String msg = "Realm service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        int tenantId = ctx.getTenantId();
+        try {
+            userStoreManager = realmService.getTenantUserRealm(tenantId).getUserStoreManager();
+        } catch (UserStoreException e) {
+            String msg = "Could not create user store manager.";
+            log.error(msg);
+            throw new EnterpriseServiceException(msg, e);
+        }
+        return userStoreManager;
+    }
+
+    private static BasicUserInfo getBasicUserInfo(String username) throws EnterpriseServiceException {
+        UserStoreManager userStoreManager = getUserStoreManager();
+        try {
+            if (!userStoreManager.isExistingUser(username)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("User by username: " + username + " does not exist.");
+                }
+                return null;
+            }
+        } catch (UserStoreException e) {
+            String msg = "Could not get user details of user " + username;
+            log.error(msg);
+            throw new EnterpriseServiceException(msg, e);
+        }
+
+        BasicUserInfo userInfo = new BasicUserInfo();
+        userInfo.setUsername(username);
+        try {
+            userInfo.setEmailAddress(userStoreManager.getUserClaimValue(username,  AndroidConstants.USER_CLAIM_EMAIL_ADDRESS, null));
+            userInfo.setFirstname(userStoreManager.getUserClaimValue(username,  AndroidConstants.USER_CLAIM_FIRST_NAME, null));
+            userInfo.setFirstname(userStoreManager.getUserClaimValue(username,  AndroidConstants.USER_CLAIM_LAST_NAME, null));
+        } catch (UserStoreException e) {
+            String msg = "Could not get claims of user " + username;
+            log.error(msg);
+            throw new EnterpriseServiceException(msg, e);
+        }
+
+        return userInfo;
     }
 
     public static EnterpriseConfigs getEnterpriseConfigs() {
@@ -174,7 +271,7 @@ public class AndroidEnterpriseUtils {
         ApplicationManager applicationManager = getAppManagerServer();
         List<Category> categories = applicationManager.getRegisteredCategories();
         if (productListResponse != null && productListResponse.getProduct() != null
-                && productListResponse.getProduct().size() >0) {
+                && productListResponse.getProduct().size() > 0) {
 
             for (Product product : productListResponse.getProduct()) {
 
@@ -188,8 +285,11 @@ public class AndroidEnterpriseUtils {
                 publicAppWrapper.setName(product.getTitle());
                 publicAppWrapper.setDescription(product.getDescription());
                 publicAppWrapper.setCategories(Arrays.asList(new String[]{"GooglePlaySyncedApp"}));//Default category
-                for (Category category :categories) {
-                    if(product.getCategory().equalsIgnoreCase(category.getCategoryName())) {
+                for (Category category : categories) {
+                    if (product.getCategory() == null) {
+                        publicAppWrapper.setCategories(Arrays.asList(new String[]{"GooglePlaySyncedApp"}));
+                        break;
+                    } else if (product.getCategory().equalsIgnoreCase(category.getCategoryName())) {
                         publicAppWrapper.setCategories(Arrays.asList(new String[]{category.getCategoryName(), "GooglePlaySyncedApp"}));
                         break;
                     }
@@ -208,7 +308,7 @@ public class AndroidEnterpriseUtils {
                 appReleaseWrapper.setReleaseType("ga");
                 appReleaseWrapper.setVersion(getAppString(product.getAppVersion()));
                 appReleaseWrapper.setPackageName(product.getProductId().replaceFirst("app:", ""));
-                appReleaseWrapper.setSupportedOsVersions(String.valueOf(product.getMinAndroidSdkVersion())+ "-ALL");
+                appReleaseWrapper.setSupportedOsVersions(String.valueOf(product.getMinAndroidSdkVersion()) + "-ALL");
 
                 publicAppWrapper.setPublicAppReleaseWrappers(Arrays.asList(new PublicAppReleaseWrapper[]{appReleaseWrapper}));
 
@@ -219,17 +319,36 @@ public class AndroidEnterpriseUtils {
                 applicationArtifact.setIconName(iconName);
 
 
-                    InputStream iconInputStream = getInputStream(iconName, product.getIconUrl());
-                    applicationArtifact.setIconStream(iconInputStream);
-                    Map<String, InputStream> screenshotMap = new HashMap<>();
+                InputStream iconInputStream = getInputStream(iconName, product.getIconUrl());
+                applicationArtifact.setIconStream(iconInputStream);
+                Map<String, InputStream> screenshotMap = new HashMap<>();
 
-                    for (int x = 0; x < 3; x++) {
-                        String screenshot = product.getScreenshotUrls().get(x);
+                int numberOfScreenShots = 3;// This is to handle some apps in playstore without 3 screenshots.
+                if (product.getScreenshotUrls() != null) {
+                    if (product.getScreenshotUrls().size() < 3) {
+                        numberOfScreenShots = product.getScreenshotUrls().size();
+                    }
+
+                    for (int y = 1; y < 4; y++) {
+                        int screenshotNumber = y - 1;
+                        if (y > numberOfScreenShots) {
+                            screenshotNumber = 0;
+                        }
+                        String screenshot = product.getScreenshotUrls().get(screenshotNumber);
                         String screenshotName = screenshot.split(".com/")[1];
                         InputStream screenshotInputStream = getInputStream(screenshotName, screenshot);
                         screenshotMap.put(screenshotName, screenshotInputStream);
                     }
-                    applicationArtifact.setScreenshots(screenshotMap);
+                } else { // Private apps doesn't seem to send screenshots. Handling it.
+                    for (int a = 0; a < 3; a++) {
+                        String screenshot = product.getIconUrl();
+                        String screenshotName = screenshot.split(".com/")[1];
+                        InputStream screenshotInputStream = getInputStream(screenshotName, screenshot);
+                        screenshotMap.put(screenshotName, screenshotInputStream);
+                    }
+                }
+
+                applicationArtifact.setScreenshots(screenshotMap);
 
 
                 Application application = applicationManager.createPublicApp(publicAppWrapper, applicationArtifact);
