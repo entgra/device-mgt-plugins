@@ -364,13 +364,13 @@ $(document).ready(function () {
 
     function getSignupUrl(serverUrl, emmToken) {
 
-        var appContext = window.location.href;
+        var appContext = window.location.href;// mgt:9443 call to jaggery API
         var tokenURL = appContext.replace("platform-configuration", "api/enterprise/token");
         var callbackURL = appContext.replace("platform-configuration", "api/enterprise/enroll-complete");
 
         var requestData = {};
         requestData.externalToken = emmToken;
-        requestData.endpoint = serverUrl;
+        requestData.endpoint = serverUrl + "/api/android-for-work/v1.0/google/enterprise/signup-url";
         requestData.callbackURL = callbackURL;
 
         $.ajax({
@@ -403,4 +403,89 @@ $(document).ready(function () {
         var emmToken = $("input#afw-backend-token").val();
         getSignupUrl(serverDetails, emmToken)
     });
+
+
+    var modalPopup = ".modal";
+    var modalPopupContainer = modalPopup + " .modal-content";
+    var modalPopupContent = modalPopup + " .modal-content";
+    var body = "body";
+
+    function unenroll(serverUrl, emmToken) {
+
+        var appContext = window.location.href;
+        var unenrollURL = appContext.replace("platform-configuration", "api/enterprise/unenroll");
+
+        var requestData = {};
+        requestData.externalToken = emmToken;
+        requestData.endpoint = serverUrl;
+
+        $.ajax({
+            type: "PUT",
+            url: unenrollURL,
+            data: JSON.stringify(requestData),
+            contentType: "application/json",
+            success: function(response) {
+                $("input#afw-server-details").val("") ;
+                $("input#afw-backend-token").val("");
+                $("input#afw-esa").val("");
+                $("input#afw-enterprise-id").val("");
+            },
+            error: function(data) {
+                var errorMsgWrapper = "#android-config-error-msg";
+                var errorMsg = "#android-config-error-msg span";
+                if (data.status == 200) {
+                    $(errorMsg).text("hari.");
+                }
+                else if (data.status == 500) {
+                    $(errorMsg).text("Exception occurred at backend.");
+                } else if (data.status == 403) {
+                    $(errorMsg).text("Action was not permitted.");
+                } else {
+                    $(errorMsg).text("An unexpected error occurred.");
+                }
+                $(errorMsgWrapper).removeClass("hidden");
+                $(window).scrollTop(0);
+            },
+            dataType: 'text'
+        });
+    }
+
+
+    $("button#afw-unenroll").click(function() {
+
+        $(modalPopupContent).html($('#remove-unenroll-modal-content').html());
+        showPopup();
+
+        $("a#remove-unenroll-yes-link").click(function () {
+            var serverDetails = $("input#afw-server-details").val() + "/api/device-mgt/android/v1.0/enterprise/324/unenroll";
+            var emmToken = $("input#afw-backend-token").val();
+            unenroll(serverDetails, emmToken);
+            hidePopup();
+        });
+
+        $("a#remove-unenroll-cancel-link").click(function () {
+            hidePopup();
+        });
+
+    });
+
+    /*
+     * show popup function.
+     */
+    function showPopup() {
+        $(modalPopup).modal('show');
+    }
+
+    /*
+     * hide popup function.
+     */
+    function hidePopup() {
+        $(modalPopupContent).html("");
+        $(modalPopupContent).removeClass("operation-data");
+        $(modalPopup).modal('hide');
+        $('body').removeClass('modal-open').css('padding-right', '0px');
+        $('.modal-backdrop').remove();
+    }
+
+
 });

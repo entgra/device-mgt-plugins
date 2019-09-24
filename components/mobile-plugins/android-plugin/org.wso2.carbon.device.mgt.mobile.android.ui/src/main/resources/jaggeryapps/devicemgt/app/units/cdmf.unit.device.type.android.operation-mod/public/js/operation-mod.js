@@ -133,6 +133,18 @@ var androidOperationModule = function () {
                     "passcodePolicyPasscodeHistory": operationPayload["pinHistory"],
                     "passcodePolicyMaxFailedAttempts": operationPayload["maxFailedAttempts"]
                 };
+                if (operationPayload["passcodePolicyWPExist"] === true) {
+                    payload["passcodePolicyWPExist"] = operationPayload["passcodePolicyWPExist"];
+                    payload["passcodePolicyAllowSimpleWP"] = operationPayload.workProfilePasscode["passcodePolicyAllowSimpleWP"];
+                    payload["passcodePolicyRequireAlphanumericWP"] = operationPayload.workProfilePasscode["passcodePolicyRequireAlphanumericWP"];
+                    payload["passcodePolicyMinLengthWP"] = operationPayload.workProfilePasscode["passcodePolicyMinLengthWP"];
+                    payload["passcodePolicyMinComplexCharsWP"] = operationPayload.workProfilePasscode["passcodePolicyMinComplexCharsWP"];
+                    payload["passcodePolicyMaxPasscodeAgeInDaysWP"] = operationPayload.workProfilePasscode["passcodePolicyMaxPasscodeAgeInDaysWP"];
+                    payload["passcodePolicyPasscodeHistoryWP"] = operationPayload.workProfilePasscode["passcodePolicyPasscodeHistoryWP"];
+                    payload["passcodePolicyMaxFailedAttemptsWP"] = operationPayload.workProfilePasscode["passcodePolicyMaxFailedAttemptsWP"];
+                } else {
+                    payload["passcodePolicyWPExist"] = operationPayload["passcodePolicyWPExist"];
+                }
                 break;
             case androidOperationConstants["CAMERA_OPERATION_CODE"]:
                 payload = operationPayload;
@@ -494,6 +506,21 @@ var androidOperationModule = function () {
                         "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
                     }
                 };
+                workProfilePasscode = {};
+                if (operationData["passcodePolicyWPExist"] === true) {
+                    payload.operation["passcodePolicyWPExist"] = operationData["passcodePolicyWPExist"];
+                    workProfilePasscode["passcodePolicyAllowSimpleWP"] = operationData["passcodePolicyAllowSimpleWP"];
+                    workProfilePasscode["passcodePolicyRequireAlphanumericWP"] = operationData["passcodePolicyRequireAlphanumericWP"];
+                    workProfilePasscode["passcodePolicyMinLengthWP"] = operationData["passcodePolicyMinLengthWP"];
+                    workProfilePasscode["passcodePolicyMinComplexCharsWP"] = operationData["passcodePolicyMinComplexCharsWP"];
+                    workProfilePasscode["passcodePolicyMaxPasscodeAgeInDaysWP"] = operationData["passcodePolicyMaxPasscodeAgeInDaysWP"];
+                    workProfilePasscode["passcodePolicyPasscodeHistoryWP"] = operationData["passcodePolicyPasscodeHistoryWP"];
+                    workProfilePasscode["passcodePolicyMaxFailedAttemptsWP"] = operationData["passcodePolicyMaxFailedAttemptsWP"]  ;
+                    payload.operation.workProfilePasscode = workProfilePasscode;
+                } else {
+                    payload["passcodePolicyWPExist"] = operationData["passcodePolicyWPExist"];
+                }
+                break;
                 break;
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
                 payload = {

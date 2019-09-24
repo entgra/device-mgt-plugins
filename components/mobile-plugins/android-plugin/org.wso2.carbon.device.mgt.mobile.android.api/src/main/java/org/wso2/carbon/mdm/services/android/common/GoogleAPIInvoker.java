@@ -38,8 +38,6 @@ import com.google.api.services.androidenterprise.model.AuthenticationToken;
 import com.google.api.services.androidenterprise.model.Device;
 import com.google.api.services.androidenterprise.model.Install;
 import com.google.api.services.androidenterprise.model.LocalizedText;
-import com.google.api.services.androidenterprise.model.ManagedConfiguration;
-import com.google.api.services.androidenterprise.model.ManagedConfigurationsSettingsListResponse;
 import com.google.api.services.androidenterprise.model.ProductSet;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import com.google.api.services.androidenterprise.model.StoreCluster;
@@ -56,7 +54,6 @@ import org.wso2.carbon.mdm.services.android.bean.EnterpriseStoreCluster;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePackages;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseStorePage;
 import org.wso2.carbon.mdm.services.android.bean.EnterpriseTokenUrl;
-import org.wso2.carbon.mdm.services.android.util.AndroidEnterpriseUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -321,6 +318,13 @@ public class GoogleAPIInvoker {
                 .enterprises()
                 .getStoreLayout(enterpriseId)
                 .execute();
+    }
+
+    public void unenroll(String enterpriseId)
+            throws IOException, EnterpriseServiceException {
+        AndroidEnterprise androidEnterprise = getEnterpriseClient();
+
+//        androidEnterprise.enterprises().unenroll(enterpriseId).execute();
     }
 
     private AndroidEnterprise getEnterpriseClient() throws EnterpriseServiceException {

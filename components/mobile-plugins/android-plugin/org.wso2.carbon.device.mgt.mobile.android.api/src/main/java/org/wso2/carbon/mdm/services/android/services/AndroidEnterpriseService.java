@@ -1329,4 +1329,64 @@ public interface AndroidEnterpriseService {
             name = "applicationPolicyDTO",
             value = "Enterprise managed conf.") ApplicationPolicyDTO applicationPolicyDTO);
 
+
+//######################################################################################################################
+//######################################################################################################################
+//######################################################################################################################
+
+    @PUT
+    @Path("/unenroll")
+    @ApiOperation(
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON,
+            httpMethod = "PUT",
+            value = "Unenroll an enterprise from EMM",
+            notes = "Unenroll an enterprise from EMM.",
+            tags = "Android Enterprise Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:modify")
+                    })
+            }
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 201, message = "Created. \n Successfully removed",
+                            responseHeaders = {
+                                    @ResponseHeader(
+                                            name = "Content-Location",
+                                            description = "The URL of the added policy."),
+                                    @ResponseHeader(
+                                            name = "Content-Type",
+                                            description = "The content type of the body"),
+                                    @ResponseHeader(
+                                            name = "ETag",
+                                            description = "Entity Tag of the response resource.\n" +
+                                                    "Used by caches, or in conditional requests."),
+                                    @ResponseHeader(
+                                            name = "Last-Modified",
+                                            description = "Date and time the resource was last modified.\n" +
+                                                    "Used by caches, or in conditional requests.")
+                            }),
+                    @ApiResponse(
+                            code = 303,
+                            message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
+                            responseHeaders = {
+                                    @ResponseHeader(
+                                            name = "Content-Location",
+                                            description = "The Source URL of the document.")}),
+                    @ApiResponse(
+                            code = 400,
+                            message = "Bad Request. \n Invalid request or validation error."),
+                    @ApiResponse(
+                            code = 415,
+                            message = "Unsupported media type. \n The format of the requested entity was not supported."),
+                    @ApiResponse(
+                            code = 500,
+                            message = "Internal Server Error. \n " +
+                                    "Server error occurred while unenrolling.")
+            })
+
+    Response unenroll();
+
 }

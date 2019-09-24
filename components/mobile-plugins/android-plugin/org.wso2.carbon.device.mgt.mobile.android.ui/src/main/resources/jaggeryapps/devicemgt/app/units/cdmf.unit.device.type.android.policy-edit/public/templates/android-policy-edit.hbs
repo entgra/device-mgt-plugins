@@ -315,6 +315,146 @@
                             <option value="10">10</option>
                         </select>
                     </div>
+
+                    <!--Passcode policy for work profile only-->
+                    <h2 class="sub-title panel-title">Passcode policy for work profile</h2>
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="wp-passcode-policy-exist" type="checkbox"
+                                   class="form-control operationDataKeys" data-key="passcodePolicyWPExist"
+                                   onchange="changeDivVisibility('wp-passcode-policy', this)"/>
+                            <span class="helper" title="Enabled work profile passcode">
+                                Enabled work profile passcode
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+                    <div id="wp-passcode-policy"  style="display: none;">
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="wp-passcode-policy-allow-simple" type="checkbox"
+                                       class="form-control operationDataKeys" data-key="passcodePolicyAllowSimpleWP"
+                                       checked="checked"/>
+                                <span class="helper"
+                                      title="Permits repeating, ascending and descending character sequences">
+                                Allow simple value
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="wp-passcode-policy-require-alphanumeric" type="checkbox"
+                                       class="form-control operationDataKeys"
+                                       data-key="passcodePolicyRequireAlphanumericWP" checked="checked"/>
+                                <span class="helper" title="Mandates to contain both letters and numbers">
+                                Require alphanumeric value
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wp-passcode-policy-min-length">
+                                Minimum passcode length
+                                <span class="helper" title="Minimum number of characters allowed in a passcode">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <select id="wp-passcode-policy-min-length" class="form-control operationDataKeys"
+                                    data-key="passcodePolicyMinLengthWP" data-default="0">
+                                <option value="" selected="selected">
+                                    None
+                                </option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wp-passcode-policy-min-complex-chars">
+                                Minimum number of complex characters
+                                <span class="helper"
+                                      title="Minimum number of complex or non-alphanumeric characters allowed in a passcode">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <select id="wp-passcode-policy-min-complex-chars" class="form-control operationDataKeys"
+                                    data-key="passcodePolicyMinComplexCharsWP" data-default="0">
+                                <option value="" selected="selected">
+                                    None
+                                </option>
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                            </select>
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wp-passcode-policy-max-passcode-age-in-days">
+                                Maximum passcode age in days*
+                                <span class="helper" title="Number of days after which a passcode must be changed">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                <br>
+                                ( Should be in between 1-to-730 days or 0 for none )
+                            </label>
+                            <input id="wp-passcode-policy-max-passcode-age-in-days" type="text"
+                                   class="form-control operationDataKeys"
+                                   data-key="passcodePolicyMaxPasscodeAgeInDaysWP" maxlength="3">
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wp-passcode-policy-passcode-history">
+                                Passcode history*
+                                <span class="helper" title="Number of consequent unique passcodes to be used before reuse">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                <br>
+                                ( Should be in between 1-to-50 passcodes or 0 for none )
+                            </label>
+                            <input id="wp-passcode-policy-passcode-history" type="text" class="form-control operationDataKeys"
+                                   data-key="passcodePolicyPasscodeHistoryWP" maxlength="2">
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wp-passcode-policy-max-failed-attempts">
+                                Maximum number of failed attempts
+                                <span class="helper"
+                                      title="The maximum number of incorrect password entries allowed. If the correct password is not entered within the allowed number of attempts, the data on the device will be erased.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <select id="wp-passcode-policy-max-failed-attempts" class="form-control operationDataKeys"
+                                    data-key="passcodePolicyMaxFailedAttemptsWP" data-default="0">
+                                <option value="" selected="selected">
+                                    None
+                                </option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>

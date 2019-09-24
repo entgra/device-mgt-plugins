@@ -783,4 +783,28 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
         }
     }
 
+    @PUT
+    @Path("/{id}/unenroll")
+    @Override
+    public Response unenroll() {
+        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+        try {
+            googleAPIInvoker.unenroll(enterpriseConfigs.getEnterpriseId());
+        } catch (IOException e) {
+            String errorMessage = "Could not unenroll the enterprise " + enterpriseConfigs.getEnterpriseId();
+            log.error(errorMessage);
+            throw new NotFoundException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.INTERNAL_SERVER_ERROR
+                            .getStatusCode()).setMessage(errorMessage).build());
+        } catch (EnterpriseServiceException e) {
+            String errorMessage = "Could not get client to call Google to unenroll enterprise " + enterpriseConfigs.getEnterpriseId();
+            log.error(errorMessage);
+            throw new NotFoundException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.INTERNAL_SERVER_ERROR
+                            .getStatusCode()).setMessage(errorMessage).build());
+        }
+        return Response.status(Response.Status.OK).build();
+    }
+
 }

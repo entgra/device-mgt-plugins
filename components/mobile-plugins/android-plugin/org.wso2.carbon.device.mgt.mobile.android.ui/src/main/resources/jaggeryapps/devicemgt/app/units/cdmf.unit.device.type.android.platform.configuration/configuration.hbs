@@ -175,9 +175,9 @@
             </div>
 
         </div>
-
         <!-- End of KIOSK Configs -->
 
+        <!--  Android For Work Configurations -->
         <div class="wr-input-control wr-btn-grp">
             <button id="save-android-btn" class="wr-btn">Save</button>
         </div>
@@ -226,6 +226,41 @@
                 <button id="afw-configure" class="wr-btn">Begin configuration</button>
             </div>
         </div>
+
+        <br><br>
+        <h4>
+            Unenroll from EMM
+        </h4>
+        <div class="wr-input-control">
+            <label class="wr-input-label" for="afw-server-details">
+                Unregister your enterprise from EMM.
+                <br>WARNING: This action cannot be undone.
+            </label>
+            <button id="afw-unenroll" class="wr-btn">Unenroll</button>
+        </div>
+
+        <div id="remove-unenroll-modal-content" class="hide">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 col-centered">
+                        <h3>Do you really want to unenroll? This cannot be undone.</h3>
+
+                        <div class="buttons">
+                            <a href="#" id="remove-unenroll-yes-link" class="btn-operations">
+                                Yes
+                            </a>
+
+                            <a href="#" id="remove-unenroll-cancel-link" class="btn-operations btn-default"
+                               data-dismiss="modal">
+                                Cancel
+                            </a>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 <!-- /android -->
