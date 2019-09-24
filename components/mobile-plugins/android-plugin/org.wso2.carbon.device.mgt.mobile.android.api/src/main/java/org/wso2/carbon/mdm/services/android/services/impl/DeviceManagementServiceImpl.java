@@ -447,26 +447,17 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     @DELETE
     @Path("/{id}")
     @Override
-    public Response disEnrollDevice(@PathParam("id") String id,
-                                    @QueryParam("permanentDelete") boolean permanentDelete) {
+    public Response disEnrollDevice(@PathParam("id") String id) {
         boolean result;
         DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
         try {
-            if (permanentDelete) {
-                result = AndroidAPIUtils.getDeviceManagementService().deleteDevice(deviceIdentifier);
-            } else {
-                AndroidDeviceUtils.updateDisEnrollOperationStatus(deviceIdentifier);
-                result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
-            }
+            AndroidDeviceUtils.updateDisEnrollOperationStatus(deviceIdentifier);
+            result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
             if (result) {
                 String msg = "Android device that carries id '" + id + "' is successfully ";
                 Message responseMessage = new Message();
                 responseMessage.setResponseCode(Response.Status.OK.toString());
-                if (permanentDelete) {
-                    responseMessage.setResponseMessage(msg + "deleted");
-                } else {
-                    responseMessage.setResponseMessage(msg + "dis-enrolled");
-                }
+                responseMessage.setResponseMessage(msg + "dis-enrolled");
                 return Response.status(Response.Status.OK).entity(responseMessage).build();
             } else {
                 Message responseMessage = new Message();
@@ -476,11 +467,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             }
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while %s the Android device that carries the id '" + id + "'";
-            if (permanentDelete) {
-                msg = String.format(msg, "deleting");
-            } else {
-                msg = String.format(msg, "dis-enrolling");
-            }
+            msg = String.format(msg, "dis-enrolling");
             log.error(msg, e);
             throw new UnexpectedServerErrorException(
                     new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());

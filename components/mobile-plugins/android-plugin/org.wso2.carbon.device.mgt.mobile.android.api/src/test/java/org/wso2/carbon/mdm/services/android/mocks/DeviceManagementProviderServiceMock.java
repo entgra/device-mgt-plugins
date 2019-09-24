@@ -20,6 +20,7 @@ package org.wso2.carbon.mdm.services.android.mocks;
 
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceTransferRequest;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.FeatureManager;
 import org.wso2.carbon.device.mgt.common.MonitoringOperation;
@@ -27,11 +28,15 @@ import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.DeviceConfiguration;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceNotFoundException;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceTypeNotFoundException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
+import org.wso2.carbon.device.mgt.common.exceptions.UnauthorizedDeviceAccessException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -364,11 +369,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public boolean deleteDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-        return false;
-    }
-
-    @Override
     public boolean isEnrolled(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
         return false;
     }
@@ -650,4 +650,20 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override public DeviceTypeVersion getDeviceTypeVersion(String s, String s1) throws DeviceManagementException {
         return null;
     }
+
+    @Override
+    public DeviceConfiguration getDeviceConfiguration(Map<String, String> propertyMap)
+            throws DeviceManagementException, DeviceNotFoundException, UnauthorizedDeviceAccessException,
+            AmbiguousConfigurationException {
+        return null;
+    }
+
+    @Override
+    public List<String> transferDeviceToTenant(DeviceTransferRequest deviceTransferRequest)
+            throws DeviceManagementException, DeviceNotFoundException {
+        return null;
+    }
+
+    @Override
+    public boolean deleteDevices(List<String> deviceIdentifiers) throws DeviceManagementException, InvalidDeviceException {return false;}
 }
