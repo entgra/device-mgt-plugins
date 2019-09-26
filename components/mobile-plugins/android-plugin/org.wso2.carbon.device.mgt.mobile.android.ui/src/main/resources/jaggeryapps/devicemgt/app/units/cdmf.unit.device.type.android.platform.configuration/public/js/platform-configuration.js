@@ -87,7 +87,9 @@ var kioskConfigs = {
     "wifiSecurity" : "android.app.extra.PROVISIONING_WIFI_SECURITY_TYPE",
     "skipEncryption" : "android.app.extra.PROVISIONING_SKIP_ENCRYPTION",
     "checksum" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM",
-    "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION"
+    "downloadURL" : "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION",
+    "defaultOwnership" : "android.app.extra.defaultOwner",
+    "serverIP" : "android.app.extra.serverIp"
 };
 
 $(document).ready(function () {
@@ -150,6 +152,10 @@ $(document).ready(function () {
                         $("input#android-kiosk-config-download-url").val(config.value);
                     } else if (config.name === kioskConfigs["skipEncryption"]) {
                         $("#android-kiosk-config-encryption").val(config.value);
+                    } else if (config.name === kioskConfigs["defaultOwnership"]) {
+                        $("#android-kiosk-config-defaultOwner").val(config.value);
+                    } else if (config.name === kioskConfigs["serverIP"]) {
+                        $("#android-kiosk-config-server-ip").val(config.value);
                     }
                 }
             }
@@ -194,6 +200,8 @@ $(document).ready(function () {
         var wifiPassword = $("input#android-kiosk-config-wifi-password").val();
         var encryption = $("#android-kiosk-config-encryption").find("option:selected").attr("value");
         var wifiSecurity = $("#android-kiosk-config-wifi-sec").find("option:selected").attr("value");
+        var defaultOwner = $("#android-kiosk-config-defaultOwner").find("option:selected").attr("value");
+        var serverIp = $("#android-kiosk-config-server-ip").val();
 
         if (notifierType === notifierTypeConstants["LOCAL"] && !notifierFrequency) {
             $(errorMsg).text("Notifier frequency is a required field. It cannot be empty.");
@@ -281,6 +289,18 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            var kioskDefaultOwner = {
+                "name": kioskConfigs["defaultOwnership"],
+                "value": defaultOwner,
+                "contentType": "text"
+            };
+
+            var kioskServerIp = {
+                "name": kioskConfigs["serverIP"],
+                "value": serverIp,
+                "contentType": "text"
+            };
+
             configList.push(type);
             configList.push(frequency);
             configList.push(androidEula);
@@ -292,6 +312,8 @@ $(document).ready(function () {
             configList.push(kioskWifiSSID);
             configList.push(kioskWifiPassword);
             configList.push(kioskWifiSecurity);
+            configList.push(kioskDefaultOwner);
+            configList.push(kioskServerIp);
 
             if (notifierType === notifierTypeConstants["FCM"]) {
                 configList.push(fcmKey);
