@@ -608,19 +608,17 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public int getDeviceCountOfTypeByStatus(String deviceType, String deviceStatus) throws DeviceManagementException {
+    public int getDeviceCountOfTypeByStatus(int i, String s, String s1) throws DeviceManagementException {
         return 0;
     }
 
     @Override
-    public List<String> getDeviceIdentifiersByStatus(String deviceType, String deviceStatus)
-            throws DeviceManagementException {
+    public List<String> getDeviceIdentifiersByStatus(int i, String s, String s1) throws DeviceManagementException {
         return null;
     }
 
     @Override
-    public boolean bulkUpdateDeviceStatus(String deviceType, List<String> deviceList, String status)
-            throws DeviceManagementException {
+    public boolean bulkUpdateDeviceStatus(int i, String s, List<String> list, String s1) throws DeviceManagementException {
         return false;
     }
 
