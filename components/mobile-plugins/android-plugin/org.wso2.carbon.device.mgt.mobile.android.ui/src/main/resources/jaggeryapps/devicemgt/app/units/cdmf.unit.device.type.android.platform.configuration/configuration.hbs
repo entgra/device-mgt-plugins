@@ -19,7 +19,7 @@
 <div class="panel panel-default">
     <div class="panel-heading" role="tab">
         <h2 class="sub-title panel-title">
-            Platform Configuration - Windows
+            Platform Configuration - Android
         </h2>
     </div>
     <div id="android-config-body" class="panel-collapse panel-body" role="tabpanel">
@@ -87,9 +87,9 @@
             <div class="wr-input-control">
                 <label class="wr-input-label" for="android-kiosk-config-admin-component">
                     PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME
-                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
-                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
-                    <!--</span>-->
+                    <span class="helper" title="Package name of the Entgra Android agent.">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
                     <br>
                     ( ex: io.entgra.iot.agent/org.wso2.iot.agent.services.AgentDeviceAdminReceiver )
                 </label>
@@ -99,9 +99,9 @@
             <div class="wr-input-control">
                 <label class="wr-input-label" for="android-kiosk-config-checksum">
                     PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM
-                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
-                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
-                    <!--</span>-->
+                    <span class="helper" title="Checksum value of the android agent.">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
                     <br>
                     ( ex: gJD2YwtOiWJHkSMkkIfLRlj-quNqG1fb6v100QmzM9w= )
                 </label>
@@ -111,9 +111,9 @@
             <div class="wr-input-control">
                 <label class="wr-input-label" for="android-kiosk-config-download-url">
                     PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION
-                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
-                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
-                    <!--</span>-->
+                    <span class="helper" title="Android agent download location.">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
                     <br>
                     ( ex: http://192.168.8.20:8080/android.apk )
                 </label>
@@ -123,9 +123,9 @@
             <div class="wr-input-control">
                 <label class="wr-input-label" for="android-kiosk-config-wifi-ssid">
                     PROVISIONING_WIFI_SSID
-                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
-                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
-                    <!--</span>-->
+                    <span class="helper" title="SSID of WI-FI network.">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
                     <br>
                     ( ex: Entgra )
                 </label>
@@ -135,9 +135,9 @@
             <div class="wr-input-control">
                 <label class="wr-input-label" for="android-kiosk-config-wifi-sec">
                     PROVISIONING_WIFI_SECURITY_TYPE
-                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
-                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
-                    <!--</span>-->
+                    <span class="helper" title="Wi-Fi security type of network.">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
                     <br>
                 </label>
                 <select id="android-kiosk-config-wifi-sec" class="form-control" data-default="0">
@@ -151,21 +151,32 @@
             <div class="wr-input-control">
                 <label class="wr-input-label" for="android-kiosk-config-wifi-password">
                     PROVISIONING_WIFI_PASSWORD
-                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
-                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
-                    <!--</span>-->
+                    <span class="helper" title="Password of the Wi-Fi network.">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
                     <br>
-
                 </label>
                 <input id="android-kiosk-config-wifi-password" type="text" class="form-control" >
             </div>
 
             <div class="wr-input-control">
+                <label class="wr-input-label" for="android-kiosk-config-server-ip">
+                    SERVER_ADDRESS
+                    <span class="helper" title="Server address (Ex-www.abc.com:8280)">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
+                    <br>
+
+                </label>
+                <input id="android-kiosk-config-server-ip" type="text" class="form-control" >
+            </div>
+
+            <div class="wr-input-control">
                 <label class="wr-input-label" for="android-kiosk-config-encryption">
                     PROVISIONING_SKIP_ENCRYPTION
-                    <!--<span class="helper" title="Time interval after which Android agent will contact IoT Server each time to fetch data">-->
-                    <!--<span class="wr-help-tip glyphicon glyphicon-question-sign"></span>-->
-                    <!--</span>-->
+                    <span class="helper" title="Set value false to enroll KIOSK device without encrypting.">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
                     <br>
                 </label>
                 <select id="android-kiosk-config-encryption" class="form-control" data-default="0">
@@ -174,6 +185,21 @@
                 </select>
             </div>
 
+            <div class="wr-input-control">
+                <label class="wr-input-label" for="android-kiosk-config-defaultOwner">
+                    DEFAULT_OWNERSHIP
+                    <span class="helper" title="Type of ownership">
+                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                    </span>
+                    <br>
+                </label>
+                <select id="android-kiosk-config-defaultOwner" class="form-control" data-default="0">
+                    <option value="BYOD">BYOD</option>
+                    <option value="COPE">COPE</option>
+                    <option value="COSU">COSU</option>
+                    <option value="WORK_PROFILE">WORK_PROFILE</option>
+                </select>
+            </div>
         </div>
 
         <!-- End of KIOSK Configs -->
