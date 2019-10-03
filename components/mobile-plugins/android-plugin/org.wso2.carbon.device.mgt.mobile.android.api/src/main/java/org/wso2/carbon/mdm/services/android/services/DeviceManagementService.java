@@ -210,6 +210,11 @@ public interface DeviceManagementService {
     })
     Response getPendingOperations(
             @ApiParam(
+                    name = "disableGoogleApps",
+                    value = "Specifically disable having Google apps installed.",
+                    required = false)
+            @QueryParam("disableGoogleApps") boolean disableGoogleApps,
+            @ApiParam(
                     name = "id",
                     value = "The unique device identifier.",
                     required = true)

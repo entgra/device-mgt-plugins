@@ -202,6 +202,10 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
         EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
         GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         EnterpriseTokenUrl enterpriseTokenUrl = new EnterpriseTokenUrl();
+        if (enterpriseConfigs == null || enterpriseConfigs.getEnterpriseId() == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Not configured for AFW").build()).build();
+        }
         enterpriseTokenUrl.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
         enterpriseTokenUrl.setApproveApps(approveApps);
         enterpriseTokenUrl.setSearchEnabled(searchEnabled);
