@@ -211,7 +211,7 @@ var InitiateViewOption = null;
             order: [],
             ajax: {
                 url: "/devicemgt/api/operation/paginate",
-                data: {deviceId: deviceIdentifier, deviceType: deviceType, owner: owner},
+                data: {deviceId: deviceIdentifier, deviceType: deviceType, owner: owner, ownership: ownership},
                 dataSrc: function (json) {
                     $("#operations-spinner").addClass("hidden");
                     $("#operations-log-container").empty();

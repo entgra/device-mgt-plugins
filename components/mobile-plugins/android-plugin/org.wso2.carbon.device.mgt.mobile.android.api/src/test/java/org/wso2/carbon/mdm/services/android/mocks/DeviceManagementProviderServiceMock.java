@@ -38,6 +38,7 @@ import org.wso2.carbon.device.mgt.common.exceptions.DeviceNotFoundException;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceTypeNotFoundException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.exceptions.UnauthorizedDeviceAccessException;
+import org.wso2.carbon.device.mgt.common.device.details.DeviceData;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -156,6 +157,10 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public Device getDevice(DeviceIdentifier deviceIdentifier, Date date, boolean b) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override public Device getDevice(DeviceData deviceData, boolean b) throws DeviceManagementException {
         return null;
     }
 
@@ -666,6 +671,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public List<String> transferDeviceToTenant(DeviceTransferRequest deviceTransferRequest)
             throws DeviceManagementException, DeviceNotFoundException {
+        return null;
+    }
+
+    @Override public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, String s)
+            throws DeviceManagementException {
         return null;
     }
 
