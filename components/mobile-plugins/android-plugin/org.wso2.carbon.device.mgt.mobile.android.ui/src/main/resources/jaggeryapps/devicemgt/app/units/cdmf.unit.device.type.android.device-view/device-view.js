@@ -21,6 +21,7 @@ function onRequest(context) {
     var deviceType = context["uriParams"]["deviceType"];
     var deviceId = request.getParameter("id");
     var owner = request.getParameter("owner");
+    var ownership = request.getParameter("ownership");
     var deviceViewData = {};
     var devicemgtProps = require("/app/modules/conf-reader/main.js")["conf"];
     var carbonServer = require("carbon").server;
@@ -28,7 +29,7 @@ function onRequest(context) {
 
     if (deviceType && deviceId) {
         var deviceModule = require("/app/modules/business-controllers/device.js")["deviceModule"];
-        var response = deviceModule.viewDevice(deviceType, deviceId, owner);
+        var response = deviceModule.viewDevice(deviceType, deviceId, owner, ownership);
         if (response["status"] === "success") {
             deviceViewData["deviceFound"] = true;
             deviceViewData["isAuthorized"] = true;
