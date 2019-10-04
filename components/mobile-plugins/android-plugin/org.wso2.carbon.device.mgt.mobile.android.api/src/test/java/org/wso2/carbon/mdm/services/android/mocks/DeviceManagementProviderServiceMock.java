@@ -592,7 +592,8 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public List<DeviceLocationHistory> getDeviceLocationInfo(String s, String s1, long l, long l1) throws DeviceManagementException {
+    public List<DeviceLocationHistory> getDeviceLocationInfo(DeviceIdentifier deviceIdentifier, long l,
+                                                             long l1) throws DeviceManagementException {
         return null;
     }
 
