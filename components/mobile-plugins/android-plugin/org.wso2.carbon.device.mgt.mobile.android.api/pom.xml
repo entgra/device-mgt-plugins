@@ -360,6 +360,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-androidenterprise</artifactId>
+            <version>v1-rev186-1.25.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.device.application.mgt.common</artifactId>
             <scope>provided</scope>

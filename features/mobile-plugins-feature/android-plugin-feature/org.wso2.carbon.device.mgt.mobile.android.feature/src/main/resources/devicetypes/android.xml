@@ -685,40 +685,145 @@
     </DeviceStatusTaskConfig>
 
     <DeviceTypePlatformDetails>
+        <!-- We are strong the SDK Int here-->
         <DeviceTypePlatformVersion>
-            <VersionName>4.0</VersionName>
+            <VersionName>1</VersionName>
         </DeviceTypePlatformVersion>
 
         <DeviceTypePlatformVersion>
-            <VersionName>4.1</VersionName>
+            <VersionName>2</VersionName>
         </DeviceTypePlatformVersion>
 
         <DeviceTypePlatformVersion>
-            <VersionName>4.4</VersionName>
+            <VersionName>3</VersionName>
         </DeviceTypePlatformVersion>
 
         <DeviceTypePlatformVersion>
-            <VersionName>5.0</VersionName>
+            <VersionName>4</VersionName>
         </DeviceTypePlatformVersion>
 
         <DeviceTypePlatformVersion>
-            <VersionName>6.0</VersionName>
+            <VersionName>5</VersionName>
         </DeviceTypePlatformVersion>
 
         <DeviceTypePlatformVersion>
-            <VersionName>7.0</VersionName>
+            <VersionName>6</VersionName>
         </DeviceTypePlatformVersion>
 
         <DeviceTypePlatformVersion>
-            <VersionName>8.0</VersionName>
+            <VersionName>7</VersionName>
         </DeviceTypePlatformVersion>
 
         <DeviceTypePlatformVersion>
-            <VersionName>9.0</VersionName>
+            <VersionName>8</VersionName>
         </DeviceTypePlatformVersion>
 
         <DeviceTypePlatformVersion>
-            <VersionName>10.0</VersionName>
+            <VersionName>9</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>10</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>11</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>12</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>13</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>14</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>15</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>16</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>17</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>18</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>19</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>20</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>21</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>22</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>23</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>24</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>25</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>26</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>27</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>28</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>29</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>30</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>31</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>32</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>33</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>34</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>35</VersionName>
         </DeviceTypePlatformVersion>
     </DeviceTypePlatformDetails>
 </DeviceTypeConfiguration>
