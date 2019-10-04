@@ -34,7 +34,7 @@ import java.util.Map;
 /**
  * Factory class used to create MobileDeviceManagement related DAO objects.
  */
-public abstract class AbstractMobileDeviceManagementDAOFactory implements MobileDeviceManagementDAOFactory {
+public abstract class AbstractMobileDeviceManagementDAOFactory {
 
     private static final Log log = LogFactory.getLog(AbstractMobileDeviceManagementDAOFactory.class);
     private static Map<String, DataSource> dataSourceMap = new HashMap<>();

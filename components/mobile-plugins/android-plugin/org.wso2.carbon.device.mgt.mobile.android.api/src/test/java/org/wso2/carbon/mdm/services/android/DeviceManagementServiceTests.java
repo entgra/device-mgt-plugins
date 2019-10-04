@@ -113,7 +113,7 @@ public class DeviceManagementServiceTests {
     public void testGetPendingOperationsForNullDevice()
             throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
         Response response = deviceManagementService
-                .getPendingOperations(null, null, null);
+                .getPendingOperations(true, null, null, null);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
     }
@@ -123,7 +123,7 @@ public class DeviceManagementServiceTests {
             throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         Response response = deviceManagementService
-                .getPendingOperations("1234", null, null);
+                .getPendingOperations(true, "1234", null, null);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
     }
@@ -133,7 +133,7 @@ public class DeviceManagementServiceTests {
             throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         Response response = deviceManagementService
-                .getPendingOperations(TestUtils.getDeviceId(), null, null);
+                .getPendingOperations(true, TestUtils.getDeviceId(), null, null);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
     }
@@ -144,7 +144,7 @@ public class DeviceManagementServiceTests {
         mockDeviceManagementService();
         mockPolicyManagerService();
         Response response = deviceManagementService
-                .getPendingOperations(TestUtils.getDeviceId(), null,
+                .getPendingOperations(true, TestUtils.getDeviceId(), null,
                                       TestUtils.getSuccessMonitorOperationResponse());
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
@@ -156,7 +156,7 @@ public class DeviceManagementServiceTests {
         mockDeviceManagementService();
         mockApplicationManagerService();
         Response response = deviceManagementService
-                .getPendingOperations(TestUtils.getDeviceId(), null,
+                .getPendingOperations(true, TestUtils.getDeviceId(), null,
                                       TestUtils.getSuccessApplicationOperationResponse());
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
@@ -168,7 +168,7 @@ public class DeviceManagementServiceTests {
         mockDeviceManagementService();
         mockDeviceInformationManagerService();
         Response response = deviceManagementService
-                .getPendingOperations(TestUtils.getDeviceId(), null,
+                .getPendingOperations(true, TestUtils.getDeviceId(), null,
                                       TestUtils.getSuccessInfoOperationResponse());
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
@@ -179,7 +179,7 @@ public class DeviceManagementServiceTests {
             throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         Response response = deviceManagementService
-                .getPendingOperations(TestUtils.getDeviceId(), null,
+                .getPendingOperations(true, TestUtils.getDeviceId(), null,
                                       TestUtils.getInProgressOperationResponse());
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
@@ -191,7 +191,7 @@ public class DeviceManagementServiceTests {
         mockDeviceManagementService();
         mockNotificationManagementService();
         Response response = deviceManagementService
-                .getPendingOperations(TestUtils.getDeviceId(), null,
+                .getPendingOperations(true, TestUtils.getDeviceId(), null,
                                       TestUtils.getErrorOperationResponse());
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());

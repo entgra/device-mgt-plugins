@@ -19,6 +19,7 @@
 package org.wso2.carbon.device.mgt.mobile.android.internal;
 
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.mobile.android.AndroidPluginService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
 /**
@@ -27,7 +28,7 @@ import org.wso2.carbon.registry.core.service.RegistryService;
 public class AndroidDeviceManagementDataHolder {
 
 	private RegistryService registryService;
-    private DeviceManagementService androidDeviceManagementService;
+    private AndroidPluginService androidDeviceManagementService;
 
 	private static AndroidDeviceManagementDataHolder thisInstance = new AndroidDeviceManagementDataHolder();
 
@@ -46,12 +47,12 @@ public class AndroidDeviceManagementDataHolder {
 		this.registryService = registryService;
 	}
 
-    public DeviceManagementService getAndroidDeviceManagementService() {
+    public AndroidPluginService getAndroidDeviceManagementService() {
         return androidDeviceManagementService;
     }
 
     public void setAndroidDeviceManagementService(
-            DeviceManagementService androidDeviceManagementService) {
+			AndroidPluginService androidDeviceManagementService) {
         this.androidDeviceManagementService = androidDeviceManagementService;
     }
 

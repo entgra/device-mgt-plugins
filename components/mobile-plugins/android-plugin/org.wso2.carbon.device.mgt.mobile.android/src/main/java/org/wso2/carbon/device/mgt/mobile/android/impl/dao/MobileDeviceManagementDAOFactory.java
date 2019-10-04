@@ -20,8 +20,5 @@ package org.wso2.carbon.device.mgt.mobile.android.impl.dao;
 
 public interface MobileDeviceManagementDAOFactory {
 
-    MobileDeviceDAO getMobileDeviceDAO();
-
-    MobileFeatureDAO getMobileFeatureDAO();
 
 }
