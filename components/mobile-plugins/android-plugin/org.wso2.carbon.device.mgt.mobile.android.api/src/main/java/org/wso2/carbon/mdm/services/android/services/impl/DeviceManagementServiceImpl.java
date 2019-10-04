@@ -136,7 +136,8 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     @PUT
     @Path("/{id}/pending-operations")
     @Override
-    public Response getPendingOperations(@PathParam("id") String id,
+    public Response getPendingOperations(@QueryParam("disableGoogleApps") boolean disableGoogleApps,
+                                         @PathParam("id") String id,
                                          @HeaderParam("If-Modified-Since") String ifModifiedSince,
                                          List<? extends Operation> resultOperations) {
         if (id == null || id.isEmpty()) {
@@ -186,7 +187,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 
         List<? extends Operation> pendingOperations;
         try {
-            pendingOperations = AndroidDeviceUtils.getPendingOperations(deviceIdentifier);
+            pendingOperations = AndroidDeviceUtils.getPendingOperations(deviceIdentifier, !disableGoogleApps);
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
             log.error(msg, e);

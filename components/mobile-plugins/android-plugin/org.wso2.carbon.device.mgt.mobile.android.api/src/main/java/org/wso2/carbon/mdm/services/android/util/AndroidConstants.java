@@ -62,6 +62,14 @@ public final class AndroidConstants {
     public static final String APPLICATION_JSON = "application/json";
     public static final String SCOPE = "scope";
 
+    public static final String USER_CLAIM_EMAIL_ADDRESS = "http://wso2.org/claims/emailaddress";
+    public static final String USER_CLAIM_FIRST_NAME = "http://wso2.org/claims/givenname";
+    public static final String USER_CLAIM_LAST_NAME = "http://wso2.org/claims/lastname";
+
+    public static final String USER_CLAIM_EMAIL_ADDRESS_PLACEHOLDER = "$email";
+    public static final String USER_CLAIM_FIRST_NAME_PLACEHOLDER = "$firstName";
+    public static final String USER_CLAIM_LAST_NAME_PLACEHOLDER = "$lastName";
+
     public final class DeviceProperties {
         private DeviceProperties() {
             throw new AssertionError();
@@ -131,6 +139,7 @@ public final class AndroidConstants {
         public static final String DEVICE_REBOOT = "REBOOT";
         public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
         public static final String NOTIFICATION = "NOTIFICATION";
+        public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
         public static final String WEBCLIP = "WEBCLIP";
         public static final String DISENROLL = "DISENROLL";
         public static final String MONITOR = "MONITOR";
@@ -188,6 +197,8 @@ public final class AndroidConstants {
         public static final String DEFAULT_VALIDITY_PERIOD = "3600";
         public static final String SUBSCRIPTION_SCOPE = "appm:subscribe";
         public static final String ENROLLMENT_APP_INSTALL_UUID = "uuid";
+        public static final String ENROLLMENT_APP_INSTALL_APP_ID = "appId";
+        public static final String GOOGLE_POLICY_PAYLOAD = "installGooglePolicyPayload";
         public static final String ENROLLMENT_APP_INSTALL_CODE = "enrollmentAppInstall";
         public static final String ENCODING = "UTF-8";
         public static final String AT = "@";
@@ -198,6 +209,9 @@ public final class AndroidConstants {
         public static final String ENROLLMENT_APP_INSTALL_URL = "/api/application-mgt-store/v1.0/subscription/{uuid}/devices/install";
         public static final String AUTHORIZATION = "Authorization";
         public static final String AUTHORIZATION_HEADER_VALUE = "Bearer ";
+        public static final String BEHAVIOUR_WHITELISTED_APPS_ONLY = "whitelist";
+        public static final String INSTALL = "INSTALL";
+        public static final String UNINSTALL = "UNINSTALL";
     }
 
     public final class ErrorMessages {

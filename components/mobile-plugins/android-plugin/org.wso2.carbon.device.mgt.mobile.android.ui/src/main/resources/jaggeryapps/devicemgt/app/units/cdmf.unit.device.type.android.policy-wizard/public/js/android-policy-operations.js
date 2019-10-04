@@ -93,6 +93,122 @@ var inputIsValidAgainstRange = function (numberInput, min, max) {
     return (numberInput == min || (numberInput > min && numberInput < max) || numberInput == max);
 };
 
+var enrollmentAppInstallClick = function (input) {
+   if (input.checked) {
+        $("div#install-app-enrollment").find("input").filterByData("child-key", "installGooglePolicy").filterByData
+        ("app-id",
+        input.getAttribute("data-app-id")).parent().parents("tr").last().find("input").each(function () {
+                if(!$(this).hasClass("child-input")) {
+                    $(this).addClass("child-input");
+                }
+        });
+   } else {
+        var isInstallPolicyChecked = $("div#install-app-enrollment").find("input")
+            .filterByData("app-id", input.getAttribute("data-app-id"))
+            .filterByData("child-key", "installGooglePolicy").prop('checked');
+
+        if (!isInstallPolicyChecked) {
+             $("div#install-app-enrollment").find("input").filterByData("child-key", "installGooglePolicy").filterByData("app-id",
+                    input.getAttribute("data-app-id")).parent().parents("tr").last().find
+                       ("input").each(function () {
+                    $(this).removeClass("child-input");
+            });
+        }
+    }
+};
+
+var appAvailabilityClick = function (input) {
+    var appAvailabilityConfigFormTitle = document.getElementById("app-availability-config-form-title");
+    var isEnrollmentAppTicked = $("div#install-app-enrollment").find("input").filterByData("child-key",
+    "enrollmentAppInstall").filterByData("app-id", input.getAttribute("data-app-id")).prop('checked');
+    if (input.checked) {
+
+        var configureAppAvailabilityFormData = {};
+        configureAppAvailabilityFormData.autoInstallMode = "autoInstallOnce";
+        configureAppAvailabilityFormData.autoInstallPriority = "50";
+        configureAppAvailabilityFormData.chargingStateConstraint = "chargingNotRequired";
+        configureAppAvailabilityFormData.deviceIdleStateConstraint = "deviceIdleNotRequired";
+        configureAppAvailabilityFormData.networkTypeConstraint = "anyNetwork";
+        configureAppAvailabilityForm(configureAppAvailabilityFormData);
+
+        var title = "Add Configurations for " + input.getAttribute("data-app-name");
+        appAvailabilityConfigFormTitle.innerHTML = title;
+        $("input#app-install-config-save").attr("data-app-id", input.getAttribute("data-app-id"));
+        $("input#app-install-config-save").attr("data-package-name", input.getAttribute("data-package-name"));
+        $("div#app-availability-config-form").attr("hidden", false);
+
+        $("div#install-app-enrollment").find("input").filterByData("child-key", "productSetBehavior").each(function () {
+            if (!$(this).val()) {
+                    $(this).val("whitelist");
+            }
+        });
+        $("div#install-app-enrollment").find("input").filterByData("child-key", "autoUpdatePolicy").each(function () {
+            if (!$(this).val()) {
+                $(this).val("wifiOnly");
+            }
+        });
+
+    } else {
+        $("input#app-install-config-save").attr("data-app-id", "");
+        $("input#app-install-config-save").attr("data-package-name", "");
+        $("div#app-availability-config-form").attr("hidden", true);
+        if (!isEnrollmentAppTicked) {
+            // Enrollment app install tick is also not present. Meaning this row is not needed.
+            $("div#install-app-enrollment").find("input").filterByData("child-key",
+                                                             "enrollmentAppInstall").filterByData("app-id", input
+                                                             .getAttribute("data-app-id")).parent().parents("tr")
+                .last().find("input").each(function () {
+                    $(this).removeClass("child-input");
+                });
+
+        }
+    }
+};
+
+var configureAppAvailabilityForm = function (input) {
+    $("select#app-availability-auto-install-mode").val(input.autoInstallMode).change();
+    $("select#app-availability-install-priority").val(input.autoInstallPriority).change();
+    $("select#app-availability-install-charging").val(input.chargingStateConstraint).change();
+    $("select#app-availability-install-idle").val(input.deviceIdleStateConstraint).change();
+    $("select#app-availability-install-network").val(input.networkTypeConstraint).change();
+};
+
+var changeSavedGlobalAppConfig = function (input) {
+   $("div#install-app-enrollment").find("input").filterByData("child-key", "productSetBehavior")
+   .each(function () {
+        $(this).val($("select#product-set-behaviour").val());
+   });
+   $("div#install-app-enrollment").find("input").filterByData("child-key", "autoUpdatePolicy")
+      .each(function () {
+           $(this).val($("select#auto-update-policy").val());
+   });
+};
+
+var changeSavedAppInstallData = function (input) {
+    var appId = input.getAttribute("data-app-id");
+    var packageName = input.getAttribute("data-package-name")
+
+    var json = {};
+    json.appId = appId;
+    json.packageName = packageName;
+    json.autoInstallMode = $("select#app-availability-auto-install-mode").val();
+    json.autoInstallPriority = $("select#app-availability-install-priority").val();
+    json.chargingStateConstraint = $("select#app-availability-install-charging").val();
+    json.deviceIdleStateConstraint = $("select#app-availability-install-idle").val();
+    json.networkTypeConstraint = $("select#app-availability-install-network").val();
+
+    var payload = JSON.stringify(json);
+
+
+    $("div#install-app-enrollment").find("input").filterByData("package-name", packageName).parent().find("input")[1].value = payload;
+    $("div#install-app-enrollment").find("input").filterByData("package-name", packageName).parent().parents("tr")
+    .last().find("input").each(function () {
+        $(this).addClass("child-input");
+    });
+    $("div#app-availability-config-form").attr("hidden", true);
+};
+
+
 var ovpnConfigUploaded = function () {
     var ovpnFileInput = document.getElementById("ovpn-file");
     if ('files' in ovpnFileInput) {
@@ -1163,7 +1279,7 @@ var showHideHelpText = function (addFormContainer) {
 var applyDataTable = function() {
     $("#enrollment-app-install-table").datatables_extended({
         ordering: false,
-        lengthMenu: [5, 10, 25, 50, 100]
+        lengthMenu: [100, 200, 500]
     });
 };
 
@@ -1343,23 +1459,5 @@ $(document).ready(function () {
         $(this).closest("[data-add-form-element=clone]").remove();
         setId(addFormContainer);
         showHideHelpText(addFormContainer);
-    });
-
-    // add app entry for enrollment-app-install
-    $(advanceOperations).on("click", "[data-click-event=add-enrollment-app]", function () {
-        $(this).attr("hidden", true);
-        $(this).siblings("a").removeAttr("hidden");
-        $(this).parent().parent().find("input").each(function () {
-            $(this).addClass("child-input");
-        });
-    });
-
-    // remove app entry for enrollment-app-install
-    $(advanceOperations).on("click", "[data-click-event=remove-enrollment-app]", function () {
-        $(this).attr("hidden", true);
-        $(this).siblings("a").removeAttr("hidden");
-        $(this).parent().parent().find("input").each(function () {
-            $(this).removeClass("child-input");
-        });
     });
 });
