@@ -34,6 +34,7 @@
  */
 package org.wso2.carbon.mdm.services.android.services.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -501,7 +502,6 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             }
             if (propertyName.equals("ALTITUDE")) {
                 altitude = property.getValue();
-
             }
             if (propertyName.equals("SPEED")) {
                 speed = property.getValue();
@@ -514,7 +514,9 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             }
         }
 
-        if (!latitude.isEmpty() && !longitude.isEmpty()) {
+        if (StringUtils.isNotBlank(latitude) && StringUtils.isNotBlank(longitude) &&
+                StringUtils.isNotBlank(altitude) && StringUtils.isNotBlank(speed) &&
+                    StringUtils.isNotBlank(bearing) && StringUtils.isNotBlank(distance)) {
             location = new DeviceLocation();
             location.setLatitude(Double.valueOf(latitude));
             location.setLongitude(Double.valueOf(longitude));
