@@ -251,7 +251,7 @@ public class AndroidEnterpriseUtils {
         String esa = AndroidDeviceUtils.getAndroidConfig(configuration,"esa");
         if (enterpriseId == null || enterpriseId.isEmpty() || esa == null || esa.isEmpty()) {
             String errorMessage = "Tenant is not configured to handle Android for work. Please contact Entgra.";
-            log.error(errorMessage);
+            log.warn(errorMessage);
             enterpriseConfigs.setErrorResponse(new ErrorResponse.ErrorResponseBuilder().setCode(404l)
                     .setMessage(errorMessage).build());
         }
