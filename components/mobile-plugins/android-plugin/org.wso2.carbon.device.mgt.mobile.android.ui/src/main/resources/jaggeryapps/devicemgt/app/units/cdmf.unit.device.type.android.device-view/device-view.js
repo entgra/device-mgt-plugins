@@ -81,6 +81,30 @@ function onRequest(context) {
                 if (filteredDeviceData["initialDeviceInfo"]["IMEI"]) {
                     viewModel["imei"] = filteredDeviceData["initialDeviceInfo"]["IMEI"];
                 }
+                if (filteredDeviceData["initialDeviceInfo"]["IMSI"]) {
+                    viewModel["imsi"] = filteredDeviceData["initialDeviceInfo"]["IMSI"];
+                }
+                if (filteredDeviceData["initialDeviceInfo"]["OS_VERSION"]) {
+                    viewModel["OSVersion"] = filteredDeviceData["initialDeviceInfo"]["OS_VERSION"];
+                }
+                if (filteredDeviceData["initialDeviceInfo"]["OS_VERSION"]) {
+                    viewModel["OSVersion"] = filteredDeviceData["initialDeviceInfo"]["OS_VERSION"];
+                }
+                if (filteredDeviceData["initialDeviceInfo"]["DEVICE_MODEL"]) {
+                    viewModel["model"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_MODEL"];
+                }
+                if (filteredDeviceData["initialDeviceInfo"]["VENDOR"]) {
+                    viewModel["vendor"] = filteredDeviceData["initialDeviceInfo"]["VENDOR"];
+                }
+                if (filteredDeviceData["initialDeviceInfo"]["SERIAL"]) {
+                    viewModel["serial"] = filteredDeviceData["initialDeviceInfo"]["SERIAL"];
+                }
+                if (filteredDeviceData["initialDeviceInfo"]["MAC_ADDRESS"]) {
+                    viewModel["macAddress"] = filteredDeviceData["initialDeviceInfo"]["MAC_ADDRESS"];
+                }
+                if (filteredDeviceData["initialDeviceInfo"]["OS_BUILD_DATE"]) {
+                    viewModel["osBuildDate"] = filteredDeviceData["initialDeviceInfo"]["OS_BUILD_DATE"];
+                }
                 if (!filteredDeviceData["latestDeviceInfo"]) {
                     if (filteredDeviceData["initialDeviceInfo"]["OS_BUILD_DATE"]) {
                         if (filteredDeviceData["initialDeviceInfo"]["OS_BUILD_DATE"] != "0") {
@@ -109,6 +133,12 @@ function onRequest(context) {
                             } else {
                                 viewModel["internalMemory"]["usage"] = 0;
                             }
+                        if (filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["OPERATOR"]) {
+                            viewModel["operator"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["OPERATOR"];
+                        }
+                        if (filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["PHONE_NUMBER"]) {
+                            viewModel["phoneNumber"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["PHONE_NUMBER"];
+                        }
 
                             viewModel["externalMemory"] = {};
                             viewModel["externalMemory"]["total"] = replaceNaNVal(Math.
@@ -141,6 +171,15 @@ function onRequest(context) {
                 if (filteredDeviceData["latestDeviceInfo"]["vendor"] && filteredDeviceData["latestDeviceInfo"]["deviceModel"]) {
                     viewModel["vendor"] = filteredDeviceData["latestDeviceInfo"]["vendor"];
                     viewModel["model"] = filteredDeviceData["latestDeviceInfo"]["deviceModel"];
+                }
+                if (filteredDeviceData["latestDeviceInfo"]["osVersion"]) {
+                    viewModel["osVersion"] = filteredDeviceData["latestDeviceInfo"]["osVersion"];
+                }
+                if (filteredDeviceData["latestDeviceInfo"]["connectionType"]) {
+                    viewModel["connectionType"] = filteredDeviceData["latestDeviceInfo"]["connectionType"];
+                }
+                if (filteredDeviceData["latestDeviceInfo"]["ssid"]) {
+                    viewModel["ssid"] = filteredDeviceData["latestDeviceInfo"]["ssid"];
                 }
                 if (filteredDeviceData["latestDeviceInfo"]["updatedTime"]) {
                     viewModel["lastUpdatedTime"] = filteredDeviceData["latestDeviceInfo"]["updatedTime"].

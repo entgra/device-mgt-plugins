@@ -97,6 +97,7 @@
             </li>
             <li><a data-toggle="tab" href="#app">Applications</a></li>
             <li><a data-toggle="tab" href="#policy">Policy Compliance</a></li>
+            <li><a data-toggle="tab" href="#device-info">Extensive Device Information</a></li>
 	    <li><a data-toggle="tab" href="#remote-session">Remote Session</a></li>
         {{/zone}}
 
@@ -142,6 +143,146 @@
             <div id="policy" class="tab-pane fade">
               <div id="policy-list-container">
               </div>
+            </div>
+            <div id="device-info" class="tab-pane fade">
+                <div id="device-info-container">
+                    {{#if device.deviceInfoAvailable}}
+                        <table class="table table-striped table-hover table-bordered display data-table"
+                               id="device-info-table">
+                            <tr>
+                                <td>
+                                    IMEI
+                                </td>
+                                <td>
+                                    {{#if device.imei}}<span>{{device.imei}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    IMSI
+                                </td>
+                                <td>
+                                    {{#if device.imsi}}<span>{{device.imsi}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Serial Number
+                                </td>
+                                <td>
+                                    {{#if device.serial}}<span>{{device.serial}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    MAC Address
+                                </td>
+                                <td>
+                                    {{#if device.macAddress}}<span>{{device.macAddress}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    OS Version
+                                </td>
+                                <td>
+                                    {{#if device.OSVersion}}<span>{{device.OSVersion}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    OS Build Date
+                                </td>
+                                <td>
+                                    {{#if device.osBuildDate}}<span>{{device.osBuildDate}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Vendor
+                                </td>
+                                <td>
+                                    {{#if device.vendor}}<span>{{device.vendor}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Model
+                                </td>
+                                <td>
+                                    {{#if device.model}}<span>{{device.model}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    CPU Usage
+                                </td>
+                                <td>
+                                    {{#if device.cpuUsage}}<span>{{device.cpuUsage.value}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    SSID
+                                </td>
+                                <td>
+                                    {{#if device.ssid}}<span>{{device.ssid}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Connection Type
+                                </td>
+                                <td>
+                                    {{#if device.connectionType}}<span>{{device.connectionType}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Operator
+                                </td>
+                                <td>
+                                    {{#if device.operator}}<span>{{device.operator}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Phone Number
+                                </td>
+                                <td>
+                                    {{#if device.phoneNumber}}<span>{{device.phoneNumber}}</span>
+                                    {{else}}<p>This information is not available yet.</p>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                        </table>
+                    {{else}}<p>Extensive information is not available yet.</p>
+                    {{/if}}
+                </div>
             </div>
             <div id="remote-session" class="tab-pane fade" data-remote-session-uri="{{remoteSessionEndpoint}}">
                 <div class="remote-session-container">
