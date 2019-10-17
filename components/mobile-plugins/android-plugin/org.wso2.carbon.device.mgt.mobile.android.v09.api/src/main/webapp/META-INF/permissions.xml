@@ -250,6 +250,13 @@
     </Permission>
 
     <Permission>
+        <name>Change LockTask Mode</name>
+        <path>/device-mgt/admin/device/android/operation/change-LockTask</path>
+        <url>/admin/devices/change-LockTask</url>
+        <method>POST</method>
+    </Permission>
+
+    <Permission>
         <name>Ring device</name>
         <path>/device-mgt/admin/device/android/operation/ring</path>
         <url>/admin/devices/ring</url>

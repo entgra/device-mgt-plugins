@@ -306,6 +306,12 @@ public class AndroidFeatureManager implements FeatureManager {
         supportedFeatures.add(feature);
 
         feature = new Feature();
+        feature.setCode("CHANGE_LOCK_TASK_MODE");
+        feature.setName("Change LockTask Mode");
+        feature.setDescription("Enable or disable LockTask mode of KIOSK device");
+        supportedFeatures.add(feature);
+
+        feature = new Feature();
         feature.setCode("UPGRADE_FIRMWARE");
         feature.setName("Upgrade Firmware");
         feature.setDescription("Upgrade Firmware");

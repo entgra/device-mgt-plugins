@@ -105,6 +105,7 @@ public final class AndroidConstants {
         public static final String APP_RESTRICTION = "APP-RESTRICTION";
         public static final String WORK_PROFILE = "WORK_PROFILE";
         public static final String NOTIFIER_FREQUENCY = "NOTIFIER_FREQUENCY";
+        public static final String CHANGE_LOCK_TASK_MODE = "CHANGE_LOCK_TASK_MODE";
     }
 
     public final class StatusCodes {

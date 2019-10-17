@@ -191,6 +191,26 @@
                 </metadata>
             </Operation>
         </Feature>
+        <Feature type="operation" code="CHANGE_LOCK_TASK_MODE">
+            <Name>Change LockTask</Name>
+            <Description>Change LockTask mode of KIOSK device</Description>
+            <Operation hidden="false" icon="fw-mobile">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/android/v1.0/admin/devices/change-LockTask</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/android/change-LockTask</permission>
+                    <filters>
+                        <filter>
+                            <property>ownership</property>
+                            <value>COPE</value>
+                            <description>This feature is only available in COSU(KIOSK)</description>
+                        </filter>
+                    </filters>
+                </metadata>
+            </Operation>
+        </Feature>
         <Feature type="operation" code="UPGRADE_FIRMWARE">
             <Name>Upgrade Firmware</Name>
             <Description>Upgrade Firmware</Description>

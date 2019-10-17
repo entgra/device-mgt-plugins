@@ -481,6 +481,33 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
     }
 
     @POST
+    @Path("/change-LockTask")
+    @Override
+    public Response changeLockTask(List<String> deviceIDs) {
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android change-lock-task operation");
+        }
+
+        try {
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(AndroidConstants.OperationCodes.CHANGE_LOCK_TASK_MODE);
+            operation.setType(Operation.Type.COMMAND);
+            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
+            return Response.status(Response.Status.CREATED).entity(activity).build();
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
+            throw new BadRequestException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            log.error(errorMessage, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
+        }
+    }
+
+    @POST
     @Path("/mute")
     @Override
     public Response muteDevice(List<String> deviceIDs) {
