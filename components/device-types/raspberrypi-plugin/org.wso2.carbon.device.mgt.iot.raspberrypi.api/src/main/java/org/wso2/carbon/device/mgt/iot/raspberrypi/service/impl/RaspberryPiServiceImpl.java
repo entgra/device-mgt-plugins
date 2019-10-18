@@ -18,7 +18,6 @@
 
 package org.wso2.carbon.device.mgt.iot.raspberrypi.service.impl;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.dataservice.commons.SortByField;
@@ -30,6 +29,8 @@ import org.wso2.carbon.apimgt.application.extension.exception.APIManagerExceptio
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.authorization.DeviceAccessAuthorizationException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.group.mgt.DeviceGroupConstants;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
@@ -46,7 +47,6 @@ import org.wso2.carbon.user.api.UserStoreException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;

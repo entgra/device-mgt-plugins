@@ -34,16 +34,17 @@
  */
 package org.wso2.carbon.mdm.services.android.services.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
@@ -136,7 +137,8 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     @PUT
     @Path("/{id}/pending-operations")
     @Override
-    public Response getPendingOperations(@PathParam("id") String id,
+    public Response getPendingOperations(@QueryParam("disableGoogleApps") boolean disableGoogleApps,
+                                         @PathParam("id") String id,
                                          @HeaderParam("If-Modified-Since") String ifModifiedSince,
                                          List<? extends Operation> resultOperations) {
         if (id == null || id.isEmpty()) {
@@ -186,7 +188,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 
         List<? extends Operation> pendingOperations;
         try {
-            pendingOperations = AndroidDeviceUtils.getPendingOperations(deviceIdentifier);
+            pendingOperations = AndroidDeviceUtils.getPendingOperations(deviceIdentifier, !disableGoogleApps);
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
             log.error(msg, e);
@@ -291,7 +293,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                     for (ProfileFeature feature : effectiveProfileFeatures) {
                         if (AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_FEATURE_CODE
                                 .equals(feature.getFeatureCode())) {
-                            AndroidDeviceUtils.installEnrollmentApplications(feature, deviceIdentifier.getId());
+                            AndroidDeviceUtils.installEnrollmentApplications(feature, deviceIdentifier);
                             break;
                         }
                     }
@@ -485,7 +487,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             throws DeviceManagementException {
 
         DeviceLocation location = null;
-        String latitude = "", longitude = "";
+        String latitude = "", longitude = "", altitude = "", speed = "", bearing = "", distance = "";
 
         if (properties == null) return null;
 
@@ -494,17 +496,34 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             if (propertyName == null) continue;
             if (propertyName.equals("LATITUDE")) {
                 latitude = property.getValue();
-                if (!longitude.isEmpty()) break;
-            } else if (propertyName.equals("LONGITUDE")) {
+            }
+            if (propertyName.equals("LONGITUDE")) {
                 longitude = property.getValue();
-                if (!latitude.isEmpty()) break;
+            }
+            if (propertyName.equals("ALTITUDE")) {
+                altitude = property.getValue();
+            }
+            if (propertyName.equals("SPEED")) {
+                speed = property.getValue();
+            }
+            if (propertyName.equals("BEARING")) {
+                bearing = property.getValue();
+            }
+            if (propertyName.equals("DISTANCE")) {
+                distance = property.getValue();
             }
         }
 
-        if (!latitude.isEmpty() && !longitude.isEmpty()) {
+        if (StringUtils.isNotBlank(latitude) && StringUtils.isNotBlank(longitude) &&
+                StringUtils.isNotBlank(altitude) && StringUtils.isNotBlank(speed) &&
+                    StringUtils.isNotBlank(bearing) && StringUtils.isNotBlank(distance)) {
             location = new DeviceLocation();
             location.setLatitude(Double.valueOf(latitude));
             location.setLongitude(Double.valueOf(longitude));
+            location.setAltitude(Double.valueOf(altitude));
+            location.setSpeed(Float.valueOf(speed));
+            location.setBearing(Float.valueOf(bearing));
+            location.setDistance(Double.valueOf(distance));
             location.setDeviceIdentifier(deviceIdentifier);
             Device savedDevice = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier, false);
             location.setDeviceId(savedDevice.getId());

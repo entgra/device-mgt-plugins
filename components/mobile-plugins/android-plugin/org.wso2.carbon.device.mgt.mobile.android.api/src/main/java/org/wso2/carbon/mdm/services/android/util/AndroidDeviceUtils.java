@@ -57,16 +57,19 @@ import org.wso2.carbon.apimgt.application.extension.dto.ApiApplicationKey;
 import org.wso2.carbon.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
-import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceInfo;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
@@ -75,13 +78,22 @@ import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.ComplianceFeature;
 import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.PolicyComplianceException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
+import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.core.search.mgt.impl.Utils;
+import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
+import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
 import org.wso2.carbon.mdm.services.android.bean.DeviceState;
+import org.wso2.carbon.mdm.services.android.bean.EnterpriseConfigs;
 import org.wso2.carbon.mdm.services.android.bean.ErrorListItem;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseApp;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseInstallPolicy;
+import org.wso2.carbon.mdm.services.android.common.GoogleAPIInvoker;
 import org.wso2.carbon.mdm.services.android.exception.BadRequestException;
+import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
+import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.UserStoreException;
 
 import javax.validation.ConstraintViolation;
@@ -236,6 +248,18 @@ public class AndroidDeviceUtils {
             } catch (DeviceDetailsMgtException e) {
                 throw new OperationManagementException("Error occurred while updating the device location.", e);
             }
+        } else if (AndroidConstants.OperationCodes.INSTALL_APPLICATION.equals(operation.getCode())) {
+            try {
+                updateAppSubStatus(deviceIdentifier, operation.getId(), operation.getStatus().toString());
+            } catch (org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException e) {
+                String msg = "Error occurred while updating the app subscription for device.";
+                log.error(msg);
+                throw new OperationManagementException(msg, e);
+            } catch (DeviceManagementException e) {
+                String msg = "Error occurred while getting device data for device identifier.";
+                log.error(msg);
+                throw new OperationManagementException(msg, e);
+            }
         }
         AndroidAPIUtils.getDeviceManagementService().updateOperation(deviceIdentifier, operation);
         // This has to be bellow other if blocks, since updateOperation would fail if we execute against a disenrolled
@@ -255,11 +279,98 @@ public class AndroidDeviceUtils {
     }
 
     public static List<? extends Operation> getPendingOperations
-            (DeviceIdentifier deviceIdentifier) throws OperationManagementException {
+            (DeviceIdentifier deviceIdentifier, boolean handleGoogleAps) throws OperationManagementException {
 
         List<? extends Operation> operations;
         operations = AndroidAPIUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
+        if (handleGoogleAps) {
+            handleEnrollmentGoogleApps(operations, deviceIdentifier);
+        }
         return operations;
+    }
+
+    private static void handleEnrollmentGoogleApps(List<? extends Operation> operations, DeviceIdentifier deviceIdentifier) {
+        boolean containsGoogleAppPolicy = false;
+        for (int x = 0; x < operations.size() && !containsGoogleAppPolicy; x++) {
+            Operation operation = operations.get(x);
+
+            // Check if the operation has a policy bundle inside.
+            if (operation.getCode().equals(AndroidConstants.OperationCodes.POLICY_BUNDLE)) {
+                ArrayList operationPayLoad = (ArrayList) operation.getPayLoad();
+
+
+                // If there is a policy bundle, read its payload
+                for (int i = 0; i < operationPayLoad.size() && !containsGoogleAppPolicy; i++) {
+                    Object policy = operationPayLoad.get(i);
+                    ProfileOperation profileOperation = (ProfileOperation) policy;
+                    String code = profileOperation.getCode();
+
+                    // Find if there is an ENROLLMENT_APP_INSTALL payload
+                    if (code.equals(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_FEATURE_CODE)) {
+                        String payload = profileOperation.getPayLoad().toString();
+                        JsonElement appListElement = new JsonParser().parse(payload).getAsJsonObject()
+                                .get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
+                        JsonArray appListArray = appListElement.getAsJsonArray();
+
+                        // Find if there are Apps with Work profile configurations
+                        for (JsonElement appElement : appListArray) {
+                            JsonElement googlePolicyPayload = appElement.getAsJsonObject().
+                                    get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD);
+                            if (googlePolicyPayload != null) {
+                                containsGoogleAppPolicy = true;
+                                sendPayloadToGoogle(payload, deviceIdentifier);
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Sends the app install policy to Google
+     * @param payload policy profile
+     * @param deviceIdentifier device to apply policy
+     */
+    private static void sendPayloadToGoogle(String payload, DeviceIdentifier deviceIdentifier) {
+        try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigsFromGoogle();
+            if (enterpriseConfigs != null && enterpriseConfigs.getErrorResponse() == null) {
+                GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+                AndroidEnterpriseUser userDetail = AndroidAPIUtils.getAndroidPluginService()
+                        .getEnterpriseUserByDevice(deviceIdentifier.getId());
+                if (userDetail != null && userDetail.getEnterpriseId() != null && !userDetail.getEnterpriseId()
+                        .isEmpty() && userDetail.getEmmUsername() != null) {
+
+                    if (payload != null) {
+//                        ProfileFeature feature = AndroidDeviceUtils.getEnrollmentPolicy(deviceIdentifier);
+                        EnterpriseInstallPolicy enterpriseInstallPolicy = AndroidEnterpriseUtils
+                                .getDeviceAppPolicy(payload, null, userDetail);
+
+                        List<String> apps = new ArrayList<>();
+                        for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
+                            apps.add(enterpriseApp.getProductId());
+                        }
+                        googleAPIInvoker.approveAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail
+                                .getGoogleUserId(), apps, enterpriseInstallPolicy.getProductSetBehavior());
+                        googleAPIInvoker.updateAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
+                                AndroidEnterpriseUtils.convertToDeviceInstance(enterpriseInstallPolicy));
+
+//                        for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
+//                            googleAPIInvoker.addManagedConfigForDevice(enterpriseConfigs.getEnterpriseId(), userDetail
+//                                    .getGoogleUserId(), enterpriseInstallPolicy.getAndroidId(), enterpriseApp.getProductId());
+//                        }
+
+                    }
+                }
+            }
+
+        } catch (EnterpriseServiceException e) {
+            String errorMessage = "App install failed for device " + deviceIdentifier.getId();
+            log.error(errorMessage);
+        }
     }
 
     private static void updateApplicationList(Operation operation, DeviceIdentifier deviceIdentifier)
@@ -306,6 +417,16 @@ public class AndroidDeviceUtils {
                 (DeviceInformationManager) ctx.getOSGiService(DeviceInformationManager.class, null);
 
         informationManager.addDeviceLocation(deviceLocation);
+    }
+
+    private static void updateAppSubStatus(DeviceIdentifier deviceIdentifier, int operationId, String status)
+            throws org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException,
+            DeviceManagementException {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ApplicationManager applicationManager =
+                (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
+        Device device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+        applicationManager.updateSubsStatus(device.getId(), operationId, status);
     }
 
     private static void updateDeviceInfo(DeviceIdentifier deviceId, DeviceInfo deviceInfo)
@@ -536,11 +657,9 @@ public class AndroidDeviceUtils {
         return errorResponse;
     }
 
-    public static void installEnrollmentApplications(ProfileFeature feature, String deviceId)
+    public static void installEnrollmentApplications(ProfileFeature feature, DeviceIdentifier deviceIdentifier)
             throws PolicyManagementException {
-        String appId = "";
-        String payload;
-        StringRequestEntity requestEntity;
+        String uuid = "";
         HttpClient httpClient;
         PostMethod request;
         try {
@@ -553,36 +672,44 @@ public class AndroidDeviceUtils {
                     System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_HOST) +
                     AndroidConstants.ApplicationInstall.COLON +
                     System.getProperty(AndroidConstants.ApplicationInstall.IOT_CORE_PORT) +
-                    AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CONTEXT;
+                    AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_URL;
             JsonElement appListElement = new JsonParser().parse(feature.getContent().toString()).getAsJsonObject()
                     .get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
+            String payload = "[{\"id\":\"" + deviceIdentifier.getId() + "\", \"type\":\""
+                             + deviceIdentifier.getType() + "\"}]";
+            StringRequestEntity requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON
+                    , AndroidConstants.ApplicationInstall.ENCODING);
             JsonArray appListArray = appListElement.getAsJsonArray();
             for (JsonElement appElement : appListArray) {
-                appId = appElement.getAsJsonObject().
-                        get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_ID).getAsString();
-                payload = "{\"appId\": \"" + appId + "\", \"scheduleTime\":\"2013-12-25T15:25:30-05:00\"," +
-                        "\"deviceIds\": [\"{\\\"id\\\":\\\"" + deviceId + "\\\", \\\"type\\\":\\\"android\\\"}\"]}";
-                requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON,
-                        AndroidConstants.ApplicationInstall.ENCODING);
+                uuid = appElement.getAsJsonObject().
+                        get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_UUID).getAsString();
+                requestUrl = requestUrl.replace("{uuid}", uuid);
                 httpClient = new HttpClient();
                 request = new PostMethod(requestUrl);
-                request.addRequestHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION,
-                        AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo.getAccessToken());
+                request.addRequestHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION
+                        , AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo.getAccessToken());
                 request.setRequestEntity(requestEntity);
                 httpClient.executeMethod(request);
             }
         } catch (UserStoreException e) {
-            throw new PolicyManagementException("Error while accessing user store for user with iOS device id: " +
-                    deviceId, e);
+            String msg = "Error while accessing user store for user with Android device id: " +
+                         deviceIdentifier.getId();
+            log.error(msg, e);
+            throw new PolicyManagementException(msg, e);
         } catch (APIManagerException e) {
-            throw new PolicyManagementException("Error while retrieving access token for Android device id: " +
-                    deviceId, e);
+            String msg = "Error while retrieving access token for Android device id: " + deviceIdentifier.getId();
+            log.error(msg, e);
+            throw new PolicyManagementException(msg, e);
         } catch (HttpException e) {
-            throw new PolicyManagementException("Error while calling the app store to install enrollment app with " +
-                    "id: " + appId + " on device with id: " + deviceId, e);
+            String msg = "Error while calling the app store to install enrollment app with uuid: " + uuid +
+                         " on device with id: " + deviceIdentifier.getId();
+            log.error(msg, e);
+            throw new PolicyManagementException(msg, e);
         } catch (IOException e) {
-            throw new PolicyManagementException("Error while installing the enrollment app with id: " + appId +
-                    " on device with id: " + deviceId, e);
+            String msg = "Error while installing the enrollment with uuid: " + uuid + " on device with id: " +
+                         deviceIdentifier.getId();
+            log.error(msg, e);
+            throw new PolicyManagementException(msg, e);
         }
     }
 
@@ -595,7 +722,7 @@ public class AndroidDeviceUtils {
     public static void updateDisEnrollOperationStatus(DeviceIdentifier deviceIdentifier)
             throws DeviceManagementException {
         try {
-            List<? extends Operation> pendingOperations = getPendingOperations(deviceIdentifier);
+            List<? extends Operation> pendingOperations = getPendingOperations(deviceIdentifier, false);
             if (pendingOperations != null && !pendingOperations.isEmpty()) {
                 for (Operation operation : pendingOperations) {
                     operation.setStatus(Operation.Status.ERROR);
@@ -608,5 +735,54 @@ public class AndroidDeviceUtils {
             log.error(msg);
             throw new DeviceManagementException(msg, e);
         }
+    }
+
+    public static String getAndroidConfig(String key) throws DeviceManagementException {
+        String value = null;
+        PlatformConfiguration configuration =  AndroidAPIUtils.getDeviceManagementService().
+                        getConfiguration(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+        if (configuration != null && configuration.getConfiguration() != null && configuration
+                .getConfiguration().size() > 0) {
+            List<ConfigurationEntry> configurations = configuration.getConfiguration();
+            for (ConfigurationEntry configurationEntry : configurations) {
+                if (configurationEntry.getName().equals(key)) {
+                    value = (String)configurationEntry.getValue();
+                    break;
+                }
+            }
+        }
+        return value;
+    }
+
+    public static String getAndroidConfig(PlatformConfiguration configuration, String key) {
+        String value = null;
+        if (configuration != null && configuration.getConfiguration() != null && configuration
+                .getConfiguration().size() > 0) {
+            List<ConfigurationEntry> configurations = configuration.getConfiguration();
+            for (ConfigurationEntry configurationEntry : configurations) {
+                if (configurationEntry.getName().equals(key)) {
+                    value = (String)configurationEntry.getValue();
+                    break;
+                }
+            }
+        }
+        return value;
+    }
+
+    public static ProfileFeature getEnrollmentFeature(DeviceIdentifier deviceIdentifier) throws
+             FeatureManagementException {
+        PolicyManagerService policyManagerService = AndroidAPIUtils.getPolicyManagerService();
+
+        List<ProfileFeature> effectiveProfileFeatures= policyManagerService.getEffectiveFeatures(deviceIdentifier);
+
+        if (effectiveProfileFeatures != null) {
+            for (ProfileFeature feature : effectiveProfileFeatures) {
+                if (AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_FEATURE_CODE
+                        .equals(feature.getFeatureCode())) {
+                    return feature;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -34,6 +34,10 @@ public class MobileDevice implements Serializable {
     private String vendor;
     private String latitude;
     private String longitude;
+    private String altitude;
+    private String speed;
+    private String bearing;
+    private String distance;
     private String imei;
     private String imsi;
     private String serial;
@@ -91,6 +95,38 @@ public class MobileDevice implements Serializable {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(String speed) {
+        this.speed = speed;
+    }
+
+    public String getBearing() {
+        return bearing;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public void setBearing(String bearing) {
+        this.bearing = bearing;
+    }
+
+    public String getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(String altitude) {
+        this.altitude = altitude;
     }
 
     public String getImei() {
