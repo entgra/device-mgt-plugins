@@ -248,7 +248,8 @@ public class AndroidDeviceUtils {
             } catch (DeviceDetailsMgtException e) {
                 throw new OperationManagementException("Error occurred while updating the device location.", e);
             }
-        } else if (AndroidConstants.OperationCodes.INSTALL_APPLICATION.equals(operation.getCode())) {
+        } else if (AndroidConstants.OperationCodes.INSTALL_APPLICATION.equals(operation.getCode())
+                || AndroidConstants.OperationCodes.UNINSTALL_APPLICATION.equals(operation.getCode())) {
             try {
                 updateAppSubStatus(deviceIdentifier, operation.getId(), operation.getStatus().toString());
             } catch (org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException e) {
