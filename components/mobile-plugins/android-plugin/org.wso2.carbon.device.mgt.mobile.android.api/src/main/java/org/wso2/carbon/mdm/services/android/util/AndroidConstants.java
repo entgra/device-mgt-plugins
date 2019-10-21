@@ -137,6 +137,7 @@ public final class AndroidConstants {
         public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
         public static final String DEVICE_RING = "DEVICE_RING";
         public static final String DEVICE_REBOOT = "REBOOT";
+        public static final String CHANGE_LOCK_TASK_MODE = "CHANGE_LOCK_TASK_MODE";
         public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
         public static final String NOTIFICATION = "NOTIFICATION";
         public static final String POLICY_BUNDLE = "POLICY_BUNDLE";
