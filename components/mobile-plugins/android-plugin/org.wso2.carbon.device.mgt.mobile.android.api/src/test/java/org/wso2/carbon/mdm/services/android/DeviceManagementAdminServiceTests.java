@@ -170,6 +170,15 @@ public class DeviceManagementAdminServiceTests {
     }
 
     @Test
+    public void testChangeLockTask()
+            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+        mockDeviceManagementService();
+        Response response = deviceManagementAdminService.changeLockTask(TestUtils.getDeviceIds());
+        Assert.assertNotNull(response);
+        Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
+    }
+
+    @Test
     public void testMuteDevice()
             throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
         mockDeviceManagementService();
