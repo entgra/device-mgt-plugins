@@ -76,34 +76,33 @@ function onRequest(context) {
                     viewModel["ownership"] = filteredDeviceData["enrolmentInfo"]["ownership"];
                 }
             }
+            var extensiveDeviceInfo = {};
             if (filteredDeviceData["initialDeviceInfo"]) {
                 viewModel["deviceInfoAvailable"] = true;
                 if (filteredDeviceData["initialDeviceInfo"]["IMEI"]) {
                     viewModel["imei"] = filteredDeviceData["initialDeviceInfo"]["IMEI"];
+                    extensiveDeviceInfo["IMEI"] = filteredDeviceData["initialDeviceInfo"]["IMEI"];
                 }
                 if (filteredDeviceData["initialDeviceInfo"]["IMSI"]) {
-                    viewModel["imsi"] = filteredDeviceData["initialDeviceInfo"]["IMSI"];
+                    extensiveDeviceInfo["IMSI"] = filteredDeviceData["initialDeviceInfo"]["IMSI"];
                 }
                 if (filteredDeviceData["initialDeviceInfo"]["OS_VERSION"]) {
-                    viewModel["OSVersion"] = filteredDeviceData["initialDeviceInfo"]["OS_VERSION"];
-                }
-                if (filteredDeviceData["initialDeviceInfo"]["OS_VERSION"]) {
-                    viewModel["OSVersion"] = filteredDeviceData["initialDeviceInfo"]["OS_VERSION"];
+                    extensiveDeviceInfo["OS Version"] = filteredDeviceData["initialDeviceInfo"]["OS_VERSION"];
                 }
                 if (filteredDeviceData["initialDeviceInfo"]["DEVICE_MODEL"]) {
-                    viewModel["model"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_MODEL"];
+                    extensiveDeviceInfo["Model"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_MODEL"];
                 }
                 if (filteredDeviceData["initialDeviceInfo"]["VENDOR"]) {
-                    viewModel["vendor"] = filteredDeviceData["initialDeviceInfo"]["VENDOR"];
+                    extensiveDeviceInfo["Vendor"] = filteredDeviceData["initialDeviceInfo"]["VENDOR"];
                 }
                 if (filteredDeviceData["initialDeviceInfo"]["SERIAL"]) {
-                    viewModel["serial"] = filteredDeviceData["initialDeviceInfo"]["SERIAL"];
+                    extensiveDeviceInfo["Serial Number"] = filteredDeviceData["initialDeviceInfo"]["SERIAL"];
                 }
                 if (filteredDeviceData["initialDeviceInfo"]["MAC_ADDRESS"]) {
-                    viewModel["macAddress"] = filteredDeviceData["initialDeviceInfo"]["MAC_ADDRESS"];
+                    extensiveDeviceInfo["MAC Address"] = filteredDeviceData["initialDeviceInfo"]["MAC_ADDRESS"];
                 }
                 if (filteredDeviceData["initialDeviceInfo"]["OS_BUILD_DATE"]) {
-                    viewModel["osBuildDate"] = filteredDeviceData["initialDeviceInfo"]["OS_BUILD_DATE"];
+                    extensiveDeviceInfo["OS Build Date"] = filteredDeviceData["initialDeviceInfo"]["OS_BUILD_DATE"];
                 }
                 if (!filteredDeviceData["latestDeviceInfo"]) {
                     if (filteredDeviceData["initialDeviceInfo"]["OS_BUILD_DATE"]) {
@@ -134,10 +133,10 @@ function onRequest(context) {
                                 viewModel["internalMemory"]["usage"] = 0;
                             }
                         if (filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["OPERATOR"]) {
-                            viewModel["operator"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["OPERATOR"];
+                            extensiveDeviceInfo["Operator"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["OPERATOR"];
                         }
                         if (filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["PHONE_NUMBER"]) {
-                            viewModel["phoneNumber"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["PHONE_NUMBER"];
+                            extensiveDeviceInfo["Phone Number"] = filteredDeviceData["initialDeviceInfo"]["DEVICE_INFO"]["PHONE_NUMBER"];
                         }
 
                             viewModel["externalMemory"] = {};
@@ -173,13 +172,13 @@ function onRequest(context) {
                     viewModel["model"] = filteredDeviceData["latestDeviceInfo"]["deviceModel"];
                 }
                 if (filteredDeviceData["latestDeviceInfo"]["osVersion"]) {
-                    viewModel["osVersion"] = filteredDeviceData["latestDeviceInfo"]["osVersion"];
+                    extensiveDeviceInfo["OS Version"] = filteredDeviceData["latestDeviceInfo"]["osVersion"];
                 }
                 if (filteredDeviceData["latestDeviceInfo"]["connectionType"]) {
-                    viewModel["connectionType"] = filteredDeviceData["latestDeviceInfo"]["connectionType"];
+                    extensiveDeviceInfo["Connection Type"] = filteredDeviceData["latestDeviceInfo"]["connectionType"];
                 }
                 if (filteredDeviceData["latestDeviceInfo"]["ssid"]) {
-                    viewModel["ssid"] = filteredDeviceData["latestDeviceInfo"]["ssid"];
+                    extensiveDeviceInfo["SSID"] = filteredDeviceData["latestDeviceInfo"]["ssid"];
                 }
                 if (filteredDeviceData["latestDeviceInfo"]["updatedTime"]) {
                     viewModel["lastUpdatedTime"] = filteredDeviceData["latestDeviceInfo"]["updatedTime"].
@@ -190,6 +189,7 @@ function onRequest(context) {
 
                 viewModel["cpuUsage"] = {};
                 viewModel["cpuUsage"]["value"] = filteredDeviceData["latestDeviceInfo"]["cpuUsage"];
+                extensiveDeviceInfo["CPU Usage"] = filteredDeviceData["latestDeviceInfo"]["cpuUsage"];
 
                 viewModel["ramUsage"] = {};
                 if (filteredDeviceData["latestDeviceInfo"]["totalRAMMemory"] != 0) {
@@ -222,6 +222,7 @@ function onRequest(context) {
                     viewModel["externalMemory"]["usage"] = 0;
                 }
             }
+            viewModel["extensiveDeviceInfo"] = extensiveDeviceInfo;
             if (!filteredDeviceData["initialDeviceInfo"] && !filteredDeviceData["latestDeviceInfo"]) {
                 viewModel["deviceInfoAvailable"] = false;
             }
