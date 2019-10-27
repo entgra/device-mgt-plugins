@@ -1252,7 +1252,7 @@
         <carbon.devicemgt.plugins.version>5.0.0-SNAPSHOT</carbon.devicemgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
-        <android.agent.version>3.7.2</android.agent.version>
+        <android.agent.version>4.0.0</android.agent.version>
 
         <!-- Carbon Commons -->
         <carbon.commons.version>4.6.21</carbon.commons.version>
