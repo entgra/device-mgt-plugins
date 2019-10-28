@@ -30,12 +30,13 @@ import feign.okhttp.OkHttpClient;
 import feign.slf4j.Slf4jLogger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.base.MultitenantConstants;
+
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.identity.jwt.client.extension.JWTClient;
 import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
 import org.wso2.carbon.identity.jwt.client.extension.exception.JWTClientException;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.extension.siddhi.device.client.configs.SiddhiExtensionConfigReader;
 import org.wso2.extension.siddhi.device.client.dto.OAuthApplication;
 import org.wso2.extension.siddhi.device.client.dto.RegistrationProfile;
