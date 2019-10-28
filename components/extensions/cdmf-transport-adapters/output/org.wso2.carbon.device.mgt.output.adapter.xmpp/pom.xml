@@ -28,7 +28,7 @@
     <artifactId>org.wso2.carbon.device.mgt.output.adapter.xmpp</artifactId>
 
     <packaging>bundle</packaging>
-    <name>WSO2 Carbon - Device Mgt Output MQTT Adaptor Module</name>
+    <name>WSO2 Carbon - Device Mgt Output XMPP Adaptor Module</name>
     <description>org.wso2.carbon.device.mgt.output.adapter.xmpp provides the back-end functionality of xmpp adaptor
     </description>
     <url>http://wso2.org</url>
