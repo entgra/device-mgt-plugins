@@ -43,6 +43,7 @@ import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManage
 import org.wso2.carbon.device.application.mgt.common.response.Application;
 import org.wso2.carbon.device.application.mgt.common.response.Category;
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
+import org.wso2.carbon.device.application.mgt.common.services.SubscriptionManager;
 import org.wso2.carbon.device.application.mgt.common.wrapper.PublicAppReleaseWrapper;
 import org.wso2.carbon.device.application.mgt.common.wrapper.PublicAppWrapper;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -264,6 +265,11 @@ public class AndroidEnterpriseUtils {
     public static ApplicationManager getAppManagerServer() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         return (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
+    }
+
+    public static SubscriptionManager getAppSubscriptionService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        return (SubscriptionManager) ctx.getOSGiService(SubscriptionManager.class, null);
     }
 
     public static void persistApp(ProductsListResponse productListResponse) throws ApplicationManagementException {
