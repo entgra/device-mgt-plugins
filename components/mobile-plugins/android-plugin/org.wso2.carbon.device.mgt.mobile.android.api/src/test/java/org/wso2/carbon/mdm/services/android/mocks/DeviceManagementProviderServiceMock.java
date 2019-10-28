@@ -18,22 +18,37 @@
 
 package org.wso2.carbon.mdm.services.android.mocks;
 
-import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceTransferRequest;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
+import org.wso2.carbon.device.mgt.common.FeatureManager;
+import org.wso2.carbon.device.mgt.common.MonitoringOperation;
+import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
+import org.wso2.carbon.device.mgt.common.PaginationRequest;
+import org.wso2.carbon.device.mgt.common.PaginationResult;
+import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.DeviceConfiguration;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
+import org.wso2.carbon.device.mgt.common.device.details.DeviceLocationHistory;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceNotFoundException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceTypeNotFoundException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
+import org.wso2.carbon.device.mgt.common.exceptions.UnauthorizedDeviceAccessException;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceData;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.common.policy.mgt.Policy;
 import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
 import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationExecutionFailedException;
 import org.wso2.carbon.device.mgt.common.push.notification.NotificationStrategy;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
+import org.wso2.carbon.device.mgt.core.dto.DeviceTypeVersion;
 import org.wso2.carbon.device.mgt.core.geo.GeoCluster;
 import org.wso2.carbon.device.mgt.core.geo.geoHash.GeoCoordinate;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
@@ -582,6 +597,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public List<DeviceLocationHistory> getDeviceLocationInfo(DeviceIdentifier deviceIdentifier, long l,
+                                                             long l1) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
     public void notifyPullNotificationSubscriber(DeviceIdentifier deviceIdentifier, Operation operation)
             throws PullNotificationExecutionFailedException {
 
@@ -599,19 +620,17 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public int getDeviceCountOfTypeByStatus(String deviceType, String deviceStatus) throws DeviceManagementException {
+    public int getDeviceCountOfTypeByStatus(String s, String s1) throws DeviceManagementException {
         return 0;
     }
 
     @Override
-    public List<String> getDeviceIdentifiersByStatus(String deviceType, String deviceStatus)
-            throws DeviceManagementException {
+    public List<String> getDeviceIdentifiersByStatus(String s, String s1) throws DeviceManagementException {
         return null;
     }
 
     @Override
-    public boolean bulkUpdateDeviceStatus(String deviceType, List<String> deviceList, String status)
-            throws DeviceManagementException {
+    public boolean bulkUpdateDeviceStatus(String s, List<String> list, String s1) throws DeviceManagementException {
         return false;
     }
 
@@ -620,10 +639,43 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
         return false;
     }
 
+    @Override public boolean addDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
+            throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public List<DeviceTypeVersion> getDeviceTypeVersions(String s) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override public boolean updateDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
+            throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public boolean isDeviceTypeVersionChangeAuthorized(String s, String s1) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public DeviceTypeVersion getDeviceTypeVersion(String s, String s1) throws DeviceManagementException {
+        return null;
+    }
+
     @Override
     public DeviceConfiguration getDeviceConfiguration(Map<String, String> propertyMap)
             throws DeviceManagementException, DeviceNotFoundException, UnauthorizedDeviceAccessException,
-                   AmbiguousConfigurationException{
+            AmbiguousConfigurationException {
+        return null;
+    }
+
+    @Override
+    public List<String> transferDeviceToTenant(DeviceTransferRequest deviceTransferRequest)
+            throws DeviceManagementException, DeviceNotFoundException {
+        return null;
+    }
+
+    @Override public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, String s)
+            throws DeviceManagementException {
         return null;
     }
 

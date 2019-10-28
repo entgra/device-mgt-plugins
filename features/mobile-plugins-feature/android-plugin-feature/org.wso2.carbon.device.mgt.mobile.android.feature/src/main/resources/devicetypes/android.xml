@@ -191,6 +191,26 @@
                 </metadata>
             </Operation>
         </Feature>
+        <Feature type="operation" code="CHANGE_LOCK_TASK_MODE">
+            <Name>Change LockTask</Name>
+            <Description>Change LockTask mode of KIOSK device</Description>
+            <Operation hidden="false" icon="fw-mobile">
+                <params/>
+                <metadata>
+                    <uri>/api/device-mgt/android/v1.0/admin/devices/change-LockTask</uri>
+                    <method>POST</method>
+                    <contentType>application/json</contentType>
+                    <permission>/device-mgt/devices/owning-device/operations/android/change-LockTask</permission>
+                    <filters>
+                        <filter>
+                            <property>ownership</property>
+                            <value>COPE</value>
+                            <description>This feature is only available in COSU(KIOSK)</description>
+                        </filter>
+                    </filters>
+                </metadata>
+            </Operation>
+        </Feature>
         <Feature type="operation" code="UPGRADE_FIRMWARE">
             <Name>Upgrade Firmware</Name>
             <Description>Upgrade Firmware</Description>
@@ -683,4 +703,147 @@
         <IdleTimeToMarkInactive>900</IdleTimeToMarkInactive>
         <IdleTimeToMarkUnreachable>600</IdleTimeToMarkUnreachable>
     </DeviceStatusTaskConfig>
+
+    <DeviceTypePlatformDetails>
+        <!-- We are strong the SDK Int here-->
+        <DeviceTypePlatformVersion>
+            <VersionName>1</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>2</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>3</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>4</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>5</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>6</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>7</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>8</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>9</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>10</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>11</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>12</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>13</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>14</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>15</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>16</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>17</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>18</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>19</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>20</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>21</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>22</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>23</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>24</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>25</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>26</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>27</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>28</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>29</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>30</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>31</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>32</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>33</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>34</VersionName>
+        </DeviceTypePlatformVersion>
+
+        <DeviceTypePlatformVersion>
+            <VersionName>35</VersionName>
+        </DeviceTypePlatformVersion>
+    </DeviceTypePlatformDetails>
 </DeviceTypeConfiguration>

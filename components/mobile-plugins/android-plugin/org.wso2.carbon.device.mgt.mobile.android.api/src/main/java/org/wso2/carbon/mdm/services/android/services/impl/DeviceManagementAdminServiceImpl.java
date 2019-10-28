@@ -37,8 +37,8 @@ package org.wso2.carbon.mdm.services.android.services.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
@@ -484,6 +484,33 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
         try {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_REBOOT);
+            operation.setType(Operation.Type.COMMAND);
+            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
+            return Response.status(Response.Status.CREATED).entity(activity).build();
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
+            throw new BadRequestException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            log.error(errorMessage, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
+        }
+    }
+
+    @POST
+    @Path("/change-LockTask")
+    @Override
+    public Response changeLockTask(List<String> deviceIDs) {
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android change LockTask mode operation");
+        }
+
+        try {
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(AndroidConstants.OperationCodes.CHANGE_LOCK_TASK_MODE);
             operation.setType(Operation.Type.COMMAND);
             Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
             return Response.status(Response.Status.CREATED).entity(activity).build();

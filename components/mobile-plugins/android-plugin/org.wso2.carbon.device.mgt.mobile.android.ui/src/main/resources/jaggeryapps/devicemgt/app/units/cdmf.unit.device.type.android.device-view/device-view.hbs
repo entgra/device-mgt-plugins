@@ -97,6 +97,7 @@
             </li>
             <li><a data-toggle="tab" href="#app">Applications</a></li>
             <li><a data-toggle="tab" href="#policy">Policy Compliance</a></li>
+            <li><a data-toggle="tab" href="#device-info">Extensive Device Information</a></li>
 	    <li><a data-toggle="tab" href="#remote-session">Remote Session</a></li>
         {{/zone}}
 
@@ -143,6 +144,27 @@
               <div id="policy-list-container">
               </div>
             </div>
+            <div id="device-info" class="tab-pane fade">
+                <div id="device-info-container">
+                    {{#if device.deviceInfoAvailable}}
+                        <table class="table table-striped table-hover table-bordered display data-table"
+                               id="device-info-table">
+                            {{#each device.extensiveDeviceInfo}}
+                                <tr>
+                                    <td>
+                                        {{@key}}
+                                    </td>
+                                    <td>
+                                        <span>{{this}}</span>
+                                    </td>
+                                </tr>
+                            {{/each}}
+                        </table>
+                    {{else}}<p>Extensive information is not available yet.</p>
+                    {{/if}}
+                </div>
+            </div>
+
             <div id="remote-session" class="tab-pane fade" data-remote-session-uri="{{remoteSessionEndpoint}}">
                 <div class="remote-session-container">
                     <div class="tab-actions">

@@ -34,6 +34,7 @@
     </ManagementRepository>
     <APIPublisher>
 	<APIs>
+        <!--todo remove this -->
         <API>
             <Name>appmanager</Name>
             <Owner>admin</Owner>
