@@ -57,6 +57,8 @@ import org.wso2.carbon.apimgt.application.extension.dto.ApiApplicationKey;
 import org.wso2.carbon.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.application.mgt.common.SubAction;
+import org.wso2.carbon.device.application.mgt.common.SubscriptionType;
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -100,6 +102,7 @@ import javax.validation.ConstraintViolation;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -284,13 +287,14 @@ public class AndroidDeviceUtils {
 
         List<? extends Operation> operations;
         operations = AndroidAPIUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
-        if (handleGoogleAps) {
+        if (operations != null && handleGoogleAps) {
             handleEnrollmentGoogleApps(operations, deviceIdentifier);
         }
         return operations;
     }
 
-    private static void handleEnrollmentGoogleApps(List<? extends Operation> operations, DeviceIdentifier deviceIdentifier) {
+    private static void handleEnrollmentGoogleApps(List<? extends Operation> operations, DeviceIdentifier
+            deviceIdentifier) {
         boolean containsGoogleAppPolicy = false;
         for (int x = 0; x < operations.size() && !containsGoogleAppPolicy; x++) {
             Operation operation = operations.get(x);
@@ -317,9 +321,17 @@ public class AndroidDeviceUtils {
                         for (JsonElement appElement : appListArray) {
                             JsonElement googlePolicyPayload = appElement.getAsJsonObject().
                                     get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD);
+
                             if (googlePolicyPayload != null) {
-                                containsGoogleAppPolicy = true;
-                                sendPayloadToGoogle(payload, deviceIdentifier);
+                                String uuid = appElement.getAsJsonObject().get("uuid").toString();
+                                containsGoogleAppPolicy = true;// breaking out of outer for loop
+                                try {
+                                    uuid = uuid.replace("\"", "");
+                                    sendPayloadToGoogle(uuid, payload, deviceIdentifier);
+                                } catch (org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException e) {
+                                    String errorMessage = "App install failed for device " + deviceIdentifier.getId();
+                                    log.error(errorMessage, e);
+                                }
                                 break;
                             }
                         }
@@ -335,7 +347,8 @@ public class AndroidDeviceUtils {
      * @param payload policy profile
      * @param deviceIdentifier device to apply policy
      */
-    private static void sendPayloadToGoogle(String payload, DeviceIdentifier deviceIdentifier) {
+    private static void sendPayloadToGoogle(String uuid, String payload, DeviceIdentifier deviceIdentifier)
+            throws org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException {
         try {
             EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigsFromGoogle();
             if (enterpriseConfigs != null && enterpriseConfigs.getErrorResponse() == null) {
@@ -358,11 +371,10 @@ public class AndroidDeviceUtils {
                                 .getGoogleUserId(), apps, enterpriseInstallPolicy.getProductSetBehavior());
                         googleAPIInvoker.updateAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
                                 AndroidEnterpriseUtils.convertToDeviceInstance(enterpriseInstallPolicy));
-
-//                        for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
-//                            googleAPIInvoker.addManagedConfigForDevice(enterpriseConfigs.getEnterpriseId(), userDetail
-//                                    .getGoogleUserId(), enterpriseInstallPolicy.getAndroidId(), enterpriseApp.getProductId());
-//                        }
+                        AndroidEnterpriseUtils.getAppSubscriptionService()
+                                .performEntAppSubscription(uuid,
+                                        Arrays.asList(CarbonContext.getThreadLocalCarbonContext().getUsername()),
+                                        SubscriptionType.USER.toString(), SubAction.INSTALL.toString(), false);
 
                     }
                 }
