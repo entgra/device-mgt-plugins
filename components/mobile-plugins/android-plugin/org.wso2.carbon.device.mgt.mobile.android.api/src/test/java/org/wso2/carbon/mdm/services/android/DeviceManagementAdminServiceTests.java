@@ -28,8 +28,8 @@ import org.testng.IObjectFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.ObjectFactory;
 import org.testng.annotations.Test;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.mdm.services.android.mocks.DeviceManagementProviderServiceMock;
 import org.wso2.carbon.mdm.services.android.services.impl.DeviceManagementAdminServiceImpl;
@@ -165,6 +165,15 @@ public class DeviceManagementAdminServiceTests {
             throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         Response response = deviceManagementAdminService.rebootDevice(TestUtils.getDeviceIds());
+        Assert.assertNotNull(response);
+        Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
+    }
+
+    @Test
+    public void testChangeLockTask()
+            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+        mockDeviceManagementService();
+        Response response = deviceManagementAdminService.changeLockTask(TestUtils.getDeviceIds());
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.CREATED.getStatusCode());
     }

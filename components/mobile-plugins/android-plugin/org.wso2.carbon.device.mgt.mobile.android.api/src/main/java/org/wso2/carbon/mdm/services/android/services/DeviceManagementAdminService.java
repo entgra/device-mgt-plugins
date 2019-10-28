@@ -157,6 +157,12 @@ import java.util.List;
                         permissions = {"/device-mgt/devices/owning-device/operations/android/reboot"}
                 ),
                 @Scope(
+                        name = "Change LockTask mode",
+                        description = "Change LoockTask mode of KIOSK devices",
+                        key = "perm:android:change-LockTask",
+                        permissions = {"/device-mgt/devices/owning-device/operations/android/change-LockTask"}
+                ),
+                @Scope(
                         name = "Mute Device",
                         description = "Mute Android devices",
                         key = "perm:android:mute",
@@ -1054,6 +1060,66 @@ public interface DeviceManagementAdminService {
                     value = "Provide the ID of the Android device. Multiple device IDs can be added using comma separated values. ",
                     required = true)
                     List<String> deviceIDs);
+
+    @POST
+    @Path("/change-LockTask")
+    @ApiOperation(
+            consumes = MediaType.APPLICATION_JSON,
+            httpMethod = "POST",
+            value = "Change LockTask mode of KIOSK Devices",
+            notes = "Enable or disable LockTask mode of KIOSK devices.",
+            response = Activity.class,
+            tags = "Android Device Management Administrative Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:change-LockTask")
+                    })
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 201,
+                    message = "Created. \n Successfully scheduled the change LockTask operation.",
+                    response = Activity.class,
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "URL of the activity instance that refers to the scheduled operation."),
+                            @ResponseHeader(
+                                    name = "Content-Type",
+                                    description = "Content type of the body"),
+                            @ResponseHeader(
+                                    name = "ETag",
+                                    description = "Entity Tag of the response resource.\n" +
+                                                  "Used by caches, or in conditional requests."),
+                            @ResponseHeader(
+                                    name = "Last-Modified",
+                                    description = "Date and time the resource was last modified.\n" +
+                                                  "Used by caches, or in conditional requests.")}),
+            @ApiResponse(
+                    code = 303,
+                    message = "See Other. \n The source can be retrieved from the URL specified in the location header.\n",
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "The Source URL of the document.")}),
+            @ApiResponse(
+                    code = 400,
+                    message = "Bad Request. \n Invalid request or validation error."),
+            @ApiResponse(
+                    code = 415,
+                    message = "Unsupported media type. \n The format of the requested entity was not supported.\n"),
+            @ApiResponse(
+                    code = 500,
+                    message = "Internal Server Error. \n " +
+                              "Server error occurred while adding the new change LockTask operation.")
+    })
+    Response changeLockTask(
+            @ApiParam(
+            name = "deviceIDs",
+            value = "Provide the ID of the Android device. Multiple device IDs can be added using comma separated values. ",
+            required = true)
+            List<String> deviceIDs);
 
     @POST
     @Path("/mute")

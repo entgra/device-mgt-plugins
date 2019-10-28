@@ -26,6 +26,7 @@
             <ref bean="deviceManagementService"/>
             <ref bean="deviceManagementAdminService"/>
             <ref bean="eventReceiverService"/>
+            <ref bean="androidEnterprise"/>
             <ref bean="deviceTypeConfigurationService"/>
             <ref bean="swaggerResource"/>
         </jaxrs:serviceBeans>
@@ -63,6 +64,7 @@
     <bean id="deviceManagementAdminService" class="org.wso2.carbon.mdm.services.android.services.impl.DeviceManagementAdminServiceImpl"/>
     <bean id="eventReceiverService" class="org.wso2.carbon.mdm.services.android.services.impl.EventReceiverServiceImpl"/>
     <bean id="deviceTypeConfigurationService" class="org.wso2.carbon.mdm.services.android.services.impl.DeviceTypeConfigurationServiceImpl"/>
+    <bean id="androidEnterprise" class="org.wso2.carbon.mdm.services.android.services.impl.AndroidEnterpriseServiceImpl"/>
     <bean id="jsonProvider" class="org.wso2.carbon.mdm.services.android.common.GsonMessageBodyHandler"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.services.android.common.ErrorHandler"/>
     <cxf:bus>

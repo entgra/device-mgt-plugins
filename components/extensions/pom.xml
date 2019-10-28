@@ -33,7 +33,6 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>appm-connector</module>
         <module>cdmf-transport-adapters</module>
         <module>mb-extensions</module>
         <module>siddhi-extensions</module>
