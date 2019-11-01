@@ -41,12 +41,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
 import org.wso2.carbon.analytics.api.AnalyticsDataAPIUtil;
 import org.wso2.carbon.analytics.dataservice.commons.AnalyticsDataResponse;
@@ -97,9 +100,9 @@ import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import javax.validation.ConstraintViolation;
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -673,8 +676,6 @@ public class AndroidDeviceUtils {
     public static void installEnrollmentApplications(ProfileFeature feature, DeviceIdentifier deviceIdentifier)
             throws PolicyManagementException {
         String uuid = "";
-        HttpClient httpClient;
-        PostMethod request;
         try {
             String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
             ApiApplicationKey apiApplicationKey = OAuthUtils.getClientCredentials(tenantDomain);
@@ -688,21 +689,25 @@ public class AndroidDeviceUtils {
                     AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_URL;
             JsonElement appListElement = new JsonParser().parse(feature.getContent().toString()).getAsJsonObject()
                     .get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
-            String payload = "[{\"id\":\"" + deviceIdentifier.getId() + "\", \"type\":\""
-                             + deviceIdentifier.getType() + "\"}]";
-            StringRequestEntity requestEntity = new StringRequestEntity(payload, MediaType.APPLICATION_JSON
-                    , AndroidConstants.ApplicationInstall.ENCODING);
+
+            JSONObject deviceObject = new JSONObject();
+            deviceObject.put("id", deviceIdentifier.getId());
+            deviceObject.put("type", deviceIdentifier.getType());
+            JSONArray payload = new JSONArray();
+            payload.put(deviceObject);
+            StringEntity requestEntity = new StringEntity(payload.toString(), ContentType.APPLICATION_JSON);
             JsonArray appListArray = appListElement.getAsJsonArray();
             for (JsonElement appElement : appListArray) {
                 uuid = appElement.getAsJsonObject().
                         get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_UUID).getAsString();
-                requestUrl = requestUrl.replace("{uuid}", uuid);
-                httpClient = new HttpClient();
-                request = new PostMethod(requestUrl);
-                request.addRequestHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION
-                        , AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo.getAccessToken());
-                request.setRequestEntity(requestEntity);
-                httpClient.executeMethod(request);
+                try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                    HttpPost postRequest = new HttpPost(requestUrl.replace("{uuid}", uuid));
+                    postRequest.setHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION,
+                            AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo
+                                    .getAccessToken());
+                    postRequest.setEntity(requestEntity);
+                    httpClient.execute(postRequest);
+                }
             }
         } catch (UserStoreException e) {
             String msg = "Error while accessing user store for user with Android device id: " +
