@@ -151,7 +151,7 @@ public class ExtensionTestCase extends BaseDeviceManagementTest {
 
         DeviceConfigurationManager.getInstance().getDeviceManagementConfig().setDeviceCacheConfiguration(configuration);
         List<DeviceIdentifier> list = TestDataHolder.getDeviceIdentifiersList(DEVICE_TYPE);
-        DeviceGroup deviceGroup = groupManagementProviderService.getGroup(TestDataHolder.generateDummyGroupData(1).getName());
+        DeviceGroup deviceGroup = groupManagementProviderService.getGroup(TestDataHolder.generateDummyGroupData(1).getName(), false);
         Assert.assertNotNull(deviceGroup);
         groupManagementProviderService.addDevices(deviceGroup.getGroupId(), list);
     }
@@ -199,9 +199,9 @@ public class ExtensionTestCase extends BaseDeviceManagementTest {
         executionPlanRuntime.start();
         DeviceIdentifier deviceIdentifier = TestDataHolder.getDeviceIdentifiersList(DEVICE_TYPE).get(0);
         inputHandler.send(new Object[]{groupManagementProviderService.getGroup(
-                TestDataHolder.generateDummyGroupData(1).getName()).getGroupId(), deviceIdentifier.getId(), deviceIdentifier.getType()});
+                TestDataHolder.generateDummyGroupData(1).getName(), false).getGroupId(), deviceIdentifier.getId(), deviceIdentifier.getType()});
         inputHandler.send(new Object[]{groupManagementProviderService.getGroup(
-                TestDataHolder.generateDummyGroupData(2).getName()).getGroupId(), deviceIdentifier.getId(), deviceIdentifier.getType()});
+                TestDataHolder.generateDummyGroupData(2).getName(), false).getGroupId(), deviceIdentifier.getId(), deviceIdentifier.getType()});
         SiddhiTestHelper.waitForEvents(100, 1, count, 10000);
         Assert.assertTrue(eventArrived);
         Assert.assertEquals(1, count.get());
