@@ -110,6 +110,7 @@ public class RemoteSessionManagementServiceImpl implements RemoteSessionManageme
                                 + " , deviceId : " + deviceId);
                     }
                 } catch (OperationManagementException | InvalidDeviceException e) {
+                    log.error("error", e);
                     throw new RemoteSessionManagementException("Error occurred while adding initial operation for the " +
                             "device Type : " + deviceType + " , deviceId : " + deviceId);
                 } catch (DeviceAccessAuthorizationException e) {
