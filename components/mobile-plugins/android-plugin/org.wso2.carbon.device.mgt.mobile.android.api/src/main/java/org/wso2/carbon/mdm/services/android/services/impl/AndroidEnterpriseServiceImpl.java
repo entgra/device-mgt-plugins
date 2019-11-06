@@ -99,43 +99,9 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                     .build();
         }
 
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
         String token;
-        boolean deviceIdExist = false;
-
         try {
-            String googleUserId;
-            List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
-                    .getEnterpriseUser(CarbonContext.getThreadLocalCarbonContext().getUsername());
-            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
-            if (androidEnterpriseUsers != null && androidEnterpriseUsers.size() > 0) {
-                googleUserId = androidEnterpriseUsers.get(0).getGoogleUserId();
-                // If this device is also present, only need to provide a token for this request.
-                for (AndroidEnterpriseUser enterprise : androidEnterpriseUsers) {
-                    if (enterprise.getEmmDeviceId() != null
-                            && enterprise.getEmmDeviceId().equals(enterpriseUser.getAndroidPlayDeviceId())) {
-                        deviceIdExist = true;
-                    }
-                }
-            } else {
-                googleUserId = googleAPIInvoker.insertUser(enterpriseConfigs.getEnterpriseId(), CarbonContext
-                        .getThreadLocalCarbonContext()
-                        .getUsername());
-            }
-            // Fetching an auth token from Google EMM API
-            token = googleAPIInvoker.getToken(enterpriseConfigs.getEnterpriseId(), googleUserId);
-
-            if (!deviceIdExist) {
-                AndroidEnterpriseUser androidEnterpriseUser = new AndroidEnterpriseUser();
-                androidEnterpriseUser.setEmmUsername(CarbonContext.getThreadLocalCarbonContext().getUsername());
-                androidEnterpriseUser.setTenantId(CarbonContext.getThreadLocalCarbonContext().getTenantId());
-                androidEnterpriseUser.setAndroidPlayDeviceId(enterpriseUser.getAndroidPlayDeviceId());
-                androidEnterpriseUser.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
-                androidEnterpriseUser.setEmmDeviceId(enterpriseUser.getEmmDeviceIdentifier());
-                androidEnterpriseUser.setGoogleUserId(googleUserId);
-
-                AndroidAPIUtils.getAndroidPluginService().addEnterpriseUser(androidEnterpriseUser);
-            }
+            token = insertUser(enterpriseUser);
             if (token == null) {
                 return Response.serverError().entity(
                         new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching token").build())
@@ -147,6 +113,48 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving user").build()).build();
         }
         return Response.status(Response.Status.OK).entity(token).build();
+    }
+
+    public String insertUser(EnterpriseUser enterpriseUser) throws EnterpriseServiceException {
+        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+        String token;
+        boolean deviceIdExist = false;
+
+        String googleUserId;
+        List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
+                .getEnterpriseUser(CarbonContext.getThreadLocalCarbonContext().getUsername());
+        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+        if (androidEnterpriseUsers != null && androidEnterpriseUsers.size() > 0) {
+            googleUserId = androidEnterpriseUsers.get(0).getGoogleUserId();
+            // If this device is also present, only need to provide a token for this request.
+            for (AndroidEnterpriseUser enterprise : androidEnterpriseUsers) {
+                if (enterprise.getEmmDeviceId() != null
+                        && enterprise.getEmmDeviceId().equals(enterpriseUser.getAndroidPlayDeviceId())) {
+                    deviceIdExist = true;
+                }
+            }
+        } else {
+            googleUserId = googleAPIInvoker.insertUser(enterpriseConfigs.getEnterpriseId(), CarbonContext
+                    .getThreadLocalCarbonContext()
+                    .getUsername());
+        }
+        // Fetching an auth token from Google EMM API
+        token = googleAPIInvoker.getToken(enterpriseConfigs.getEnterpriseId(), googleUserId);
+
+        if (!deviceIdExist) {
+            AndroidEnterpriseUser androidEnterpriseUser = new AndroidEnterpriseUser();
+            androidEnterpriseUser.setEmmUsername(CarbonContext.getThreadLocalCarbonContext().getUsername());
+            androidEnterpriseUser.setTenantId(CarbonContext.getThreadLocalCarbonContext().getTenantId());
+            androidEnterpriseUser.setAndroidPlayDeviceId(enterpriseUser.getAndroidPlayDeviceId());
+            androidEnterpriseUser.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
+            androidEnterpriseUser.setEmmDeviceId(enterpriseUser.getEmmDeviceIdentifier());
+            androidEnterpriseUser.setGoogleUserId(googleUserId);
+
+            AndroidAPIUtils.getAndroidPluginService().addEnterpriseUser(androidEnterpriseUser);
+        }
+
+        return token;
+
     }
 
     @Override

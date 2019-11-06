@@ -110,11 +110,15 @@ public class RemoteSessionManagementServiceImpl implements RemoteSessionManageme
                                 + " , deviceId : " + deviceId);
                     }
                 } catch (OperationManagementException | InvalidDeviceException e) {
-                    throw new RemoteSessionManagementException("Error occurred while adding initial operation for the " +
-                            "device Type : " + deviceType + " , deviceId : " + deviceId);
+                    String msg = "Error occurred while adding initial operation for the " +
+                            "device Type : " + deviceType + " , deviceId : " + deviceId;
+                    log.error(msg, e);
+                    throw new RemoteSessionManagementException(msg);
                 } catch (DeviceAccessAuthorizationException e) {
-                    throw new RemoteSessionManagementException("Error occurred while device access authorization for the " +
-                            "device Type : " + deviceType + " , " + "deviceId : " + deviceId);
+                    String msg = "Error occurred while device access authorization for the " +
+                            "device Type : " + deviceType + " , " + "deviceId : " + deviceId;
+                    log.error(msg, e);
+                    throw new RemoteSessionManagementException(msg);
                 } finally {
                     PrivilegedCarbonContext.endTenantFlow();
                 }

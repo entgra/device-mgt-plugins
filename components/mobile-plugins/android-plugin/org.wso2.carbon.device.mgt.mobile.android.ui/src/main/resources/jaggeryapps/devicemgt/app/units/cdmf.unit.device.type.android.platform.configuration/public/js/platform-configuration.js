@@ -479,7 +479,8 @@ $(document).ready(function () {
         showPopup();
 
         $("a#remove-unenroll-yes-link").click(function () {
-            var serverDetails = $("input#afw-server-details").val() + "/api/device-mgt/android/v1.0/enterprise/324/unenroll";
+            var serverDetails = $("input#afw-server-details").val()
+             + "/api/android-for-work/v1.0/google/enterprise/unenroll/" + $("input#afw-enterprise-id").val();
             var emmToken = $("input#afw-backend-token").val();
             unenroll(serverDetails, emmToken);
             hidePopup();

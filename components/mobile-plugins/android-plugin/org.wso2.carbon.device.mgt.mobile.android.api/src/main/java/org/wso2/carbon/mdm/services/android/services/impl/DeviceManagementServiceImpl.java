@@ -54,9 +54,11 @@ import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.PolicyComplianceExce
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
+import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
 import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.AndroidApplication;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.AndroidDevice;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.EnterpriseUser;
 import org.wso2.carbon.mdm.services.android.exception.UnexpectedServerErrorException;
 import org.wso2.carbon.mdm.services.android.services.DeviceManagementService;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
@@ -92,6 +94,8 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 
     private static final String OPERATION_ERROR_STATUS = "ERROR";
     private static final Log log = LogFactory.getLog(DeviceManagementServiceImpl.class);
+    public static final String GOOGLE_AFW_EMM_ANDROID_ID = "googleEMMAndroidId";
+    public static final String GOOGLE_AFW_DEVICE_ID = "googleEMMDeviceId";
 
     @PUT
     @Path("/{id}/applications")
@@ -233,6 +237,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                     new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
         }
         try {
+            String token = null;
             Device device = new Device();
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
             device.setEnrolmentInfo(androidDevice.getEnrolmentInfo());
@@ -243,6 +248,27 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             device.setName(androidDevice.getName());
             device.setFeatures(androidDevice.getFeatures());
             device.setProperties(androidDevice.getProperties());
+
+            String googleEMMAndroidId = null;
+            String googleEMMDeviceId = null;
+            if (androidDevice.getProperties() != null) {
+                for (Device.Property property : androidDevice.getProperties()) {
+                    if (property.getName().equals(GOOGLE_AFW_EMM_ANDROID_ID)) {
+                        googleEMMAndroidId = property.getValue();
+                    } else if (property.getName().equals(GOOGLE_AFW_DEVICE_ID)) {
+                        googleEMMDeviceId = property.getValue();
+                    }
+                }
+
+                if (googleEMMAndroidId != null && googleEMMDeviceId != null) {
+                    EnterpriseUser user = new EnterpriseUser();
+                    user.setAndroidPlayDeviceId(googleEMMAndroidId);
+                    user.setEmmDeviceIdentifier(googleEMMDeviceId);
+                    AndroidEnterpriseServiceImpl enterpriseService = new AndroidEnterpriseServiceImpl();
+                    token = enterpriseService.insertUser(user);
+                }
+            }
+
 
             boolean status = AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
             if (status) {
@@ -301,8 +327,12 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 
                 Message responseMessage = new Message();
                 responseMessage.setResponseCode(Response.Status.OK.toString());
-                responseMessage.setResponseMessage("Android device, which carries the id '" +
-                        androidDevice.getDeviceIdentifier() + "' has successfully been enrolled");
+                if (token == null) {
+                    responseMessage.setResponseMessage("Android device, which carries the id '" +
+                            androidDevice.getDeviceIdentifier() + "' has successfully been enrolled");
+                } else {
+                    responseMessage.setResponseMessage("Google response token" + token);
+                }
                 return Response.status(Response.Status.OK).entity(responseMessage).build();
             } else {
                 Message responseMessage = new Message();
@@ -335,6 +365,12 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
         } catch (InvalidDeviceException e) {
             String msg = "Error occurred while enforcing default enrollment policy upon android " +
                     "', which carries the id '" +
+                    androidDevice.getDeviceIdentifier() + "'";
+            log.error(msg, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+        } catch (EnterpriseServiceException e) {
+            String msg = "Error occurred while adding user via Google Apis '" +
                     androidDevice.getDeviceIdentifier() + "'";
             log.error(msg, e);
             throw new UnexpectedServerErrorException(
