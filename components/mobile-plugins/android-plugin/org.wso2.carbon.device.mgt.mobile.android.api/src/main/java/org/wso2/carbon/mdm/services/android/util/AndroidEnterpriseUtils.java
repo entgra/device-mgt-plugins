@@ -30,6 +30,7 @@ import com.google.api.services.androidenterprise.model.ProductPolicy;
 
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import com.google.api.services.androidenterprise.model.VariableSet;
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -38,12 +39,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.application.mgt.common.ApplicationArtifact;
+import org.wso2.carbon.device.application.mgt.common.Filter;
 import org.wso2.carbon.device.application.mgt.common.LifecycleChanger;
 import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
 import org.wso2.carbon.device.application.mgt.common.response.Application;
 import org.wso2.carbon.device.application.mgt.common.response.Category;
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
 import org.wso2.carbon.device.application.mgt.common.services.SubscriptionManager;
+import org.wso2.carbon.device.application.mgt.common.wrapper.ApplicationUpdateWrapper;
 import org.wso2.carbon.device.application.mgt.common.wrapper.PublicAppReleaseWrapper;
 import org.wso2.carbon.device.application.mgt.common.wrapper.PublicAppWrapper;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -76,9 +79,11 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AndroidEnterpriseUtils {
 
@@ -277,85 +282,70 @@ public class AndroidEnterpriseUtils {
         ApplicationManager applicationManager = getAppManagerServer();
         List<Category> categories = applicationManager.getRegisteredCategories();
         if (productListResponse != null && productListResponse.getProduct() != null
-                && productListResponse.getProduct().size() > 0) {
+                && !productListResponse.getProduct().isEmpty()) {
 
-            for (Product product : productListResponse.getProduct()) {
+            List<String> packageNamesOfApps = productListResponse.getProduct().stream()
+                    .map(product -> (product.getProductId().replaceFirst("app:", ""))).collect(Collectors.toList());
 
+            List<Application> existingApps = applicationManager.getApplications(packageNamesOfApps);
+            List<Product> products = productListResponse.getProduct();
+
+            for (Application app : existingApps){
+                for (Product product : products){
+                    if (product.getProductId().replaceFirst("app:", "").equals(app.getPackageName())){
+                        ApplicationUpdateWrapper applicationUpdateWrapper = generatePubAppUpdateWrapper(product, categories);
+                        applicationManager.updateApplication(app.getId(), applicationUpdateWrapper);
+
+                        PublicAppReleaseWrapper publicAppReleaseWrapper = new PublicAppReleaseWrapper();
+                        if (app.getSubMethod()
+                                .equalsIgnoreCase(AndroidConstants.ApplicationProperties.FREE_SUB_METHOD)) {
+                            publicAppReleaseWrapper.setPrice(0.0);
+                        } else {
+                            publicAppReleaseWrapper.setPrice(1.0);
+                        }
+
+                        publicAppReleaseWrapper.setDescription(product.getRecentChanges());
+                        publicAppReleaseWrapper.setReleaseType("ga");
+                        publicAppReleaseWrapper.setVersion(getAppString(product.getAppVersion()));
+                        publicAppReleaseWrapper
+                                .setSupportedOsVersions(String.valueOf(product.getMinAndroidSdkVersion()) + "-ALL");
+
+                        ApplicationArtifact applicationArtifact = generateArtifacts(product);
+                        applicationManager.updatePubAppRelease(app.getApplicationReleases().get(0).getUuid(),
+                                publicAppReleaseWrapper, applicationArtifact);
+                        products.remove(product);
+                        break;
+                    }
+                }
+            }
+
+            for (Product product : products) {
                 if (product.getAppVersion() == null) { // This is to handled removed apps from playstore
                     continue;
                 }
 
                 // Generate App wrapper
-                PublicAppWrapper publicAppWrapper = new PublicAppWrapper();
+                PublicAppWrapper publicAppWrapper = generatePubAppWrapper(product, categories);
                 PublicAppReleaseWrapper appReleaseWrapper = new PublicAppReleaseWrapper();
-                publicAppWrapper.setName(product.getTitle());
-                publicAppWrapper.setDescription(product.getDescription());
-                publicAppWrapper.setCategories(Arrays.asList(new String[]{"GooglePlaySyncedApp"}));//Default category
-                for (Category category : categories) {
-                    if (product.getCategory() == null) {
-                        publicAppWrapper.setCategories(Arrays.asList(new String[]{"GooglePlaySyncedApp"}));
-                        break;
-                    } else if (product.getCategory().equalsIgnoreCase(category.getCategoryName())) {
-                        publicAppWrapper.setCategories(Arrays.asList(new String[]{category.getCategoryName(), "GooglePlaySyncedApp"}));
-                        break;
-                    }
-                }
-                if (product.getProductPricing().equalsIgnoreCase("free")) {
-                    publicAppWrapper.setSubMethod("FREE");
-                } else {
-                    publicAppWrapper.setSubMethod("PAID");
-                }
-                // TODO: purchase an app from Playstore and see how to capture the real value for price field.
-                publicAppWrapper.setPaymentCurrency("$");
-                appReleaseWrapper.setPrice(1.0);
 
-                publicAppWrapper.setDeviceType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+                if (publicAppWrapper.getSubMethod()
+                        .equalsIgnoreCase(AndroidConstants.ApplicationProperties.FREE_SUB_METHOD)) {
+                    appReleaseWrapper.setPrice(0.0);
+                } else {
+                    appReleaseWrapper.setPrice(1.0);
+                }
+
                 appReleaseWrapper.setDescription(product.getRecentChanges());
                 appReleaseWrapper.setReleaseType("ga");
                 appReleaseWrapper.setVersion(getAppString(product.getAppVersion()));
                 appReleaseWrapper.setPackageName(product.getProductId().replaceFirst("app:", ""));
                 appReleaseWrapper.setSupportedOsVersions(String.valueOf(product.getMinAndroidSdkVersion()) + "-ALL");
 
-                publicAppWrapper.setPublicAppReleaseWrappers(Arrays.asList(new PublicAppReleaseWrapper[]{appReleaseWrapper}));
+                publicAppWrapper.setPublicAppReleaseWrappers(
+                        Arrays.asList(new PublicAppReleaseWrapper[] { appReleaseWrapper }));
 
                 // Generate artifacts
-                ApplicationArtifact applicationArtifact = new ApplicationArtifact();
-
-                String iconName = product.getIconUrl().split(".com/")[1];
-                applicationArtifact.setIconName(iconName);
-
-
-                InputStream iconInputStream = getInputStream(iconName, product.getIconUrl());
-                applicationArtifact.setIconStream(iconInputStream);
-                Map<String, InputStream> screenshotMap = new HashMap<>();
-
-                int numberOfScreenShots = 3;// This is to handle some apps in playstore without 3 screenshots.
-                if (product.getScreenshotUrls() != null) {
-                    if (product.getScreenshotUrls().size() < 3) {
-                        numberOfScreenShots = product.getScreenshotUrls().size();
-                    }
-
-                    for (int y = 1; y < 4; y++) {
-                        int screenshotNumber = y - 1;
-                        if (y > numberOfScreenShots) {
-                            screenshotNumber = 0;
-                        }
-                        String screenshot = product.getScreenshotUrls().get(screenshotNumber);
-                        String screenshotName = screenshot.split(".com/")[1];
-                        InputStream screenshotInputStream = getInputStream(screenshotName, screenshot);
-                        screenshotMap.put(screenshotName, screenshotInputStream);
-                    }
-                } else { // Private apps doesn't seem to send screenshots. Handling it.
-                    for (int a = 0; a < 3; a++) {
-                        String screenshot = product.getIconUrl();
-                        String screenshotName = screenshot.split(".com/")[1];
-                        InputStream screenshotInputStream = getInputStream(screenshotName, screenshot);
-                        screenshotMap.put(screenshotName, screenshotInputStream);
-                    }
-                }
-
-                applicationArtifact.setScreenshots(screenshotMap);
-
+                ApplicationArtifact applicationArtifact = generateArtifacts(product);
 
                 Application application = applicationManager.createPublicApp(publicAppWrapper, applicationArtifact);
                 if (application != null && (application.getApplicationReleases().get(0).getCurrentStatus() == null
@@ -373,6 +363,129 @@ public class AndroidEnterpriseUtils {
         }
     }
 
+    /**
+     * To generate {@link ApplicationUpdateWrapper}
+     *
+     * @param product {@link Product}
+     * @param categories List of categories registered with app manager
+     * @return {@link ApplicationUpdateWrapper}
+     */
+    private static ApplicationUpdateWrapper generatePubAppUpdateWrapper(Product product, List<Category> categories) {
+        ApplicationUpdateWrapper applicationUpdateWrapper = new ApplicationUpdateWrapper();
+        applicationUpdateWrapper.setName(product.getTitle());
+        applicationUpdateWrapper.setDescription(product.getDescription());
+        applicationUpdateWrapper.setCategories(
+                Collections.singletonList(AndroidConstants.GOOGLE_PLAY_SYNCED_APP_CATEGORY));//Default category
+        for (Category category : categories) {
+            if (product.getCategory() == null) {
+                List<String> pubAppCategories = new ArrayList<>();
+                pubAppCategories.add(AndroidConstants.GOOGLE_PLAY_SYNCED_APP_CATEGORY);
+                applicationUpdateWrapper.setCategories(pubAppCategories);
+                break;
+            } else if (product.getCategory().equalsIgnoreCase(category.getCategoryName())) {
+                List<String> pubAppCategories = new ArrayList<>();
+                pubAppCategories.add(category.getCategoryName());
+                pubAppCategories.add(AndroidConstants.GOOGLE_PLAY_SYNCED_APP_CATEGORY);
+                applicationUpdateWrapper.setCategories(pubAppCategories);
+                break;
+            }
+        }
+        if (product.getProductPricing().equalsIgnoreCase(AndroidConstants.ApplicationProperties.FREE_SUB_METHOD)) {
+            applicationUpdateWrapper.setSubMethod(AndroidConstants.ApplicationProperties.FREE_SUB_METHOD);
+        } else {
+            applicationUpdateWrapper.setSubMethod(AndroidConstants.ApplicationProperties.PAID_SUB_METHOD);
+        }
+        // TODO: purchase an app from Playstore and see how to capture the real value for price field.
+        applicationUpdateWrapper.setPaymentCurrency("$");
+        return applicationUpdateWrapper;
+    }
+
+    /**
+     * To generate {@link PublicAppWrapper}
+     *
+     * @param product {@link Product}
+     * @param categories List of categories registered with app manager
+     * @return {@link PublicAppWrapper}
+     */
+    private static PublicAppWrapper generatePubAppWrapper(Product product, List<Category> categories) {
+        PublicAppWrapper publicAppWrapper = new PublicAppWrapper();
+        publicAppWrapper.setName(product.getTitle());
+        publicAppWrapper.setDescription(product.getDescription());
+        publicAppWrapper.setCategories(
+                Collections.singletonList(AndroidConstants.GOOGLE_PLAY_SYNCED_APP_CATEGORY));//Default category
+        for (Category category : categories) {
+            if (product.getCategory() == null) {
+                List<String> pubAppCategories = new ArrayList<>();
+                pubAppCategories.add(AndroidConstants.GOOGLE_PLAY_SYNCED_APP_CATEGORY);
+                publicAppWrapper.setCategories(pubAppCategories);
+                break;
+            } else if (product.getCategory().equalsIgnoreCase(category.getCategoryName())) {
+                List<String> pubAppCategories = new ArrayList<>();
+                pubAppCategories.add(category.getCategoryName());
+                pubAppCategories.add(AndroidConstants.GOOGLE_PLAY_SYNCED_APP_CATEGORY);
+                publicAppWrapper.setCategories(pubAppCategories);
+                break;
+            }
+        }
+        if (product.getProductPricing().equalsIgnoreCase(AndroidConstants.ApplicationProperties.FREE_SUB_METHOD)) {
+            publicAppWrapper.setSubMethod(AndroidConstants.ApplicationProperties.FREE_SUB_METHOD);
+        } else {
+            publicAppWrapper.setSubMethod(AndroidConstants.ApplicationProperties.PAID_SUB_METHOD);
+        }
+        // TODO: purchase an app from Playstore and see how to capture the real value for price field.
+        publicAppWrapper.setPaymentCurrency("$");
+        publicAppWrapper.setDeviceType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+        return publicAppWrapper;
+    }
+
+    /**
+     * To generate {@link ApplicationArtifact}
+     *
+     * @param product {@link Product}
+     * @return {@link ApplicationArtifact}
+     * @throws ApplicationManagementException if I/O exception occurred while generating application artifact.
+     */
+    private static ApplicationArtifact generateArtifacts(Product product) throws ApplicationManagementException {
+        ApplicationArtifact applicationArtifact = new ApplicationArtifact();
+        try {
+            String iconName = product.getIconUrl().split(".com/")[1];
+            applicationArtifact.setIconName(iconName);
+            InputStream iconInputStream = getInputStream(iconName, product.getIconUrl());
+            applicationArtifact.setIconStream(iconInputStream);
+            Map<String, InputStream> screenshotMap = new HashMap<>();
+
+            int numberOfScreenShots = 3;// This is to handle some apps in playstore without 3 screenshots.
+            if (product.getScreenshotUrls() != null) {
+                if (product.getScreenshotUrls().size() < 3) {
+                    numberOfScreenShots = product.getScreenshotUrls().size();
+                }
+                for (int y = 1; y < 4; y++) {
+                    int screenshotNumber = y - 1;
+                    if (y > numberOfScreenShots) {
+                        screenshotNumber = 0;
+                    }
+                    String screenshot = product.getScreenshotUrls().get(screenshotNumber);
+                    String screenshotName = screenshot.split(".com/")[1];
+                    InputStream screenshotInputStream = getInputStream(screenshotName, screenshot);
+                    screenshotMap.put(screenshotName, screenshotInputStream);
+                }
+            } else { // Private apps doesn't seem to send screenshots. Handling it.
+                for (int a = 0; a < 3; a++) {
+                    String screenshot = product.getIconUrl();
+                    String screenshotName = screenshot.split(".com/")[1];
+                    InputStream screenshotInputStream = getInputStream(screenshotName, screenshot);
+                    screenshotMap.put(screenshotName, screenshotInputStream);
+                }
+            }
+            applicationArtifact.setScreenshots(screenshotMap);
+            return applicationArtifact;
+        } catch (ApplicationManagementException e) {
+            String msg = "Error occurred while generating Application artifact";
+            log.error(msg);
+            throw new ApplicationManagementException(msg, e);
+        }
+    }
+    
     private static InputStream getInputStream(String filename, String url) throws ApplicationManagementException {
         URL website;
         try {
