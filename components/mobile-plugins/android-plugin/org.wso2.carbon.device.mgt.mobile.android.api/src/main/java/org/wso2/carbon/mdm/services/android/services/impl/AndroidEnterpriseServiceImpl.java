@@ -31,8 +31,17 @@ import org.wso2.carbon.device.application.mgt.common.dto.ApplicationPolicyDTO;
 import org.wso2.carbon.device.application.mgt.common.dto.ApplicationReleaseDTO;
 import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
+import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.mobile.android.impl.EnterpriseServiceException;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dto.AndroidEnterpriseUser;
@@ -798,28 +807,73 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
         }
     }
 
-    @PUT
-    @Path("/{id}/unenroll")
     @Override
-    public Response unenroll() {
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("/wipe-device")
+    public Response wipeEnterprise() {
+        log.warn("Wiping all devices!!!");
         EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
-            googleAPIInvoker.unenroll(enterpriseConfigs.getEnterpriseId());
-        } catch (IOException e) {
-            String errorMessage = "Could not unenroll the enterprise " + enterpriseConfigs.getEnterpriseId();
-            log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.INTERNAL_SERVER_ERROR
-                            .getStatusCode()).setMessage(errorMessage).build());
+            // Take all enterprise devices in the DB.
+            List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
+                    .getAllEnterpriseDevices(enterpriseConfigs.getEnterpriseId());
+
+            // Extract the device identifiers of enterprise devices.
+            List<String> deviceID = new ArrayList<>();
+            if (androidEnterpriseUsers != null && androidEnterpriseUsers.size() > 0) {
+                for (AndroidEnterpriseUser userDevice: androidEnterpriseUsers) {
+                    deviceID.add(userDevice.getEmmDeviceId());
+                }
+            }
+
+            List<String> byodDevices = new ArrayList<>();
+            List<String> copeDevices = new ArrayList<>();
+            // Get all registered device
+            List<Device> devices = AndroidAPIUtils.getDeviceManagementService().
+                    getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, false);
+            for (Device device : devices) { // Go through all enrolled devices
+                if (deviceID.contains(device.getDeviceIdentifier())) { // Filter out only enterprise enrolled devices.
+                    if (device.getEnrolmentInfo().getOwnership().equals(EnrolmentInfo.OwnerShip.BYOD)) {
+                        byodDevices.add(device.getDeviceIdentifier());
+                    } else {
+                        copeDevices.add(device.getDeviceIdentifier());
+                    }
+                }
+            }
+
+            CommandOperation operation = new CommandOperation();
+            operation.setType(Operation.Type.COMMAND);
+            if (byodDevices != null && byodDevices.size() > 0) { // BYOD devices only needs a data wipe(work profile)
+                log.warn("Wiping " + byodDevices.size() + " BYOD devices");
+                operation.setCode(AndroidConstants.OperationCodes.ENTERPRISE_WIPE);
+            } else if (copeDevices != null && copeDevices.size() > 0) {
+                log.warn("Wiping " + copeDevices.size() + " BYOD devices");
+                operation.setCode(AndroidConstants.OperationCodes.ENTERPRISE_WIPE);//TODO: fix
+            }
+            AndroidDeviceUtils.getOperationResponse(deviceID, operation);
+            log.warn("Added wipe to all devices");
+            return Response.status(Response.Status.OK).build();
         } catch (EnterpriseServiceException e) {
-            String errorMessage = "Could not get client to call Google to unenroll enterprise " + enterpriseConfigs.getEnterpriseId();
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
+        } catch (OperationManagementException e) {
+            String errorMessage = "Could not add wipe command to enterprise " + enterpriseConfigs.getEnterpriseId();
             log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.INTERNAL_SERVER_ERROR
-                            .getStatusCode()).setMessage(errorMessage).build());
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Could not add wipe command to enterprise " + enterpriseConfigs.getEnterpriseId() +
+                    " due to an error in device management";
+            log.error(errorMessage);
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Could not add wipe command to enterprise due to invalid device ids";
+            log.error(errorMessage);
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
-        return Response.status(Response.Status.OK).build();
     }
 
 }
