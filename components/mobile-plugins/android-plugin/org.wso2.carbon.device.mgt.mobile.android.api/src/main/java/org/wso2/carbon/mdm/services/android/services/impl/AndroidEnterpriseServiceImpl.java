@@ -843,13 +843,14 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
             }
 
             CommandOperation operation = new CommandOperation();
-            operation.setType(Operation.Type.COMMAND);
+            operation.setType(Operation.Type.COMMAND);//TODO: Check if this should be profile
+                                                        // type when implementing COPE/COSU
             if (byodDevices != null && byodDevices.size() > 0) { // BYOD devices only needs a data wipe(work profile)
                 log.warn("Wiping " + byodDevices.size() + " BYOD devices");
                 operation.setCode(AndroidConstants.OperationCodes.ENTERPRISE_WIPE);
             } else if (copeDevices != null && copeDevices.size() > 0) {
-                log.warn("Wiping " + copeDevices.size() + " BYOD devices");
-                operation.setCode(AndroidConstants.OperationCodes.ENTERPRISE_WIPE);//TODO: fix
+                log.warn("Wiping " + copeDevices.size() + " COPE/COSU devices");
+                operation.setCode(AndroidConstants.OperationCodes.WIPE_DATA);
             }
             AndroidDeviceUtils.getOperationResponse(deviceID, operation);
             log.warn("Added wipe to all devices");

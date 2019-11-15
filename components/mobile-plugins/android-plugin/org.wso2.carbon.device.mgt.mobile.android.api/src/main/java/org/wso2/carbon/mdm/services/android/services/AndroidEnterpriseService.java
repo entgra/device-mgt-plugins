@@ -1337,7 +1337,7 @@ public interface AndroidEnterpriseService {
 //######################################################################################################################
 
     @GET
-    @Path("/wipe-enterprise")
+    @Path("/wipe-device")
     @ApiOperation(
             produces = MediaType.APPLICATION_JSON,
             httpMethod = "GET",
@@ -1346,7 +1346,7 @@ public interface AndroidEnterpriseService {
             tags = "Device Type Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:view")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:enterprise:modify")
                     })
             }
     )
