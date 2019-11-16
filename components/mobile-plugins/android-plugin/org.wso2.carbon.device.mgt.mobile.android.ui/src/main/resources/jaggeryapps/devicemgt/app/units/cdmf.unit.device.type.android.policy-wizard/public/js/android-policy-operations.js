@@ -56,7 +56,9 @@ var androidOperationConstants = {
     "COSU_PROFILE_CONFIGURATION_OPERATION_CODE": "COSU_PROFILE",
     "ENROLLMENT_APP_INSTALL": "enrollment-app-install",
     "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL",
-    "CERTIFICATE_INSTALL": "INSTALL_CERT"
+    "CERTIFICATE_INSTALL": "INSTALL_CERT",
+    "DISPLAY_MESSAGE_CONFIGURATION_OPERATION": "display-message-configuration",
+    "DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE": "DISPLAY_MESSAGE_CONFIGURATION"
 };
 
 /**
@@ -593,6 +595,36 @@ var validatePolicyProfile = function () {
             // updating validationStatusArray with validationStatus
             validationStatusArray.push(validationStatus);
         }
+        // Validating DISPLAY MESSAGE CONFIGURATION
+        if ($.inArray(androidOperationConstants["DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE"], configuredOperations) !== -1) {
+            // if DISPLAY_MESSAGE_CONFIGURATION policy is configured
+            operation = androidOperationConstants["DISPLAY_MESSAGE_CONFIGURATION_OPERATION"];
+            // initializing continueToCheckNextInputs to true
+            continueToCheckNextInputs = true;
+
+            var lockScreenMessage = $("textarea#lock-screen-message").val();
+            var settingAppMessage = $("textarea#setting-app-message").val();
+            var disabledSettingMessage = $("textarea#disabled-setting-message").val();
+            if (!lockScreenMessage && !settingAppMessage && !disabledSettingMessage) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "Please fill at-least a one field.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+            // at-last, if the value of continueToCheckNextInputs is still true
+            // this means that no error is found
+            if (continueToCheckNextInputs) {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+            }
+
+            // updating validationStatusArray with validationStatus
+            validationStatusArray.push(validationStatus);
+        }
 
         // Validating PROXY
         if ($.inArray(androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"], configuredOperations) !== -1) {
@@ -600,7 +632,6 @@ var validatePolicyProfile = function () {
             operation = androidOperationConstants["GLOBAL_PROXY_OPERATION"];
             // initializing continueToCheckNextInputs to true
             continueToCheckNextInputs = true;
-
             if ($("input#manual-proxy-configuration-radio-button").is(":checked")) {
                 var proxyHost = $("input#proxy-host").val();
                 var proxyPort = $("input#proxy-port").val();

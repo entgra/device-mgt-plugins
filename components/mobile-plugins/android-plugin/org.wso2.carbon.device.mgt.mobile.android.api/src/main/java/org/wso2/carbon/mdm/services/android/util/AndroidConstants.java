@@ -151,6 +151,7 @@ public final class AndroidConstants {
         public static final String NOTIFIER_FREQUENCY = "NOTIFIER_FREQUENCY";
         public static final String GLOBAL_PROXY = "SET_GLOBAL_PROXY";
         public static final String REMOTE_APP_CONFIG = "REMOTE_APP_CONFIG";
+        public static final String DISPLAY_MESSAGE_CONFIGURATION = "DISPLAY_MESSAGE_CONFIGURATION";
     }
 
     public final class StatusCodes {
