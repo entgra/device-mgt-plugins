@@ -37,6 +37,7 @@ package org.wso2.carbon.mdm.services.android.services.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpStatus;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
@@ -56,6 +57,7 @@ import org.wso2.carbon.mdm.services.android.bean.ErrorResponse;
 import org.wso2.carbon.mdm.services.android.bean.FileTransfer;
 import org.wso2.carbon.mdm.services.android.bean.GlobalProxy;
 import org.wso2.carbon.mdm.services.android.bean.LockCode;
+import org.wso2.carbon.mdm.services.android.bean.DisplayMessage;
 import org.wso2.carbon.mdm.services.android.bean.Notification;
 import org.wso2.carbon.mdm.services.android.bean.PasscodePolicy;
 import org.wso2.carbon.mdm.services.android.bean.UpgradeFirmware;
@@ -74,6 +76,7 @@ import org.wso2.carbon.mdm.services.android.bean.wrapper.EncryptionBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.FileTransferBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.GlobalProxyBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.LockCodeBeanWrapper;
+import org.wso2.carbon.mdm.services.android.bean.wrapper.DisplayMessageBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.NotificationBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.PasswordPolicyBeanWrapper;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.UpgradeFirmwareBeanWrapper;
@@ -1087,6 +1090,47 @@ public class DeviceManagementAdminServiceImpl implements DeviceManagementAdminSe
             log.error(errorMessage, e);
             throw new UnexpectedServerErrorException(
                     new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(errorMessage).build());
+        }
+    }
+
+    @POST
+    @Path("/configure-display-message")
+    @Override
+    public Response configureDisplayMessage(DisplayMessageBeanWrapper displayMessageBeanWrapper) {
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking 'configure-display-message' operation");
+        }
+
+        try {
+            if (displayMessageBeanWrapper == null || displayMessageBeanWrapper.getOperation() == null) {
+                String errorMessage = "The payload of the display message operation is incorrect";
+                log.error(errorMessage);
+                throw new BadRequestException(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatus.SC_BAD_REQUEST).
+                                setMessage(errorMessage).build());
+            }
+            DisplayMessage configureDisplayMessage = displayMessageBeanWrapper.getOperation();
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(AndroidConstants.OperationCodes.DISPLAY_MESSAGE_CONFIGURATION);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setPayLoad(configureDisplayMessage.toJSON());
+
+            Activity activity = AndroidDeviceUtils.getOperationResponse(displayMessageBeanWrapper.
+                    getDeviceIDs(), operation);
+            return Response.status(Response.Status.CREATED).entity(activity).build();
+
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
+            throw new BadRequestException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatus.SC_BAD_REQUEST).
+                            setMessage(errorMessage).build());
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            log.error(errorMessage, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().
+                            setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR).setMessage(errorMessage).build());
         }
     }
 
