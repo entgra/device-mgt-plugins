@@ -39,7 +39,11 @@
     <dependencies>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.mobile.android</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.mobile.android.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.mobile.android.common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database.wso2</groupId>
@@ -243,7 +247,10 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.android:${carbon.devicemgt.plugins.version}
+                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.android.core:${carbon.devicemgt.plugins.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.android.common:${carbon.devicemgt.plugins.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>

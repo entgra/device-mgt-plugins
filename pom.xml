@@ -549,7 +549,17 @@
             <!--Android dependencies-->
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.mobile.android</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.mobile.android.common</artifactId>
+                <version>${carbon.devicemgt.plugins.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.mobile.android.addons</artifactId>
+                <version>${carbon.devicemgt.plugins.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.mobile.android.core</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
