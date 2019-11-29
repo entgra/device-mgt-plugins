@@ -72,7 +72,7 @@ public class DeviceTypeConfigurationAPIImpl implements DeviceTypeConfigurationAP
     public Response getConfiguration(
             @HeaderParam("If-Modified-Since") String ifModifiedSince) {
         try {
-            AndroidService androidService = AndroidAPIUtils.getAndroidnService();
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
             PlatformConfiguration platformConfiguration = androidService.getPlatformConfig();
             return Response.status(Response.Status.OK).entity(platformConfiguration).build();
         } catch (DeviceManagementException e) {
@@ -89,7 +89,7 @@ public class DeviceTypeConfigurationAPIImpl implements DeviceTypeConfigurationAP
     public Response updateConfiguration(
             @Valid AndroidPlatformConfiguration androidPlatformConfiguration) {
         try {
-            AndroidService androidService = AndroidAPIUtils.getAndroidnService();
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
             androidService.updateConfiguration(androidPlatformConfiguration);
             return Response.status(Response.Status.OK)
                     .entity("Android platform configuration has been updated successfully.").build();

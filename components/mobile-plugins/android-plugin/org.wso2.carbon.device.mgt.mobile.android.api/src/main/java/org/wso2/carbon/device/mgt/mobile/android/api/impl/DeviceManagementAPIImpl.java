@@ -65,6 +65,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExce
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
+import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
@@ -94,10 +95,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class DeviceManagementAPIImpl implements DeviceManagementAPI {
 
-    private static final String OPERATION_ERROR_STATUS = "ERROR";
     private static final Log log = LogFactory.getLog(DeviceManagementAPIImpl.class);
-    public static final String GOOGLE_AFW_EMM_ANDROID_ID = "googleEMMAndroidId";
-    public static final String GOOGLE_AFW_DEVICE_ID = "googleEMMDeviceId";
 
     @PUT
     @Path("/{id}/applications")
@@ -107,30 +105,9 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
                                           @Size(min = 2, max = 45)
                                           @Pattern(regexp = "^[A-Za-z0-9]*$")
                                           String id, List<AndroidApplication> androidApplications) {
-        Application application;
-        List<Application> applications = new ArrayList<>();
-        for (AndroidApplication androidApplication : androidApplications) {
-            application = new Application();
-            application.setPlatform(androidApplication.getPlatform());
-            application.setCategory(androidApplication.getCategory());
-            application.setName(androidApplication.getName());
-            application.setLocationUrl(androidApplication.getLocationUrl());
-            application.setImageUrl(androidApplication.getImageUrl());
-            application.setVersion(androidApplication.getVersion());
-            application.setType(androidApplication.getType());
-            application.setAppProperties(androidApplication.getAppProperties());
-            application.setApplicationIdentifier(androidApplication.getApplicationIdentifier());
-            application.setMemoryUsage(androidApplication.getMemoryUsage());
-            applications.add(application);
-        }
-        Message responseMessage = new Message();
-        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-        deviceIdentifier.setId(id);
-        deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
         try {
-            AndroidAPIUtils.getApplicationManagerService().
-                    updateApplicationListInstalledInDevice(deviceIdentifier, applications);
-            responseMessage.setResponseMessage("Device information has modified successfully.");
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
+            Message responseMessage = androidService.updateApplicationList(id, androidApplications);
             return Response.status(Response.Status.ACCEPTED).entity(responseMessage).build();
         } catch (ApplicationManagementException e) {
             String msg = "Error occurred while modifying the application list.";
@@ -154,39 +131,10 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         }
         DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
         try {
-            if (!AndroidDeviceUtils.isValidDeviceIdentifier(deviceIdentifier)) {
-                String msg = "Device not found for identifier '" + id + "'";
-                log.error(msg);
-                return Response.status(Response.Status.NOT_FOUND).entity(msg).build();
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("Invoking Android pending operations:" + id);
-            }
-            if (resultOperations != null && !resultOperations.isEmpty()) {
-                updateOperations(id, resultOperations);
-            }
-        } catch (OperationManagementException e) {
-            String msg = "Issue in retrieving operation management service instance";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (PolicyComplianceException e) {
-            String msg = "Issue in updating Monitoring operation";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
+            androidService.getPendingOperations(id, resultOperations);
         } catch (DeviceManagementException e) {
             String msg = "Issue in retrieving device management service instance";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (ApplicationManagementException e) {
-            String msg = "Issue in retrieving application management service instance";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (NotificationManagementException e) {
-            String msg = "Issue in retrieving Notification management service instance";
             log.error(msg, e);
             throw new UnexpectedServerErrorException(
                     new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
@@ -204,30 +152,7 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         return Response.status(Response.Status.CREATED).entity(pendingOperations).build();
     }
 
-    private void updateOperations(String deviceId, List<? extends Operation> operations)
-            throws OperationManagementException, PolicyComplianceException,
-            ApplicationManagementException, NotificationManagementException, DeviceManagementException {
-        for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
-            AndroidDeviceUtils.updateOperation(deviceId, operation);
-            if (OPERATION_ERROR_STATUS.equals(operation.getStatus().toString())) {
-                org.wso2.carbon.device.mgt.common.notification.mgt.Notification notification = new
-                        org.wso2.carbon.device.mgt.common.notification.mgt.Notification();
-                DeviceIdentifier id = new DeviceIdentifier();
-                id.setId(deviceId);
-                id.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
-                String deviceName = AndroidAPIUtils.getDeviceManagementService().getDevice(id, false).getName();
-                notification.setOperationId(operation.getId());
-                notification.setStatus(org.wso2.carbon.device.mgt.common.notification.mgt.Notification.
-                        Status.NEW.toString());
-                notification.setDescription(operation.getCode() + " operation failed to execute on device " +
-                        deviceName + " (ID: " + deviceId + ")");
-                AndroidAPIUtils.getNotificationManagementService().addNotification(id, notification);
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("Updating operation '" + operation.toString() + "'");
-            }
-        }
-    }
+
 
     @POST
     @Override
@@ -239,140 +164,11 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
         }
         try {
-            String token = null;
-            Device device = new Device();
-            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            device.setEnrolmentInfo(androidDevice.getEnrolmentInfo());
-            device.getEnrolmentInfo().setOwner(AndroidAPIUtils.getAuthenticatedUser());
-            device.setDeviceInfo(androidDevice.getDeviceInfo());
-            device.setDeviceIdentifier(androidDevice.getDeviceIdentifier());
-            device.setDescription(androidDevice.getDescription());
-            device.setName(androidDevice.getName());
-            device.setFeatures(androidDevice.getFeatures());
-            device.setProperties(androidDevice.getProperties());
-
-            String googleEMMAndroidId = null;
-            String googleEMMDeviceId = null;
-            if (androidDevice.getProperties() != null) {
-                for (Device.Property property : androidDevice.getProperties()) {
-                    if (property.getName().equals(GOOGLE_AFW_EMM_ANDROID_ID)) {
-                        googleEMMAndroidId = property.getValue();
-                    } else if (property.getName().equals(GOOGLE_AFW_DEVICE_ID)) {
-                        googleEMMDeviceId = property.getValue();
-                    }
-                }
-
-                if (googleEMMAndroidId != null && googleEMMDeviceId != null) {
-                    EnterpriseUser user = new EnterpriseUser();
-                    user.setAndroidPlayDeviceId(googleEMMAndroidId);
-                    user.setEmmDeviceIdentifier(googleEMMDeviceId);
-                    AndroidEnterpriseAPIImpl enterpriseService = new AndroidEnterpriseAPIImpl();
-                    token = enterpriseService.insertUser(user);
-                }
-            }
-
-
-            boolean status = AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
-            if (status) {
-                DeviceIdentifier deviceIdentifier = new DeviceIdentifier(androidDevice.getDeviceIdentifier(),
-                                                                         device.getType());
-
-                //Immediately update location information from initial payload
-                DeviceLocation deviceLocation = extractLocation(deviceIdentifier, androidDevice.getProperties());
-                if (deviceLocation != null) {
-                    try {
-                        DeviceInformationManager informationManager = AndroidAPIUtils
-                                .getDeviceInformationManagerService();
-                        informationManager.addDeviceLocation(deviceLocation);
-                    } catch (DeviceDetailsMgtException e) {
-                        String msg = "Error occurred while updating the device location upon android " +
-                                "', which carries the id '" + androidDevice.getDeviceIdentifier() + "'";
-                        log.error(msg, e);
-                        throw new UnexpectedServerErrorException(
-                                new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-                    }
-                }
-
-                //Adding Tasks to get device information
-                List<DeviceIdentifier> deviceIdentifiers = new ArrayList<>();
-                deviceIdentifiers.add(deviceIdentifier);
-
-                 List<String> taskOperaions = new ArrayList<>();
-                 taskOperaions.add(AndroidConstants.OperationCodes.APPLICATION_LIST);
-                 taskOperaions.add(AndroidConstants.OperationCodes.DEVICE_INFO);
-                 taskOperaions.add(AndroidConstants.OperationCodes.DEVICE_LOCATION);
-
-                for (String str : taskOperaions) {
-                    CommandOperation operation = new CommandOperation();
-                    operation.setEnabled(true);
-                    operation.setType(Operation.Type.COMMAND);
-                    operation.setCode(str);
-                    AndroidAPIUtils.getDeviceManagementService().
-                            addOperation(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID,
-                                    operation, deviceIdentifiers);
-                }
-                PolicyManagerService policyManagerService = AndroidAPIUtils.getPolicyManagerService();
-                Policy effectivePolicy = policyManagerService.
-                        getEffectivePolicy(new DeviceIdentifier(androidDevice.getDeviceIdentifier(), device.getType()));
-
-                if (effectivePolicy != null) {
-                    List<ProfileFeature> effectiveProfileFeatures = effectivePolicy.getProfile().
-                            getProfileFeaturesList();
-                    for (ProfileFeature feature : effectiveProfileFeatures) {
-                        if (AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_FEATURE_CODE
-                                .equals(feature.getFeatureCode())) {
-                            AndroidDeviceUtils.installEnrollmentApplications(feature, deviceIdentifier);
-                            break;
-                        }
-                    }
-                }
-
-                Message responseMessage = new Message();
-                responseMessage.setResponseCode(Response.Status.OK.toString());
-                if (token == null) {
-                    responseMessage.setResponseMessage("Android device, which carries the id '" +
-                            androidDevice.getDeviceIdentifier() + "' has successfully been enrolled");
-                } else {
-                    responseMessage.setResponseMessage("Google response token" + token);
-                }
-                return Response.status(Response.Status.OK).entity(responseMessage).build();
-            } else {
-                Message responseMessage = new Message();
-                responseMessage.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
-                responseMessage.setResponseMessage("Failed to enroll '" +
-                        device.getType() + "' device, which carries the id '" +
-                        androidDevice.getDeviceIdentifier() + "'");
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseMessage).build();
-            }
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
+            Response response = androidService.enrollDevice(androidDevice);
+            return response;
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while enrolling the android, which carries the id '" +
-                    androidDevice.getDeviceIdentifier() + "'";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (PolicyManagementException e) {
-            String msg = "Error occurred while enforcing default enrollment policy upon android " +
-                    "', which carries the id '" +
-                    androidDevice.getDeviceIdentifier() + "'";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (OperationManagementException e) {
-            String msg = "Error occurred while enforcing default enrollment policy upon android " +
-                    "', which carries the id '" +
-                    androidDevice.getDeviceIdentifier() + "'";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (InvalidDeviceException e) {
-            String msg = "Error occurred while enforcing default enrollment policy upon android " +
-                    "', which carries the id '" +
-                    androidDevice.getDeviceIdentifier() + "'";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (EnterpriseServiceException e) {
-            String msg = "Error occurred while adding user via Google Apis '" +
                     androidDevice.getDeviceIdentifier() + "'";
             log.error(msg, e);
             throw new UnexpectedServerErrorException(
@@ -386,20 +182,10 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
     public Response isEnrolled(@PathParam("id") String id, @HeaderParam("If-Modified-Since") String ifModifiedSince) {
         DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
         try {
-            Device device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
-            if (device != null) {
-                String status = String.valueOf(device.getEnrolmentInfo().getStatus());
-                Message responseMessage = new Message();
-                responseMessage.setResponseCode(Response.Status.OK.toString());
-                responseMessage
-                        .setResponseMessage("Status of android device that carries the id '" + id + "' is " + status);
-                return Response.status(Response.Status.OK).entity(responseMessage).build();
-            } else {
-                Message responseMessage = new Message();
-                responseMessage.setResponseCode(Response.Status.NOT_FOUND.toString());
-                responseMessage.setResponseMessage("No Android device is found upon the id '" + id + "'");
-                return Response.status(Response.Status.NOT_FOUND).entity(responseMessage).build();
-            }
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
+            Message responseMessage = androidService.isEnrolled(id, deviceIdentifier);
+            return Response.status(Response.Status.NOT_FOUND).entity(responseMessage).build();
+
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while checking enrollment status of the device.";
             log.error(msg, e);
@@ -412,52 +198,8 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
     @Path("/{id}")
     @Override
     public Response modifyEnrollment(@PathParam("id") String id, @Valid AndroidDevice androidDevice) {
-        Device device;
-        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-        deviceIdentifier.setId(id);
-        deviceIdentifier.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
-        try {
-            device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
-        } catch (DeviceManagementException e) {
-            String msg = "Error occurred while getting enrollment details of the Android device that carries the id '" +
-                    id + "'";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        }
-
-        if (androidDevice == null) {
-            String errorMessage = "The payload of the android device enrollment is incorrect.";
-            log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
-        }
-        if (device == null) {
-            String errorMessage = "The device to be modified doesn't exist.";
-            log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage(errorMessage).build());
-        }
-        if(androidDevice.getEnrolmentInfo() != null){
-            device.setEnrolmentInfo(device.getEnrolmentInfo());
-        }
-        device.getEnrolmentInfo().setOwner(AndroidAPIUtils.getAuthenticatedUser());
-        if(androidDevice.getDeviceInfo() != null) {
-            device.setDeviceInfo(androidDevice.getDeviceInfo());
-        }
-        device.setDeviceIdentifier(androidDevice.getDeviceIdentifier());
-        if(androidDevice.getDescription() != null) {
-            device.setDescription(androidDevice.getDescription());
-        }
-        if(androidDevice.getName() != null) {
-            device.setName(androidDevice.getName());
-        }
-        if(androidDevice.getFeatures() != null) {
-            device.setFeatures(androidDevice.getFeatures());
-        }
-        if(androidDevice.getProperties() != null) {
-            device.setProperties(androidDevice.getProperties());
-        }
+        AndroidService androidService = AndroidAPIUtils.getAndroidService();
+        Device device = androidService.modifyEnrollment(id, androidDevice);
         boolean result;
         try {
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
@@ -488,11 +230,10 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
     @Path("/{id}")
     @Override
     public Response disEnrollDevice(@PathParam("id") String id) {
-        boolean result;
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
+
         try {
-            AndroidDeviceUtils.updateDisEnrollOperationStatus(deviceIdentifier);
-            result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
+            boolean result = androidService.disEnrollDevice(id);
             if (result) {
                 String msg = "Android device that carries id '" + id + "' is successfully ";
                 Message responseMessage = new Message();
@@ -514,58 +255,5 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         }
     }
 
-    /**
-     * Extracts the device location
-     *
-     * @param deviceIdentifier
-     * @param properties
-     * @return returns null when location not found
-     */
-    private DeviceLocation extractLocation(DeviceIdentifier deviceIdentifier, List<Device.Property> properties)
-            throws DeviceManagementException {
 
-        DeviceLocation location = null;
-        String latitude = "", longitude = "", altitude = "", speed = "", bearing = "", distance = "";
-
-        if (properties == null) return null;
-
-        for (Device.Property property : properties) {
-            String propertyName = property.getName();
-            if (propertyName == null) continue;
-            if (propertyName.equals("LATITUDE")) {
-                latitude = property.getValue();
-            }
-            if (propertyName.equals("LONGITUDE")) {
-                longitude = property.getValue();
-            }
-            if (propertyName.equals("ALTITUDE")) {
-                altitude = property.getValue();
-            }
-            if (propertyName.equals("SPEED")) {
-                speed = property.getValue();
-            }
-            if (propertyName.equals("BEARING")) {
-                bearing = property.getValue();
-            }
-            if (propertyName.equals("DISTANCE")) {
-                distance = property.getValue();
-            }
-        }
-
-        if (StringUtils.isNotBlank(latitude) && StringUtils.isNotBlank(longitude) &&
-                StringUtils.isNotBlank(altitude) && StringUtils.isNotBlank(speed) &&
-                    StringUtils.isNotBlank(bearing) && StringUtils.isNotBlank(distance)) {
-            location = new DeviceLocation();
-            location.setLatitude(Double.valueOf(latitude));
-            location.setLongitude(Double.valueOf(longitude));
-            location.setAltitude(Double.valueOf(altitude));
-            location.setSpeed(Float.valueOf(speed));
-            location.setBearing(Float.valueOf(bearing));
-            location.setDistance(Double.valueOf(distance));
-            location.setDeviceIdentifier(deviceIdentifier);
-            Device savedDevice = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier, false);
-            location.setDeviceId(savedDevice.getId());
-        }
-        return location;
-    }
 }

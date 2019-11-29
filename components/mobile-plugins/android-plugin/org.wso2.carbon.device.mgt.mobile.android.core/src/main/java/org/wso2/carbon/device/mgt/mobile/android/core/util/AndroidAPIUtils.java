@@ -69,7 +69,7 @@ public class AndroidAPIUtils {
         return androidPluginService;
     }
 
-    public static AndroidService getAndroidnService() {
+    public static AndroidService getAndroidService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         AndroidService androidService = (AndroidService) ctx.getOSGiService(AndroidService.class, null);
         if (androidService == null) {
@@ -79,7 +79,7 @@ public class AndroidAPIUtils {
         }
         return androidService;
     }
-
+    
     public static String getAuthenticatedUser() {
         PrivilegedCarbonContext threadLocalCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         String username = threadLocalCarbonContext.getUsername();

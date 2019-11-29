@@ -38,6 +38,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EventBeanWr
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
+import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 
@@ -75,17 +76,8 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
         }
         Device device;
         try {
-            if (!DeviceManagerUtil.isPublishLocationResponseEnabled()) {
-                return Response.status(Response.Status.ACCEPTED).entity("Event is publishing has not enabled.").build();
-            }
-            DeviceIdentifier deviceIdentifier = new DeviceIdentifier(eventBeanWrapper.getDeviceIdentifier(),
-                                                                     AndroidConstants.DEVICE_TYPE_ANDROID);
-            device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
-            if (device != null && EnrolmentInfo.Status.ACTIVE != device.getEnrolmentInfo().getStatus()){
-                return Response.status(Response.Status.ACCEPTED).entity("Device is not in Active state.").build();
-            } else if (device == null){
-                return Response.status(Response.Status.ACCEPTED).entity("Device is not enrolled yet.").build();
-            }
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
+            device = androidService.publishEvents(eventBeanWrapper);
         } catch (DeviceManagementException e) {
             log.error("Error occurred while checking Operation Analytics is Enabled.", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
@@ -142,94 +134,8 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
                                    @QueryParam("type") String type,
                                    @HeaderParam("If-Modified-Since") String ifModifiedSince) {
 
-        if (from != 0l && to != 0l && deviceId != null) {
-            return retrieveAlertFromDate(deviceId, from, to);
-        } else if (deviceId != null && type != null) {
-            return retrieveAlertByType(deviceId, type);
-        } else if (deviceId != null) {
-            return retrieveAlert(deviceId);
-        } else {
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage("Request must contain " +
-                            "the device identifier. Optionally, both from and to value should be present to get " +
-                            "alerts between times.").build());
-        }
+        AndroidService androidService = AndroidAPIUtils.getAndroidService();
+        Response response = androidService.retrieveAlerts(deviceId, from, to, type, ifModifiedSince);
+        return response;
     }
-
-    private Response retrieveAlert(String deviceId) {
-        if (log.isDebugEnabled()) {
-            log.debug("Retrieving events for given device Identifier.");
-        }
-        String query = "deviceIdentifier:" + deviceId;
-        List<DeviceState> deviceStates;
-        try {
-            deviceStates = AndroidDeviceUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
-            if (deviceStates == null) {
-                throw new NotFoundException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage("No any alerts are " +
-                                "published for Device: " + deviceId + ".").build());
-            } else {
-                return Response.status(Response.Status.OK).entity(deviceStates).build();
-            }
-        } catch (AnalyticsException e) {
-            String msg = "Error occurred while getting published events for specific device: " + deviceId + ".";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        }
-    }
-
-    private Response retrieveAlertFromDate(String deviceId, long from, long to) {
-        String fromDate = String.valueOf(from);
-        String toDate = String.valueOf(to);
-        if (log.isDebugEnabled()) {
-            log.debug("Retrieving events for given device Identifier and time period.");
-        }
-
-        String query = "deviceIdentifier:" + deviceId + " AND _timestamp: [" + fromDate + " TO " + toDate + "]";
-        List<DeviceState> deviceStates;
-        try {
-            deviceStates = AndroidDeviceUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
-            if (deviceStates == null) {
-                throw new NotFoundException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage("No any alerts are " +
-                                "published on given date for given Device: " + deviceId + ".").build());
-
-            } else {
-                return Response.status(Response.Status.OK).entity(deviceStates).build();
-            }
-        } catch (AnalyticsException e) {
-            String msg = "Error occurred while getting published events for specific " +
-                    "Device: " + deviceId + " on given Date.";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        }
-    }
-
-    private Response retrieveAlertByType(String deviceId, String type) {
-        if (log.isDebugEnabled()) {
-            log.debug("Retrieving events for given device identifier and type.");
-        }
-        String query = "deviceIdentifier:" + deviceId + " AND type:" + type;
-        List<DeviceState> deviceStates;
-        try {
-            deviceStates = AndroidDeviceUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
-            if (deviceStates == null) {
-                throw new NotFoundException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage("No any alerts are " +
-                                "published for given Device: '" + deviceId + "' and given specific Type.").build());
-
-            } else {
-                return Response.status(Response.Status.OK).entity(deviceStates).build();
-            }
-        } catch (AnalyticsException e) {
-            String msg = "Error occurred while getting published events for specific " +
-                    "Device: " + deviceId + "and given specific Type.";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        }
-    }
-
 }
