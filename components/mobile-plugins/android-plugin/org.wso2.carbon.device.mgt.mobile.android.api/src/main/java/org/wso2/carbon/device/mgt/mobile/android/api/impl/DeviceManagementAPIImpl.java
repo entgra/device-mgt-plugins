@@ -34,42 +34,24 @@
  */
 package org.wso2.carbon.device.mgt.mobile.android.api.impl;
 
-import org.apache.commons.lang.StringUtils;
+import com.google.api.client.http.HttpStatusCodes;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
-import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
-import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.common.policy.mgt.Policy;
-import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
-import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.PolicyComplianceException;
-import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
-import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
-import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.mobile.android.api.DeviceManagementAPI;
-import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.AndroidApplication;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.AndroidDevice;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseUser;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
-import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
-import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -87,7 +69,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("/devices")
@@ -129,30 +110,23 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
             log.error(msg);
             return Response.status(Response.Status.BAD_REQUEST).entity(msg).build();
         }
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
         try {
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
-            androidService.getPendingOperations(id, resultOperations);
+            List<? extends Operation> pendingOperations = androidService
+                    .getPendingOperations(id, resultOperations, disableGoogleApps);
+            return Response.status(Response.Status.CREATED).entity(pendingOperations).build();
+        } catch (InvalidDeviceException e) {
+            String msg = "Device identifier is invalid. Device identifier " + id;
+            log.error(msg, e);
+            return Response.status(Response.Status.BAD_REQUEST).entity(msg).build();
         } catch (DeviceManagementException e) {
-            String msg = "Issue in retrieving device management service instance";
+            String msg = "Error occurred while getting pending operations of the device.";
             log.error(msg, e);
             throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(msg).build());
         }
-
-        List<? extends Operation> pendingOperations;
-        try {
-            pendingOperations = AndroidDeviceUtils.getPendingOperations(deviceIdentifier, !disableGoogleApps);
-        } catch (OperationManagementException e) {
-            String msg = "Issue in retrieving operation management service instance";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        }
-        return Response.status(Response.Status.CREATED).entity(pendingOperations).build();
     }
-
-
 
     @POST
     @Override
@@ -184,13 +158,13 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         try {
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
             Message responseMessage = androidService.isEnrolled(id, deviceIdentifier);
-            return Response.status(Response.Status.NOT_FOUND).entity(responseMessage).build();
-
+            return Response.status(Integer.parseInt(responseMessage.getResponseCode())).entity(responseMessage).build();
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while checking enrollment status of the device.";
             log.error(msg, e);
             throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(msg).build());
         }
     }
 
@@ -198,13 +172,9 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
     @Path("/{id}")
     @Override
     public Response modifyEnrollment(@PathParam("id") String id, @Valid AndroidDevice androidDevice) {
-        AndroidService androidService = AndroidAPIUtils.getAndroidService();
-        Device device = androidService.modifyEnrollment(id, androidDevice);
-        boolean result;
         try {
-            device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-            result = AndroidAPIUtils.getDeviceManagementService().modifyEnrollment(device);
-            if (result) {
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
+            if (androidService.modifyEnrollment(id, androidDevice)) {
                 Message responseMessage = new Message();
                 responseMessage.setResponseCode(Response.Status.ACCEPTED.toString());
                 responseMessage.setResponseMessage("Enrollment of Android device that " +
@@ -230,11 +200,9 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
     @Path("/{id}")
     @Override
     public Response disEnrollDevice(@PathParam("id") String id) {
-
         try {
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
-            boolean result = androidService.disEnrollDevice(id);
-            if (result) {
+            if (androidService.disEnrollDevice(id)) {
                 String msg = "Android device that carries id '" + id + "' is successfully ";
                 Message responseMessage = new Message();
                 responseMessage.setResponseCode(Response.Status.OK.toString());

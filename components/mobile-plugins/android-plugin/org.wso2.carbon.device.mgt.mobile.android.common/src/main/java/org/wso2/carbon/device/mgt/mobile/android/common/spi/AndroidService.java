@@ -22,6 +22,8 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceNotFoundException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
@@ -119,11 +121,12 @@ public interface AndroidService {
     //DeviceManagementAPIImpl
     Message updateApplicationList(String id, List<AndroidApplication> androidApplications) throws ApplicationManagementException;
 
-    void getPendingOperations(String id, List<? extends Operation> resultOperations) throws DeviceManagementException;
+    List<? extends Operation> getPendingOperations(String id, List<? extends Operation> resultOperations, boolean disableGoogleApps)
+            throws DeviceManagementException, InvalidDeviceException;
 
     Response enrollDevice(AndroidDevice androidDevice) throws DeviceManagementException;
 
-    Device modifyEnrollment(String id, AndroidDevice androidDevice);
+    boolean modifyEnrollment(String id, AndroidDevice androidDevice) throws DeviceManagementException;
 
     boolean disEnrollDevice(String id) throws DeviceManagementException;
 

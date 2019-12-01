@@ -18,7 +18,6 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.core.mokcs.utils;
 
-import javafx.scene.Camera;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
@@ -32,6 +31,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.ApplicationInstalla
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ApplicationUninstallation;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ApplicationUpdate;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.BlacklistApplications;
+import org.wso2.carbon.device.mgt.mobile.android.common.bean.Camera;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceEncryption;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceLock;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.LockCode;
@@ -108,14 +108,14 @@ public class TestUtils {
         return deviceLockBeanWrapper;
     }
 
-//    public static CameraBeanWrapper getCamerabeanWrapper() {
-//        CameraBeanWrapper cameraBeanWrapper = new CameraBeanWrapper();
-//        cameraBeanWrapper.setDeviceIDs(getDeviceIds());
-//        Camera camera = new Camera();
-//        camera.setEnabled(false);
-//        cameraBeanWrapper.setOperation(camera);
-//        return cameraBeanWrapper;
-//    }
+    public static CameraBeanWrapper getCamerabeanWrapper() {
+        CameraBeanWrapper cameraBeanWrapper = new CameraBeanWrapper();
+        cameraBeanWrapper.setDeviceIDs(getDeviceIds());
+        Camera camera = new Camera();
+        camera.setEnabled(false);
+        cameraBeanWrapper.setOperation(camera);
+        return cameraBeanWrapper;
+    }
 
     public static WipeDataBeanWrapper getWipeDataBeanWrapper() {
         WipeDataBeanWrapper wipeDataBeanWrapper = new WipeDataBeanWrapper();

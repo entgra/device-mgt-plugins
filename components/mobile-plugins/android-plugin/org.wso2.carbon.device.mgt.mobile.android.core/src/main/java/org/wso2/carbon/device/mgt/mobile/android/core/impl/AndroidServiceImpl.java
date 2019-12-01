@@ -17,6 +17,7 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.core.impl;
 
+import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -35,6 +36,7 @@ import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceNotFoundException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
@@ -261,9 +263,8 @@ public class AndroidServiceImpl implements AndroidService {
         operation.setPayLoad(file.toJSON());
 
         try {
-            Activity activity = AndroidDeviceUtils
+            return AndroidDeviceUtils
                     .getOperationResponse(fileTransferBeanWrapper.getDeviceIDs(), operation);
-            return activity;
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers ( " + fileTransferBeanWrapper.getDeviceIDs() + " ) found.";
             log.error(errorMessage, e);
@@ -288,8 +289,7 @@ public class AndroidServiceImpl implements AndroidService {
         operation.setPayLoad(lock.toJSON());
 
         try {
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceLockBeanWrapper.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceLockBeanWrapper.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -305,8 +305,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_UNLOCK);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(true);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -321,8 +320,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_LOCATION);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -337,8 +335,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.CLEAR_PASSWORD);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -361,8 +358,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.CAMERA);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(camera.isEnabled());
-            Activity activity = AndroidDeviceUtils.getOperationResponse(cameraBeanWrapper.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(cameraBeanWrapper.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -377,8 +373,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_INFO);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -393,8 +388,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.LOGCAT);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -409,8 +403,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.ENTERPRISE_WIPE);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -433,8 +426,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.WIPE_DATA);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(wipeData.toJSON());
-            Activity activity = AndroidDeviceUtils.getOperationResponse(wipeDataBeanWrapper.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(wipeDataBeanWrapper.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -449,8 +441,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.APPLICATION_LIST);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -465,8 +456,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_RING);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -481,8 +471,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_REBOOT);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -497,8 +486,7 @@ public class AndroidServiceImpl implements AndroidService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.CHANGE_LOCK_TASK_MODE);
             operation.setType(Operation.Type.COMMAND);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -514,8 +502,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_MUTE);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(true);
-            Activity activity = AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(deviceIDs, operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -545,9 +532,8 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.INSTALL_APPLICATION);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(applicationInstallation.toJSON());
-            Activity activity = AndroidDeviceUtils
+            return AndroidDeviceUtils
                     .getOperationResponse(applicationInstallationBeanWrapper.getDeviceIDs(), operation);
-            return activity;
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -575,9 +561,8 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(applicationUpdate.toJSON());
 
-            Activity activity = AndroidDeviceUtils
+            return AndroidDeviceUtils
                     .getOperationResponse(applicationUpdateBeanWrapper.getDeviceIDs(), operation);
-            return activity;
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -603,9 +588,8 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.UNINSTALL_APPLICATION);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(applicationUninstallation.toJSON());
-            Activity activity = AndroidDeviceUtils
+            return AndroidDeviceUtils
                     .getOperationResponse(applicationUninstallationBeanWrapper.getDeviceIDs(), operation);
-            return activity;
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -628,9 +612,8 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.BLACKLIST_APPLICATIONS);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(blacklistApplications.toJSON());
-            Activity activity = AndroidDeviceUtils
+            return AndroidDeviceUtils
                     .getOperationResponse(blacklistApplicationsBeanWrapper.getDeviceIDs(), operation);
-            return activity;
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -655,9 +638,8 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.UPGRADE_FIRMWARE);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(upgradeFirmware.toJSON());
-            Activity activity = AndroidDeviceUtils
+            return AndroidDeviceUtils
                     .getOperationResponse(upgradeFirmwareBeanWrapper.getDeviceIDs(), operation);
-            return activity;
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -680,8 +662,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.VPN);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(vpn.toJSON());
-            Activity activity = AndroidDeviceUtils.getOperationResponse(vpnConfiguration.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(vpnConfiguration.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -704,8 +685,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.NOTIFICATION);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(notification.toJSON());
-            Activity activity = AndroidDeviceUtils.getOperationResponse(notificationBeanWrapper.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(notificationBeanWrapper.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -729,8 +709,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(wifi.toJSON());
 
-            Activity activity = AndroidDeviceUtils.getOperationResponse(wifiBeanWrapper.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(wifiBeanWrapper.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -753,8 +732,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.ENCRYPT_STORAGE);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(deviceEncryption.isEncrypted());
-            Activity activity = AndroidDeviceUtils.getOperationResponse(encryptionBeanWrapper.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(encryptionBeanWrapper.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -777,8 +755,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.CHANGE_LOCK_CODE);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(lockCode.toJSON());
-            Activity activity = AndroidDeviceUtils.getOperationResponse(lockCodeBeanWrapper.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(lockCodeBeanWrapper.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -802,9 +779,8 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(passcodePolicy.toJSON());
 
-            Activity activity = AndroidDeviceUtils
+            return AndroidDeviceUtils
                     .getOperationResponse(passwordPolicyBeanWrapper.getDeviceIDs(), operation);
-            return activity;
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -829,8 +805,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(webClip.toJSON());
 
-            Activity activity = AndroidDeviceUtils.getOperationResponse(webClipBeanWrapper.getDeviceIDs(), operation);
-            return activity;
+            return AndroidDeviceUtils.getOperationResponse(webClipBeanWrapper.getDeviceIDs(), operation);
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
@@ -856,9 +831,8 @@ public class AndroidServiceImpl implements AndroidService {
                 operation.setType(Operation.Type.PROFILE);
                 operation.setPayLoad(globalProxy.toJSON());
 
-                Activity activity = AndroidDeviceUtils
+                return AndroidDeviceUtils
                         .getOperationResponse(globalProxyBeanWrapper.getDeviceIDs(), operation);
-                return activity;
             } else {
                 String errorMessage = "The payload of the global proxy operation is incorrect";
                 log.error(errorMessage);
@@ -890,9 +864,8 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(configureDisplayMessage.toJSON());
 
-            Activity activity = AndroidDeviceUtils.getOperationResponse(displayMessageBeanWrapper.
+            return AndroidDeviceUtils.getOperationResponse(displayMessageBeanWrapper.
                     getDeviceIDs(), operation);
-            return activity;
 
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
@@ -935,46 +908,66 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
     @Override
-    public void getPendingOperations(String id, List<? extends Operation> resultOperations) throws DeviceManagementException {
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
+    public List<? extends Operation> getPendingOperations(String deviceId, List<? extends Operation> resultOperations,
+            boolean disableGoogleApps) throws DeviceManagementException, InvalidDeviceException {
+        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(deviceId);
         if (!AndroidDeviceUtils.isValidDeviceIdentifier(deviceIdentifier)) {
-            String msg = "Device not found for identifier '" + id + "'";
+            String msg = "Device not found for identifier '" + deviceId + "'";
             log.error(msg);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setMessage(msg).build());
+            throw new InvalidDeviceException(msg);
         }
         if (log.isDebugEnabled()) {
-            log.debug("Invoking Android pending operations:" + id);
+            log.debug("Invoking Android pending operations:" + deviceId);
         }
         if (resultOperations != null && !resultOperations.isEmpty()) {
             try {
-                updateOperations(id, resultOperations);
+                for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : resultOperations) {
+                    AndroidDeviceUtils.updateOperation(deviceId, operation);
+                    if (OPERATION_ERROR_STATUS.equals(operation.getStatus().toString())) {
+                        org.wso2.carbon.device.mgt.common.notification.mgt.Notification notification = new org.wso2.carbon.device.mgt.common.notification.mgt.Notification();
+                        DeviceIdentifier id = new DeviceIdentifier();
+                        id.setId(deviceId);
+                        id.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
+                        String deviceName = AndroidAPIUtils.getDeviceManagementService().getDevice(id, false).getName();
+                        notification.setOperationId(operation.getId());
+                        notification.setStatus(org.wso2.carbon.device.mgt.common.notification.mgt.Notification.
+                                Status.NEW.toString());
+                        notification.setDescription(
+                                operation.getCode() + " operation failed to execute on device " + deviceName + " (ID: "
+                                        + deviceId + ")");
+                        AndroidAPIUtils.getNotificationManagementService().addNotification(id, notification);
+                    }
+                    if (log.isDebugEnabled()) {
+                        log.debug("Updating operation '" + operation.toString() + "'");
+                    }
+                }
             } catch (OperationManagementException e) {
                 String msg = "Issue in retrieving operation management service instance";
                 log.error(msg, e);
-                throw new UnexpectedServerErrorException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+                throw new DeviceManagementException(msg, e);
             } catch (PolicyComplianceException e) {
                 String msg = "Issue in updating Monitoring operation";
                 log.error(msg, e);
-                throw new UnexpectedServerErrorException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-            } catch (DeviceManagementException e) {
-                String msg = "Issue in retrieving device management service instance";
-                log.error(msg, e);
-                throw new UnexpectedServerErrorException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+                throw new DeviceManagementException(msg, e);
             } catch (org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException e) {
                 String msg = "Issue in retrieving application management service instance";
                 log.error(msg, e);
-                throw new UnexpectedServerErrorException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+                throw new DeviceManagementException(msg, e);
             } catch (NotificationManagementException e) {
                 String msg = "Issue in retrieving Notification management service instance";
                 log.error(msg, e);
-                throw new UnexpectedServerErrorException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+                throw new DeviceManagementException(msg, e);
             }
+        }
+
+        try {
+            return AndroidDeviceUtils.getPendingOperations(deviceIdentifier, !disableGoogleApps);
+        } catch (OperationManagementException e) {
+            String msg = "Issue in retrieving operation management service instance";
+            log.error(msg, e);
+            throw new UnexpectedServerErrorException(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(msg).build());
         }
     }
 
@@ -1114,7 +1107,7 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
     @Override
-    public Device modifyEnrollment(String id, AndroidDevice androidDevice){
+    public boolean modifyEnrollment(String id, AndroidDevice androidDevice) throws DeviceManagementException {
         Device device;
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setId(id);
@@ -1161,16 +1154,14 @@ public class AndroidServiceImpl implements AndroidService {
         if(androidDevice.getProperties() != null) {
             device.setProperties(androidDevice.getProperties());
         }
-        return device;
+        return AndroidAPIUtils.getDeviceManagementService().modifyEnrollment(device);
     }
 
     @Override
     public boolean disEnrollDevice(String id) throws DeviceManagementException{
-        boolean result;
         DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
         AndroidDeviceUtils.updateDisEnrollOperationStatus(deviceIdentifier);
-        result = AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
-        return result;
+        return AndroidAPIUtils.getDeviceManagementService().disenrollDevice(deviceIdentifier);
     }
 
     @Override
@@ -1292,31 +1283,6 @@ public class AndroidServiceImpl implements AndroidService {
         }
     }
 
-    private void updateOperations(String deviceId, List<? extends Operation> operations)
-            throws OperationManagementException, PolicyComplianceException,
-            org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException, NotificationManagementException, DeviceManagementException {
-        for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
-            AndroidDeviceUtils.updateOperation(deviceId, operation);
-            if (OPERATION_ERROR_STATUS.equals(operation.getStatus().toString())) {
-                org.wso2.carbon.device.mgt.common.notification.mgt.Notification notification = new
-                        org.wso2.carbon.device.mgt.common.notification.mgt.Notification();
-                DeviceIdentifier id = new DeviceIdentifier();
-                id.setId(deviceId);
-                id.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
-                String deviceName = AndroidAPIUtils.getDeviceManagementService().getDevice(id, false).getName();
-                notification.setOperationId(operation.getId());
-                notification.setStatus(org.wso2.carbon.device.mgt.common.notification.mgt.Notification.
-                        Status.NEW.toString());
-                notification.setDescription(operation.getCode() + " operation failed to execute on device " +
-                        deviceName + " (ID: " + deviceId + ")");
-                AndroidAPIUtils.getNotificationManagementService().addNotification(id, notification);
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("Updating operation '" + operation.toString() + "'");
-            }
-        }
-    }
-
     /**
      * Extracts the device location
      *
@@ -1402,7 +1368,7 @@ public class AndroidServiceImpl implements AndroidService {
         List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
                 .getEnterpriseUser(CarbonContext.getThreadLocalCarbonContext().getUsername());
         GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
-        if (androidEnterpriseUsers != null && androidEnterpriseUsers.size() > 0) {
+        if (androidEnterpriseUsers != null && !androidEnterpriseUsers.isEmpty()) {
             googleUserId = androidEnterpriseUsers.get(0).getGoogleUserId();
             // If this device is also present, only need to provide a token for this request.
             for (AndroidEnterpriseUser enterprise : androidEnterpriseUsers) {
@@ -1430,9 +1396,7 @@ public class AndroidServiceImpl implements AndroidService {
 
             AndroidAPIUtils.getAndroidPluginService().addEnterpriseUser(androidEnterpriseUser);
         }
-
         return token;
-
     }
 
 
