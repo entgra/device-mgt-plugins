@@ -18,6 +18,7 @@
  */
 package org.wso2.carbon.device.mgt.mobile.android.api.impl;
 
+import com.google.api.client.http.HttpStatusCodes;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.logging.Log;
@@ -35,9 +36,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceState;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EventBeanWrapper;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.*;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
@@ -133,9 +132,22 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
                                        @Size(min = 2, max = 45)
                                    @QueryParam("type") String type,
                                    @HeaderParam("If-Modified-Since") String ifModifiedSince) {
-
-        AndroidService androidService = AndroidAPIUtils.getAndroidService();
-        Response response = androidService.retrieveAlerts(deviceId, from, to, type, ifModifiedSince);
-        return response;
+        try{
+            AndroidService androidService = AndroidAPIUtils.getAndroidService();
+            Response response = androidService.retrieveAlerts(deviceId, from, to, type, ifModifiedSince);
+            return response;
+        } catch (BadRequestExceptionDup e){
+            String msg = "Invalid request";
+            log.error(msg, e);
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
+                            .setMessage(msg).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while retrieving alerts";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(errorMessage).build()).build();
+        }
     }
 }
