@@ -45,7 +45,7 @@
     <bean id="swaggerWriter" class="io.swagger.jaxrs.listing.SwaggerSerializers" />
     <bean id="swaggerResource" class="io.swagger.jaxrs.listing.ApiListingResource" />
     <bean id="GlobalExceptionMapper" class="org.wso2.carbon.device.mgt.mobile.android.api.exception.GlobalThrowableMapper"/>
-    <bean id="ValidationInterceptor" class="org.wso2.carbon.device.mgt.mobile.android.common.ValidationInterceptor"/>
+    <bean id="ValidationInterceptor" class="org.wso2.carbon.device.mgt.mobile.android.addons.ValidationInterceptor"/>
 
     <bean id="swaggerConfig" class="io.swagger.jaxrs.config.BeanConfig">
         <property name="resourcePackage" value="org.wso2.carbon.mdm.services.android.services"/>
@@ -60,11 +60,11 @@
         <property name="scan" value="true"/>
     </bean>
 
-    <bean id="deviceManagementService" class="org.wso2.carbon.mdm.services.android.impl.DeviceManagementServiceImpl"/>
-    <bean id="deviceManagementAdminService" class="org.wso2.carbon.mdm.services.android.impl.DeviceManagementAdminServiceImpl"/>
-    <bean id="eventReceiverService" class="org.wso2.carbon.mdm.services.android.impl.EventReceiverServiceImpl"/>
-    <bean id="deviceTypeConfigurationService" class="org.wso2.carbon.mdm.services.android.impl.DeviceTypeConfigurationServiceImpl"/>
-    <bean id="androidEnterprise" class="org.wso2.carbon.mdm.services.android.impl.AndroidEnterpriseServiceImpl"/>
+    <bean id="deviceManagementService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.DeviceManagementAPIImpl"/>
+    <bean id="deviceManagementAdminService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.DeviceManagementAdminAPIImpl"/>
+    <bean id="eventReceiverService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.EventReceiverAPIImpl"/>
+    <bean id="deviceTypeConfigurationService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.DeviceTypeConfigurationAPIImpl"/>
+    <bean id="androidEnterprise" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.AndroidEnterpriseAPIImpl"/>
     <bean id="jsonProvider" class="org.wso2.carbon.device.mgt.mobile.android.common.GsonMessageBodyHandler"/>
     <bean id="errorHandler" class="org.wso2.carbon.device.mgt.mobile.android.common.ErrorHandler"/>
     <cxf:bus>
