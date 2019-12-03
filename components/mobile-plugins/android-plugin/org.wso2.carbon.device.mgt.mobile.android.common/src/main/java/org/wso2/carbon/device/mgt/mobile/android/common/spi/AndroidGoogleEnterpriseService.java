@@ -39,4 +39,7 @@ public interface AndroidGoogleEnterpriseService {
     boolean updateMobileDevice(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseServiceException;
 
     boolean deleteMobileDevice(String id) throws EnterpriseServiceException;
+
+    List<AndroidEnterpriseUser> getAllEnterpriseDevices(String enterpriseId)
+            throws EnterpriseServiceException ;
 }

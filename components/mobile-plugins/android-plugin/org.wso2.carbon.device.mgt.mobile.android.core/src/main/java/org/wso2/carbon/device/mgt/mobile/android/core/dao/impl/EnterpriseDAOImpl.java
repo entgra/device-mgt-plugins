@@ -286,4 +286,42 @@ public class EnterpriseDAOImpl implements EnterpriseDAO {
         return status;
     }
 
+    public List<AndroidEnterpriseUser> getAllEnterpriseDevices(int tenantId, String enterpriseId)
+            throws EnterpriseManagementDAOException {
+        Connection conn;
+        PreparedStatement stmt = null;
+        List<AndroidEnterpriseUser> enterpriseUsers = new ArrayList<>();
+        ResultSet rs = null;
+        try {
+            conn = AndroidDAOFactory.getConnection();
+            String selectDBQuery =
+                    "SELECT * FROM AD_ENTERPRISE_USER_DEVICE WHERE ENTERPRISE_ID = ? AND TENANT_ID = ?";
+            stmt = conn.prepareStatement(selectDBQuery);
+            stmt.setString(1, enterpriseId);
+            stmt.setInt(2, tenantId);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                AndroidEnterpriseUser enterpriseUser = new AndroidEnterpriseUser();
+                enterpriseUser.setEmmUsername(rs.getString("EMM_USERNAME"));
+                enterpriseUser.setTenantId(rs.getInt("TENANT_ID"));
+                enterpriseUser.setLastUpdatedTime(rs.getString("LAST_UPDATED_TIMESTAMP"));
+                enterpriseUser.setAndroidPlayDeviceId(rs.getString("ANDROID_PLAY_DEVICE_ID"));
+                enterpriseUser.setEnterpriseId(rs.getString("ENTERPRISE_ID"));
+                enterpriseUser.setGoogleUserId(rs.getString("GOOGLE_USER_ID"));
+                enterpriseUser.setEmmDeviceId(rs.getString("EMM_DEVICE_ID"));
+                enterpriseUsers.add(enterpriseUser);
+            }
+        } catch (SQLException e) {
+            String msg = "Error occurred while fetching user of enterprise: '" + enterpriseId + "'";
+            log.error(msg, e);
+            throw new EnterpriseManagementDAOException(msg, e);
+        } finally {
+            MobileDeviceManagementDAOUtil.cleanupResources(stmt, rs);
+            AndroidDAOFactory.closeConnection();
+        }
+
+        return enterpriseUsers;
+    }
 }
