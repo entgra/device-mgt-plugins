@@ -110,7 +110,8 @@ var androidOperationModule = function () {
         "DISALLOW_BLUETOOTH_SHARING": "DISALLOW_BLUETOOTH_SHARING",
         "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
         "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING",
-        "CERT_ADD_OPERATION_CODE": "INSTALL_CERT"
+        "CERT_ADD_OPERATION_CODE": "INSTALL_CERT",
+        "DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE": "DISPLAY_MESSAGE_CONFIGURATION"
     };
 
     /**
@@ -234,6 +235,8 @@ var androidOperationModule = function () {
                     payload["kioskLogoImage"] = deviceGlobalConfigurations["kioskLogoImage"];
                     payload["kioskAppName"] = deviceGlobalConfigurations["kioskAppName"];
                     payload["isSingleModeApp"] = deviceGlobalConfigurations["isSingleModeApp"];
+                    payload["keepDisplayAwake"] = deviceGlobalConfigurations["keepDisplayAwake"];
+
                     if (payload["isSingleModeApp"] === true) {
                         payload["isSingleModeAppBuiltForKiosk"] =
                             deviceGlobalConfigurations["isSingleModeAppBuiltForKiosk"];
@@ -331,6 +334,13 @@ var androidOperationModule = function () {
                 });
                 payload = {
                     "CERT_LIST": listNew
+                };
+                break;
+            case androidOperationConstants["DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE"]:
+                payload = {
+                    "lockScreenMessage": operationPayload["lockScreenMessage"],
+                    "settingAppSupportMessage": operationPayload["settingAppSupportMessage"],
+                    "disabledSettingSupportMessage": operationPayload["disabledSettingSupportMessage"]
                 };
                 break;
         }
@@ -581,6 +591,7 @@ var androidOperationModule = function () {
                              operationData["isSingleModeAppBuiltForKiosk"];
                      }
                      deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
+                     deviceGlobalConfigurations["keepDisplayAwake"] = operationData["keepDisplayAwake"];
                      if (operationData["idleTimeout"]) {
                          deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"];
                      }
@@ -717,6 +728,16 @@ var androidOperationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "lockScreenMessage": operationData["lockScreenMessage"],
+                        "settingAppSupportMessage": operationData["settingAppSupportMessage"],
+                        "disabledSettingSupportMessage": operationData["disabledSettingSupportMessage"]
+                    }
+                };
+                break;
             default:
                 // If the operation is neither of above, it is a command operation
                 operationType = operationTypeConstants["COMMAND"];
@@ -757,7 +778,8 @@ var androidOperationModule = function () {
             "BLACKLIST_APPLICATIONS": "blacklist-applications",
             "PASSCODE_POLICY": "set-password-policy",
             "ENTERPRISE_WIPE": "enterprise-wipe",
-            "WIPE_DATA": "wipe"
+            "WIPE_DATA": "wipe",
+            "DISPLAY_MESSAGE_CONFIGURATION": "configure-display-message"
         };
         return "/api/device-mgt/android/v1.0/admin/devices/" + featureMap[operationCode];
     };

@@ -162,6 +162,18 @@
             <span id="enrollment-app-install-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
             <span id="enrollment-app-install-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+
+        <a href="javascript:void(0)" class="display-message-configuration" onclick="showAdvanceOperation('display-message-configuration', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+              <i class="fw fw-comment fw-stack-2x"></i>
+            </span>
+             Display Message Configuration
+             <span id="display-message-configuration-configured" class="has-configured status-icon hidden"><i
+                     class="fw fw-success"></i></span>
+             <span id="display-message-configuration-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
+             <span id="display-message-configuration-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -2229,6 +2241,21 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!--keep display awake configuration-->
+                                   <div class="wr-input-control">
+                                         <div class="wr-input-control sub-title panel-title"
+                                               style="padding: 0px; padding-right:15px; font-size:15px;">
+                                               Keep display awake
+                                             <span class="wr-help-tip glyphicon glyphicon-question-sign"
+                                                      title="Keep display awake"></span>
+                                             <label class="wr-input-control checkbox">
+                                                  <input id="cosu-global-config-keep-display-awake" type="checkbox"
+                                                  class="form-control operationDataKeys cosu-profile-config"
+                                                  data-key="keepDisplayAwake"/>
+                                             <span class="helper"></span>
+                                         </label>
+                                    </div>
+                                    </div>
                                     <!--COSU profile user app configuration-->
                                     <div id="cosu-profile-user-app-configuration" class="panel">
                                         <div class="wr-input-control sub-title panel-title"
@@ -3318,6 +3345,78 @@
             </div>
         </div>
         <!--/enrolment-app-install-->
+
+        <!--Display Message Configuration-->
+        <div class="wr-hidden-operation" data-operation="display-message-configuration">
+                <div class="panel panel-default operation-data" data-operation="display-message-configuration" data-operation-code="DISPLAY_MESSAGE_CONFIGURATION">
+                        <div id="display-message-configuration-policy-heading" class="panel-heading" role="tab">
+                            <h2 class="sub-title panel-title">
+                                Display Message Configuration
+                                <label id="display-message-configuration-policy-lbl" class="wr-input-control switch" data-toggle="collapse"
+                                       data-target="#display-message-configuration-policy-body">
+                                    <input type="checkbox"/>
+                                    <span class="helper"></span>
+                                    <span class="text"></span>
+                                </label>
+                            </h2>
+                            <div class="panel-title-description">
+                                Configure these settings to manage the applications in the show message.
+                            </div>
+                        </div>
+                        <div id="display-message-configuration-policy-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                             aria-labelledby="display-message-configuration-policy-body">
+                            <hr/>
+                        <br>
+                        <div id="display-message-configuration-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                            <i class="icon fw fw-error"></i><span></span>
+                        </div>
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="lock-screen-message-policy-enable-system-apps">
+                                    Lock Screen Message
+                                    <span class="helper"
+                                          title="The message that needs to show on the lock-screen.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                                    <br>
+                                </label>
+                                <br>
+                                <a id="policy-listing-status-msg"> Below lock screen message is valid only when the Agent is the
+                                                                    <b>device owner</b>.</a>
+                                <br>
+                                <textarea id="lock-screen-message" type="text"
+                                          class="form-control operationDataKeys" rows="4"
+                                          data-key="lockScreenMessage"></textarea>
+                                <br><br>
+                                <label class="wr-input-label" for="setting-app-support-message-policy-enable-system-apps">
+                                    Setting App Support Message
+                                    <span class="helper"
+                                          title="The message that needs to show on the device administrators apps.">
+                                          <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                                <br>
+                                </label>
+                                <textarea id="setting-app-message" type="text"
+                                          class="form-control operationDataKeys" rows="4"
+                                          data-key="settingAppSupportMessage"></textarea>
+                                <br><br>
+                                <label class="wr-input-label" for="disabled-setting-app-support-message-policy-enable-system-apps">
+                                    Disabled Setting Support Message
+                                    <span class="helper"
+                                          title="The message that needs to show on the screens where funtionality has been disabled by the admin.Max length is 200">
+                                          <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                                <br>
+                                </label>
+                                <textarea id="disabled-setting-message" type="text"
+                                          class="form-control operationDataKeys" rows="4"
+                                          data-key="disabledSettingSupportMessage"
+                                          maxlength="200"></textarea>
+                            </div>
+                        </div>
+                </div>
+        </div>
+        <!--/Display Message Configuration-->
+
     </div>
     <script type="text/javascript">applyDataTable();</script>
 </div>

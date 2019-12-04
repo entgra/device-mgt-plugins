@@ -257,6 +257,12 @@ import java.util.List;
                         description = "Send app restrictions to an application in the device",
                         key = "perm:android:send-app-restrictions",
                         permissions = {"/device-mgt/devices/owning-device/operations/android/send-app-conf"}
+                ),
+                @Scope(
+                        name = "Configure display message",
+                        description = "Configure display message on Android Device",
+                        key = "perm:android:configure-display-message",
+                        permissions = {"/device-mgt/devices/owning-device/operations/android/display-message"}
                 )
         }
 )
@@ -2052,4 +2058,55 @@ public interface DeviceManagementAdminService {
                     value = "The properties to set the global proxy settings.",
                     required = true)
                     GlobalProxyBeanWrapper globalProxyBeanWrapper);
+
+    @POST
+    @Path("/configure-display-message")
+    @ApiOperation(
+            consumes = MediaType.APPLICATION_JSON,
+            httpMethod = "POST",
+            value = "Sending a messages to Android Devices.",
+            notes = "Send a message to Android Devices.",
+            response = Activity.class,
+            tags = "Android Device Management Administrative Service",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:configure-display-message")
+                    })
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 201,
+                    message = "Created. \n Successfully sent the message.",
+                    response = Activity.class,
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Location",
+                                    description = "URL of the activity instance that refers to the scheduled operation."),
+                            @ResponseHeader(
+                                    name = "Content-Type",
+                                    description = "Content type of the body"),
+                            @ResponseHeader(
+                                    name = "ETag",
+                                    description = "Entity Tag of the response resource.\n" +
+                                                  "Used by caches, or in conditional requests."),
+                            @ResponseHeader(
+                                    name = "Last-Modified",
+                                    description = "Date and time the resource was last modified.\n" +
+                                                  "Used by caches, or in conditional requests.")}),
+            @ApiResponse(
+                    code = 400,
+                    message = "Bad Request. \n Invalid request or validation error."),
+            @ApiResponse(
+                    code = 500,
+                    message = "Internal Server Error. \n " +
+                              "Server error occurred while adding a new display messages operation.")
+    })
+    Response configureDisplayMessage(
+            @ApiParam(
+                    name = "display-message",
+                    value = "The properties required to send a messages. Provide the message you wish to send and the ID of the " +
+                            "Android device. Multiple device IDs can be added by using comma separated values.",
+                    required = true)
+                    DisplayMessageBeanWrapper displayMessageBeanWrapper);
 }
