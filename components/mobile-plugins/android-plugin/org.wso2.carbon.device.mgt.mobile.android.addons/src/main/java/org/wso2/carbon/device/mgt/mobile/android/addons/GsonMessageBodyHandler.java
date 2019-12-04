@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.android.common;
+package org.wso2.carbon.device.mgt.mobile.android.addons;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

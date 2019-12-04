@@ -34,7 +34,6 @@ import org.wso2.carbon.apimgt.annotations.api.Scopes;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.AndroidPlatformConfiguration;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidAgentException;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -245,6 +244,6 @@ public interface DeviceTypeConfigurationAPI {
                     value = "Checks if the requested variant was modified, since the specified date-time.\n" +
                             "Provide the value in the following format: EEE, d MMM yyyy HH:mm:ss Z.\n" +
                             "Example: Mon, 05 Jan 2014 15:10:00 +0200.")
-            @HeaderParam("If-Modified-Since") String ifModifiedSince) throws AndroidAgentException;
+            @HeaderParam("If-Modified-Since") String ifModifiedSince);
 
 }

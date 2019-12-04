@@ -65,8 +65,8 @@
     <bean id="eventReceiverService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.EventReceiverAPIImpl"/>
     <bean id="deviceTypeConfigurationService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.DeviceTypeConfigurationAPIImpl"/>
     <bean id="androidEnterprise" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.AndroidEnterpriseAPIImpl"/>
-    <bean id="jsonProvider" class="org.wso2.carbon.device.mgt.mobile.android.common.GsonMessageBodyHandler"/>
-    <bean id="errorHandler" class="org.wso2.carbon.device.mgt.mobile.android.common.ErrorHandler"/>
+    <bean id="jsonProvider" class="org.wso2.carbon.device.mgt.mobile.android.addons.GsonMessageBodyHandler"/>
+    <bean id="errorHandler" class="org.wso2.carbon.device.mgt.mobile.android.addons.ErrorHandler"/>
     <cxf:bus>
         <cxf:inInterceptors>
             <ref bean="ValidationInterceptor"/>

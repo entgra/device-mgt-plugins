@@ -1360,7 +1360,7 @@
         <!--websocket related lib versions-->
         <tomcat.websocket.version>7.0.85</tomcat.websocket.version>
         <javax.websocket.version>1.0</javax.websocket.version>
-        <javax.version>2.0</javax.version>
+        <javax.version>2.0.1</javax.version>
 
         <!-- Release plugin ID for github-->
         <project.scm.id>github-scm</project.scm.id>

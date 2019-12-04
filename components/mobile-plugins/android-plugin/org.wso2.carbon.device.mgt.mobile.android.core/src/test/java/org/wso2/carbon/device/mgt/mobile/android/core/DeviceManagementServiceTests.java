@@ -36,6 +36,7 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.AndroidDevice;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.core.impl.AndroidServiceImpl;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.ApplicationManagementProviderServiceMock;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.DeviceInformationManagerServiceMock;
@@ -289,7 +290,8 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testModifyEnrollmentSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
+            AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockUser();
         boolean status = androidService.modifyEnrollment(TestUtils.getDeviceId(), TestUtils.getBasicAndroidDevice());
@@ -298,7 +300,8 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testModifyEnrollmentUnSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
+            AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockUser();
         AndroidDevice androidDevice = TestUtils.getBasicAndroidDevice();

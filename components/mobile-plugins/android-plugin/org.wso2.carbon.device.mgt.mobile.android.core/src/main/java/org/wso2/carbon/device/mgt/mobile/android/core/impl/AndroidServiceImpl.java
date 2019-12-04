@@ -22,7 +22,6 @@ import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpStatus;
 import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.context.CarbonContext;
@@ -36,7 +35,6 @@ import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceNotFoundException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
@@ -66,7 +64,6 @@ import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtil
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
-import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -87,7 +84,6 @@ public class AndroidServiceImpl implements AndroidService {
     private static final String OPERATION_ERROR_STATUS = "ERROR";
     public static final String GOOGLE_AFW_EMM_ANDROID_ID = "googleEMMAndroidId";
     public static final String GOOGLE_AFW_DEVICE_ID = "googleEMMDeviceId";
-
     private static final String EVENT_STREAM_DEFINITION = "org.wso2.iot.LocationStream";
 
     @Override
