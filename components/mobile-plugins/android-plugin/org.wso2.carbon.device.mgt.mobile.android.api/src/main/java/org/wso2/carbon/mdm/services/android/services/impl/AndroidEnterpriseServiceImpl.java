@@ -821,7 +821,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
 
             // Extract the device identifiers of enterprise devices.
             List<String> deviceID = new ArrayList<>();
-            if (androidEnterpriseUsers != null && androidEnterpriseUsers.size() > 0) {
+            if (androidEnterpriseUsers != null && !androidEnterpriseUsers.isEmpty()) {
                 for (AndroidEnterpriseUser userDevice: androidEnterpriseUsers) {
                     deviceID.add(userDevice.getEmmDeviceId());
                 }
@@ -834,7 +834,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
                     getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, false);
             for (Device device : devices) { // Go through all enrolled devices
                 if (deviceID.contains(device.getDeviceIdentifier())) { // Filter out only enterprise enrolled devices.
-                    if (device.getEnrolmentInfo().getOwnership().equals(EnrolmentInfo.OwnerShip.BYOD)) {
+                    if (EnrolmentInfo.OwnerShip.BYOD.equals(device.getEnrolmentInfo().getOwnership())) {
                         byodDevices.add(device.getDeviceIdentifier());
                     } else {
                         copeDevices.add(device.getDeviceIdentifier());
@@ -845,7 +845,7 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
             CommandOperation operation = new CommandOperation();
             operation.setType(Operation.Type.COMMAND);//TODO: Check if this should be profile
                                                         // type when implementing COPE/COSU
-            if (byodDevices != null && byodDevices.size() > 0) { // BYOD devices only needs a data wipe(work profile)
+            if (byodDevices != null && !byodDevices.isEmpty()) { // BYOD devices only needs a data wipe(work profile)
                 log.warn("Wiping " + byodDevices.size() + " BYOD devices");
                 operation.setCode(AndroidConstants.OperationCodes.ENTERPRISE_WIPE);
             } else if (copeDevices != null && copeDevices.size() > 0) {
@@ -856,8 +856,10 @@ public class AndroidEnterpriseServiceImpl implements AndroidEnterpriseService {
             log.warn("Added wipe to all devices");
             return Response.status(Response.Status.OK).build();
         } catch (EnterpriseServiceException e) {
+            String errorMessage = "Error when saving configs for enterprise " + enterpriseConfigs.getEnterpriseId();
+            log.error(errorMessage);
             return Response.serverError().entity(
-                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         } catch (OperationManagementException e) {
             String errorMessage = "Could not add wipe command to enterprise " + enterpriseConfigs.getEnterpriseId();
             log.error(errorMessage);
