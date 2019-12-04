@@ -47,10 +47,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.AndroidApplication;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.AndroidDevice;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.*;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
@@ -95,8 +92,9 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         } catch (ApplicationManagementException e) {
             String msg = "Error occurred while modifying the application list.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(msg).build()).build();
         }
     }
 
@@ -124,9 +122,15 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while getting pending operations of the device.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(msg).build());
+                            .setMessage(msg).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while executing get pending operations";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(errorMessage).build()).build();
         }
     }
 
@@ -136,8 +140,9 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         if (androidDevice == null) {
             String errorMessage = "The payload of the android device enrollment is incorrect.";
             log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
+                            .setMessage(errorMessage).build()).build();
         }
         try {
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
@@ -147,8 +152,15 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
             String msg = "Error occurred while enrolling the android, which carries the id '" +
                     androidDevice.getDeviceIdentifier() + "'";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(msg).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while enrolling device";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(errorMessage).build()).build();
         }
     }
 
@@ -164,9 +176,9 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while checking enrollment status of the device.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(msg).build());
+                            .setMessage(msg).build()).build();
         }
     }
 
@@ -193,14 +205,21 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
             String msg = "Error occurred while modifying enrollment of the Android device that carries the id '" +
                     id + "'";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(msg).build()).build();
         } catch (BadRequestExceptionDup e){
             String msg = "Invalid request";
             log.error(msg, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
                             .setMessage(msg).build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Class not found";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.NOT_FOUND).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured";
             log.error(errorMessage, e);
@@ -232,8 +251,9 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
             String msg = "Error occurred while %s the Android device that carries the id '" + id + "'";
             msg = String.format(msg, "dis-enrolling");
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(msg).build()).build();
         }
     }
 

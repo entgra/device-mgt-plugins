@@ -18,6 +18,7 @@
  */
 package org.wso2.carbon.device.mgt.mobile.android.api.impl;
 
+import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import com.google.api.services.androidenterprise.model.StoreCluster;
 import com.google.api.services.androidenterprise.model.StoreLayout;
@@ -57,9 +58,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseU
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.TokenWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseUser;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtils;
@@ -191,8 +190,9 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
         } catch (EnterpriseServiceException e) {
             String errorMessage = "App install failed. No user found for name " + device.getUsername();
             log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage(errorMessage).build());
+            return Response.status(Response.Status.NOT_FOUND).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
+                            .setMessage(errorMessage).build()).build();
         }
         if (sentToDevice) {
             return Response.status(Response.Status.OK).build();
@@ -759,9 +759,9 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                                         String errorMessage = "App: " + applicationPolicyDTO.getApplicationDTO()
                                                 .getPackageName() + " for device " + deviceIdentifier.getId();
                                         log.error(errorMessage);
-                                        throw new BadRequestException(
-                                                new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.BAD_REQUEST
-                                                        .getStatusCode()).setMessage(errorMessage).build());
+                                        return Response.status(Response.Status.BAD_REQUEST).entity(
+                                                new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
+                                                        .setMessage(errorMessage).build()).build();
                                     }
                                 }
                                 googleAPIInvoker.installApps(enterpriseConfigs.getEnterpriseId(), userDetail
@@ -783,15 +783,15 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             } catch (EnterpriseServiceException e) {
                 String errorMessage = "App install failed for device " + deviceIdentifier.getId();
                 log.error(errorMessage);
-                throw new NotFoundException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.NOT_FOUND
-                                .getStatusCode()).setMessage(errorMessage).build());
+                return Response.status(Response.Status.NOT_FOUND).entity(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
+                                .setMessage(errorMessage).build()).build();
             } catch (FeatureManagementException e) {
                 String errorMessage = "Could not fetch effective policy for device " + deviceIdentifier.getId();
                 log.error(errorMessage);
-                throw new NotFoundException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(Response.Status.INTERNAL_SERVER_ERROR
-                                .getStatusCode()).setMessage(errorMessage).build());            }
+                return Response.status(Response.Status.NOT_FOUND).entity(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
+                                .setMessage(errorMessage).build()).build();          }
         }
 
         if (sentToDevice) {

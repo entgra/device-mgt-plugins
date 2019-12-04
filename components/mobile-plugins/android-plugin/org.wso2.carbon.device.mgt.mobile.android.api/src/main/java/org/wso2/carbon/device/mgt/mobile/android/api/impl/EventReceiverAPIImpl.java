@@ -110,15 +110,18 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
                 log.warn("Error occurred while trying to publish the event. This could be due to unavailability " +
                         "of the publishing service. Please make sure that analytics server is running and accessible " +
                         "by this server");
-                throw new UnexpectedServerErrorException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(503l).setMessage("Error occurred due to " +
-                                "unavailability of the publishing service.").build());
+                String msg = "Error occurred due to " +
+                        "unavailability of the publishing service.";
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                        new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                                .setMessage(msg).build()).build();
             }
         } catch (DataPublisherConfigurationException e) {
             String msg = "Error occurred while getting the Data publisher Service instance.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(msg).build()).build();
         }
     }
 
@@ -142,6 +145,12 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
                             .setMessage(msg).build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Class not found";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.NOT_FOUND).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while retrieving alerts";
             log.error(errorMessage, e);

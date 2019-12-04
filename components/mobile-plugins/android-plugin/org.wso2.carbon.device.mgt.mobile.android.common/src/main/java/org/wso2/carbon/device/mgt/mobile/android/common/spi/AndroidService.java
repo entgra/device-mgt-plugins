@@ -418,7 +418,7 @@ public interface AndroidService {
      */
     List<? extends Operation> getPendingOperations
             (String id, List<? extends Operation> resultOperations, boolean disableGoogleApps)
-            throws DeviceManagementException, InvalidDeviceException;
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException;
 
     /**
      * Method to enroll device
@@ -427,7 +427,7 @@ public interface AndroidService {
      * @return {@link Response}
      * @throws {@link DeviceManagementException}
      */
-    Response enrollDevice(AndroidDevice androidDevice) throws DeviceManagementException;
+    Response enrollDevice(AndroidDevice androidDevice) throws DeviceManagementException, AndroidDeviceMgtPluginException;
 
     /**
      * Method to check if a device is enrolled

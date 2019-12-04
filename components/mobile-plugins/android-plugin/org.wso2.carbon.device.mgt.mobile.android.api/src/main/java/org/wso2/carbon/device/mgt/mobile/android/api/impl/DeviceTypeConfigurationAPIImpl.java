@@ -46,7 +46,6 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 
@@ -78,9 +77,9 @@ public class DeviceTypeConfigurationAPIImpl implements DeviceTypeConfigurationAP
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while retrieving the Android tenant configuration";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(msg).build());
+                            .setMessage(msg).build()).build();
         }
     }
 
@@ -102,9 +101,9 @@ public class DeviceTypeConfigurationAPIImpl implements DeviceTypeConfigurationAP
         } catch (AndroidDeviceMgtPluginException e) {
             String msg = "Error occurred while modifying configuration settings of Android platform";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(msg).build());
+                            .setMessage(msg).build()).build();
         }
 
     }
@@ -122,9 +121,9 @@ public class DeviceTypeConfigurationAPIImpl implements DeviceTypeConfigurationAP
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while retrieving the license configured for Android device enrolment";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(msg).build());
+                            .setMessage(msg).build()).build();
         }
     }
 }

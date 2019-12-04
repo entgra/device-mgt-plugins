@@ -274,8 +274,7 @@ public class AndroidServiceImpl implements AndroidService {
         if (deviceLockBeanWrapper == null || deviceLockBeanWrapper.getOperation() == null) {
             String errorMessage = "Lock bean is empty.";
             log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+            throw new BadRequestExceptionDup(errorMessage);
         }
         DeviceLock lock = deviceLockBeanWrapper.getOperation();
         ProfileOperation operation = new ProfileOperation();
@@ -346,8 +345,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (cameraBeanWrapper == null || cameraBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the configure camera operation is incorrect.";
                 log.error(errorMessage);
-                throw new BadRequestException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+                throw new BadRequestExceptionDup(errorMessage);
             }
             Camera camera = cameraBeanWrapper.getOperation();
             CommandOperation operation = new CommandOperation();
@@ -850,17 +848,11 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             log.error(errorMessage, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder()
-                            .setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(errorMessage).build());
+            throw new UnexpectedServerErrorExceptionDup(errorMessage);
         } catch (DeviceManagementException e) {
             String errorMessage = "Issue in retrieving device management service instance";
             log.error(errorMessage, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder()
-                            .setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(errorMessage).build());
+            throw new UnexpectedServerErrorExceptionDup(errorMessage, e);
         }
     }
 
@@ -923,7 +915,8 @@ public class AndroidServiceImpl implements AndroidService {
 
     @Override
     public List<? extends Operation> getPendingOperations(String deviceId, List<? extends Operation> resultOperations,
-            boolean disableGoogleApps) throws DeviceManagementException, InvalidDeviceException {
+            boolean disableGoogleApps)
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(deviceId);
         if (!AndroidDeviceUtils.isValidDeviceIdentifier(deviceIdentifier)) {
             String msg = "Device not found for identifier '" + deviceId + "'";
@@ -979,14 +972,13 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(msg).build());
+            throw new UnexpectedServerErrorExceptionDup(msg, e);
         }
     }
 
     @Override
-    public Response enrollDevice(AndroidDevice androidDevice) throws DeviceManagementException {
+    public Response enrollDevice(AndroidDevice androidDevice)
+            throws DeviceManagementException, AndroidDeviceMgtPluginException {
         try {
             String token = null;
             Device device = new Device();
@@ -1040,8 +1032,7 @@ public class AndroidServiceImpl implements AndroidService {
                         String msg = "Error occurred while updating the device location upon android " +
                                 "', which carries the id '" + androidDevice.getDeviceIdentifier() + "'";
                         log.error(msg, e);
-                        throw new UnexpectedServerErrorException(
-                                new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+                        throw new UnexpectedServerErrorExceptionDup(msg, e);
                     }
                 }
 
@@ -1096,27 +1087,12 @@ public class AndroidServiceImpl implements AndroidService {
                         androidDevice.getDeviceIdentifier() + "'");
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseMessage).build();
             }
-        } catch (PolicyManagementException e) {
+        } catch (PolicyManagementException | InvalidDeviceException | OperationManagementException e) {
             String msg = "Error occurred while enforcing default enrollment policy upon android " +
                     "', which carries the id '" +
                     androidDevice.getDeviceIdentifier() + "'";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (OperationManagementException e) {
-            String msg = "Error occurred while enforcing default enrollment policy upon android " +
-                    "', which carries the id '" +
-                    androidDevice.getDeviceIdentifier() + "'";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
-        } catch (InvalidDeviceException e) {
-            String msg = "Error occurred while enforcing default enrollment policy upon android " +
-                    "', which carries the id '" +
-                    androidDevice.getDeviceIdentifier() + "'";
-            log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            throw new UnexpectedServerErrorExceptionDup(msg, e);
         }
     }
 
@@ -1133,8 +1109,7 @@ public class AndroidServiceImpl implements AndroidService {
             String msg = "Error occurred while getting enrollment details of the Android device that carries the id '" +
                     id + "'";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            throw new UnexpectedServerErrorExceptionDup(msg, e);
         }
 
         if (androidDevice == null) {
@@ -1145,8 +1120,7 @@ public class AndroidServiceImpl implements AndroidService {
         if (device == null) {
             String errorMessage = "The device to be modified doesn't exist.";
             log.error(errorMessage);
-            throw new NotFoundException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage(errorMessage).build());
+            throw new NotFoundExceptionDup(errorMessage);
         }
         if(androidDevice.getEnrolmentInfo() != null){
             device.setEnrolmentInfo(device.getEnrolmentInfo());
@@ -1222,7 +1196,7 @@ public class AndroidServiceImpl implements AndroidService {
         }
     }
 
-    private Response retrieveAlert(String deviceId) {
+    private Response retrieveAlert(String deviceId) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events for given device Identifier.");
         }
@@ -1231,21 +1205,20 @@ public class AndroidServiceImpl implements AndroidService {
         try {
             deviceStates = AndroidDeviceUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
             if (deviceStates == null) {
-                throw new NotFoundException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage("No any alerts are " +
-                                "published for Device: " + deviceId + ".").build());
+                String errorMessage = "No any alerts are " +
+                        "published for Device: " + deviceId + ".";
+                throw new NotFoundExceptionDup(errorMessage);
             } else {
                 return Response.status(Response.Status.OK).entity(deviceStates).build();
             }
         } catch (AnalyticsException e) {
             String msg = "Error occurred while getting published events for specific device: " + deviceId + ".";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            throw new UnexpectedServerErrorExceptionDup(msg, e);
         }
     }
 
-    private Response retrieveAlertFromDate(String deviceId, long from, long to) {
+    private Response retrieveAlertFromDate(String deviceId, long from, long to) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
         String fromDate = String.valueOf(from);
         String toDate = String.valueOf(to);
         if (log.isDebugEnabled()) {
@@ -1257,9 +1230,9 @@ public class AndroidServiceImpl implements AndroidService {
         try {
             deviceStates = AndroidDeviceUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
             if (deviceStates == null) {
-                throw new NotFoundException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage("No any alerts are " +
-                                "published on given date for given Device: " + deviceId + ".").build());
+                String errorMessage = "No any alerts are " +
+                        "published on given date for given Device: " + deviceId + ".";
+                throw new NotFoundExceptionDup(errorMessage);
 
             } else {
                 return Response.status(Response.Status.OK).entity(deviceStates).build();
@@ -1268,12 +1241,11 @@ public class AndroidServiceImpl implements AndroidService {
             String msg = "Error occurred while getting published events for specific " +
                     "Device: " + deviceId + " on given Date.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            throw new UnexpectedServerErrorExceptionDup(msg, e);
         }
     }
 
-    private Response retrieveAlertByType(String deviceId, String type) {
+    private Response retrieveAlertByType(String deviceId, String type) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events for given device identifier and type.");
         }
@@ -1282,9 +1254,9 @@ public class AndroidServiceImpl implements AndroidService {
         try {
             deviceStates = AndroidDeviceUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
             if (deviceStates == null) {
-                throw new NotFoundException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(404l).setMessage("No any alerts are " +
-                                "published for given Device: '" + deviceId + "' and given specific Type.").build());
+                String errorMessage = "No any alerts are " +
+                        "published for given Device: '" + deviceId + "' and given specific Type.";
+                throw new NotFoundExceptionDup(errorMessage);
 
             } else {
                 return Response.status(Response.Status.OK).entity(deviceStates).build();
@@ -1293,8 +1265,7 @@ public class AndroidServiceImpl implements AndroidService {
             String msg = "Error occurred while getting published events for specific " +
                     "Device: " + deviceId + "and given specific Type.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(500l).setMessage(msg).build());
+            throw new UnexpectedServerErrorExceptionDup(msg, e);
         }
     }
 
