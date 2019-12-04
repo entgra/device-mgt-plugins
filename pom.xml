@@ -1203,6 +1203,16 @@
 
     <properties>
 
+        <!-- Carbon Device Management -->
+        <carbon.devicemgt.version>4.1.5-SNAPSHOT</carbon.devicemgt.version>
+        <carbon.devicemgt.version.range>[4.0.0, 5.0.0)</carbon.devicemgt.version.range>
+
+        <!-- Carbon Device Management Plugins -->
+        <carbon.devicemgt.plugins.version>5.0.5-SNAPSHOT</carbon.devicemgt.plugins.version>
+
+        <!-- Android Agent Artifact Version-->
+        <android.agent.version>4.0.3</android.agent.version>
+
         <!-- Java Version Compatibility -->
         <wso2.maven.compiler.source>1.8</wso2.maven.compiler.source>
         <wso2.maven.compiler.target>1.8</wso2.maven.compiler.target>
@@ -1240,16 +1250,6 @@
         <cxf.bindings.version>2.5.11</cxf.bindings.version>
         <jackson.version>1.9.0</jackson.version>
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
-
-        <!-- Carbon Device Management -->
-        <carbon.devicemgt.version>4.1.5-SNAPSHOT</carbon.devicemgt.version>
-        <carbon.devicemgt.version.range>[4.0.0, 5.0.0)</carbon.devicemgt.version.range>
-
-        <!-- Carbon Device Management Plugins -->
-        <carbon.devicemgt.plugins.version>5.0.5-SNAPSHOT</carbon.devicemgt.plugins.version>
-
-        <!-- Android Agent Artifact Version-->
-        <android.agent.version>4.0.2</android.agent.version>
 
         <!-- Carbon Commons -->
         <carbon.commons.version>4.6.21</carbon.commons.version>
