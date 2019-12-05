@@ -70,8 +70,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testConfigureDeviceUnlock()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.configureDeviceUnlock(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -80,8 +79,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testGetDeviceLocation()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.getDeviceLocation(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -90,8 +88,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testRemovePassword()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.removePassword(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -100,8 +97,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testConfigureCamera()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.configureCamera(TestUtils.getCamerabeanWrapper());
         Assert.assertNotNull(activity);
@@ -110,8 +106,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testGetDeviceInformation()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.getDeviceInformation(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -120,8 +115,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testGetDeviceLogcat()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.getDeviceLogcat(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -129,8 +123,7 @@ public class DeviceManagementAdminServiceTests {
     }
 
     @Test
-    public void testWipeDevice() throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+    public void testWipeDevice() throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.wipeDevice(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -138,8 +131,7 @@ public class DeviceManagementAdminServiceTests {
     }
 
     @Test
-    public void testWipeData() throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+    public void testWipeData() throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.wipeData(TestUtils.getWipeDataBeanWrapper());
         Assert.assertNotNull(activity);
@@ -148,8 +140,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testGetApplications()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.getApplications(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -157,8 +148,7 @@ public class DeviceManagementAdminServiceTests {
     }
 
     @Test
-    public void testRingDevice() throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+    public void testRingDevice() throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.ringDevice(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -167,8 +157,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testRebootDevice()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.rebootDevice(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -177,8 +166,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testChangeLockTask()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.changeLockTask(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -186,8 +174,7 @@ public class DeviceManagementAdminServiceTests {
     }
 
     @Test
-    public void testMuteDevice() throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+    public void testMuteDevice() throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.muteDevice(TestUtils.getDeviceIds());
         Assert.assertNotNull(activity);
@@ -196,8 +183,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testInstallApplication()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService
                 .installApplication(TestUtils.getApplicationInstallationBeanWrapper());
@@ -207,8 +193,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testUpdateApplication()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.updateApplication(TestUtils.getApplicationUpdateBeanWrapper());
         Assert.assertNotNull(activity);
@@ -217,8 +202,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testUninstallApplicationPublic()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService
                 .uninstallApplication(TestUtils.getApplicationUninstallationBeanWrapperPublic());
@@ -228,8 +212,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testUninstallApplicationWebApp()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService
                 .uninstallApplication(TestUtils.getApplicationUninstallationBeanWrapperWebApp());
@@ -239,8 +222,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testBlacklistApplications()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService
                 .blacklistApplications(TestUtils.getBlacklistApplicationsBeanWrapper());
@@ -250,8 +232,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testUpgradeFirmware()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.upgradeFirmware(TestUtils.getUpgradeFirmwareBeanWrapper());
         Assert.assertNotNull(activity);
@@ -260,8 +241,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testConfigureVPN()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.configureVPN(TestUtils.getVpnBeanWrapper());
         Assert.assertNotNull(activity);
@@ -270,8 +250,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testSendNotification()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.sendNotification(TestUtils.getNotificationBeanWrapper());
         Assert.assertNotNull(activity);
@@ -280,8 +259,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testConfigureWifi()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.configureWifi(TestUtils.getWifiBeanWrapper());
         Assert.assertNotNull(activity);
@@ -290,8 +268,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testEncryptStorage()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.encryptStorage(TestUtils.getEncryptionBeanWrapper());
         Assert.assertNotNull(activity);
@@ -300,8 +277,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testChangeLockCode()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.changeLockCode(TestUtils.getLockCodeBeanWrapper());
         Assert.assertNotNull(activity);
@@ -310,8 +286,7 @@ public class DeviceManagementAdminServiceTests {
 
     @Test
     public void testSetPasswordPolicy()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.setPasswordPolicy(TestUtils.getPasswordPolicyBeanWrapper());
         Assert.assertNotNull(activity);
@@ -319,8 +294,7 @@ public class DeviceManagementAdminServiceTests {
     }
 
     @Test
-    public void testSetWebClip() throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+    public void testSetWebClip() throws OperationManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         Activity activity = androidService.setWebClip(TestUtils.getWebClipBeanWrapper());
         Assert.assertNotNull(activity);

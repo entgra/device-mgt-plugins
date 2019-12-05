@@ -16,22 +16,19 @@
  * under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.android.common.exception;
+package org.wso2.carbon.device.mgt.mobile.android.api.exception;
 
-import org.wso2.carbon.device.mgt.mobile.android.common.Message;
+import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Custom exception class for wrapping Android Operation related exceptions.
+ * Custom exception class for wrapping BadRequest related exceptions.
  */
-public class AndroidOperationException extends WebApplicationException {
+public class BadRequestException extends WebApplicationException {
 
-	public AndroidOperationException(Message message, MediaType mediaType) {
-		super(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).
-				type(mediaType).build());
+	public BadRequestException(ErrorResponse error) {
+		super(Response.status(Response.Status.BAD_REQUEST).entity(error).build());
 	}
 }
-

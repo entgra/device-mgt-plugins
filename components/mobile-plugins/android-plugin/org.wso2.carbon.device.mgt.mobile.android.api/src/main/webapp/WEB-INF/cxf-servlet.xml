@@ -34,7 +34,7 @@
             <ref bean="jsonProvider"/>
             <ref bean="errorHandler"/>
             <ref bean="swaggerWriter"/>
-            <ref bean="GlobalExceptionMapper"/>
+<!--            <ref bean="GlobalExceptionMapper"/>-->
         </jaxrs:providers>
         <jaxrs:properties>
             <!-- This is added to catch interceptor level exceptions in GlobalThrowableMapper. -->
@@ -44,7 +44,7 @@
 
     <bean id="swaggerWriter" class="io.swagger.jaxrs.listing.SwaggerSerializers" />
     <bean id="swaggerResource" class="io.swagger.jaxrs.listing.ApiListingResource" />
-    <bean id="GlobalExceptionMapper" class="org.wso2.carbon.device.mgt.mobile.android.api.exception.GlobalThrowableMapper"/>
+<!--    <bean id="GlobalExceptionMapper" class="org.wso2.carbon.device.mgt.mobile.android.api.exception.GlobalThrowableMapper"/>-->
     <bean id="ValidationInterceptor" class="org.wso2.carbon.device.mgt.mobile.android.addons.ValidationInterceptor"/>
 
     <bean id="swaggerConfig" class="io.swagger.jaxrs.config.BeanConfig">

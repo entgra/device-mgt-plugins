@@ -59,9 +59,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseA
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseInstallPolicy;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseUser;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.*;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
@@ -223,13 +221,13 @@ public class AndroidEnterpriseUtils {
         return userInfo;
     }
 
-    public static EnterpriseConfigs getEnterpriseConfigs() {
+    public static EnterpriseConfigs getEnterpriseConfigs() throws AndroidDeviceMgtPluginException {
         EnterpriseConfigs enterpriseConfigs = getEnterpriseConfigsFromGoogle();
         if (enterpriseConfigs.getErrorResponse() != null) {
             if (enterpriseConfigs.getErrorResponse().getCode() == 500l) {
-                throw new UnexpectedServerErrorException(enterpriseConfigs.getErrorResponse());
+                throw new UnexpectedServerErrorExceptionDup(enterpriseConfigs.getErrorResponse().getMessage());
             } else if (enterpriseConfigs.getErrorResponse().getCode() == 500l) {
-                throw new NotFoundException(enterpriseConfigs.getErrorResponse());
+                throw new NotFoundExceptionDup(enterpriseConfigs.getErrorResponse().getMessage());
             }
         }
         return enterpriseConfigs;

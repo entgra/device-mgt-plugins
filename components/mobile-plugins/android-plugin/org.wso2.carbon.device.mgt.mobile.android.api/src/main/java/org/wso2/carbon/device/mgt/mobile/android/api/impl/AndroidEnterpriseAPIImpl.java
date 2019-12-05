@@ -58,7 +58,10 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseU
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.TokenWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseManagedConfig;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseUser;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundExceptionDup;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorExceptionDup;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtils;
@@ -117,11 +120,24 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
         } catch (EnterpriseServiceException e) {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving user").build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while adding user";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
         return Response.status(Response.Status.OK).entity(token).build();
     }
 
-    public String insertUser(EnterpriseUser enterpriseUser) throws EnterpriseServiceException {
+    public String insertUser(EnterpriseUser enterpriseUser)
+            throws EnterpriseServiceException, AndroidDeviceMgtPluginException {
         EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
         String token;
         boolean deviceIdExist = false;
@@ -171,9 +187,9 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
     public Response updateUser(EnterpriseInstallPolicy device) {
 
         boolean sentToDevice = false;
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
 
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
             List<AndroidEnterpriseUser> enterpriseUserInstances = AndroidAPIUtils.getAndroidPluginService()
                     .getEnterpriseUser(device.getUsername());
             GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
@@ -193,6 +209,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.status(Response.Status.NOT_FOUND).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
                             .setMessage(errorMessage).build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while updating user";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
         if (sentToDevice) {
             return Response.status(Response.Status.OK).build();
@@ -213,23 +241,24 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                                 @QueryParam("isOrganizeAppPageVisible") boolean isOrganizeAppPageVisible,
                                 @QueryParam("isManagedConfigEnabled") boolean isManagedConfigEnabled,
                                 @QueryParam("host") String host) {
-
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
-        EnterpriseTokenUrl enterpriseTokenUrl = new EnterpriseTokenUrl();
-        if (enterpriseConfigs == null || enterpriseConfigs.getEnterpriseId() == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity(
-                    new ErrorResponse.ErrorResponseBuilder().setMessage("Not configured for AFW").build()).build();
-        }
-        enterpriseTokenUrl.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
-        enterpriseTokenUrl.setApproveApps(approveApps);
-        enterpriseTokenUrl.setSearchEnabled(searchEnabled);
-        enterpriseTokenUrl.setPrivateAppsEnabled(isPrivateAppsEnabled);
-        enterpriseTokenUrl.setWebAppEnabled(isWebAppEnabled);
-        enterpriseTokenUrl.setOrganizeAppPageVisible(isOrganizeAppPageVisible);
-        enterpriseTokenUrl.setParentHost(host);
-        enterpriseTokenUrl.setManagedConfigEnabled(isManagedConfigEnabled);
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+            EnterpriseTokenUrl enterpriseTokenUrl = new EnterpriseTokenUrl();
+            if (enterpriseConfigs == null || enterpriseConfigs.getEnterpriseId() == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity(
+                        new ErrorResponse.ErrorResponseBuilder().setMessage("Not configured for AFW").build()).build();
+            }
+            enterpriseTokenUrl.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
+            enterpriseTokenUrl.setApproveApps(approveApps);
+            enterpriseTokenUrl.setSearchEnabled(searchEnabled);
+            enterpriseTokenUrl.setPrivateAppsEnabled(isPrivateAppsEnabled);
+            enterpriseTokenUrl.setWebAppEnabled(isWebAppEnabled);
+            enterpriseTokenUrl.setOrganizeAppPageVisible(isOrganizeAppPageVisible);
+            enterpriseTokenUrl.setParentHost(host);
+            enterpriseTokenUrl.setManagedConfigEnabled(isManagedConfigEnabled);
+
             String token = googleAPIInvoker.getAdministratorWebToken(enterpriseTokenUrl);
             TokenWrapper tokenWrapper = new TokenWrapper();
             tokenWrapper.setToken(token);
@@ -238,6 +267,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when calling get web token").build())
                     .build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while getting store url";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -245,9 +286,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
     @GET
     @Path("/products/sync")
     public Response syncApps() {
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             ProductsListResponse productsListResponse = googleAPIInvoker
                     .listProduct(enterpriseConfigs.getEnterpriseId(), null);
             AndroidEnterpriseUtils.persistApp(productsListResponse);
@@ -265,6 +307,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when persisting app").build())
                     .build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while syncing apps";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -298,9 +352,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Message body is empty or incorrect").build())
                     .build();
         }
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             String id = googleAPIInvoker.insertPage(enterpriseConfigs.getEnterpriseId(), page);
             page.setPageId(id);
             return Response.status(Response.Status.OK).entity(page).build();
@@ -312,6 +367,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when inserting page "
                             + page.getPageName() + " , due to an error with ESA").build() ).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while adding page";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -325,9 +392,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     .build();
         }
 
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             String id = googleAPIInvoker.updatePage(enterpriseConfigs.getEnterpriseId(), page);
             page.setPageId(id);
             return Response.status(Response.Status.OK).entity(page).build();
@@ -339,6 +407,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when updating page "
                             + page.getPageName()  + " , due to an error with ESA").build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while updating page";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -353,9 +433,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     .build();
         }
 
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             googleAPIInvoker.deletePage(enterpriseConfigs.getEnterpriseId(), id);
             return Response.status(Response.Status.OK).build();
         } catch (IOException e) {
@@ -366,6 +447,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when updating page "
                             + id  + " , Due to an error with ESA").build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while deleting page";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -373,9 +466,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
     @Path("/store-layout/page")
     @Override
     public Response getPages() {
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             StoreLayoutPagesListResponse pages = googleAPIInvoker.listPages(enterpriseConfigs.getEnterpriseId());
             return Response.status(Response.Status.OK).entity(pages).build();
         } catch (IOException e) {
@@ -386,6 +480,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching page "
                             + " , Due to an error with ESA").build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while getting pages";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -399,9 +505,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Id cannot be empty").build())
                     .build();
         }
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             StoreLayout layout = googleAPIInvoker.setStoreLayout(enterpriseConfigs.getEnterpriseId(), id);
             return Response.status(Response.Status.OK).entity(layout).build();
         } catch (IOException e) {
@@ -412,6 +519,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when inserting home page "
                             + id + " , due to an error with ESA").build() ).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while setting home";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -419,9 +538,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
     @Path("/store-layout/home-page")
     @Override
     public Response getHome() {
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             StoreLayout layout = googleAPIInvoker.getStoreLayout(enterpriseConfigs.getEnterpriseId());
             return Response.status(Response.Status.OK).entity(layout).build();
         } catch (IOException e) {
@@ -431,6 +551,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching home page.").build() )
                     .build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while getting home";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -453,9 +585,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Cluster order cannot be empty").build()).build();
         }
 
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             String id = googleAPIInvoker.insertCluster(enterpriseConfigs.getEnterpriseId(), storeCluster);
             storeCluster.setClusterId(id);
             return Response.status(Response.Status.OK).entity(storeCluster).build();
@@ -467,6 +600,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when updating cluster "
                             + storeCluster.getName()  + " , due to an error with ESA").build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while adding cluster";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -489,9 +634,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Cluster order cannot be empty").build()).build();
         }
 
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             String id = googleAPIInvoker.updateCluster(enterpriseConfigs.getEnterpriseId(), storeCluster);
             storeCluster.setClusterId(id);
             return Response.status(Response.Status.OK).entity(storeCluster).build();
@@ -503,6 +649,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when updating cluster "
                             + storeCluster.getName() + " , due to an error with ESA").build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while updating cluster";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -519,9 +677,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Page id cannot be empty").build()).build();
         }
 
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             googleAPIInvoker.deleteCluster(enterpriseConfigs.getEnterpriseId(), pageId, clusterId);
             return Response.status(Response.Status.OK).build();
         } catch (IOException e) {
@@ -532,6 +691,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when deleting cluster "
                             + clusterId + " , due to an error with ESA").build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while deleting cluster";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -544,9 +715,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Page id cannot be empty").build()).build();
         }
 
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             StoreLayoutClustersListResponse response = googleAPIInvoker.getClusters(enterpriseConfigs.getEnterpriseId(), pageId);
             if (response == null || response.getCluster() == null) {
                 return Response.status(Response.Status.NOT_FOUND).entity(
@@ -601,6 +773,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching all details in PageId "
                             + pageId).build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while getting clusters in page";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -608,9 +792,10 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
     @Path("/store-layout/page-link")
     @Override
     public Response updateLinks(EnterpriseStorePageLinks link) {
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
         try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
             googleAPIInvoker.addLinks(enterpriseConfigs.getEnterpriseId(),
                     link.getPageId(), link.getLinks());
             return Response.status(Response.Status.OK).build();
@@ -622,6 +807,18 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching page "
                             + " , Due to an error with ESA").build()).build();
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while updating links";
+            return Response.serverError().entity(
+                    new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
     }
 
@@ -725,11 +922,12 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
     public Response updateUser(ApplicationPolicyDTO applicationPolicyDTO) {
 
         boolean sentToDevice = false;
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+
 
         for (DeviceIdentifier deviceIdentifier : applicationPolicyDTO.getDeviceIdentifierList()) {
             try {
+                EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+                GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
 
                 AndroidEnterpriseUser userDetail = AndroidAPIUtils.getAndroidPluginService()
                         .getEnterpriseUserByDevice(deviceIdentifier.getId());
@@ -791,7 +989,20 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                 log.error(errorMessage);
                 return Response.status(Response.Status.NOT_FOUND).entity(
                         new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
-                                .setMessage(errorMessage).build()).build();          }
+                                .setMessage(errorMessage).build()).build();
+            } catch (NotFoundExceptionDup e) {
+                String errorMessage = "Not found";
+                return Response.serverError().entity(
+                        new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+            } catch (UnexpectedServerErrorExceptionDup e) {
+                String errorMessage = "Unexpected server error";
+                return Response.serverError().entity(
+                        new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+            } catch (AndroidDeviceMgtPluginException e) {
+                String errorMessage = "Error occured while updating user";
+                return Response.serverError().entity(
+                        new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+            }
         }
 
         if (sentToDevice) {
@@ -809,69 +1020,82 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
     @Path("/wipe-device")
     public Response wipeEnterprise() {
         log.warn("Wiping all devices!!!");
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        try {
-            // Take all enterprise devices in the DB.
-            List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
-                    .getAllEnterpriseDevices(enterpriseConfigs.getEnterpriseId());
+        try{
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
+            try {
+                // Take all enterprise devices in the DB.
+                List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
+                        .getAllEnterpriseDevices(enterpriseConfigs.getEnterpriseId());
 
-            // Extract the device identifiers of enterprise devices.
-            List<String> deviceID = new ArrayList<>();
-            if (androidEnterpriseUsers != null && !androidEnterpriseUsers.isEmpty()) {
-                for (AndroidEnterpriseUser userDevice: androidEnterpriseUsers) {
-                    deviceID.add(userDevice.getEmmDeviceId());
-                }
-            }
-
-            List<String> byodDevices = new ArrayList<>();
-            List<String> copeDevices = new ArrayList<>();
-            // Get all registered device
-            List<Device> devices = AndroidAPIUtils.getDeviceManagementService().
-                    getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, false);
-            for (Device device : devices) { // Go through all enrolled devices
-                if (deviceID.contains(device.getDeviceIdentifier())) { // Filter out only enterprise enrolled devices.
-                    if (device.getEnrolmentInfo().getOwnership().equals(EnrolmentInfo.OwnerShip.BYOD)) {
-                        byodDevices.add(device.getDeviceIdentifier());
-                    } else {
-                        copeDevices.add(device.getDeviceIdentifier());
+                // Extract the device identifiers of enterprise devices.
+                List<String> deviceID = new ArrayList<>();
+                if (androidEnterpriseUsers != null && !androidEnterpriseUsers.isEmpty()) {
+                    for (AndroidEnterpriseUser userDevice: androidEnterpriseUsers) {
+                        deviceID.add(userDevice.getEmmDeviceId());
                     }
                 }
-            }
 
-            CommandOperation operation = new CommandOperation();
-            operation.setType(Operation.Type.COMMAND);//TODO: Check if this should be profile
-            // type when implementing COPE/COSU
-            if (byodDevices != null && !byodDevices.isEmpty()) { // BYOD devices only needs a data wipe(work profile)
-                log.warn("Wiping " + byodDevices.size() + " BYOD devices");
-                operation.setCode(AndroidConstants.OperationCodes.ENTERPRISE_WIPE);
-            } else if (copeDevices != null && !copeDevices.isEmpty()) {
-                log.warn("Wiping " + copeDevices.size() + " COPE/COSU devices");
-                operation.setCode(AndroidConstants.OperationCodes.WIPE_DATA);
+                List<String> byodDevices = new ArrayList<>();
+                List<String> copeDevices = new ArrayList<>();
+                // Get all registered device
+                List<Device> devices = AndroidAPIUtils.getDeviceManagementService().
+                        getAllDevices(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, false);
+                for (Device device : devices) { // Go through all enrolled devices
+                    if (deviceID.contains(device.getDeviceIdentifier())) { // Filter out only enterprise enrolled devices.
+                        if (device.getEnrolmentInfo().getOwnership().equals(EnrolmentInfo.OwnerShip.BYOD)) {
+                            byodDevices.add(device.getDeviceIdentifier());
+                        } else {
+                            copeDevices.add(device.getDeviceIdentifier());
+                        }
+                    }
+                }
+
+                CommandOperation operation = new CommandOperation();
+                operation.setType(Operation.Type.COMMAND);//TODO: Check if this should be profile
+                // type when implementing COPE/COSU
+                if (byodDevices != null && !byodDevices.isEmpty()) { // BYOD devices only needs a data wipe(work profile)
+                    log.warn("Wiping " + byodDevices.size() + " BYOD devices");
+                    operation.setCode(AndroidConstants.OperationCodes.ENTERPRISE_WIPE);
+                } else if (copeDevices != null && !copeDevices.isEmpty()) {
+                    log.warn("Wiping " + copeDevices.size() + " COPE/COSU devices");
+                    operation.setCode(AndroidConstants.OperationCodes.WIPE_DATA);
+                }
+                AndroidDeviceUtils.getOperationResponse(deviceID, operation);
+                log.warn("Added wipe to all devices");
+                return Response.status(Response.Status.OK).build();
+            } catch (EnterpriseServiceException e) {
+                return Response.serverError().entity(
+                        new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
+            } catch (OperationManagementException e) {
+                String errorMessage = "Could not add wipe command to enterprise " + enterpriseConfigs.getEnterpriseId();
+                log.error(errorMessage);
+                return Response.serverError().entity(
+                        new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+            } catch (DeviceManagementException e) {
+                String errorMessage = "Could not add wipe command to enterprise " + enterpriseConfigs.getEnterpriseId() +
+                        " due to an error in device management";
+                log.error(errorMessage);
+                return Response.serverError().entity(
+                        new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
+            } catch (InvalidDeviceException e) {
+                String errorMessage = "Could not add wipe command to enterprise due to invalid device ids";
+                log.error(errorMessage);
+                return Response.serverError().entity(
+                        new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
             }
-            AndroidDeviceUtils.getOperationResponse(deviceID, operation);
-            log.warn("Added wipe to all devices");
-            return Response.status(Response.Status.OK).build();
-        } catch (EnterpriseServiceException e) {
-            return Response.serverError().entity(
-                    new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving configs").build()).build();
-        } catch (OperationManagementException e) {
-            String errorMessage = "Could not add wipe command to enterprise " + enterpriseConfigs.getEnterpriseId();
-            log.error(errorMessage);
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (DeviceManagementException e) {
-            String errorMessage = "Could not add wipe command to enterprise " + enterpriseConfigs.getEnterpriseId() +
-                    " due to an error in device management";
-            log.error(errorMessage);
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (InvalidDeviceException e) {
-            String errorMessage = "Could not add wipe command to enterprise due to invalid device ids";
-            log.error(errorMessage);
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while executing wipe enterprice command";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
         }
-
     }
 
 }

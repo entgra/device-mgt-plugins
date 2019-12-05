@@ -94,7 +94,8 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseApp;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseInstallPolicy;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseUser;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
 import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
 import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
@@ -140,12 +141,11 @@ public class AndroidDeviceUtils {
     }
 
     public static Activity getOperationResponse(List<String> deviceIDs, Operation operation)
-            throws OperationManagementException, InvalidDeviceException {
+            throws OperationManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         if (deviceIDs == null || deviceIDs.isEmpty()) {
             String errorMessage = "Device identifier list is empty";
             log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+            throw new BadRequestExceptionDup(errorMessage);
         }
         DeviceIdentifier deviceIdentifier;
         List<DeviceIdentifier> deviceIdentifiers = new ArrayList<>();
@@ -637,10 +637,10 @@ public class AndroidDeviceUtils {
      * @param description description of the exception
      * @return a new BadRequestException with the specified details as a response DTO
      */
-    public static BadRequestException buildBadRequestException(String description) {
+    public static ErrorResponse buildBadRequestException(String description) {
         ErrorResponse errorResponse = getErrorResponse(AndroidConstants.
                                                                ErrorMessages.STATUS_BAD_REQUEST_MESSAGE_DEFAULT, 400l, description);
-        return new BadRequestException(errorResponse);
+        return errorResponse;
     }
 
     /**

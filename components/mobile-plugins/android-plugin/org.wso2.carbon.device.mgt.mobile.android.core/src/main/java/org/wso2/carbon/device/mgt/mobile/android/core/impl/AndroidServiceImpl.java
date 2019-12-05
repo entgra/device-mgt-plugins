@@ -849,10 +849,10 @@ public class AndroidServiceImpl implements AndroidService {
             String errorMessage = "Issue in retrieving operation management service instance";
             log.error(errorMessage, e);
             throw new UnexpectedServerErrorExceptionDup(errorMessage);
-        } catch (DeviceManagementException e) {
+        } catch (BadRequestExceptionDup e) {
             String errorMessage = "Issue in retrieving device management service instance";
             log.error(errorMessage, e);
-            throw new UnexpectedServerErrorExceptionDup(errorMessage, e);
+            throw new BadRequestExceptionDup(errorMessage, e);
         }
     }
 
@@ -1345,89 +1345,100 @@ public class AndroidServiceImpl implements AndroidService {
         }
     }
 
-    public String insertUser(EnterpriseUser enterpriseUser) throws EnterpriseServiceException {
-        EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-        String token;
-        boolean deviceIdExist = false;
+    public String insertUser(EnterpriseUser enterpriseUser)
+            throws EnterpriseServiceException, AndroidDeviceMgtPluginException {
+        try {
+            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
 
-        String googleUserId;
-        List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
-                .getEnterpriseUser(CarbonContext.getThreadLocalCarbonContext().getUsername());
-        GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
-        if (androidEnterpriseUsers != null && !androidEnterpriseUsers.isEmpty()) {
-            googleUserId = androidEnterpriseUsers.get(0).getGoogleUserId();
-            // If this device is also present, only need to provide a token for this request.
-            for (AndroidEnterpriseUser enterprise : androidEnterpriseUsers) {
-                if (enterprise.getEmmDeviceId() != null
-                        && enterprise.getEmmDeviceId().equals(enterpriseUser.getAndroidPlayDeviceId())) {
-                    deviceIdExist = true;
+            String token;
+            boolean deviceIdExist = false;
+
+            String googleUserId;
+            List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
+                    .getEnterpriseUser(CarbonContext.getThreadLocalCarbonContext().getUsername());
+            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
+            if (androidEnterpriseUsers != null && !androidEnterpriseUsers.isEmpty()) {
+                googleUserId = androidEnterpriseUsers.get(0).getGoogleUserId();
+                // If this device is also present, only need to provide a token for this request.
+                for (AndroidEnterpriseUser enterprise : androidEnterpriseUsers) {
+                    if (enterprise.getEmmDeviceId() != null
+                            && enterprise.getEmmDeviceId().equals(enterpriseUser.getAndroidPlayDeviceId())) {
+                        deviceIdExist = true;
+                    }
                 }
+            } else {
+                googleUserId = googleAPIInvoker.insertUser(enterpriseConfigs.getEnterpriseId(), CarbonContext
+                        .getThreadLocalCarbonContext()
+                        .getUsername());
             }
-        } else {
-            googleUserId = googleAPIInvoker.insertUser(enterpriseConfigs.getEnterpriseId(), CarbonContext
-                    .getThreadLocalCarbonContext()
-                    .getUsername());
-        }
-        // Fetching an auth token from Google EMM API
-        token = googleAPIInvoker.getToken(enterpriseConfigs.getEnterpriseId(), googleUserId);
+            // Fetching an auth token from Google EMM API
+            token = googleAPIInvoker.getToken(enterpriseConfigs.getEnterpriseId(), googleUserId);
 
-        if (!deviceIdExist) {
-            AndroidEnterpriseUser androidEnterpriseUser = new AndroidEnterpriseUser();
-            androidEnterpriseUser.setEmmUsername(CarbonContext.getThreadLocalCarbonContext().getUsername());
-            androidEnterpriseUser.setTenantId(CarbonContext.getThreadLocalCarbonContext().getTenantId());
-            androidEnterpriseUser.setAndroidPlayDeviceId(enterpriseUser.getAndroidPlayDeviceId());
-            androidEnterpriseUser.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
-            androidEnterpriseUser.setEmmDeviceId(enterpriseUser.getEmmDeviceIdentifier());
-            androidEnterpriseUser.setGoogleUserId(googleUserId);
+            if (!deviceIdExist) {
+                AndroidEnterpriseUser androidEnterpriseUser = new AndroidEnterpriseUser();
+                androidEnterpriseUser.setEmmUsername(CarbonContext.getThreadLocalCarbonContext().getUsername());
+                androidEnterpriseUser.setTenantId(CarbonContext.getThreadLocalCarbonContext().getTenantId());
+                androidEnterpriseUser.setAndroidPlayDeviceId(enterpriseUser.getAndroidPlayDeviceId());
+                androidEnterpriseUser.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
+                androidEnterpriseUser.setEmmDeviceId(enterpriseUser.getEmmDeviceIdentifier());
+                androidEnterpriseUser.setGoogleUserId(googleUserId);
 
-            AndroidAPIUtils.getAndroidPluginService().addEnterpriseUser(androidEnterpriseUser);
+                AndroidAPIUtils.getAndroidPluginService().addEnterpriseUser(androidEnterpriseUser);
+            }
+            return token;
+        } catch (NotFoundExceptionDup e) {
+            String errorMessage = "Not found";
+            log.error(errorMessage);
+            throw new NotFoundExceptionDup(errorMessage);
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Unexpected server error";
+            log.error(errorMessage);
+            throw new UnexpectedServerErrorExceptionDup(errorMessage);
+        } catch (AndroidDeviceMgtPluginException e) {
+            String errorMessage = "Error occured while executing wipe enterprice command";
+            log.error(errorMessage);
+            throw new AndroidDeviceMgtPluginException(errorMessage);
         }
-        return token;
     }
 
 
-    private static void validateApplicationUrl(String apkUrl) {
+    private static void validateApplicationUrl(String apkUrl) throws BadRequestExceptionDup{
         try {
             URL url = new URL(apkUrl);
             URLConnection conn = url.openConnection();
             if (((HttpURLConnection) conn).getResponseCode() != HttpURLConnection.HTTP_OK) {
                 String errorMessage = "URL is not pointed to a downloadable file.";
                 log.error(errorMessage);
-                throw new BadRequestException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+                throw new BadRequestExceptionDup(errorMessage);
             }
         } catch (MalformedURLException e) {
             String errorMessage = "Malformed application url.";
             log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+            throw new BadRequestExceptionDup(errorMessage);
         } catch (IOException e) {
             String errorMessage = "Invalid application url.";
             log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+            throw new BadRequestExceptionDup(errorMessage);
         }
     }
 
-    private static void validateApplicationType(String type) {
+    private static void validateApplicationType(String type) throws BadRequestExceptionDup{
         if (type != null) {
             if (!"enterprise".equalsIgnoreCase(type)
                     && !"public".equalsIgnoreCase(type)
                     && !"webapp".equalsIgnoreCase(type)) {
                 String errorMessage = "Invalid application type.";
                 log.error(errorMessage);
-                throw new BadRequestException(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+                throw new BadRequestExceptionDup(errorMessage);
             }
         } else {
             String errorMessage = "Application type is missing.";
             log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+            throw new BadRequestExceptionDup(errorMessage);
         }
     }
 
-    private static void validateScheduleDate(String dateString) {
+    private static void validateScheduleDate(String dateString) throws BadRequestExceptionDup{
         try {
             if (dateString != null && !dateString.isEmpty()) {
                 SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
@@ -1437,8 +1448,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (ParseException e) {
             String errorMessage = "Issue in validating the schedule date";
             log.error(errorMessage);
-            throw new BadRequestException(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(400l).setMessage(errorMessage).build());
+            throw new BadRequestExceptionDup(errorMessage);
         }
     }
 }

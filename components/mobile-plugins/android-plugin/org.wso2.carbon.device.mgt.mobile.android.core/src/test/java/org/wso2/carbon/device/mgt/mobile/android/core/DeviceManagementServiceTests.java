@@ -62,51 +62,44 @@ public class DeviceManagementServiceTests {
     }
 
     @BeforeClass
-    public void init() throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+    public void init() {
         MockitoAnnotations.initMocks(this);
         androidService = new AndroidServiceImpl();
     }
 
-    private void mockDeviceManagementService()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+    private void mockDeviceManagementService() {
         PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getDeviceManagementService"))
                 .toReturn(new DeviceManagementProviderServiceMock());
     }
 
-    private void mockApplicationManagerService()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+    private void mockApplicationManagerService() {
         PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getApplicationManagerService"))
                 .toReturn(new ApplicationManagementProviderServiceMock());
     }
 
-    private void mockPolicyManagerService()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+    private void mockPolicyManagerService() {
         PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getPolicyManagerService"))
                 .toReturn(new PolicyManagerServiceMock());
     }
 
-    private void mockDeviceInformationManagerService()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+    private void mockDeviceInformationManagerService() {
         PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getDeviceInformationManagerService"))
                 .toReturn(new DeviceInformationManagerServiceMock());
     }
 
-    private void mockNotificationManagementService()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+    private void mockNotificationManagementService() {
         PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getNotificationManagementService"))
                 .toReturn(new NotificationManagementServiceMock());
     }
 
-    private void mockUser()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+    private void mockUser() {
         PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getAuthenticatedUser"))
                 .toReturn("admin");
     }
 
     @Test
     public void testUpdateApplicationList()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            ApplicationManagementException {
+            throws ApplicationManagementException {
         mockApplicationManagerService();
         Message message = androidService
                 .updateApplicationList(TestUtils.getDeviceId(), TestUtils.getAndroidApplications());
@@ -116,14 +109,14 @@ public class DeviceManagementServiceTests {
 
     @Test (expectedExceptions = {InvalidDeviceException.class})
     public void testGetPendingOperationsForNullDevice()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         List<? extends Operation> resultOperations = new ArrayList<>();
         androidService.getPendingOperations(null, resultOperations, true);
     }
 
     @Test (expectedExceptions = {InvalidDeviceException.class})
     public void testGetPendingOperationsForInvalidDevice()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         List<? extends Operation> resultOperations = new ArrayList<>();
         androidService.getPendingOperations("1234", resultOperations, true);
@@ -131,7 +124,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsNullResponse()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         List<? extends Operation> pendingOperations = androidService
                 .getPendingOperations(TestUtils.getDeviceId(), null, true);
@@ -141,7 +134,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithMonitorResponse()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockPolicyManagerService();
         List<? extends Operation> pendingOperations = androidService
@@ -152,7 +145,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithApplicationResponse()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockApplicationManagerService();
         List<? extends Operation> pendingOperations = androidService
@@ -164,7 +157,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithDeviceInfoResponse()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockDeviceInformationManagerService();
         List<? extends Operation> pendingOperations = androidService
@@ -176,7 +169,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithInProgressResponse()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, OperationManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         List<? extends Operation> pendingOperations = androidService
                 .getPendingOperations(TestUtils.getDeviceId(),
@@ -187,7 +180,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithErrorResponse()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockNotificationManagementService();
         List<? extends Operation> pendingOperations = androidService
@@ -199,7 +192,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testEnrollDeviceWithoutLocationSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockPolicyManagerService();
         mockUser();
@@ -210,7 +203,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testEnrollDeviceWithLocationSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockDeviceInformationManagerService();
         mockPolicyManagerService();
@@ -251,7 +244,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testEnrollDeviceUnSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockUser();
         AndroidDevice androidDevice = TestUtils.getBasicAndroidDevice();
@@ -263,7 +256,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testIsEnrolledExists()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException {
         mockDeviceManagementService();
         Message message = androidService.isEnrolled(TestUtils.getDeviceId(), null);
         Assert.assertNotNull(message);
@@ -272,7 +265,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testIsEnrolledNonExist()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException {
         mockDeviceManagementService();
         Message message = androidService.isEnrolled("1234", null);
         Assert.assertNotNull(message);
@@ -281,7 +274,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testIsEnrolledNull()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException {
         mockDeviceManagementService();
         Message response = androidService.isEnrolled(null, null);
         Assert.assertNotNull(response);
@@ -290,8 +283,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testModifyEnrollmentSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockUser();
         boolean status = androidService.modifyEnrollment(TestUtils.getDeviceId(), TestUtils.getBasicAndroidDevice());
@@ -300,8 +292,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testModifyEnrollmentUnSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException,
-            AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, AndroidDeviceMgtPluginException {
         mockDeviceManagementService();
         mockUser();
         AndroidDevice androidDevice = TestUtils.getBasicAndroidDevice();
@@ -313,7 +304,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testDisEnrollDeviceSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException {
         mockDeviceManagementService();
         boolean status = androidService.disEnrollDevice(TestUtils.getDeviceId());
         Assert.assertTrue(status);
@@ -321,7 +312,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testDisEnrollUnSuccess()
-            throws DeviceManagementException, OperationManagementException, InvalidDeviceException {
+            throws DeviceManagementException {
         mockDeviceManagementService();
         boolean status = androidService.disEnrollDevice("1234");
         Assert.assertFalse(status);

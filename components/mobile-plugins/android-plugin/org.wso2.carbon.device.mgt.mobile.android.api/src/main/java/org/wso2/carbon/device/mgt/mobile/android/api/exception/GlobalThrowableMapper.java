@@ -21,11 +21,7 @@ package org.wso2.carbon.device.mgt.mobile.android.api.exception;
 import com.google.gson.JsonParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.ErrorDTO;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.ForbiddenException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 
 import javax.naming.AuthenticationException;
@@ -58,7 +54,7 @@ public class GlobalThrowableMapper implements ExceptionMapper {
             if (log.isDebugEnabled()) {
                 log.debug(errorMessage, e);
             }
-            return AndroidDeviceUtils.buildBadRequestException(errorMessage).getResponse();
+            return new BadRequestException(AndroidDeviceUtils.buildBadRequestException(errorMessage)).getResponse();
         }
         if (e instanceof NotFoundException) {
                 return ((NotFoundException) e).getResponse();

@@ -88,7 +88,6 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WebClipBean
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WifiBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WipeDataBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;

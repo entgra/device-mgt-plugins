@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.android.common.exception;
+package org.wso2.carbon.device.mgt.mobile.android.api.exception;
 
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.ErrorDTO;
