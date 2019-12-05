@@ -282,11 +282,8 @@ public class AndroidEnterpriseUtils {
         if (productListResponse != null && productListResponse.getProduct() != null
                 && !productListResponse.getProduct().isEmpty()) {
 
-            List<String> packageNamesOfApps = new ArrayList<>();
-            for (Product product1 : productListResponse.getProduct()) {
-                String s = (product1.getProductId().replaceFirst("app:", ""));
-                packageNamesOfApps.add(s);
-            }
+            List<String> packageNamesOfApps = productListResponse.getProduct().stream()
+                    .map(product -> (product.getProductId().replaceFirst("app:", ""))).collect(Collectors.toList());
 
             List<Application> existingApps = applicationManager.getApplications(packageNamesOfApps);
             List<Product> products = productListResponse.getProduct();
