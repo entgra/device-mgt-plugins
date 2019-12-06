@@ -25,7 +25,6 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.analytics.data.publisher.service.EventsPublisherService;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
@@ -35,7 +34,6 @@ import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderServ
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidGoogleEnterpriseService;
@@ -178,7 +176,7 @@ public class AndroidAPIUtils {
 
     public static Response getOperationResponse(List<String> deviceIDs, Operation operation)
             throws AndroidDeviceMgtPluginException, OperationManagementException, InvalidDeviceException {
-        if (deviceIDs == null || deviceIDs.size() == 0) {
+        if (deviceIDs == null || deviceIDs.isEmpty()) {
             String errorMessage = "Device identifier list is empty";
             log.error(errorMessage);
             throw new BadRequestExceptionDup(errorMessage);

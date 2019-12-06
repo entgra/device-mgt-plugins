@@ -32,7 +32,7 @@ import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
 /**
- * @scr.component name="org.wso2.carbon.device.mgt.mobile.android.core.impl.internal.AndroidPluginServiceComponent"
+ * @scr.component name="org.wso2.carbon.device.mgt.mobile.android.impl.internal.AndroidPluginServiceComponent"
  * immediate="true"
  * @scr.reference name="org.wso2.carbon.ndatasource"
  * interface="org.wso2.carbon.ndatasource.core.DataSourceService"

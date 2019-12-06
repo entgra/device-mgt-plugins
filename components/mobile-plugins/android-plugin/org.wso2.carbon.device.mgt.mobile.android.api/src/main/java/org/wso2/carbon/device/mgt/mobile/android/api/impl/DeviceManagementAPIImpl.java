@@ -146,8 +146,7 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         }
         try {
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
-            Response response = androidService.enrollDevice(androidDevice);
-            return response;
+            return androidService.enrollDevice(androidDevice);
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while enrolling the android, which carries the id '" +
                     androidDevice.getDeviceIdentifier() + "'";

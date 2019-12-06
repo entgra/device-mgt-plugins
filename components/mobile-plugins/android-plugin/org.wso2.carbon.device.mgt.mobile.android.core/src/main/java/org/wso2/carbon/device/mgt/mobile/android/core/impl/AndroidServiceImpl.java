@@ -17,7 +17,6 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.core.impl;
 
-import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -838,9 +837,8 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.REMOTE_APP_CONFIG);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(applicationRestriction.toJSON());
-            Response response = AndroidAPIUtils.getOperationResponse(applicationRestrictionBeanWrapper.getDeviceIDs(),
+            return AndroidAPIUtils.getOperationResponse(applicationRestrictionBeanWrapper.getDeviceIDs(),
                     operation);
-            return response;
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);

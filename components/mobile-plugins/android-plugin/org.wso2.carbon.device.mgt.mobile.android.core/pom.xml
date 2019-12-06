@@ -67,14 +67,19 @@
                             javax.naming,
                             org.wso2.carbon.context,
                             org.wso2.carbon.utils.*,
+                            org.wso2.carbon.device.mgt.mobile.android.common.*,
                             org.wso2.carbon.device.mgt.common.*,
+                            org.wso2.carbon.device.mgt.core.*,
                             org.wso2.carbon.ndatasource.core,
                             org.wso2.carbon.policy.mgt.common.*,
+                            org.wso2.carbon.policy.mgt.core.*,
                             org.wso2.carbon.registry.core,
                             org.wso2.carbon.registry.core.session,
                             org.wso2.carbon.registry.core.service,
                             org.wso2.carbon.registry.api,
                             org.wso2.carbon.device.mgt.extensions.license.mgt.registry,
+                            org.wso2.carbon.analytics.datasource.commons.*,
+                            org.wso2.carbon.base,
                             com.google.gson.*
                         </Import-Package>
                         <Export-Package>
@@ -161,17 +166,14 @@
         <dependency>
             <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
             <artifactId>org.wso2.carbon.device.mgt.mobile.android.common</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.device.application.mgt.common</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
-            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -182,27 +184,22 @@
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.policy.mgt.common</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.apimgt.application.extension</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.apimgt.annotations</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
@@ -228,10 +225,6 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.queuing</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.ndatasource.core</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-dbcp.wso2</groupId>
