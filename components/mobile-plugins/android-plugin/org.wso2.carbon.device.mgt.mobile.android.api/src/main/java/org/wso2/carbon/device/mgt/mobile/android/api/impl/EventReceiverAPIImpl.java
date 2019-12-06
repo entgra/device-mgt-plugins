@@ -137,8 +137,8 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
                                    @HeaderParam("If-Modified-Since") String ifModifiedSince) {
         try{
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
-            Response response = androidService.retrieveAlerts(deviceId, from, to, type, ifModifiedSince);
-            return response;
+            List<DeviceState> deviceStates = androidService.retrieveAlerts(deviceId, from, to, type, ifModifiedSince);
+            return Response.status(Response.Status.OK).entity(deviceStates).build();
         } catch (BadRequestExceptionDup e){
             String msg = "Invalid request";
             log.error(msg, e);

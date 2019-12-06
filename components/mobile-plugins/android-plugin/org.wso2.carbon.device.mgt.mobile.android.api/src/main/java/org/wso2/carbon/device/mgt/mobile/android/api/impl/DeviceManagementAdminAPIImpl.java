@@ -89,6 +89,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WifiBeanWra
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WipeDataBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorExceptionDup;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
@@ -1047,8 +1048,22 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
 
         try{
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
-            Response response = androidService.sendApplicationConfiguration(applicationRestrictionBeanWrapper);
+            ProfileOperation operation = androidService.sendApplicationConfiguration(applicationRestrictionBeanWrapper);
+            Response response = AndroidAPIUtils.getOperationResponse(applicationRestrictionBeanWrapper.getDeviceIDs(),
+                    operation);
             return Response.status(Response.Status.CREATED).entity(response).build();
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
+                            .setMessage(errorMessage).build()).build();
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
             String msg = "Invalid request";
             log.error(msg, e);

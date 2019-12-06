@@ -28,9 +28,10 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 
-
+import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.AndroidPlatformConfiguration;
+import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceState;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.EnterpriseTokenUrl;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.GoogleAppSyncResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.*;
@@ -380,7 +381,7 @@ public interface AndroidService {
      * @return
      * @throws {@link AndroidDeviceMgtPluginException}
      */
-    Response sendApplicationConfiguration(
+    ProfileOperation sendApplicationConfiguration(
             ApplicationRestrictionBeanWrapper applicationRestrictionBeanWrapper)
             throws AndroidDeviceMgtPluginException;
 
@@ -427,7 +428,7 @@ public interface AndroidService {
      * @return {@link Response}
      * @throws {@link DeviceManagementException}
      */
-    Response enrollDevice(AndroidDevice androidDevice) throws DeviceManagementException, AndroidDeviceMgtPluginException;
+    Message enrollDevice(AndroidDevice androidDevice) throws DeviceManagementException, AndroidDeviceMgtPluginException;
 
     /**
      * Method to check if a device is enrolled
@@ -480,6 +481,6 @@ public interface AndroidService {
      * @return {@link Response}
      * @throws {@link AndroidDeviceMgtPluginException}
      */
-    Response retrieveAlerts(String deviceId, long from, long to, String type, String ifModifiedSince)
+    List<DeviceState> retrieveAlerts(String deviceId, long from, long to, String type, String ifModifiedSince)
             throws AndroidDeviceMgtPluginException;
 }

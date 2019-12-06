@@ -81,6 +81,8 @@
                             org.wso2.carbon.analytics.datasource.commons.*,
                             org.wso2.carbon.base,
                             com.google.gson.*
+                            org.wso2.carbon.device.application.mgt.common.*
+                            org.wso2.carbon.user.core.
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.device.mgt.mobile.android.core.internal,

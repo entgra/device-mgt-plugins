@@ -17,6 +17,7 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.core.impl;
 
+import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -63,7 +64,7 @@ import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtil
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
-import javax.ws.rs.core.Response;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -222,13 +223,13 @@ public class AndroidServiceImpl implements AndroidService {
         if (device != null) {
             String status = String.valueOf(device.getEnrolmentInfo().getStatus());
             Message responseMessage = new Message();
-            responseMessage.setResponseCode(Response.Status.OK.toString());
+            responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_OK));
             responseMessage
                     .setResponseMessage("Status of android device that carries the id '" + id + "' is " + status);
             return responseMessage;
         } else {
             Message responseMessage = new Message();
-            responseMessage.setResponseCode(Response.Status.NOT_FOUND.toString());
+            responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_NOT_FOUND));
             responseMessage.setResponseMessage("No Android device is found upon the id '" + id + "'");
             return responseMessage;
         }
@@ -824,7 +825,7 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
     @Override
-    public Response sendApplicationConfiguration(ApplicationRestrictionBeanWrapper applicationRestrictionBeanWrapper)
+    public ProfileOperation sendApplicationConfiguration(ApplicationRestrictionBeanWrapper applicationRestrictionBeanWrapper)
             throws AndroidDeviceMgtPluginException {
         try {
             if (applicationRestrictionBeanWrapper == null || applicationRestrictionBeanWrapper.getOperation() == null) {
@@ -837,16 +838,7 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setCode(AndroidConstants.OperationCodes.REMOTE_APP_CONFIG);
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(applicationRestriction.toJSON());
-            return AndroidAPIUtils.getOperationResponse(applicationRestrictionBeanWrapper.getDeviceIDs(),
-                    operation);
-        } catch (InvalidDeviceException e) {
-            String errorMessage = "Invalid Device Identifiers found.";
-            log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
-        } catch (OperationManagementException e) {
-            String errorMessage = "Issue in retrieving operation management service instance";
-            log.error(errorMessage, e);
-            throw new UnexpectedServerErrorExceptionDup(errorMessage);
+            return operation;
         } catch (BadRequestExceptionDup e) {
             String errorMessage = "Issue in retrieving device management service instance";
             log.error(errorMessage, e);
@@ -975,7 +967,7 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
     @Override
-    public Response enrollDevice(AndroidDevice androidDevice)
+    public Message enrollDevice(AndroidDevice androidDevice)
             throws DeviceManagementException, AndroidDeviceMgtPluginException {
         try {
             String token = null;
@@ -1069,21 +1061,21 @@ public class AndroidServiceImpl implements AndroidService {
                 }
 
                 Message responseMessage = new Message();
-                responseMessage.setResponseCode(Response.Status.OK.toString());
+                responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_OK));
                 if (token == null) {
                     responseMessage.setResponseMessage("Android device, which carries the id '" +
                             androidDevice.getDeviceIdentifier() + "' has successfully been enrolled");
                 } else {
                     responseMessage.setResponseMessage("Google response token" + token);
                 }
-                return Response.status(Response.Status.OK).entity(responseMessage).build();
+                return responseMessage;
             } else {
                 Message responseMessage = new Message();
-                responseMessage.setResponseCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
+                responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_SERVER_ERROR));
                 responseMessage.setResponseMessage("Failed to enroll '" +
                         device.getType() + "' device, which carries the id '" +
                         androidDevice.getDeviceIdentifier() + "'");
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseMessage).build();
+                return responseMessage;
             }
         } catch (PolicyManagementException | InvalidDeviceException | OperationManagementException e) {
             String msg = "Error occurred while enforcing default enrollment policy upon android " +
@@ -1174,11 +1166,11 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
     @Override
-    public Response retrieveAlerts(String deviceId,
-                               long from,
-                               long to,
-                               String type,
-                               String ifModifiedSince) throws AndroidDeviceMgtPluginException {
+    public List<DeviceState> retrieveAlerts(String deviceId,
+                                            long from,
+                                            long to,
+                                            String type,
+                                            String ifModifiedSince) throws AndroidDeviceMgtPluginException {
         if (from != 0l && to != 0l && deviceId != null){
             return retrieveAlertFromDate(deviceId, from, to);
         } else if (deviceId != null && type != null) {
@@ -1194,7 +1186,7 @@ public class AndroidServiceImpl implements AndroidService {
         }
     }
 
-    private Response retrieveAlert(String deviceId) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
+    private List<DeviceState> retrieveAlert(String deviceId) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events for given device Identifier.");
         }
@@ -1207,7 +1199,7 @@ public class AndroidServiceImpl implements AndroidService {
                         "published for Device: " + deviceId + ".";
                 throw new NotFoundExceptionDup(errorMessage);
             } else {
-                return Response.status(Response.Status.OK).entity(deviceStates).build();
+                return deviceStates;
             }
         } catch (AnalyticsException e) {
             String msg = "Error occurred while getting published events for specific device: " + deviceId + ".";
@@ -1216,7 +1208,7 @@ public class AndroidServiceImpl implements AndroidService {
         }
     }
 
-    private Response retrieveAlertFromDate(String deviceId, long from, long to) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
+    private List<DeviceState> retrieveAlertFromDate(String deviceId, long from, long to) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
         String fromDate = String.valueOf(from);
         String toDate = String.valueOf(to);
         if (log.isDebugEnabled()) {
@@ -1233,7 +1225,7 @@ public class AndroidServiceImpl implements AndroidService {
                 throw new NotFoundExceptionDup(errorMessage);
 
             } else {
-                return Response.status(Response.Status.OK).entity(deviceStates).build();
+                return deviceStates;
             }
         } catch (AnalyticsException e) {
             String msg = "Error occurred while getting published events for specific " +
@@ -1243,7 +1235,7 @@ public class AndroidServiceImpl implements AndroidService {
         }
     }
 
-    private Response retrieveAlertByType(String deviceId, String type) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
+    private List<DeviceState> retrieveAlertByType(String deviceId, String type) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events for given device identifier and type.");
         }
@@ -1257,7 +1249,7 @@ public class AndroidServiceImpl implements AndroidService {
                 throw new NotFoundExceptionDup(errorMessage);
 
             } else {
-                return Response.status(Response.Status.OK).entity(deviceStates).build();
+                return deviceStates;
             }
         } catch (AnalyticsException e) {
             String msg = "Error occurred while getting published events for specific " +
