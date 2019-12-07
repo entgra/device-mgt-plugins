@@ -321,21 +321,27 @@ public class AndroidDeviceUtils {
                         JsonArray appListArray = appListElement.getAsJsonArray();
 
                         // Find if there are Apps with Work profile configurations
+                        boolean alreadySendToGoogle = false;
                         for (JsonElement appElement : appListArray) {
                             JsonElement googlePolicyPayload = appElement.getAsJsonObject().
                                     get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD);
+
 
                             if (googlePolicyPayload != null) {
                                 String uuid = appElement.getAsJsonObject().get("uuid").toString();
                                 containsGoogleAppPolicy = true;// breaking out of outer for loop
                                 try {
                                     uuid = uuid.replace("\"", "");
-                                    sendPayloadToGoogle(uuid, payload, deviceIdentifier);
+                                    if (alreadySendToGoogle) {
+                                        sendPayloadToGoogle(uuid, payload, deviceIdentifier, false);
+                                    } else {
+                                        sendPayloadToGoogle(uuid, payload, deviceIdentifier, true);
+                                        alreadySendToGoogle = true;
+                                    }
                                 } catch (org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException e) {
                                     String errorMessage = "App install failed for device " + deviceIdentifier.getId();
                                     log.error(errorMessage, e);
                                 }
-                                break;
                             }
                         }
 
@@ -349,8 +355,10 @@ public class AndroidDeviceUtils {
      * Sends the app install policy to Google
      * @param payload policy profile
      * @param deviceIdentifier device to apply policy
+     * @param requireSendingToGoogle
      */
-    private static void sendPayloadToGoogle(String uuid, String payload, DeviceIdentifier deviceIdentifier)
+    private static void sendPayloadToGoogle(String uuid, String payload, DeviceIdentifier deviceIdentifier,
+                                            boolean requireSendingToGoogle)
             throws org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException {
         try {
             EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigsFromGoogle();
@@ -370,10 +378,12 @@ public class AndroidDeviceUtils {
                         for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
                             apps.add(enterpriseApp.getProductId());
                         }
-                        googleAPIInvoker.approveAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail
-                                .getGoogleUserId(), apps, enterpriseInstallPolicy.getProductSetBehavior());
-                        googleAPIInvoker.updateAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
-                                AndroidEnterpriseUtils.convertToDeviceInstance(enterpriseInstallPolicy));
+                        if (requireSendingToGoogle) {
+                            googleAPIInvoker.approveAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail
+                                    .getGoogleUserId(), apps, enterpriseInstallPolicy.getProductSetBehavior());
+                            googleAPIInvoker.updateAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
+                                    AndroidEnterpriseUtils.convertToDeviceInstance(enterpriseInstallPolicy));
+                        }
                         AndroidEnterpriseUtils.getAppSubscriptionService()
                                 .performEntAppSubscription(uuid,
                                         Arrays.asList(CarbonContext.getThreadLocalCarbonContext().getUsername()),
@@ -698,15 +708,20 @@ public class AndroidDeviceUtils {
             StringEntity requestEntity = new StringEntity(payload.toString(), ContentType.APPLICATION_JSON);
             JsonArray appListArray = appListElement.getAsJsonArray();
             for (JsonElement appElement : appListArray) {
-                uuid = appElement.getAsJsonObject().
-                        get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_UUID).getAsString();
-                try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                    HttpPost postRequest = new HttpPost(requestUrl.replace("{uuid}", uuid));
-                    postRequest.setHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION,
-                            AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo
-                                    .getAccessToken());
-                    postRequest.setEntity(requestEntity);
-                    httpClient.execute(postRequest);
+                JsonElement googlePolicyPayload = appElement.getAsJsonObject().
+                        get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD);
+
+                if (googlePolicyPayload == null || googlePolicyPayload.toString().equals("\"\"")) {
+                    uuid = appElement.getAsJsonObject().
+                            get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_UUID).getAsString();
+                    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                        HttpPost postRequest = new HttpPost(requestUrl.replace("{uuid}", uuid));
+                        postRequest.setHeader(AndroidConstants.ApplicationInstall.AUTHORIZATION,
+                                AndroidConstants.ApplicationInstall.AUTHORIZATION_HEADER_VALUE + tokenInfo
+                                        .getAccessToken());
+                        postRequest.setEntity(requestEntity);
+                        httpClient.execute(postRequest);
+                    }
                 }
             }
         } catch (UserStoreException e) {

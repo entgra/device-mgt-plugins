@@ -70,6 +70,8 @@ public final class AndroidConstants {
     public static final String USER_CLAIM_FIRST_NAME_PLACEHOLDER = "$firstName";
     public static final String USER_CLAIM_LAST_NAME_PLACEHOLDER = "$lastName";
 
+    public static final String GOOGLE_PLAY_SYNCED_APP_CATEGORY = "GooglePlaySyncedApp";
+
     public final class DeviceProperties {
         private DeviceProperties() {
             throw new AssertionError();
@@ -151,6 +153,7 @@ public final class AndroidConstants {
         public static final String NOTIFIER_FREQUENCY = "NOTIFIER_FREQUENCY";
         public static final String GLOBAL_PROXY = "SET_GLOBAL_PROXY";
         public static final String REMOTE_APP_CONFIG = "REMOTE_APP_CONFIG";
+        public static final String DISPLAY_MESSAGE_CONFIGURATION = "DISPLAY_MESSAGE_CONFIGURATION";
     }
 
     public final class StatusCodes {
@@ -185,6 +188,8 @@ public final class AndroidConstants {
         public static final String VERSION = "version";
         public static final String ICON = "icon";
         public static final String IS_ACTIVE = "isActive";
+        public static final String FREE_SUB_METHOD = "FREE";
+        public static final String PAID_SUB_METHOD = "PAID";
     }
 
     public final class ApplicationInstall {

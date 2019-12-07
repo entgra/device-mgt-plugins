@@ -49,4 +49,7 @@ public interface EnterpriseDAO {
 	boolean updateConfig(AndroidEnterpriseManagedConfig managedConfig) throws EnterpriseManagementDAOException;
 
 	boolean deleteConfig(String id, int tenantId) throws EnterpriseManagementDAOException;
+
+	List<AndroidEnterpriseUser> getAllEnterpriseDevices(int tenantId, String enterpriseId) throws
+			EnterpriseManagementDAOException;
 }
