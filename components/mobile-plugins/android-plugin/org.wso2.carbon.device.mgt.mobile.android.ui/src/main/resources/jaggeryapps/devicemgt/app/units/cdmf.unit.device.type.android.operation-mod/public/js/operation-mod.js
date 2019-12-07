@@ -167,6 +167,7 @@ var androidOperationModule = function () {
                 payload = {
                     "wifiSSID": operationPayload["ssid"],
                     "wifiPassword": operationPayload["password"],
+                    "wifiForceConnectEnabled":operationPayload["forceConnectEnabled"],
                     "wifiType": operationPayload["type"],
                     "wifiEAP": operationPayload["eap"],
                     "wifiPhase2": operationPayload["phase2"],
@@ -440,6 +441,7 @@ var androidOperationModule = function () {
                         "ssid": operationData["wifiSSID"],
                         "type": operationData["wifiType"],
                         "password": operationData["wifiPassword"],
+                        "forceConnectEnabled": operationData["wifiForceConnectEnabled"],
                         "eap": operationData["wifiEAP"],
                         "phase2": operationData["wifiPhase2"],
                         "provisioning": operationData["wifiProvisioning"],
