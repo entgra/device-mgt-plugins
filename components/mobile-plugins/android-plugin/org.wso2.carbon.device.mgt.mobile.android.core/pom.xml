@@ -78,11 +78,16 @@
                             org.wso2.carbon.registry.core.service,
                             org.wso2.carbon.registry.api,
                             org.wso2.carbon.device.mgt.extensions.license.mgt.registry,
+                            org.wso2.carbon.apimgt.application.extension.*,
                             org.wso2.carbon.analytics.datasource.commons.*,
                             org.wso2.carbon.base,
-                            com.google.gson.*
-                            org.wso2.carbon.device.application.mgt.common.*
-                            org.wso2.carbon.user.core.
+                            com.google.gson.*,
+                            org.wso2.carbon.device.application.mgt.common.*,
+                            org.wso2.carbon.user.core.*,
+                            org.wso2.carbon.user.api.*,
+                            org.apache.commons.httpclient,
+                            org.apache.http,
+                            org.apache.http.client.methods
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.device.mgt.mobile.android.core.internal,
