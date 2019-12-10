@@ -705,7 +705,7 @@ public class AndroidDeviceUtils {
                 JsonElement googlePolicyPayload = appElement.getAsJsonObject().
                         get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD);
 
-                if (googlePolicyPayload == null) {
+                if (googlePolicyPayload == null || googlePolicyPayload.toString().equals("\"\"")) {
                     uuid = appElement.getAsJsonObject().
                             get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_UUID).getAsString();
                     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
