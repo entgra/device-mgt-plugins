@@ -235,6 +235,8 @@ var androidOperationModule = function () {
                     payload["kioskLogoImage"] = deviceGlobalConfigurations["kioskLogoImage"];
                     payload["kioskAppName"] = deviceGlobalConfigurations["kioskAppName"];
                     payload["isSingleModeApp"] = deviceGlobalConfigurations["isSingleModeApp"];
+                    payload["keepDisplayAwake"] = deviceGlobalConfigurations["keepDisplayAwake"];
+
                     if (payload["isSingleModeApp"] === true) {
                         payload["isSingleModeAppBuiltForKiosk"] =
                             deviceGlobalConfigurations["isSingleModeAppBuiltForKiosk"];
@@ -589,6 +591,7 @@ var androidOperationModule = function () {
                              operationData["isSingleModeAppBuiltForKiosk"];
                      }
                      deviceGlobalConfigurations["isIdleGraphicsEnabled"] = operationData["isIdleGraphicsEnabled"];
+                     deviceGlobalConfigurations["keepDisplayAwake"] = operationData["keepDisplayAwake"];
                      if (operationData["idleTimeout"]) {
                          deviceGlobalConfigurations["idleTimeout"] = operationData["idleTimeout"];
                      }

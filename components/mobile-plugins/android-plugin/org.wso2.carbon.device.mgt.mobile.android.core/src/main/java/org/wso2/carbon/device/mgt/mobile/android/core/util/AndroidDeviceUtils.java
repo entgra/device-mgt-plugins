@@ -327,7 +327,6 @@ public class AndroidDeviceUtils {
                         for (JsonElement appElement : appListArray) {
                             JsonElement googlePolicyPayload = appElement.getAsJsonObject().
                                     get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD);
-
                             if (googlePolicyPayload != null) {
                                 String uuid = appElement.getAsJsonObject().get("uuid").toString();
                                 containsGoogleAppPolicy = true;// breaking out of outer for loop
@@ -716,7 +715,6 @@ public class AndroidDeviceUtils {
                         postRequest.setEntity(requestEntity);
                         httpClient.execute(postRequest);
                     }
-
                 }
             }
         } catch (UserStoreException e) {

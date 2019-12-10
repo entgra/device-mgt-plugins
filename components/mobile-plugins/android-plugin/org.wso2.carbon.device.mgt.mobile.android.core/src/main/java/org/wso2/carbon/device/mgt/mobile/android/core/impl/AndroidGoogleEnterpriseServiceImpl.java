@@ -241,5 +241,4 @@ public class AndroidGoogleEnterpriseServiceImpl implements AndroidGoogleEnterpri
         }
         return androidEnterpriseUsers;
     }
-
 }

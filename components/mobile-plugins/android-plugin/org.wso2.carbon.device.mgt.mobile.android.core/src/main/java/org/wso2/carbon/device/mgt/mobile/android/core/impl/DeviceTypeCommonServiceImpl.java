@@ -25,7 +25,7 @@ import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
-import org.wso2.carbon.device.mgt.common.spi.DeviceTypePluginService;
+import org.wso2.carbon.device.mgt.common.spi.DeviceTypeCommonService;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AndroidPluginServiceImpl implements DeviceTypePluginService {
+public class DeviceTypeCommonServiceImpl implements DeviceTypeCommonService {
 
     @Override
     public Map<EnrolmentInfo.OwnerShip, String> getEnrollmentQRCode() throws DeviceManagementException {
