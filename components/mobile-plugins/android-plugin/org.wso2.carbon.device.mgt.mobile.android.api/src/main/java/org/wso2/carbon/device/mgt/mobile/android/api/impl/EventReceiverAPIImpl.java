@@ -140,11 +140,13 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
             List<DeviceState> deviceStates = androidService.retrieveAlerts(deviceId, from, to, type, ifModifiedSince);
             return Response.status(Response.Status.OK).entity(deviceStates).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Request must contain " +
+                    "the device identifier. Optionally, both from and to value should be present to get " +
+                    "alerts between times.";
+            log.error(errorMessage);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (NotFoundExceptionDup e) {
             String errorMessage = "Class not found";
             log.error(errorMessage, e);

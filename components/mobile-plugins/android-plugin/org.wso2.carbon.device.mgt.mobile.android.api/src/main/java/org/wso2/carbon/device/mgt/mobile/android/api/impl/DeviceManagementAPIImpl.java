@@ -210,19 +210,19 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(msg).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "The payload of the android device enrollment is incorrect.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (NotFoundExceptionDup e) {
-            String errorMessage = "Class not found";
+            String errorMessage = "The device to be modified doesn't exist.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.NOT_FOUND).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
                             .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
-            String errorMessage = "Error occured";
+            String errorMessage = "Error occured while modifying enrollment";
             log.error(errorMessage, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)

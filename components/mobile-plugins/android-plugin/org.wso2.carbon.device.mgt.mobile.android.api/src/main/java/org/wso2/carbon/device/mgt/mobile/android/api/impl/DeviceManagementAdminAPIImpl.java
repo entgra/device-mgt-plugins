@@ -133,11 +133,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e) {
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers ( " + fileTransferBeanWrapper.getDeviceIDs() + " ) found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing file tranfer operation";
             log.error(errorMessage, e);
@@ -166,11 +166,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing device lock operation";
             log.error(errorMessage, e);
@@ -199,11 +199,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing device unlock operation";
             log.error(errorMessage, e);
@@ -232,11 +232,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                    .setMessage(msg).build()).build();
+                    .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while retrieving device location";
             log.error(errorMessage, e);
@@ -265,11 +265,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing remove password operation";
             log.error(errorMessage, e);
@@ -298,11 +298,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing control camera operation";
             log.error(errorMessage, e);
@@ -329,11 +329,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             log.error(errorMessage, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMessage).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while retrieving device information";
             log.error(errorMessage, e);
@@ -360,11 +360,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             log.error(errorMessage, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMessage).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while retrieving device logcat";
             log.error(errorMessage, e);
@@ -393,11 +393,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing enterprice wipe device operation";
             log.error(errorMessage, e);
@@ -426,11 +426,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing Android wipe-data device operation";
             log.error(errorMessage, e);
@@ -459,11 +459,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing Android getApplicationList device operation";
             log.error(errorMessage, e);
@@ -492,11 +492,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing Android ring device operation";
             log.error(errorMessage, e);
@@ -525,11 +525,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing Android reboot device operation";
             log.error(errorMessage, e);
@@ -558,11 +558,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing Android change LockTask mode operation";
             log.error(errorMessage, e);
@@ -591,11 +591,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing mute device operation";
             log.error(errorMessage, e);
@@ -625,11 +625,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing install application operation";
             log.error(errorMessage, e);
@@ -658,11 +658,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing update application operation";
             log.error(errorMessage, e);
@@ -692,11 +692,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing uninstall application operation";
             log.error(errorMessage, e);
@@ -725,11 +725,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing blacklist application operation";
             log.error(errorMessage, e);
@@ -758,11 +758,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing upgrade firmware operation";
             log.error(errorMessage, e);
@@ -791,11 +791,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing configure vpn operation";
             log.error(errorMessage, e);
@@ -824,11 +824,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing send notification operation";
             log.error(errorMessage, e);
@@ -857,11 +857,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing configure wifi operation";
             log.error(errorMessage, e);
@@ -890,11 +890,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing encrypt operation operation";
             log.error(errorMessage, e);
@@ -923,11 +923,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing change lock code operation";
             log.error(errorMessage, e);
@@ -956,11 +956,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing set password policy operation";
             log.error(errorMessage, e);
@@ -989,11 +989,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing set webclip operation";
             log.error(errorMessage, e);
@@ -1024,11 +1024,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while applying 'configure-global-proxy' operation";
             log.error(errorMessage, e);
@@ -1065,11 +1065,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Issue in retrieving device management service instance";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while sending app configuration";
             log.error(errorMessage, e);
@@ -1099,11 +1099,11 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         } catch (BadRequestExceptionDup e){
-            String msg = "Invalid request";
-            log.error(msg, e);
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing configure-display-message operation";
             log.error(errorMessage, e);
