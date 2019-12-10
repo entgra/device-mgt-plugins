@@ -196,9 +196,9 @@ public class DeviceManagementServiceTests {
         mockDeviceManagementService();
         mockPolicyManagerService();
         mockUser();
-        Response response = androidService.enrollDevice(TestUtils.getBasicAndroidDevice());
-        Assert.assertNotNull(response);
-        Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+        Message message = androidService.enrollDevice(TestUtils.getBasicAndroidDevice());
+        Assert.assertNotNull(message);
+        Assert.assertEquals(message.getResponseCode(), Response.Status.OK.getStatusCode());
     }
 
     @Test
@@ -237,9 +237,9 @@ public class DeviceManagementServiceTests {
         properties.add(property);
         androidDevice.setProperties(properties);
 
-        Response response = androidService.enrollDevice(androidDevice);
-        Assert.assertNotNull(response);
-        Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+        Message message = androidService.enrollDevice(androidDevice);
+        Assert.assertNotNull(message);
+        Assert.assertEquals(message.getResponseCode(), Response.Status.OK.getStatusCode());
     }
 
     @Test
@@ -249,9 +249,9 @@ public class DeviceManagementServiceTests {
         mockUser();
         AndroidDevice androidDevice = TestUtils.getBasicAndroidDevice();
         androidDevice.setDeviceIdentifier("1234");
-        Response response = androidService.enrollDevice(androidDevice);
-        Assert.assertNotNull(response);
-        Assert.assertEquals(response.getStatus(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+        Message message = androidService.enrollDevice(androidDevice);
+        Assert.assertNotNull(message);
+        Assert.assertEquals(message.getResponseCode(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
     }
 
     @Test
