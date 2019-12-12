@@ -22,7 +22,6 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceNotFoundException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -32,18 +31,9 @@ import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.AndroidPlatformConfiguration;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceState;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.EnterpriseTokenUrl;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.GoogleAppSyncResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.*;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -91,7 +81,7 @@ public interface AndroidService {
     /**
      * Method for device unlock operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -102,7 +92,7 @@ public interface AndroidService {
     /**
      * Method for get device location operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -113,7 +103,7 @@ public interface AndroidService {
     /**
      * Method for remove password operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -135,7 +125,7 @@ public interface AndroidService {
     /**
      * Method to get device information
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -146,7 +136,7 @@ public interface AndroidService {
     /**
      * Method to get device logcat
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -157,7 +147,7 @@ public interface AndroidService {
     /**
      * Method for wipe device operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -179,7 +169,7 @@ public interface AndroidService {
     /**
      * Method for get applications operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -190,7 +180,7 @@ public interface AndroidService {
     /**
      * Method for ring device operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -201,7 +191,7 @@ public interface AndroidService {
     /**
      * Method for reboot device operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -212,7 +202,7 @@ public interface AndroidService {
     /**
      * Method for change lock task operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -223,7 +213,7 @@ public interface AndroidService {
     /**
      * Method for mute device operation
      *
-     * @param deviceIDs
+     * @param deviceIDs A list of device IDs
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
@@ -272,7 +262,7 @@ public interface AndroidService {
      * @throws {@link AndroidDeviceMgtPluginException}
      * @throws {@link OperationManagementException}
      */
-    Activity blacklistApplications(@Valid BlacklistApplicationsBeanWrapper blacklistApplicationsBeanWrapper)
+    Activity blacklistApplications(BlacklistApplicationsBeanWrapper blacklistApplicationsBeanWrapper)
             throws OperationManagementException, AndroidDeviceMgtPluginException;
 
     /**
@@ -399,8 +389,8 @@ public interface AndroidService {
     /**
      * Method for update application list
      *
-     * @param id
-     * @param androidApplications
+     * @param id Id of the device to update application list
+     * @param androidApplications List of AndroidApplication objects to update
      * @return {@link Message}
      * @throws {@link ApplicationManagementException}
      */
@@ -410,9 +400,9 @@ public interface AndroidService {
     /**
      * Method for get pending operations
      *
-     * @param id
-     * @param resultOperations
-     * @param disableGoogleApps
+     * @param id Id of the device to get pending operations
+     * @param resultOperations Result operations list
+     * @param disableGoogleApps Check whether google apps are disabled
      * @return
      * @throws {@link DeviceManagementException}
      * @throws {@link InvalidDeviceException}
@@ -424,7 +414,7 @@ public interface AndroidService {
     /**
      * Method to enroll device
      *
-     * @param androidDevice
+     * @param androidDevice Instance of AndroidDevice to enroll
      * @return {@link Response}
      * @throws {@link DeviceManagementException}
      */
@@ -433,8 +423,8 @@ public interface AndroidService {
     /**
      * Method to check if a device is enrolled
      *
-     * @param id
-     * @param deviceIdentifier
+     * @param id Id of the device to check
+     * @param deviceIdentifier Device Identifier of the device to check
      * @return {@link Message}
      * @throws {@link DeviceManagementException}
      */
@@ -443,8 +433,8 @@ public interface AndroidService {
     /**
      * Method to modify enrollment
      *
-     * @param id
-     * @param androidDevice
+     * @param id Id of the device to modify enrollement
+     * @param androidDevice AndroidDevice object of the device to modify enrollment
      * @return
      * @throws {@link DeviceManagementException}
      * @throws {@link AndroidDeviceMgtPluginException}
@@ -455,7 +445,7 @@ public interface AndroidService {
     /**
      * Method to disenroll a device
      *
-     * @param id
+     * @param id Id of the device to disenroll
      * @return
      * @throws {@link DeviceManagementException}
      */
@@ -468,15 +458,16 @@ public interface AndroidService {
      * @return {@link Device}
      * @throws {@link DeviceManagementException}
      */
-    Message publishEvents(EventBeanWrapper eventBeanWrapper) throws DeviceManagementException, AndroidDeviceMgtPluginException;
+    Message publishEvents(EventBeanWrapper eventBeanWrapper)
+            throws DeviceManagementException, AndroidDeviceMgtPluginException;
 
     /**
      * Method to retrieve alerts
      *
-     * @param deviceId
-     * @param from
-     * @param to
-     * @param type
+     * @param deviceId Id of the device to retrieve alerts
+     * @param from Start date to retrieve alerts
+     * @param to End date to retrieve alerts
+     * @param type Type to retrieve alerts
      * @param ifModifiedSince
      * @return {@link Response}
      * @throws {@link AndroidDeviceMgtPluginException}
