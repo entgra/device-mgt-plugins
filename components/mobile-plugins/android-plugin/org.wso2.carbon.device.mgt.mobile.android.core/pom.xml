@@ -87,7 +87,8 @@
                             org.wso2.carbon.user.api.*,
                             org.apache.commons.httpclient,
                             org.apache.http,
-                            org.apache.http.client.methods
+                            org.apache.http.client.methods,
+                            org.wso2.carbon.device.mgt.analytics.data.publisher.*
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.device.mgt.mobile.android.core.internal,

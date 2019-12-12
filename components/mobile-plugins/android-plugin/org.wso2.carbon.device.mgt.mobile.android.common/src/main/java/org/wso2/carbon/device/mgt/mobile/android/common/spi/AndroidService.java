@@ -468,7 +468,7 @@ public interface AndroidService {
      * @return {@link Device}
      * @throws {@link DeviceManagementException}
      */
-    Device publishEvents(EventBeanWrapper eventBeanWrapper) throws DeviceManagementException;
+    Message publishEvents(EventBeanWrapper eventBeanWrapper) throws DeviceManagementException, AndroidDeviceMgtPluginException;
 
     /**
      * Method to retrieve alerts

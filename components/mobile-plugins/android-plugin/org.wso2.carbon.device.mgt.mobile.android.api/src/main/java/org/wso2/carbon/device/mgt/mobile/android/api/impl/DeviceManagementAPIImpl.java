@@ -118,7 +118,7 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
         } catch (InvalidDeviceException e) {
             String msg = "Device identifier is invalid. Device identifier " + id;
             log.error(msg, e);
-            return Response.status(Response.Status.BAD_REQUEST).entity(msg).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(msg).build();
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while getting pending operations of the device.";
             log.error(msg, e);

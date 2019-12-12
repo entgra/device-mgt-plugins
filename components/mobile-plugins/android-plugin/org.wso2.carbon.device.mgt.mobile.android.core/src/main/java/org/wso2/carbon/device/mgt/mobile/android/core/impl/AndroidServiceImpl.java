@@ -19,6 +19,8 @@ package org.wso2.carbon.device.mgt.mobile.android.core.impl;
 
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.services.androidenterprise.model.ProductsListResponse;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +28,7 @@ import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
+import org.wso2.carbon.device.mgt.analytics.data.publisher.exception.DataPublisherConfigurationException;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -65,6 +68,7 @@ import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -85,6 +89,16 @@ public class AndroidServiceImpl implements AndroidService {
     public static final String GOOGLE_AFW_EMM_ANDROID_ID = "googleEMMAndroidId";
     public static final String GOOGLE_AFW_DEVICE_ID = "googleEMMDeviceId";
     private static final String EVENT_STREAM_DEFINITION = "org.wso2.iot.LocationStream";
+
+    private Gson gson = new Gson();
+    private static final String LONGITUDE = "longitude";
+    private static final String LATITUDE = "latitude";
+    private static final String ALTITUDE = "altitude";
+    private static final String SPEED = "speed";
+    private static final String DISTANCE = "distance";
+    private static final String BEARING = "bearing";
+    private static final String TIME_STAMP = "timeStamp";
+    private static final String LOCATION_EVENT_TYPE = "location";
 
     @Override
     public PlatformConfiguration getPlatformConfig() throws DeviceManagementException {
@@ -908,16 +922,16 @@ public class AndroidServiceImpl implements AndroidService {
             boolean disableGoogleApps)
             throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
         DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(deviceId);
-        if (!AndroidDeviceUtils.isValidDeviceIdentifier(deviceIdentifier)) {
-            String msg = "Device not found for identifier '" + deviceId + "'";
-            log.error(msg);
-            throw new InvalidDeviceException(msg);
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("Invoking Android pending operations:" + deviceId);
-        }
-        if (resultOperations != null && !resultOperations.isEmpty()) {
-            try {
+        try {
+            if (!AndroidDeviceUtils.isValidDeviceIdentifier(deviceIdentifier)) {
+                String msg = "Device not found for identifier '" + deviceId + "'";
+                log.error(msg);
+                throw new InvalidDeviceException(msg);
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("Invoking Android pending operations:" + deviceId);
+            }
+            if (resultOperations != null && !resultOperations.isEmpty()) {
                 for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : resultOperations) {
                     AndroidDeviceUtils.updateOperation(deviceId, operation);
                     if (OPERATION_ERROR_STATUS.equals(operation.getStatus().toString())) {
@@ -938,25 +952,24 @@ public class AndroidServiceImpl implements AndroidService {
                         log.debug("Updating operation '" + operation.toString() + "'");
                     }
                 }
-            } catch (OperationManagementException e) {
-                String msg = "Issue in retrieving operation management service instance";
-                log.error(msg, e);
-                throw new DeviceManagementException(msg, e);
-            } catch (PolicyComplianceException e) {
-                String msg = "Issue in updating Monitoring operation";
-                log.error(msg, e);
-                throw new DeviceManagementException(msg, e);
-            } catch (org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException e) {
-                String msg = "Issue in retrieving application management service instance";
-                log.error(msg, e);
-                throw new DeviceManagementException(msg, e);
-            } catch (NotificationManagementException e) {
-                String msg = "Issue in retrieving Notification management service instance";
-                log.error(msg, e);
-                throw new DeviceManagementException(msg, e);
             }
+        } catch (OperationManagementException e) {
+            String msg = "Issue in retrieving operation management service instance";
+            log.error(msg, e);
+            throw new DeviceManagementException(msg, e);
+        } catch (PolicyComplianceException e) {
+            String msg = "Issue in updating Monitoring operation";
+            log.error(msg, e);
+            throw new DeviceManagementException(msg, e);
+        } catch (org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException e) {
+            String msg = "Issue in retrieving application management service instance";
+            log.error(msg, e);
+            throw new DeviceManagementException(msg, e);
+        } catch (NotificationManagementException e) {
+            String msg = "Issue in retrieving Notification management service instance";
+            log.error(msg, e);
+            throw new DeviceManagementException(msg, e);
         }
-
         try {
             return AndroidDeviceUtils.getPendingOperations(deviceIdentifier, !disableGoogleApps);
         } catch (OperationManagementException e) {
@@ -1143,26 +1156,82 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
     @Override
-    public Device publishEvents(EventBeanWrapper eventBeanWrapper) throws DeviceManagementException{
+    public Message publishEvents(EventBeanWrapper eventBeanWrapper) throws AndroidDeviceMgtPluginException {
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android device event logging.");
+        }
         Device device;
+        try {
             if (!DeviceManagerUtil.isPublishLocationResponseEnabled()) {
-                String msg = "Event is publishing has not enabled.";
-                log.error(msg);
-                throw new DeviceManagementException(msg);            }
+                Message responseMessage = new Message();
+                responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_ACCEPTED));
+                responseMessage.setResponseMessage("Event is publishing has not enabled.");
+                return responseMessage;
+            }
             DeviceIdentifier deviceIdentifier = new DeviceIdentifier(eventBeanWrapper.getDeviceIdentifier(),
                     AndroidConstants.DEVICE_TYPE_ANDROID);
             device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
             if (device != null && EnrolmentInfo.Status.ACTIVE != device.getEnrolmentInfo().getStatus()){
-                String msg = "Device is not in Active state.";
-                log.error(msg);
-                throw new DeviceManagementException(msg);
+                Message responseMessage = new Message();
+                responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_ACCEPTED));
+                responseMessage.setResponseMessage("Device is not in Active state.");
+                return responseMessage;
             } else if (device == null){
-                String msg = "Device is not enrolled yet.";
-                log.error(msg);
-                throw new DeviceManagementException(msg);
+                Message responseMessage = new Message();
+                responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_ACCEPTED));
+                responseMessage.setResponseMessage("Device is not enrolled yet.");
+                return responseMessage;
             }
+        } catch (DeviceManagementException e) {
+            log.error("Error occurred while checking Operation Analytics is Enabled.", e);
+            Message responseMessage = new Message();
+            responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_SERVER_ERROR));
+            responseMessage.setResponseMessage(e.getMessage());
+            return responseMessage;
+        }
+        String eventType = eventBeanWrapper.getType();
+        if (!LOCATION_EVENT_TYPE.equals(eventType)) {
+            String msg = "Dropping Android " + eventType + " Event.Only Location Event Type is supported.";
+            log.warn(msg);
+            Message responseMessage = new Message();
+            responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_BAD_REQUEST));
+            responseMessage.setResponseMessage(msg);
+            return responseMessage;
+        }
+        Message message = new Message();
+        Object[] metaData = {eventBeanWrapper.getDeviceIdentifier(), device.getEnrolmentInfo().getOwner(),
+                AndroidConstants.DEVICE_TYPE_ANDROID};
+        String eventPayload = eventBeanWrapper.getPayload();
+        JsonObject jsonObject = gson.fromJson(eventPayload, JsonObject.class);
+        Object[] payload = {
+                jsonObject.get(TIME_STAMP).getAsLong(),
+                jsonObject.get(LATITUDE).getAsDouble(),
+                jsonObject.get(LONGITUDE).getAsDouble(),
+                jsonObject.get(ALTITUDE).getAsDouble(),
+                jsonObject.get(SPEED).getAsFloat(),
+                jsonObject.get(BEARING).getAsFloat(),
+                jsonObject.get(DISTANCE).getAsDouble()
+        };
+        try {
+            if (AndroidAPIUtils.getEventPublisherService().publishEvent(
+                    EVENT_STREAM_DEFINITION, "1.0.0", metaData, new Object[0], payload)) {
+                message.setResponseCode("Event is published successfully.");
+                return message;
+            } else {
+                log.warn("Error occurred while trying to publish the event. This could be due to unavailability " +
+                        "of the publishing service. Please make sure that analytics server is running and accessible " +
+                        "by this server");
+                String errorMessage = "Error occurred due to " +
+                        "unavailability of the publishing service.";
+                message.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_SERVICE_UNAVAILABLE));
+                return message;
+            }
+        } catch (DataPublisherConfigurationException e) {
+            String msg = "Error occurred while getting the Data publisher Service instance.";
+            log.error(msg, e);
+            throw new UnexpectedServerErrorExceptionDup(msg);
+        }
 
-        return device;
     }
 
     @Override

@@ -70,58 +70,28 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
     @Path("/publish")
     @Override
     public Response publishEvents(@Valid EventBeanWrapper eventBeanWrapper) {
-        if (log.isDebugEnabled()) {
-            log.debug("Invoking Android device event logging.");
-        }
-        Device device;
-        try {
+        try{
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
-            device = androidService.publishEvents(eventBeanWrapper);
+            Message message = androidService.publishEvents(eventBeanWrapper);
+            return Response.status(Integer.parseInt(message.getResponseCode())).entity(message.getResponseMessage()).build();
         } catch (DeviceManagementException e) {
-            log.error("Error occurred while checking Operation Analytics is Enabled.", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-        }
-        String eventType = eventBeanWrapper.getType();
-        if (!LOCATION_EVENT_TYPE.equals(eventType)) {
-            String msg = "Dropping Android " + eventType + " Event.Only Location Event Type is supported.";
-            log.warn(msg);
-            return Response.status(Response.Status.BAD_REQUEST).entity(msg).build();
-        }
-        Message message = new Message();
-        Object[] metaData = {eventBeanWrapper.getDeviceIdentifier(), device.getEnrolmentInfo().getOwner(),
-                AndroidConstants.DEVICE_TYPE_ANDROID};
-        String eventPayload = eventBeanWrapper.getPayload();
-        JsonObject jsonObject = gson.fromJson(eventPayload, JsonObject.class);
-        Object[] payload = {
-                jsonObject.get(TIME_STAMP).getAsLong(),
-                jsonObject.get(LATITUDE).getAsDouble(),
-                jsonObject.get(LONGITUDE).getAsDouble(),
-                jsonObject.get(ALTITUDE).getAsDouble(),
-                jsonObject.get(SPEED).getAsFloat(),
-                jsonObject.get(BEARING).getAsFloat(),
-                jsonObject.get(DISTANCE).getAsDouble()
-        };
-        try {
-            if (AndroidAPIUtils.getEventPublisherService().publishEvent(
-                    EVENT_STREAM_DEFINITION, "1.0.0", metaData, new Object[0], payload)) {
-                message.setResponseCode("Event is published successfully.");
-                return Response.status(Response.Status.CREATED).entity(message).build();
-            } else {
-                log.warn("Error occurred while trying to publish the event. This could be due to unavailability " +
-                        "of the publishing service. Please make sure that analytics server is running and accessible " +
-                        "by this server");
-                String msg = "Error occurred due to " +
-                        "unavailability of the publishing service.";
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
-                        new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                                .setMessage(msg).build()).build();
-            }
-        } catch (DataPublisherConfigurationException e) {
-            String msg = "Error occurred while getting the Data publisher Service instance.";
-            log.error(msg, e);
+            String errorMessage = "Error occurred while checking Operation Analytics is Enabled.";
+            log.error(errorMessage, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(msg).build()).build();
+                            .setMessage(errorMessage).build()).build();
+        } catch (UnexpectedServerErrorExceptionDup e) {
+            String errorMessage = "Error occurred while getting the Data publisher Service instance.";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(errorMessage).build()).build();
+        } catch (AndroidDeviceMgtPluginException e){
+            String errorMessage = "Error occurred while publishing events.";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(errorMessage).build()).build();
         }
     }
 
