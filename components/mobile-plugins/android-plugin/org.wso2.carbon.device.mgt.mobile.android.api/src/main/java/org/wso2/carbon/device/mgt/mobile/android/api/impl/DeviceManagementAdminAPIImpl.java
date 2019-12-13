@@ -38,36 +38,12 @@ package org.wso2.carbon.device.mgt.mobile.android.api.impl;
 import com.google.api.client.http.HttpStatusCodes;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpStatus;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.mobile.android.api.DeviceManagementAdminAPI;
-import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.ApplicationInstallation;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.ApplicationRestriction;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.ApplicationUninstallation;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.ApplicationUpdate;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.BlacklistApplications;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.Camera;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceEncryption;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceLock;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.DisplayMessage;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.FileTransfer;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.GlobalProxy;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.LockCode;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.Notification;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.PasscodePolicy;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.UpgradeFirmware;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.Vpn;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.WebClip;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.Wifi;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.WipeData;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.ApplicationInstallationBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.ApplicationRestrictionBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.ApplicationUninstallationBeanWrapper;
@@ -89,10 +65,8 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WifiBeanWra
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WipeDataBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorExceptionDup;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -101,13 +75,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Path("/admin/devices")
@@ -116,7 +83,6 @@ import java.util.List;
 public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
 
     private static final Log log = LogFactory.getLog(DeviceManagementAdminAPIImpl.class);
-    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     @POST
     @Path("/file-transfer")

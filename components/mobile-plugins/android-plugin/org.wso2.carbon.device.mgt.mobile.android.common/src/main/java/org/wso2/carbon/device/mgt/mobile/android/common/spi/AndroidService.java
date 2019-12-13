@@ -43,7 +43,7 @@ public interface AndroidService {
      * Method to retrieve platform configurations
      *
      * @return {@link PlatformConfiguration}
-     * @throws {@link DeviceManagementException}
+     * @throws {@link DeviceManagementException} If some unusual behaviour is observed while getting platform configurations
      */
     PlatformConfiguration getPlatformConfig() throws DeviceManagementException;
 
@@ -62,7 +62,7 @@ public interface AndroidService {
      * @param fileTransferBeanWrapper
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
-     * @throws {@link OperationManagementException}
+     * @throws {@link OperationManagementException} If some unusual behaviour is observed while executing file transfer operation
      */
     Activity fileTransfer(FileTransferBeanWrapper fileTransferBeanWrapper)
             throws AndroidDeviceMgtPluginException, OperationManagementException;
@@ -73,7 +73,7 @@ public interface AndroidService {
      * @param deviceLockBeanWrapper
      * @return {@link Activity}
      * @throws {@link AndroidDeviceMgtPluginException}
-     * @throws {@link OperationManagementException}
+     * @throws {@link OperationManagementException} If some unusual behaviour is observed while executing device lock operation
      */
     Activity configureDeviceLock(DeviceLockBeanWrapper deviceLockBeanWrapper)
             throws OperationManagementException, AndroidDeviceMgtPluginException;

@@ -20,18 +20,10 @@ package org.wso2.carbon.device.mgt.mobile.android.api.impl;
 
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
-import org.wso2.carbon.device.mgt.analytics.data.publisher.exception.DataPublisherConfigurationException;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
-import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 import org.wso2.carbon.device.mgt.mobile.android.api.EventReceiverAPI;
-import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceState;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
@@ -39,7 +31,6 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EventBeanWr
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.*;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -53,18 +44,8 @@ import java.util.List;
 
 @Path("/events")
 public class EventReceiverAPIImpl implements EventReceiverAPI {
-    private static final String EVENT_STREAM_DEFINITION = "org.wso2.iot.LocationStream";
-    private static final Log log = LogFactory.getLog(EventReceiverAPIImpl.class);
-    private Gson gson = new Gson();
 
-    private static final String LONGITUDE = "longitude";
-    private static final String LATITUDE = "latitude";
-    private static final String ALTITUDE = "altitude";
-    private static final String SPEED = "speed";
-    private static final String DISTANCE = "distance";
-    private static final String BEARING = "bearing";
-    private static final String TIME_STAMP = "timeStamp";
-    private static final String LOCATION_EVENT_TYPE = "location";
+    private static final Log log = LogFactory.getLog(EventReceiverAPIImpl.class);
 
     @POST
     @Path("/publish")

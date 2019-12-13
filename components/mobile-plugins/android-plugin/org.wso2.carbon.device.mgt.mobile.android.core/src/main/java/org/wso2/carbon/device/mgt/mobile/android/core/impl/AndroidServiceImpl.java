@@ -28,6 +28,7 @@ import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
+
 import org.wso2.carbon.device.mgt.analytics.data.publisher.exception.DataPublisherConfigurationException;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -67,8 +68,6 @@ import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtil
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
-
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -889,7 +888,8 @@ public class AndroidServiceImpl implements AndroidService {
 
 
     @Override
-    public Message updateApplicationList(String id, List<AndroidApplication> androidApplications) throws org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException {
+    public Message updateApplicationList(String id, List<AndroidApplication> androidApplications)
+            throws org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException {
         Application application;
         List<Application> applications = new ArrayList<>();
         for (AndroidApplication androidApplication : androidApplications) {
@@ -932,26 +932,7 @@ public class AndroidServiceImpl implements AndroidService {
                 log.debug("Invoking Android pending operations:" + deviceId);
             }
             if (resultOperations != null && !resultOperations.isEmpty()) {
-                for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : resultOperations) {
-                    AndroidDeviceUtils.updateOperation(deviceId, operation);
-                    if (OPERATION_ERROR_STATUS.equals(operation.getStatus().toString())) {
-                        org.wso2.carbon.device.mgt.common.notification.mgt.Notification notification = new org.wso2.carbon.device.mgt.common.notification.mgt.Notification();
-                        DeviceIdentifier id = new DeviceIdentifier();
-                        id.setId(deviceId);
-                        id.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
-                        String deviceName = AndroidAPIUtils.getDeviceManagementService().getDevice(id, false).getName();
-                        notification.setOperationId(operation.getId());
-                        notification.setStatus(org.wso2.carbon.device.mgt.common.notification.mgt.Notification.
-                                Status.NEW.toString());
-                        notification.setDescription(
-                                operation.getCode() + " operation failed to execute on device " + deviceName + " (ID: "
-                                        + deviceId + ")");
-                        AndroidAPIUtils.getNotificationManagementService().addNotification(id, notification);
-                    }
-                    if (log.isDebugEnabled()) {
-                        log.debug("Updating operation '" + operation.toString() + "'");
-                    }
-                }
+                updateOperations(deviceId, resultOperations);
             }
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
@@ -961,12 +942,12 @@ public class AndroidServiceImpl implements AndroidService {
             String msg = "Issue in updating Monitoring operation";
             log.error(msg, e);
             throw new DeviceManagementException(msg, e);
-        } catch (org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException e) {
-            String msg = "Issue in retrieving application management service instance";
+        }  catch (NotificationManagementException e) {
+            String msg = "Issue in retrieving Notification management service instance";
             log.error(msg, e);
             throw new DeviceManagementException(msg, e);
-        } catch (NotificationManagementException e) {
-            String msg = "Issue in retrieving Notification management service instance";
+        } catch (org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException e) {
+            String msg = "Issue in retrieving application management service instance";
             log.error(msg, e);
             throw new DeviceManagementException(msg, e);
         }
@@ -978,6 +959,32 @@ public class AndroidServiceImpl implements AndroidService {
             throw new UnexpectedServerErrorExceptionDup(msg, e);
         }
     }
+
+    private void updateOperations(String deviceId, List<? extends Operation> operations)
+            throws OperationManagementException, PolicyComplianceException, NotificationManagementException,
+            DeviceManagementException, org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException {
+        for (org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation : operations) {
+            AndroidDeviceUtils.updateOperation(deviceId, operation);
+            if (OPERATION_ERROR_STATUS.equals(operation.getStatus().toString())) {
+                org.wso2.carbon.device.mgt.common.notification.mgt.Notification notification = new
+                        org.wso2.carbon.device.mgt.common.notification.mgt.Notification();
+                DeviceIdentifier id = new DeviceIdentifier();
+                id.setId(deviceId);
+                id.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
+                String deviceName = AndroidAPIUtils.getDeviceManagementService().getDevice(id, false).getName();
+                notification.setOperationId(operation.getId());
+                notification.setStatus(org.wso2.carbon.device.mgt.common.notification.mgt.Notification.
+                        Status.NEW.toString());
+                notification.setDescription(operation.getCode() + " operation failed to execute on device " +
+                        deviceName + " (ID: " + deviceId + ")");
+                AndroidAPIUtils.getNotificationManagementService().addNotification(id, notification);
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("Updating operation '" + operation.toString() + "'");
+            }
+        }
+    }
+
 
     @Override
     public Message enrollDevice(AndroidDevice androidDevice)
@@ -1304,7 +1311,8 @@ public class AndroidServiceImpl implements AndroidService {
         }
     }
 
-    private List<DeviceState> retrieveAlertByType(String deviceId, String type) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
+    private List<DeviceState> retrieveAlertByType(String deviceId, String type)
+            throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events for given device identifier and type.");
         }
