@@ -19,7 +19,6 @@
 package org.wso2.carbon.device.mgt.mobile.android.api.impl;
 
 import com.google.api.client.http.HttpStatusCodes;
-import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
