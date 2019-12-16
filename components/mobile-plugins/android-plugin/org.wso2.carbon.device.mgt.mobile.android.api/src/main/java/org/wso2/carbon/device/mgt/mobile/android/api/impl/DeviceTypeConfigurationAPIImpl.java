@@ -44,7 +44,7 @@ import org.wso2.carbon.device.mgt.mobile.android.api.DeviceTypeConfigurationAPI;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.AndroidPlatformConfiguration;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 
@@ -91,7 +91,7 @@ public class DeviceTypeConfigurationAPIImpl implements DeviceTypeConfigurationAP
             androidService.updateConfiguration(androidPlatformConfiguration);
             return Response.status(Response.Status.OK)
                     .entity("Android platform configuration has been updated successfully.").build();
-        } catch (BadRequestExceptionDup e) {
+        } catch (BadRequestException e) {
             String msg = "The payload of the android platform configuration is incorrect.";
             log.error(msg, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(

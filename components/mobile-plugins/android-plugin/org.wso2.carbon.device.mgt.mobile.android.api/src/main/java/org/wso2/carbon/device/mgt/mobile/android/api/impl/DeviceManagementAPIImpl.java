@@ -209,13 +209,13 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(msg).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "The payload of the android device enrollment is incorrect.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
                             .setMessage(errorMessage).build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "The device to be modified doesn't exist.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.NOT_FOUND).entity(

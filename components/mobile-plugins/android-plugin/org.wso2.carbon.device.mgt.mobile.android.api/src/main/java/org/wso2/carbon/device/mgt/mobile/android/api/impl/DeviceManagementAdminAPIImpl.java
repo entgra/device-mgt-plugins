@@ -64,7 +64,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WebClipBean
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WifiBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WipeDataBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 
@@ -98,7 +98,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e) {
+        } catch (BadRequestException e) {
             String errorMessage = "Invalid Device Identifiers ( " + fileTransferBeanWrapper.getDeviceIDs() + " ) found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -131,7 +131,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -164,7 +164,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -197,7 +197,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -230,7 +230,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -263,7 +263,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -294,7 +294,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             String errorMessage = "Issue in retrieving operation management service instance";
             log.error(errorMessage, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMessage).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -325,7 +325,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             String errorMessage = "Issue in retrieving operation management service instance";
             log.error(errorMessage, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorMessage).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -358,7 +358,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -391,7 +391,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -424,7 +424,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -457,7 +457,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -490,7 +490,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -523,7 +523,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -556,7 +556,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -590,7 +590,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -623,7 +623,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -657,7 +657,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -690,7 +690,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -723,7 +723,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -756,7 +756,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -789,7 +789,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -822,7 +822,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -855,7 +855,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -888,7 +888,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -921,7 +921,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -954,7 +954,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -989,7 +989,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -1030,7 +1030,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Issue in retrieving device management service instance";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(
@@ -1064,7 +1064,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.BAD_REQUEST).entity(

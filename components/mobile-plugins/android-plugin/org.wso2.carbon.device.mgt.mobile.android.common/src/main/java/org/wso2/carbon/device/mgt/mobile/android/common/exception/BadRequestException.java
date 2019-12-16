@@ -20,13 +20,13 @@ package org.wso2.carbon.device.mgt.mobile.android.common.exception;
 /**
  * Represents the exception thrown during validating the request.
  */
-public class NotFoundExceptionDup extends AndroidDeviceMgtPluginException {
+public class BadRequestException extends AndroidDeviceMgtPluginException {
 
-    public NotFoundExceptionDup(String message, Throwable ex) {
+    public BadRequestException(String message, Throwable ex) {
         super(message, ex);
     }
 
-    public NotFoundExceptionDup(String message) {
+    public BadRequestException(String message) {
         super(message);
     }
 }

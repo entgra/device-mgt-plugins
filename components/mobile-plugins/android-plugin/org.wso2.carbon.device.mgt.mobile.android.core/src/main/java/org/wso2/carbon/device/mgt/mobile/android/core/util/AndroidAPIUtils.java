@@ -35,7 +35,7 @@ import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManag
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestExceptionDup;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidGoogleEnterpriseService;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
@@ -179,7 +179,7 @@ public class AndroidAPIUtils {
         if (deviceIDs == null || deviceIDs.isEmpty()) {
             String errorMessage = "Device identifier list is empty";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
         DeviceIdentifier deviceIdentifier;
         List<DeviceIdentifier> deviceIdentifiers = new ArrayList<>();

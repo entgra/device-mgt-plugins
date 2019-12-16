@@ -225,9 +225,9 @@ public class AndroidEnterpriseUtils {
         EnterpriseConfigs enterpriseConfigs = getEnterpriseConfigsFromGoogle();
         if (enterpriseConfigs.getErrorResponse() != null) {
             if (enterpriseConfigs.getErrorResponse().getCode() == 500l) {
-                throw new UnexpectedServerErrorExceptionDup(enterpriseConfigs.getErrorResponse().getMessage());
+                throw new UnexpectedServerErrorException(enterpriseConfigs.getErrorResponse().getMessage());
             } else if (enterpriseConfigs.getErrorResponse().getCode() == 500l) {
-                throw new NotFoundExceptionDup(enterpriseConfigs.getErrorResponse().getMessage());
+                throw new NotFoundException(enterpriseConfigs.getErrorResponse().getMessage());
             }
         }
         return enterpriseConfigs;

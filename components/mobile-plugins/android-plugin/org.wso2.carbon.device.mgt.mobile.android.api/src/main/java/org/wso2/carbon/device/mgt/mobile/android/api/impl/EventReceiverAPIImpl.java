@@ -60,7 +60,7 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Error occurred while getting the Data publisher Service instance.";
             log.error(errorMessage, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
@@ -89,7 +89,7 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
             List<DeviceState> deviceStates = androidService.retrieveAlerts(deviceId, from, to, type, ifModifiedSince);
             return Response.status(Response.Status.OK).entity(deviceStates).build();
-        } catch (BadRequestExceptionDup e){
+        } catch (BadRequestException e){
             String errorMessage = "Request must contain " +
                     "the device identifier. Optionally, both from and to value should be present to get " +
                     "alerts between times.";
@@ -97,7 +97,7 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
             return Response.status(Response.Status.BAD_REQUEST).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
                             .setMessage(errorMessage).build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Class not found";
             log.error(errorMessage, e);
             return Response.status(Response.Status.NOT_FOUND).entity(

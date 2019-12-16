@@ -60,8 +60,8 @@ import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseMan
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundExceptionDup;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorExceptionDup;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
+import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtils;
@@ -120,11 +120,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
         } catch (EnterpriseServiceException e) {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when saving user").build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -209,11 +209,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.status(Response.Status.NOT_FOUND).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
                             .setMessage(errorMessage).build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -267,11 +267,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when calling get web token").build())
                     .build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -307,11 +307,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when persisting app").build())
                     .build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -367,11 +367,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when inserting page "
                             + page.getPageName() + " , due to an error with ESA").build() ).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -407,11 +407,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when updating page "
                             + page.getPageName()  + " , due to an error with ESA").build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -447,11 +447,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when updating page "
                             + id  + " , Due to an error with ESA").build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -480,11 +480,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching page "
                             + " , Due to an error with ESA").build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -519,11 +519,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when inserting home page "
                             + id + " , due to an error with ESA").build() ).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -551,11 +551,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching home page.").build() )
                     .build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -600,11 +600,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when updating cluster "
                             + storeCluster.getName()  + " , due to an error with ESA").build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -649,11 +649,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when updating cluster "
                             + storeCluster.getName() + " , due to an error with ESA").build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -691,11 +691,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when deleting cluster "
                             + clusterId + " , due to an error with ESA").build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -773,11 +773,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching all details in PageId "
                             + pageId).build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -807,11 +807,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage("Error when fetching page "
                             + " , Due to an error with ESA").build()).build();
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -990,11 +990,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                 return Response.status(Response.Status.NOT_FOUND).entity(
                         new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_NOT_FOUND)
                                 .setMessage(errorMessage).build()).build();
-            } catch (NotFoundExceptionDup e) {
+            } catch (NotFoundException e) {
                 String errorMessage = "Not found";
                 return Response.serverError().entity(
                         new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-            } catch (UnexpectedServerErrorExceptionDup e) {
+            } catch (UnexpectedServerErrorException e) {
                 String errorMessage = "Unexpected server error";
                 return Response.serverError().entity(
                         new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
@@ -1083,11 +1083,11 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                 return Response.serverError().entity(
                         new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
             }
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();
-        } catch (UnexpectedServerErrorExceptionDup e) {
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             return Response.serverError().entity(
                     new ErrorResponse.ErrorResponseBuilder().setMessage(errorMessage).build()).build();

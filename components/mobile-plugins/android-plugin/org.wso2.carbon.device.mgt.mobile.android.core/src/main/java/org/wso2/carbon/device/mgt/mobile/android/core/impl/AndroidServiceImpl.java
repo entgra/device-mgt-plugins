@@ -145,7 +145,7 @@ public class AndroidServiceImpl implements AndroidService {
         if (androidPlatformConfiguration == null) {
             String errorMessage = "The payload of the android platform configuration is null.";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
         configuration.setConfiguration(androidPlatformConfiguration.getConfiguration());
         try {
@@ -170,7 +170,7 @@ public class AndroidServiceImpl implements AndroidService {
                     } else {
                         String msg = "No value specified for notifierFrequency.";
                         log.error(msg);
-                        throw new BadRequestExceptionDup(msg);
+                        throw new BadRequestException(msg);
                     }
                 } else if (AndroidConstants.TenantConfigProperties.NOTIFIER_TYPE.equals(entry.getName())) {
                     if (entry.getValue() != null) {
@@ -178,7 +178,7 @@ public class AndroidServiceImpl implements AndroidService {
                     } else {
                         String msg = "No value specified for notifierType.";
                         log.error(msg);
-                        throw new BadRequestExceptionDup(msg);
+                        throw new BadRequestException(msg);
                     }
                 }
             }
@@ -255,7 +255,7 @@ public class AndroidServiceImpl implements AndroidService {
                 || fileTransferBeanWrapper.getDeviceIDs() == null) {
             String errorMessage = "The payload of the file transfer operation is incorrect.";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android file transfer operation for " + fileTransferBeanWrapper.getDeviceIDs());
@@ -277,7 +277,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers ( " + fileTransferBeanWrapper.getDeviceIDs() + " ) found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -287,7 +287,7 @@ public class AndroidServiceImpl implements AndroidService {
         if (deviceLockBeanWrapper == null || deviceLockBeanWrapper.getOperation() == null) {
             String errorMessage = "Lock bean is empty.";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
         DeviceLock lock = deviceLockBeanWrapper.getOperation();
         ProfileOperation operation = new ProfileOperation();
@@ -301,7 +301,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -317,7 +317,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -332,7 +332,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -347,7 +347,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -358,7 +358,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (cameraBeanWrapper == null || cameraBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the configure camera operation is incorrect.";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             Camera camera = cameraBeanWrapper.getOperation();
             CommandOperation operation = new CommandOperation();
@@ -369,7 +369,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -384,7 +384,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -399,7 +399,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -414,7 +414,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -425,7 +425,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (wipeDataBeanWrapper == null || wipeDataBeanWrapper.getOperation() == null) {
                 String errorMessage = "WipeData bean is empty.";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             WipeData wipeData = wipeDataBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -436,7 +436,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -451,7 +451,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -466,7 +466,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -481,7 +481,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -496,7 +496,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -512,7 +512,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -524,7 +524,7 @@ public class AndroidServiceImpl implements AndroidService {
                     null) {
                 String errorMessage = "The payload of the application installing operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
 
             ApplicationInstallation applicationInstallation = applicationInstallationBeanWrapper.getOperation();
@@ -541,7 +541,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -552,7 +552,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (applicationUpdateBeanWrapper == null || applicationUpdateBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the application update operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             ApplicationUpdate applicationUpdate = applicationUpdateBeanWrapper.getOperation();
             validateApplicationUrl(applicationUpdate.getUrl());
@@ -569,7 +569,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -581,7 +581,7 @@ public class AndroidServiceImpl implements AndroidService {
                     applicationUninstallationBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the application uninstalling operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             ApplicationUninstallation applicationUninstallation = applicationUninstallationBeanWrapper.getOperation();
             validateApplicationType(applicationUninstallation.getType());
@@ -595,7 +595,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -606,7 +606,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (blacklistApplicationsBeanWrapper == null || blacklistApplicationsBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the blacklisting apps operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             BlacklistApplications blacklistApplications = blacklistApplicationsBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -618,7 +618,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -629,7 +629,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (upgradeFirmwareBeanWrapper == null || upgradeFirmwareBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the upgrade firmware operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             UpgradeFirmware upgradeFirmware = upgradeFirmwareBeanWrapper.getOperation();
             validateScheduleDate(upgradeFirmware.getSchedule());
@@ -643,7 +643,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -654,7 +654,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (vpnConfiguration == null || vpnConfiguration.getOperation() == null) {
                 String errorMessage = "The payload of the VPN operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             Vpn vpn = vpnConfiguration.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -665,7 +665,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -676,7 +676,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (notificationBeanWrapper == null || notificationBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the notification operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             Notification notification = notificationBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -687,7 +687,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -698,7 +698,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (wifiBeanWrapper == null || wifiBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the wifi operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             Wifi wifi = wifiBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -710,7 +710,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -721,7 +721,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (encryptionBeanWrapper == null || encryptionBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the device encryption operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             DeviceEncryption deviceEncryption = encryptionBeanWrapper.getOperation();
             CommandOperation operation = new CommandOperation();
@@ -732,7 +732,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -743,7 +743,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (lockCodeBeanWrapper == null || lockCodeBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the change lock code operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             LockCode lockCode = lockCodeBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -754,7 +754,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -765,7 +765,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (passwordPolicyBeanWrapper == null || passwordPolicyBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the change password policy operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             PasscodePolicy passcodePolicy = passwordPolicyBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -778,7 +778,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -790,7 +790,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (webClipBeanWrapper == null || webClipBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the add webclip operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             WebClip webClip = webClipBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -802,7 +802,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -813,7 +813,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (globalProxyBeanWrapper == null || globalProxyBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the global proxy operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
 
             GlobalProxy globalProxy = globalProxyBeanWrapper.getOperation();
@@ -828,12 +828,12 @@ public class AndroidServiceImpl implements AndroidService {
             } else {
                 String errorMessage = "The payload of the global proxy operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -844,7 +844,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (applicationRestrictionBeanWrapper == null || applicationRestrictionBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the application configuration operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             ApplicationRestriction applicationRestriction = applicationRestrictionBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -852,10 +852,10 @@ public class AndroidServiceImpl implements AndroidService {
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(applicationRestriction.toJSON());
             return operation;
-        } catch (BadRequestExceptionDup e) {
+        } catch (BadRequestException e) {
             String errorMessage = "Issue in retrieving device management service instance";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -867,7 +867,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (displayMessageBeanWrapper == null || displayMessageBeanWrapper.getOperation() == null) {
                 String errorMessage = "The payload of the display message operation is incorrect";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
             DisplayMessage configureDisplayMessage = displayMessageBeanWrapper.getOperation();
             ProfileOperation operation = new ProfileOperation();
@@ -881,7 +881,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);
-            throw new BadRequestExceptionDup(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
         }
     }
 
@@ -956,7 +956,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
             log.error(msg, e);
-            throw new UnexpectedServerErrorExceptionDup(msg, e);
+            throw new UnexpectedServerErrorException(msg, e);
         }
     }
 
@@ -1042,7 +1042,7 @@ public class AndroidServiceImpl implements AndroidService {
                         String msg = "Error occurred while updating the device location upon android " +
                                 "', which carries the id '" + androidDevice.getDeviceIdentifier() + "'";
                         log.error(msg, e);
-                        throw new UnexpectedServerErrorExceptionDup(msg, e);
+                        throw new UnexpectedServerErrorException(msg, e);
                     }
                 }
 
@@ -1102,7 +1102,7 @@ public class AndroidServiceImpl implements AndroidService {
                     "', which carries the id '" +
                     androidDevice.getDeviceIdentifier() + "'";
             log.error(msg, e);
-            throw new UnexpectedServerErrorExceptionDup(msg, e);
+            throw new UnexpectedServerErrorException(msg, e);
         }
     }
 
@@ -1119,18 +1119,18 @@ public class AndroidServiceImpl implements AndroidService {
             String msg = "Error occurred while getting enrollment details of the Android device that carries the id '" +
                     id + "'";
             log.error(msg, e);
-            throw new UnexpectedServerErrorExceptionDup(msg, e);
+            throw new UnexpectedServerErrorException(msg, e);
         }
 
         if (androidDevice == null) {
             String errorMessage = "The payload of the android device enrollment is incorrect.";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
         if (device == null) {
             String errorMessage = "The device to be modified doesn't exist.";
             log.error(errorMessage);
-            throw new NotFoundExceptionDup(errorMessage);
+            throw new NotFoundException(errorMessage);
         }
         if(androidDevice.getEnrolmentInfo() != null){
             device.setEnrolmentInfo(device.getEnrolmentInfo());
@@ -1236,7 +1236,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (DataPublisherConfigurationException e) {
             String msg = "Error occurred while getting the Data publisher Service instance.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorExceptionDup(msg);
+            throw new UnexpectedServerErrorException(msg);
         }
 
     }
@@ -1258,11 +1258,11 @@ public class AndroidServiceImpl implements AndroidService {
                     "the device identifier. Optionally, both from and to value should be present to get " +
                     "alerts between times.";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
     }
 
-    private List<DeviceState> retrieveAlert(String deviceId) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
+    private List<DeviceState> retrieveAlert(String deviceId) throws NotFoundException, UnexpectedServerErrorException {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events for given device Identifier.");
         }
@@ -1273,18 +1273,19 @@ public class AndroidServiceImpl implements AndroidService {
             if (deviceStates == null) {
                 String errorMessage = "No any alerts are " +
                         "published for Device: " + deviceId + ".";
-                throw new NotFoundExceptionDup(errorMessage);
+                throw new NotFoundException(errorMessage);
             } else {
                 return deviceStates;
             }
         } catch (AnalyticsException e) {
             String msg = "Error occurred while getting published events for specific device: " + deviceId + ".";
             log.error(msg, e);
-            throw new UnexpectedServerErrorExceptionDup(msg, e);
+            throw new UnexpectedServerErrorException(msg, e);
         }
     }
 
-    private List<DeviceState> retrieveAlertFromDate(String deviceId, long from, long to) throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
+    private List<DeviceState> retrieveAlertFromDate(String deviceId, long from, long to) throws NotFoundException,
+            UnexpectedServerErrorException {
         String fromDate = String.valueOf(from);
         String toDate = String.valueOf(to);
         if (log.isDebugEnabled()) {
@@ -1298,7 +1299,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (deviceStates == null) {
                 String errorMessage = "No any alerts are " +
                         "published on given date for given Device: " + deviceId + ".";
-                throw new NotFoundExceptionDup(errorMessage);
+                throw new NotFoundException(errorMessage);
 
             } else {
                 return deviceStates;
@@ -1307,12 +1308,12 @@ public class AndroidServiceImpl implements AndroidService {
             String msg = "Error occurred while getting published events for specific " +
                     "Device: " + deviceId + " on given Date.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorExceptionDup(msg, e);
+            throw new UnexpectedServerErrorException(msg, e);
         }
     }
 
     private List<DeviceState> retrieveAlertByType(String deviceId, String type)
-            throws NotFoundExceptionDup, UnexpectedServerErrorExceptionDup {
+            throws NotFoundException, UnexpectedServerErrorException {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events for given device identifier and type.");
         }
@@ -1323,7 +1324,7 @@ public class AndroidServiceImpl implements AndroidService {
             if (deviceStates == null) {
                 String errorMessage = "No any alerts are " +
                         "published for given Device: '" + deviceId + "' and given specific Type.";
-                throw new NotFoundExceptionDup(errorMessage);
+                throw new NotFoundException(errorMessage);
 
             } else {
                 return deviceStates;
@@ -1332,7 +1333,7 @@ public class AndroidServiceImpl implements AndroidService {
             String msg = "Error occurred while getting published events for specific " +
                     "Device: " + deviceId + "and given specific Type.";
             log.error(msg, e);
-            throw new UnexpectedServerErrorExceptionDup(msg, e);
+            throw new UnexpectedServerErrorException(msg, e);
         }
     }
 
@@ -1453,14 +1454,14 @@ public class AndroidServiceImpl implements AndroidService {
                 AndroidAPIUtils.getAndroidPluginService().addEnterpriseUser(androidEnterpriseUser);
             }
             return token;
-        } catch (NotFoundExceptionDup e) {
+        } catch (NotFoundException e) {
             String errorMessage = "Not found";
             log.error(errorMessage);
-            throw new NotFoundExceptionDup(errorMessage);
-        } catch (UnexpectedServerErrorExceptionDup e) {
+            throw new NotFoundException(errorMessage);
+        } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Unexpected server error";
             log.error(errorMessage);
-            throw new UnexpectedServerErrorExceptionDup(errorMessage);
+            throw new UnexpectedServerErrorException(errorMessage);
         } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occured while executing wipe enterprice command";
             log.error(errorMessage);
@@ -1469,43 +1470,43 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
 
-    private static void validateApplicationUrl(String apkUrl) throws BadRequestExceptionDup{
+    private static void validateApplicationUrl(String apkUrl) throws BadRequestException {
         try {
             URL url = new URL(apkUrl);
             URLConnection conn = url.openConnection();
             if (((HttpURLConnection) conn).getResponseCode() != HttpURLConnection.HTTP_OK) {
                 String errorMessage = "URL is not pointed to a downloadable file.";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
         } catch (MalformedURLException e) {
             String errorMessage = "Malformed application url.";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         } catch (IOException e) {
             String errorMessage = "Invalid application url.";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
     }
 
-    private static void validateApplicationType(String type) throws BadRequestExceptionDup{
+    private static void validateApplicationType(String type) throws BadRequestException {
         if (type != null) {
             if (!"enterprise".equalsIgnoreCase(type)
                     && !"public".equalsIgnoreCase(type)
                     && !"webapp".equalsIgnoreCase(type)) {
                 String errorMessage = "Invalid application type.";
                 log.error(errorMessage);
-                throw new BadRequestExceptionDup(errorMessage);
+                throw new BadRequestException(errorMessage);
             }
         } else {
             String errorMessage = "Application type is missing.";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
     }
 
-    private static void validateScheduleDate(String dateString) throws BadRequestExceptionDup{
+    private static void validateScheduleDate(String dateString) throws BadRequestException {
         try {
             if (dateString != null && !dateString.isEmpty()) {
                 SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
@@ -1515,7 +1516,7 @@ public class AndroidServiceImpl implements AndroidService {
         } catch (ParseException e) {
             String errorMessage = "Issue in validating the schedule date";
             log.error(errorMessage);
-            throw new BadRequestExceptionDup(errorMessage);
+            throw new BadRequestException(errorMessage);
         }
     }
 }
