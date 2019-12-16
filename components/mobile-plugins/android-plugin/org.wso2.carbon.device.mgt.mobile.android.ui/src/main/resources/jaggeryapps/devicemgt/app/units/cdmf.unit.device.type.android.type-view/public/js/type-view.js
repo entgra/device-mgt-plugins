@@ -108,7 +108,7 @@ function generateKIOSKQRCode(qrCodeClass) {
         function(data) {
             data = JSON.parse(data);
             if (data != null && data.configuration != null) {
-                if (ownership_type == "COSU") {
+                if (ownership_type == "COSU" || ownership_type == "COPE") {
                     for (var i = 0; i < data.configuration.length; i++) {
                         var config = data.configuration[i];
                         if (config.name === kioskConfigs["adminComponentName"]) {
