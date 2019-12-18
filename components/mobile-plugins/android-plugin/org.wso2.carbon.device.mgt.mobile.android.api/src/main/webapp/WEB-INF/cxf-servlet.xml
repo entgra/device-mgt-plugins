@@ -34,7 +34,7 @@
             <ref bean="jsonProvider"/>
             <ref bean="errorHandler"/>
             <ref bean="swaggerWriter"/>
-            <ref bean="GlobalExceptionMapper"/>
+<!--            <ref bean="GlobalExceptionMapper"/>-->
         </jaxrs:providers>
         <jaxrs:properties>
             <!-- This is added to catch interceptor level exceptions in GlobalThrowableMapper. -->
@@ -44,8 +44,7 @@
 
     <bean id="swaggerWriter" class="io.swagger.jaxrs.listing.SwaggerSerializers" />
     <bean id="swaggerResource" class="io.swagger.jaxrs.listing.ApiListingResource" />
-    <bean id="GlobalExceptionMapper" class="org.wso2.carbon.mdm.services.android.exception.GlobalThrowableMapper"/>
-    <bean id="ValidationInterceptor" class="org.wso2.carbon.mdm.services.android.common.ValidationInterceptor"/>
+    <bean id="ValidationInterceptor" class="org.wso2.carbon.device.mgt.mobile.android.addons.ValidationInterceptor"/>
 
     <bean id="swaggerConfig" class="io.swagger.jaxrs.config.BeanConfig">
         <property name="resourcePackage" value="org.wso2.carbon.mdm.services.android.services"/>
@@ -60,13 +59,13 @@
         <property name="scan" value="true"/>
     </bean>
 
-    <bean id="deviceManagementService" class="org.wso2.carbon.mdm.services.android.services.impl.DeviceManagementServiceImpl"/>
-    <bean id="deviceManagementAdminService" class="org.wso2.carbon.mdm.services.android.services.impl.DeviceManagementAdminServiceImpl"/>
-    <bean id="eventReceiverService" class="org.wso2.carbon.mdm.services.android.services.impl.EventReceiverServiceImpl"/>
-    <bean id="deviceTypeConfigurationService" class="org.wso2.carbon.mdm.services.android.services.impl.DeviceTypeConfigurationServiceImpl"/>
-    <bean id="androidEnterprise" class="org.wso2.carbon.mdm.services.android.services.impl.AndroidEnterpriseServiceImpl"/>
-    <bean id="jsonProvider" class="org.wso2.carbon.mdm.services.android.common.GsonMessageBodyHandler"/>
-    <bean id="errorHandler" class="org.wso2.carbon.mdm.services.android.common.ErrorHandler"/>
+    <bean id="deviceManagementService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.DeviceManagementAPIImpl"/>
+    <bean id="deviceManagementAdminService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.DeviceManagementAdminAPIImpl"/>
+    <bean id="eventReceiverService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.EventReceiverAPIImpl"/>
+    <bean id="deviceTypeConfigurationService" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.DeviceTypeConfigurationAPIImpl"/>
+    <bean id="androidEnterprise" class="org.wso2.carbon.device.mgt.mobile.android.api.impl.AndroidEnterpriseAPIImpl"/>
+    <bean id="jsonProvider" class="org.wso2.carbon.device.mgt.mobile.android.addons.GsonMessageBodyHandler"/>
+    <bean id="errorHandler" class="org.wso2.carbon.device.mgt.mobile.android.addons.ErrorHandler"/>
     <cxf:bus>
         <cxf:inInterceptors>
             <ref bean="ValidationInterceptor"/>
