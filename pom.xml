@@ -23,7 +23,7 @@
     <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
     <artifactId>carbon-device-mgt-plugins-parent</artifactId>
     <packaging>pom</packaging>
-    <version>5.0.6-SNAPSHOT</version>
+    <version>5.0.7-SNAPSHOT</version>
     <name>WSO2 Carbon - Device Management Plugins Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Carbon - Device Management Plugins Parent</description>
@@ -549,7 +549,17 @@
             <!--Android dependencies-->
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.mobile.android</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.mobile.android.common</artifactId>
+                <version>${carbon.devicemgt.plugins.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.mobile.android.addons</artifactId>
+                <version>${carbon.devicemgt.plugins.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.mobile.android.core</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
@@ -1204,11 +1214,11 @@
     <properties>
 
         <!-- Carbon Device Management -->
-        <carbon.devicemgt.version>4.1.5</carbon.devicemgt.version>
+        <carbon.devicemgt.version>4.1.6</carbon.devicemgt.version>
         <carbon.devicemgt.version.range>[4.0.0, 5.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon Device Management Plugins -->
-        <carbon.devicemgt.plugins.version>5.0.6-SNAPSHOT</carbon.devicemgt.plugins.version>
+        <carbon.devicemgt.plugins.version>5.0.7-SNAPSHOT</carbon.devicemgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.3</android.agent.version>
@@ -1350,7 +1360,7 @@
         <!--websocket related lib versions-->
         <tomcat.websocket.version>7.0.85</tomcat.websocket.version>
         <javax.websocket.version>1.0</javax.websocket.version>
-        <javax.version>2.0</javax.version>
+        <javax.version>2.0.1</javax.version>
 
         <!-- Release plugin ID for github-->
         <project.scm.id>github-scm</project.scm.id>

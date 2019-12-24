@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
         <artifactId>mobile-plugins</artifactId>
-        <version>5.0.6-SNAPSHOT</version>
+        <version>5.0.7-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -33,7 +33,9 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>org.wso2.carbon.device.mgt.mobile.android</module>
+        <module>org.wso2.carbon.device.mgt.mobile.android.common</module>
+        <module>org.wso2.carbon.device.mgt.mobile.android.addons</module>
+        <module>org.wso2.carbon.device.mgt.mobile.android.core</module>
         <module>org.wso2.carbon.device.mgt.mobile.android.api</module>
         <module>org.wso2.carbon.device.mgt.mobile.android.emulator</module>
         <module>org.wso2.carbon.device.mgt.mobile.android.ui</module>
