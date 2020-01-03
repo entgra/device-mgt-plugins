@@ -79,6 +79,17 @@ import java.util.Map;
 
 public class DeviceManagementProviderServiceMock implements DeviceManagementProviderService {
     @Override
+    public boolean deleteDeviceTypeVersions(DeviceType deviceType)
+            throws DeviceManagementException {
+        return false;
+    }
+
+    @Override
+    public void disEnrollDevices(List<Device> list) throws DeviceManagementException {
+
+    }
+
+    @Override
     public List<Device> getAllDevices(String s) throws DeviceManagementException {
         return null;
     }
