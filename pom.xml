@@ -37,12 +37,12 @@
     <modules>
         <module>components/extensions</module>
         <module>components/mobile-plugins</module>
-        <module>components/device-types</module>
+<!--        <module>components/device-types</module>-->
         <module>components/analytics</module>
         <module>components/test-coverage</module>
         <module>features/analytics-feature</module>
         <module>features/mobile-plugins-feature</module>
-        <module>features/device-types-feature</module>
+<!--        <module>features/device-types-feature</module>-->
         <module>features/extensions-feature</module>
     </modules>
 
@@ -481,51 +481,9 @@
 				<artifactId>org.wso2.carbon.device.mgt.mqtt.notification.listener</artifactId>
 				<version>${carbon.devicemgt.plugins.version}</version>
 			</dependency>
-            <!--Android sense DeviceType Impl, API and Agent-->
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.androidsense.api</artifactId>
-                <version>${carbon.devicemgt.plugins.version}</version>
-                <type>war</type>
-            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.extensions.remote.session</artifactId>
-                <version>${carbon.devicemgt.plugins.version}</version>
-            </dependency>
-
-            <!--Arduino DeviceType Impl, API and Agent-->
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.arduino.api</artifactId>
-                <version>${carbon.devicemgt.plugins.version}</version>
-                <type>war</type>
-            </dependency>
-
-            <!--RaspberryPi DeviceType Impl, API and Agent-->
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.api</artifactId>
-                <version>${carbon.devicemgt.plugins.version}</version>
-                <type>war</type>
-            </dependency>
-
-            <!--VirtualFireAlarm DeviceType Impl, API and Agent-->
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.plugin</artifactId>
-                <version>${carbon.devicemgt.plugins.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.api</artifactId>
-                <version>${carbon.devicemgt.plugins.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.agent.impl</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
 
@@ -565,18 +523,6 @@
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.mobile.android.api</artifactId>
-                <version>${carbon.devicemgt.plugins.version}</version>
-            </dependency>
-
-            <!--Windows dependencies-->
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.mobile.windows</artifactId>
-                <version>${carbon.devicemgt.plugins.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.mobile.windows.api</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
 
