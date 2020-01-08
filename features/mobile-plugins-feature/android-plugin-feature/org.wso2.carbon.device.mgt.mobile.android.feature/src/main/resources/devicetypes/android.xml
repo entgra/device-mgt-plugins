@@ -656,6 +656,13 @@
                     <method>POST</method>
                     <contentType>application/json</contentType>
                     <permission>/device-mgt/devices/owning-device/operations/android/send-app-conf</permission>
+                    <filters>
+                        <filter>
+                            <property>ownership</property>
+                            <value>COPE</value>
+                            <description>This feature is only available in COSU(KIOSK)</description>
+                        </filter>
+                    </filters>
                 </metadata>
             </Operation>
         </Feature>
