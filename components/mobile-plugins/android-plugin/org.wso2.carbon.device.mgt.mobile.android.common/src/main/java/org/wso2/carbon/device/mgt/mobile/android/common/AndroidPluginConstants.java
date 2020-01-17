@@ -57,6 +57,9 @@ public final class AndroidPluginConstants {
 	public static final String OS_BUILD_DATE = "OS_BUILD_DATE";
 	public static final String MAC_ADDRESS = "MAC";
 
+	public static final String GOOGLE_AFW_EMM_ANDROID_ID = "googleEMMAndroidId";
+	public static final String GOOGLE_AFW_DEVICE_ID = "googleEMMDeviceId";
+
 	//Properties related to AD_FEATURE table
 	public static final String ANDROID_FEATURE_ID = "ID";
 	public static final String ANDROID_FEATURE_CODE = "CODE";

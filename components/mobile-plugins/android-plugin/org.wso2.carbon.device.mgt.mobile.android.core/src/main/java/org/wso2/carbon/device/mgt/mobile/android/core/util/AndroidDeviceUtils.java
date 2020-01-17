@@ -60,9 +60,6 @@ import org.wso2.carbon.apimgt.application.extension.dto.ApiApplicationKey;
 import org.wso2.carbon.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.application.mgt.common.SubAction;
-import org.wso2.carbon.device.application.mgt.common.SubscriptionType;
-import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -83,20 +80,13 @@ import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.ComplianceFeature;
 import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.PolicyComplianceException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
-import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.core.search.mgt.impl.Utils;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
-import org.wso2.carbon.device.mgt.mobile.android.common.GoogleAPIInvoker;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceState;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.EnterpriseConfigs;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorListItem;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseApp;
-import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseInstallPolicy;
-import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
 import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
 import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
@@ -107,7 +97,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import javax.validation.ConstraintViolation;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -288,108 +277,10 @@ public class AndroidDeviceUtils {
     }
 
     public static List<? extends Operation> getPendingOperations
-            (DeviceIdentifier deviceIdentifier, boolean handleGoogleAps) throws OperationManagementException {
-
+            (DeviceIdentifier deviceIdentifier) throws OperationManagementException {
         List<? extends Operation> operations;
         operations = AndroidAPIUtils.getDeviceManagementService().getPendingOperations(deviceIdentifier);
-        if (operations != null && handleGoogleAps) {
-            handleEnrollmentGoogleApps(operations, deviceIdentifier);
-        }
         return operations;
-    }
-
-    private static void handleEnrollmentGoogleApps(List<? extends Operation> operations, DeviceIdentifier
-            deviceIdentifier) {
-        boolean containsGoogleAppPolicy = false;
-        for (int x = 0; x < operations.size() && !containsGoogleAppPolicy; x++) {
-            Operation operation = operations.get(x);
-
-            // Check if the operation has a policy bundle inside.
-            if (operation.getCode().equals(AndroidConstants.OperationCodes.POLICY_BUNDLE)) {
-                ArrayList operationPayLoad = (ArrayList) operation.getPayLoad();
-
-
-                // If there is a policy bundle, read its payload
-                for (int i = 0; i < operationPayLoad.size() && !containsGoogleAppPolicy; i++) {
-                    Object policy = operationPayLoad.get(i);
-                    ProfileOperation profileOperation = (ProfileOperation) policy;
-                    String code = profileOperation.getCode();
-
-                    // Find if there is an ENROLLMENT_APP_INSTALL payload
-                    if (code.equals(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_FEATURE_CODE)) {
-                        String payload = profileOperation.getPayLoad().toString();
-                        JsonElement appListElement = new JsonParser().parse(payload).getAsJsonObject()
-                                .get(AndroidConstants.ApplicationInstall.ENROLLMENT_APP_INSTALL_CODE);
-                        JsonArray appListArray = appListElement.getAsJsonArray();
-
-                        // Find if there are Apps with Work profile configurations
-                        boolean alreadySendToGoogle = false;
-                        for (JsonElement appElement : appListArray) {
-                            JsonElement googlePolicyPayload = appElement.getAsJsonObject().
-                                    get(AndroidConstants.ApplicationInstall.GOOGLE_POLICY_PAYLOAD);
-                            if (googlePolicyPayload != null) {
-                                String uuid = appElement.getAsJsonObject().get("uuid").toString();
-                                containsGoogleAppPolicy = true;// breaking out of outer for loop
-                                try {
-                                    uuid = uuid.replace("\"", "");
-                                    if (alreadySendToGoogle) {
-                                        sendPayloadToGoogle(uuid, payload, deviceIdentifier, false);
-                                    } else {
-                                        sendPayloadToGoogle(uuid, payload, deviceIdentifier, true);
-                                        alreadySendToGoogle = true;
-                                    }
-                                } catch (org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException e) {
-                                    String errorMessage = "App install failed for device " + deviceIdentifier.getId();
-                                    log.error(errorMessage, e);
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Sends the app install policy to Google
-     * @param payload policy profile
-     * @param deviceIdentifier device to apply policy
-     */
-    private static void sendPayloadToGoogle(String uuid, String payload, DeviceIdentifier deviceIdentifier,
-                                            boolean requireSendingToGoogle) throws ApplicationManagementException {
-        try {
-            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigsFromGoogle();
-            if (enterpriseConfigs.getErrorResponse() == null) {
-                GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
-                AndroidEnterpriseUser userDetail = AndroidAPIUtils.getAndroidPluginService()
-                        .getEnterpriseUserByDevice(deviceIdentifier.getId());
-                if (userDetail != null && userDetail.getEnterpriseId() != null && !userDetail.getEnterpriseId()
-                        .isEmpty() && userDetail.getEmmUsername() != null && payload != null) {
-                    EnterpriseInstallPolicy enterpriseInstallPolicy = AndroidEnterpriseUtils
-                            .getDeviceAppPolicy(payload, null, userDetail);
-
-                    List<String> apps = new ArrayList<>();
-                    for (EnterpriseApp enterpriseApp : enterpriseInstallPolicy.getApps()) {
-                        apps.add(enterpriseApp.getProductId());
-                    }
-                    if (requireSendingToGoogle) {
-                        googleAPIInvoker.approveAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail
-                                .getGoogleUserId(), apps, enterpriseInstallPolicy.getProductSetBehavior());
-                        googleAPIInvoker.updateAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
-                                AndroidEnterpriseUtils.convertToDeviceInstance(enterpriseInstallPolicy));
-                    }
-                    AndroidEnterpriseUtils.getAppSubscriptionService().performEntAppSubscription(uuid,
-                            Arrays.asList(CarbonContext.getThreadLocalCarbonContext().getUsername()),
-                            SubscriptionType.USER.toString(), SubAction.INSTALL.toString(), false);
-
-                }
-            }
-
-        } catch (EnterpriseServiceException e) {
-            String errorMessage = "App install failed for device " + deviceIdentifier.getId();
-            log.error(errorMessage);
-        }
     }
 
     private static void updateApplicationList(Operation operation, DeviceIdentifier deviceIdentifier)
@@ -748,7 +639,7 @@ public class AndroidDeviceUtils {
     public static void updateDisEnrollOperationStatus(DeviceIdentifier deviceIdentifier)
             throws DeviceManagementException {
         try {
-            List<? extends Operation> pendingOperations = getPendingOperations(deviceIdentifier, false);
+            List<? extends Operation> pendingOperations = getPendingOperations(deviceIdentifier);
             if (pendingOperations != null && !pendingOperations.isEmpty()) {
                 for (Operation operation : pendingOperations) {
                     operation.setStatus(Operation.Status.ERROR);

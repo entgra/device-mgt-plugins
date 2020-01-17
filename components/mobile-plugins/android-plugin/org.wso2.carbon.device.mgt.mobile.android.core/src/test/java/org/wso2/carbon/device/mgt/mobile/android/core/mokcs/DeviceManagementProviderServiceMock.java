@@ -661,6 +661,18 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
         return null;
     }
 
+    @Override public boolean deleteDeviceTypeVersions(DeviceType deviceType) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override public void disEnrollDevices(List<Device> list) throws DeviceManagementException {
+
+    }
+
+    @Override public boolean deleteDeviceType(String s, DeviceType deviceType) throws DeviceManagementException {
+        return false;
+    }
+
     @Override
     public DeviceConfiguration getDeviceConfiguration(Map<String, String> propertyMap)
             throws DeviceManagementException, DeviceNotFoundException, UnauthorizedDeviceAccessException,
