@@ -18,7 +18,6 @@
 package org.wso2.carbon.device.mgt.mobile.android.core.impl;
 
 import com.google.api.client.http.HttpStatusCodes;
-import com.google.api.services.androidenterprise.model.ProductsListResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang.StringUtils;
@@ -26,8 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
 import org.wso2.carbon.base.ServerConfiguration;
-import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManagementException;
 
 import org.wso2.carbon.device.mgt.analytics.data.publisher.exception.DataPublisherConfigurationException;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -55,16 +52,13 @@ import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
-import org.wso2.carbon.device.mgt.mobile.android.common.GoogleAPIInvoker;
 import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.*;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.*;
-import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.*;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtils;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
@@ -85,8 +79,6 @@ public class AndroidServiceImpl implements AndroidService {
     private static final Log log = LogFactory.getLog(AndroidServiceImpl.class);
 
     private static final String OPERATION_ERROR_STATUS = "ERROR";
-    public static final String GOOGLE_AFW_EMM_ANDROID_ID = "googleEMMAndroidId";
-    public static final String GOOGLE_AFW_DEVICE_ID = "googleEMMDeviceId";
     private static final String EVENT_STREAM_DEFINITION = "org.wso2.iot.LocationStream";
 
     private Gson gson = new Gson();
@@ -918,21 +910,20 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
     @Override
-    public List<? extends Operation> getPendingOperations(String deviceId, List<? extends Operation> resultOperations,
-            boolean disableGoogleApps)
+    public List<? extends Operation> getPendingOperations(DeviceIdentifier deviceIdentifier,
+            List<? extends Operation> resultOperations)
             throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(deviceId);
         try {
             if (!AndroidDeviceUtils.isValidDeviceIdentifier(deviceIdentifier)) {
-                String msg = "Device not found for identifier '" + deviceId + "'";
+                String msg = "Device not found for identifier '" + deviceIdentifier.getId() + "'";
                 log.error(msg);
                 throw new InvalidDeviceException(msg);
             }
             if (log.isDebugEnabled()) {
-                log.debug("Invoking Android pending operations:" + deviceId);
+                log.debug("Invoking Android pending operations:" + deviceIdentifier.getId());
             }
             if (resultOperations != null && !resultOperations.isEmpty()) {
-                updateOperations(deviceId, resultOperations);
+                updateOperations(deviceIdentifier.getId(), resultOperations);
             }
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
@@ -952,7 +943,7 @@ public class AndroidServiceImpl implements AndroidService {
             throw new DeviceManagementException(msg, e);
         }
         try {
-            return AndroidDeviceUtils.getPendingOperations(deviceIdentifier, !disableGoogleApps);
+            return AndroidDeviceUtils.getPendingOperations(deviceIdentifier);
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
             log.error(msg, e);
@@ -990,7 +981,6 @@ public class AndroidServiceImpl implements AndroidService {
     public Message enrollDevice(AndroidDevice androidDevice)
             throws DeviceManagementException, AndroidDeviceMgtPluginException {
         try {
-            String token = null;
             Device device = new Device();
             device.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
             device.setEnrolmentInfo(androidDevice.getEnrolmentInfo());
@@ -1001,30 +991,6 @@ public class AndroidServiceImpl implements AndroidService {
             device.setName(androidDevice.getName());
             device.setFeatures(androidDevice.getFeatures());
             device.setProperties(androidDevice.getProperties());
-
-            String googleEMMAndroidId = null;
-            String googleEMMDeviceId = null;
-            if (androidDevice.getProperties() != null) {
-                for (Device.Property property : androidDevice.getProperties()) {
-                    if (property.getName().equals(GOOGLE_AFW_EMM_ANDROID_ID)) {
-                        googleEMMAndroidId = property.getValue();
-                    } else if (property.getName().equals(GOOGLE_AFW_DEVICE_ID)) {
-                        googleEMMDeviceId = property.getValue();
-                    }
-                }
-
-                if (googleEMMAndroidId != null && googleEMMDeviceId != null) {
-                    EnterpriseUser user = new EnterpriseUser();
-                    user.setAndroidPlayDeviceId(googleEMMAndroidId);
-                    user.setEmmDeviceIdentifier(googleEMMDeviceId);
-                    try {
-                        token = insertUser(user);
-                    } catch (EnterpriseServiceException e) {
-
-                    }
-                }
-            }
-
 
             boolean status = AndroidAPIUtils.getDeviceManagementService().enrollDevice(device);
             if (status) {
@@ -1082,20 +1048,14 @@ public class AndroidServiceImpl implements AndroidService {
 
                 Message responseMessage = new Message();
                 responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_OK));
-                if (token == null) {
-                    responseMessage.setResponseMessage("Android device, which carries the id '" +
-                            androidDevice.getDeviceIdentifier() + "' has successfully been enrolled");
-                } else {
-                    responseMessage.setResponseMessage("Google response token" + token);
-                }
+                responseMessage.setResponseMessage("Android device, which carries the id '" +
+                        androidDevice.getDeviceIdentifier() + "' has successfully been enrolled");
                 return responseMessage;
             } else {
-                Message responseMessage = new Message();
-                responseMessage.setResponseCode(String.valueOf(HttpStatusCodes.STATUS_CODE_SERVER_ERROR));
-                responseMessage.setResponseMessage("Failed to enroll '" +
-                        device.getType() + "' device, which carries the id '" +
-                        androidDevice.getDeviceIdentifier() + "'");
-                return responseMessage;
+                String msg = "Failed to enroll '" + device.getType() + "' device, which carries the id '" +
+                        androidDevice.getDeviceIdentifier() + "'";
+                log.error(msg);
+                throw new DeviceManagementException(msg);
             }
         } catch (PolicyManagementException | InvalidDeviceException | OperationManagementException e) {
             String msg = "Error occurred while enforcing default enrollment policy upon android " +
@@ -1391,84 +1351,6 @@ public class AndroidServiceImpl implements AndroidService {
         }
         return location;
     }
-
-    private int recursiveSync(GoogleAPIInvoker googleAPIInvoker, String enterpriseId, ProductsListResponse
-            productsListResponse) throws EnterpriseServiceException, ApplicationManagementException {
-        // Are there more pages
-        if (productsListResponse == null || productsListResponse.getTokenPagination() == null
-                || productsListResponse.getTokenPagination().getNextPageToken() == null) {
-            return 0;
-        }
-
-        // Get next page
-        ProductsListResponse productsListResponseNext = googleAPIInvoker.listProduct(enterpriseId,
-                productsListResponse.getTokenPagination().getNextPageToken());
-        AndroidEnterpriseUtils.persistApp(productsListResponseNext);
-        if (productsListResponseNext != null && productsListResponseNext.getTokenPagination() != null &&
-                productsListResponseNext.getTokenPagination().getNextPageToken() != null) {
-            return recursiveSync(googleAPIInvoker, enterpriseId, productsListResponseNext)
-                    + productsListResponseNext.getProduct().size();
-        } else {
-            return productsListResponseNext.getProduct().size();
-        }
-    }
-
-    public String insertUser(EnterpriseUser enterpriseUser)
-            throws EnterpriseServiceException, AndroidDeviceMgtPluginException {
-        try {
-            EnterpriseConfigs enterpriseConfigs = AndroidEnterpriseUtils.getEnterpriseConfigs();
-
-            String token;
-            boolean deviceIdExist = false;
-
-            String googleUserId;
-            List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
-                    .getEnterpriseUser(CarbonContext.getThreadLocalCarbonContext().getUsername());
-            GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
-            if (androidEnterpriseUsers != null && !androidEnterpriseUsers.isEmpty()) {
-                googleUserId = androidEnterpriseUsers.get(0).getGoogleUserId();
-                // If this device is also present, only need to provide a token for this request.
-                for (AndroidEnterpriseUser enterprise : androidEnterpriseUsers) {
-                    if (enterprise.getEmmDeviceId() != null
-                            && enterprise.getEmmDeviceId().equals(enterpriseUser.getAndroidPlayDeviceId())) {
-                        deviceIdExist = true;
-                    }
-                }
-            } else {
-                googleUserId = googleAPIInvoker.insertUser(enterpriseConfigs.getEnterpriseId(), CarbonContext
-                        .getThreadLocalCarbonContext()
-                        .getUsername());
-            }
-            // Fetching an auth token from Google EMM API
-            token = googleAPIInvoker.getToken(enterpriseConfigs.getEnterpriseId(), googleUserId);
-
-            if (!deviceIdExist) {
-                AndroidEnterpriseUser androidEnterpriseUser = new AndroidEnterpriseUser();
-                androidEnterpriseUser.setEmmUsername(CarbonContext.getThreadLocalCarbonContext().getUsername());
-                androidEnterpriseUser.setTenantId(CarbonContext.getThreadLocalCarbonContext().getTenantId());
-                androidEnterpriseUser.setAndroidPlayDeviceId(enterpriseUser.getAndroidPlayDeviceId());
-                androidEnterpriseUser.setEnterpriseId(enterpriseConfigs.getEnterpriseId());
-                androidEnterpriseUser.setEmmDeviceId(enterpriseUser.getEmmDeviceIdentifier());
-                androidEnterpriseUser.setGoogleUserId(googleUserId);
-
-                AndroidAPIUtils.getAndroidPluginService().addEnterpriseUser(androidEnterpriseUser);
-            }
-            return token;
-        } catch (NotFoundException e) {
-            String errorMessage = "Not found";
-            log.error(errorMessage);
-            throw new NotFoundException(errorMessage);
-        } catch (UnexpectedServerErrorException e) {
-            String errorMessage = "Unexpected server error";
-            log.error(errorMessage);
-            throw new UnexpectedServerErrorException(errorMessage);
-        } catch (AndroidDeviceMgtPluginException e) {
-            String errorMessage = "Error occured while executing wipe enterprice command";
-            log.error(errorMessage);
-            throw new AndroidDeviceMgtPluginException(errorMessage);
-        }
-    }
-
 
     private static void validateApplicationUrl(String apkUrl) throws BadRequestException {
         try {
