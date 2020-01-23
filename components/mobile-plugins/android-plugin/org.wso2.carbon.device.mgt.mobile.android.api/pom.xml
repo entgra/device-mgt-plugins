@@ -251,7 +251,6 @@
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-androidenterprise</artifactId>
-            <version>v1-rev186-1.25.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>guava</artifactId>
@@ -318,6 +317,12 @@
             <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
             <artifactId>org.wso2.carbon.device.mgt.mobile.android.common</artifactId>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>google-api-services-androidenterprise</artifactId>
+                    <groupId>com.google.apis</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt-plugins</groupId>

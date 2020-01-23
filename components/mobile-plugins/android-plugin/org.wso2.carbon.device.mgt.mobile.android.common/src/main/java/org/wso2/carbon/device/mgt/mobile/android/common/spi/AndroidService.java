@@ -400,15 +400,14 @@ public interface AndroidService {
     /**
      * Method for get pending operations
      *
-     * @param id Id of the device to get pending operations
+     * @param deviceIdentifier Device Identifier of the device to get pending operations
      * @param resultOperations Result operations list
-     * @param disableGoogleApps Check whether google apps are disabled
      * @return
      * @throws {@link DeviceManagementException}
      * @throws {@link InvalidDeviceException}
      */
     List<? extends Operation> getPendingOperations
-            (String id, List<? extends Operation> resultOperations, boolean disableGoogleApps)
+            (DeviceIdentifier deviceIdentifier, List<? extends Operation> resultOperations)
             throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException;
 
     /**

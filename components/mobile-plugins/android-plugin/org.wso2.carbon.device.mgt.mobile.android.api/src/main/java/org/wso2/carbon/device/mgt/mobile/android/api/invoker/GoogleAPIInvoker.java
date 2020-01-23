@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.android.common;
+package org.wso2.carbon.device.mgt.mobile.android.api.invoker;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -70,8 +70,6 @@ public class GoogleAPIInvoker {
     public GoogleAPIInvoker(String esa) {
         this.esa = esa;
     }
-
-    private GoogleAPIInvoker(){}
 
     public String insertUser(String enterpriseId, String username) throws EnterpriseServiceException {
         AndroidEnterprise androidEnterprise = getEnterpriseClient();
