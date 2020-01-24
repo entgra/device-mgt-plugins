@@ -43,7 +43,6 @@ import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
 import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.mobile.android.api.AndroidEnterpriseAPI;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
-import org.wso2.carbon.device.mgt.mobile.android.common.GoogleAPIInvoker;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.EnterpriseConfigs;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.EnterpriseStoreCluster;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.EnterpriseStorePackages;
@@ -65,6 +64,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServ
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.invoker.GoogleAPIInvoker;
 import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 
 import javax.ws.rs.Consumes;
@@ -146,7 +146,7 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
         List<AndroidEnterpriseUser> androidEnterpriseUsers = AndroidAPIUtils.getAndroidPluginService()
                 .getEnterpriseUser(CarbonContext.getThreadLocalCarbonContext().getUsername());
         GoogleAPIInvoker googleAPIInvoker = new GoogleAPIInvoker(enterpriseConfigs.getEsa());
-        if (androidEnterpriseUsers != null && androidEnterpriseUsers.size() > 0) {
+        if (androidEnterpriseUsers != null && !androidEnterpriseUsers.isEmpty()) {
             googleUserId = androidEnterpriseUsers.get(0).getGoogleUserId();
             // If this device is also present, only need to provide a token for this request.
             for (AndroidEnterpriseUser enterprise : androidEnterpriseUsers) {

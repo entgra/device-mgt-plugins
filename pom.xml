@@ -1154,6 +1154,11 @@
                 <type>apk</type>
                 <version>${android.agent.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.apis</groupId>
+                <artifactId>google-api-services-androidenterprise</artifactId>
+                <version>v1-rev214-1.25.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
