@@ -846,4 +846,2429 @@
             <VersionName>35</VersionName>
         </DeviceTypePlatformVersion>
     </DeviceTypePlatformDetails>
+
+    <PolicyUIConfigurations>
+        <Policy>
+            <Name>Passcode Policy</Name>
+            <Panels>
+                <Panel id="PASSCODE_POLICY">
+                    <Title>Passcode Policy</Title>
+                    <Description>Enforce a configured passcode policy on Android devices. Once this profile is applied,
+                        the device owners won't be able to modify the password settings on their devices.</Description>
+                    <PanelItems>
+                        <PanelItem type="checkbox">
+                            <Label>Allow Simple Value</Label>
+                            <Tooltip>Permits repeating, ascending and descending character sequences</Tooltip>
+                            <ItemId>allowSimple</ItemId>
+                            <Optional>
+                                <Checked>true</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Require alphanumeric value</Label>
+                            <Tooltip>Mandates to contain both letters and numbers</Tooltip>
+                            <ItemId>requireAlphanumeric</ItemId>
+                            <Optional>
+                                <Checked>true</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="select">
+                            <Label>Minimum passcode length</Label>
+                            <Tooltip>Minimum number of characters allowed in a passcode</Tooltip>
+                            <ItemId>minLength</ItemId>
+                            <Optional>
+                                <Options>
+                                    <Option>
+                                        <OptionName>None</OptionName>
+                                        <OptionValue></OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>04</OptionName>
+                                        <OptionValue>4</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>05</OptionName>
+                                        <OptionValue>5</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>06</OptionName>
+                                        <OptionValue>6</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>07</OptionName>
+                                        <OptionValue>7</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>08</OptionName>
+                                        <OptionValue>8</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>09</OptionName>
+                                        <OptionValue>9</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>10</OptionName>
+                                        <OptionValue>10</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>11</OptionName>
+                                        <OptionValue>11</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>12</OptionName>
+                                        <OptionValue>12</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>13</OptionName>
+                                        <OptionValue>13</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>14</OptionName>
+                                        <OptionValue>14</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>15</OptionName>
+                                        <OptionValue>15</OptionValue>
+                                    </Option>
+                                </Options>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="select">
+                            <Label>Minimum number of complex characters</Label>
+                            <Tooltip>Minimum number of complex or non-alphanumeric characters allowed in a passcode</Tooltip>
+                            <ItemId>minComplexChars</ItemId>
+                            <Optional>
+                                <Options>
+                                    <Option>
+                                        <OptionName>None</OptionName>
+                                        <OptionValue></OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>01</OptionName>
+                                        <OptionValue>1</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>02</OptionName>
+                                        <OptionValue>2</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>03</OptionName>
+                                        <OptionValue>3</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>04</OptionName>
+                                        <OptionValue>4</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>05</OptionName>
+                                        <OptionValue>5</OptionValue>
+                                    </Option>
+                                </Options>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="input">
+                            <Label>Maximum passcode age in days</Label>
+                            <Tooltip>Number of days after which a passcode must be changed</Tooltip>
+                            <ItemId>maxPINAgeInDays</ItemId>
+                            <Optional>
+                                <Placeholder>Should be in between 1-to-730 days or 0 for none</Placeholder>
+                                <Rules>
+                                    <Regex>^(?:0|[1-9]|[1-9][1-9]|[0-6][0-9][0-9]|7[0-2][0-9]|730)$</Regex>
+                                    <ValidationMsg>Should be in between 1-to-730 days or 0 for none</ValidationMsg>
+                                    <Required>false</Required>
+                                </Rules>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="input">
+                            <Label>Passcode history</Label>
+                            <Tooltip>Number of consequent unique passcodes to be used before reuse</Tooltip>
+                            <ItemId>pinHistory</ItemId>
+                            <Optional>
+                                <Placeholder>Should be in between 1-to-50 passcodes or 0 for none</Placeholder>
+                                <Rules>
+                                    <Regex>^(?:0|[1-9]|[1-4][0-9]|50)$</Regex>
+                                    <ValidationMsg>Should be in between 1-to-50 passcodes or 0 for none</ValidationMsg>
+                                    <Required>false</Required>
+                                </Rules>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="select">
+                            <Label>Maximum number of failed attempts</Label>
+                            <Tooltip>The maximum number of incorrect password entries allowed. If the correct password is not entered within the allowed number of attempts, the data on the device will be erased.</Tooltip>
+                            <ItemId>maxFailedAttempts</ItemId>
+                            <Optional>
+                                <Options>
+                                    <Option>
+                                        <OptionName>None</OptionName>
+                                        <OptionValue></OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>03</OptionName>
+                                        <OptionValue>3</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>04</OptionName>
+                                        <OptionValue>4</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>05</OptionName>
+                                        <OptionValue>5</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>06</OptionName>
+                                        <OptionValue>6</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>07</OptionName>
+                                        <OptionValue>7</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>08</OptionName>
+                                        <OptionValue>8</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>09</OptionName>
+                                        <OptionValue>9</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>10</OptionName>
+                                        <OptionValue>10</OptionValue>
+                                    </Option>
+                                </Options>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="title">
+                            <Label>Passcode policy for work profile</Label>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Enabled Work profile passcode</Label>
+                            <Tooltip>Enabled Work profile passcode.</Tooltip>
+                            <ItemId>passcodePolicyWPExist</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                                <SubPanels>
+                                    <SubPanel>
+                                        <PanelKey>workProfilePasscode</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="checkbox">
+                                                <Label>Allow Simple Value</Label>
+                                                <Tooltip>Permits repeating, ascending and descending character sequences</Tooltip>
+                                                <ItemId>passcodePolicyAllowSimpleWP</ItemId>
+                                                <Optional>
+                                                    <Checked>true</Checked>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="checkbox">
+                                                <Label>Require alphanumeric value</Label>
+                                                <Tooltip>Mandates to contain both letters and numbers</Tooltip>
+                                                <ItemId>passcodePolicyRequireAlphanumericWP</ItemId>
+                                                <Optional>
+                                                    <Checked>true</Checked>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="select">
+                                                <Label>Minimum passcode length</Label>
+                                                <Tooltip>Minimum number of characters allowed in a passcode</Tooltip>
+                                                <ItemId>passcodePolicyMinLengthWP</ItemId>
+                                                <Optional>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>None</OptionName>
+                                                            <OptionValue></OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04</OptionName>
+                                                            <OptionValue>4</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05</OptionName>
+                                                            <OptionValue>5</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06</OptionName>
+                                                            <OptionValue>6</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07</OptionName>
+                                                            <OptionValue>7</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08</OptionName>
+                                                            <OptionValue>8</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09</OptionName>
+                                                            <OptionValue>9</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10</OptionName>
+                                                            <OptionValue>10</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11</OptionName>
+                                                            <OptionValue>11</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12</OptionName>
+                                                            <OptionValue>12</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>13</OptionName>
+                                                            <OptionValue>13</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>14</OptionName>
+                                                            <OptionValue>14</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>15</OptionName>
+                                                            <OptionValue>15</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="select">
+                                                <Label>Minimum number of complex characters</Label>
+                                                <Tooltip>Minimum number of complex or non-alphanumeric characters allowed in a passcode</Tooltip>
+                                                <ItemId>passcodePolicyMinComplexCharsWP</ItemId>
+                                                <Optional>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>None</OptionName>
+                                                            <OptionValue></OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01</OptionName>
+                                                            <OptionValue>1</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02</OptionName>
+                                                            <OptionValue>2</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03</OptionName>
+                                                            <OptionValue>3</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04</OptionName>
+                                                            <OptionValue>4</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05</OptionName>
+                                                            <OptionValue>5</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="input">
+                                                <Label>Maximum passcode age in days</Label>
+                                                <Tooltip>Number of days after which a passcode must be changed</Tooltip>
+                                                <ItemId>passcodePolicyMaxPasscodeAgeInDaysWP</ItemId>
+                                                <Optional>
+                                                    <Placeholder>Should be in between 1-to-730 days or 0 for none</Placeholder>
+                                                    <Rules>
+                                                        <Regex>^(?:0|[1-9]|[1-9][1-9]|[0-6][0-9][0-9]|7[0-2][0-9]|730)$</Regex>
+                                                        <ValidationMsg>Should be in between 1-to-730 days or 0 for none</ValidationMsg>
+                                                        <Required>false</Required>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="input">
+                                                <Label>Passcode history</Label>
+                                                <Tooltip>Number of consequent unique passcodes to be used before reuse</Tooltip>
+                                                <ItemId>passcodePolicyPasscodeHistoryWP</ItemId>
+                                                <Optional>
+                                                    <Placeholder>Should be in between 1-to-50 passcodes or 0 for none</Placeholder>
+                                                    <Rules>
+                                                        <Regex>^(?:0|[1-9]|[1-4][0-9]|50)$</Regex>
+                                                        <ValidationMsg>Should be in between 1-to-50 passcodes or 0 for none</ValidationMsg>
+                                                        <Required>false</Required>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="select">
+                                                <Label>Maximum number of failed attempts</Label>
+                                                <Tooltip>The maximum number of incorrect password entries allowed. If the correct password is not entered within the allowed number of attempts, the data on the device will be erased.</Tooltip>
+                                                <ItemId>passcodePolicyMaxFailedAttemptsWP</ItemId>
+                                                <Optional>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>None</OptionName>
+                                                            <OptionValue></OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03</OptionName>
+                                                            <OptionValue>3</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04</OptionName>
+                                                            <OptionValue>4</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05</OptionName>
+                                                            <OptionValue>5</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06</OptionName>
+                                                            <OptionValue>6</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07</OptionName>
+                                                            <OptionValue>7</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08</OptionName>
+                                                            <OptionValue>8</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09</OptionName>
+                                                            <OptionValue>9</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10</OptionName>
+                                                            <OptionValue>10</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                </Optional>
+                                            </PanelItem>
+                                        </PanelItems>
+                                    </SubPanel>
+                                </SubPanels>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Restrictions</Name>
+            <Panels>
+                <Panel id="CAMERA">
+                    <Title>Restrictions</Title>
+                    <Description>This configurations can be used to restrict certain settings on an Android device. Once this configuration profile is installed on a device, corresponding users will not be able to modify these settings on their devices.</Description>
+                    <PanelItems>
+                        <PanelItem type="checkbox">
+                            <Label>Allow use of camera</Label>
+                            <Tooltip>Enables the usage of device camera</Tooltip>
+                            <ItemId>CAMERA</ItemId>
+                            <Optional>
+                                <Checked>true</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="alert">
+                            <Label>Below Restrictions are valid only when the Agent is work-profile owner or device owner.</Label>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow configuring VPN</Label>
+                            <Tooltip>Users are restricted from configuring VPN.</Tooltip>
+                            <ItemId>DISALLOW_CONFIG_VPN</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow configuring app control</Label>
+                            <Tooltip>Restricts users from modifying applications in the device's settings or launchers.</Tooltip>
+                            <ItemId>DISALLOW_APPS_CONTROL</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow cross profile copy paste</Label>
+                            <Tooltip>Device owners are restricted from copying items that are copied to the clipboard from the managed profile to the parent profile or vice-versa.</Tooltip>
+                            <ItemId>DISALLOW_CROSS_PROFILE_COPY_PASTE</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow debugging</Label>
+                            <Tooltip>Users are restricted from accessing debug logs.</Tooltip>
+                            <ItemId>DISALLOW_DEBUGGING_FEATURES</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow install apps</Label>
+                            <Tooltip>Users are restricted from installing applications.</Tooltip>
+                            <ItemId>DISALLOW_INSTALL_APPS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow install from unknown sources</Label>
+                            <Tooltip>Users are restricted from installing applications from unknown origin.</Tooltip>
+                            <ItemId>DISALLOW_INSTALL_UNKNOWN_SOURCES</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow modify accounts</Label>
+                            <Tooltip>Users are restricted from modifying user accounts.</Tooltip>
+                            <ItemId>DISALLOW_MODIFY_ACCOUNTS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow outgoing beam</Label>
+                            <Tooltip>Users are restricted from using NFC bump.</Tooltip>
+                            <ItemId>DISALLOW_OUTGOING_BEAM</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow location sharing</Label>
+                            <Tooltip>Users are restricted from sharing their geo-location.</Tooltip>
+                            <ItemId>DISALLOW_SHARE_LOCATION</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow uninstall apps</Label>
+                            <Tooltip>Users are restricted from uninstalling applications.</Tooltip>
+                            <ItemId>DISALLOW_UNINSTALL_APPS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow parent profile app linking</Label>
+                            <Tooltip>Allows apps in the parent profile to access or handle web links from the managed profile.</Tooltip>
+                            <ItemId>ALLOW_PARENT_PROFILE_APP_LINKING</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="alert">
+                            <Label>Below restrictions will be applicable when the agent is the device owner and Android version 6.0 (Marshmallow) or higher.</Label>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow set wallpaper</Label>
+                            <Tooltip>Users are restricted from setting wallpapers.</Tooltip>
+                            <ItemId>DISALLOW_SET_WALLPAPER</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow set user icon</Label>
+                            <Tooltip>Users are restricted from changing their icon.</Tooltip>
+                            <ItemId>DISALLOW_SET_USER_ICON</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow remove managed profile</Label>
+                            <Tooltip>Users are restricted from removing the managed profile.</Tooltip>
+                            <ItemId>DISALLOW_REMOVE_MANAGEMENT_PROFILE</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow autofill</Label>
+                            <Tooltip>Users are restricted from using autofill services.</Tooltip>
+                            <ItemId>DISALLOW_AUTOFILL</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow bluetooth</Label>
+                            <Tooltip>Bluetooth is disallowed on the device.</Tooltip>
+                            <ItemId>DISALLOW_BLUETOOTH</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow bluetooth sharing</Label>
+                            <Tooltip>Users are restricted from Bluetooth sharing on the device.</Tooltip>
+                            <ItemId>DISALLOW_BLUETOOTH_SHARING</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow remove user</Label>
+                            <Tooltip>Users are restricted from removing user itself.</Tooltip>
+                            <ItemId>DISALLOW_CONFIG_CREDENTIALS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="alert">
+                            <Label>Below Restrictions are valid only when the Agent is the device owner.</Label>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow SMS</Label>
+                            <Tooltip>Users are restricted from sending SMS messages.</Tooltip>
+                            <ItemId>DISALLOW_SMS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Ensure verifying apps</Label>
+                            <Tooltip>Ensure app verification.</Tooltip>
+                            <ItemId>ENSURE_VERIFY_APPS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Enable auto timing</Label>
+                            <Tooltip>Enables the auto time feature that is in the device's Settings > Data and Time.</Tooltip>
+                            <ItemId>AUTO_TIME</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disable screen capture</Label>
+                            <Tooltip>Screen capturing would be disable.</Tooltip>
+                            <ItemId>SET_SCREEN_CAPTURE_DISABLED</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow volume adjust</Label>
+                            <Tooltip>Users are restricted from adjusting device volume.</Tooltip>
+                            <ItemId>DISALLOW_ADJUST_VOLUME</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow cell broadcast</Label>
+                            <Tooltip>Users are restricted from configuring cell broadcast.</Tooltip>
+                            <ItemId>DISALLOW_CONFIG_CELL_BROADCASTS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow configuring bluetooth</Label>
+                            <Tooltip>Users are restricted from configuring bluetooth.</Tooltip>
+                            <ItemId>DISALLOW_CONFIG_BLUETOOTH</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow configuring mobile networks</Label>
+                            <Tooltip>Users are restricted from configuring mobile network.</Tooltip>
+                            <ItemId>DISALLOW_CONFIG_MOBILE_NETWORKS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow configuring tethering</Label>
+                            <Tooltip>Users are restricted from configuring tethering.</Tooltip>
+                            <ItemId>DISALLOW_CONFIG_TETHERING</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow configuring WIFI</Label>
+                            <Tooltip>Users are restricted from configuring Wifi.</Tooltip>
+                            <ItemId>DISALLOW_CONFIG_WIFI</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow safe boot</Label>
+                            <Tooltip>Users are restricted to enter safe boot mode.</Tooltip>
+                            <ItemId>DISALLOW_SAFE_BOOT</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow outgoing calls</Label>
+                            <Tooltip>Users are restricted from taking calls.</Tooltip>
+                            <ItemId>DISALLOW_OUTGOING_CALLS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow mount physical media</Label>
+                            <Tooltip>Users are restricted from mounting the device as physical media.</Tooltip>
+                            <ItemId>DISALLOW_MOUNT_PHYSICAL_MEDIA</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow create window</Label>
+                            <Tooltip>Restricts device owners from opening new windows beside the app windows.</Tooltip>
+                            <ItemId>DISALLOW_CREATE_WINDOWS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow factory reset</Label>
+                            <Tooltip>Users are restricted from performing factory reset.</Tooltip>
+                            <ItemId>DISALLOW_FACTORY_RESET</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow remove user</Label>
+                            <Tooltip>Users are restricted from removing user.</Tooltip>
+                            <ItemId>DISALLOW_REMOVE_USER</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow add user</Label>
+                            <Tooltip>Users are restricted from creating new users.</Tooltip>
+                            <ItemId>DISALLOW_ADD_USER</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow network reset</Label>
+                            <Tooltip>Users are restricted from resetting network.</Tooltip>
+                            <ItemId>DISALLOW_NETWORK_RESET</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow USB file transfer</Label>
+                            <Tooltip>Users are restricted from transferring files via USB.</Tooltip>
+                            <ItemId>DISALLOW_USB_FILE_TRANSFER</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow unmute microphone</Label>
+                            <Tooltip>Users are restricted from unmuting the microphone.</Tooltip>
+                            <ItemId>DISALLOW_UNMUTE_MICROPHONE</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="alert">
+                            <Label>Below restrictions will be applied on devices with Android version 6.0 Marshmallow onwards only.</Label>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disable status bar</Label>
+                            <Tooltip>Checking this will disable the status bar.</Tooltip>
+                            <ItemId>SET_STATUS_BAR_DISABLED</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Disallow data roaming</Label>
+                            <Tooltip>Users are restricted from using cellular data when roaming.</Tooltip>
+                            <ItemId>DISALLOW_DATA_ROAMING</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Enable device backup service</Label>
+                            <Tooltip>Device backup service will be enabled.</Tooltip>
+                            <ItemId>DISALLOW_CONFIG_CREDENTIALS</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Encryption Settings</Name>
+            <Panels>
+                <Panel id="ENCRYPT_STORAGE">
+                    <Title>Encryption Settings</Title>
+                    <Description>This configuration can be used to encrypt data on an Android device, when the device is locked and make it readable when the passcode is entered. Once this configuration profile is installed on a device, corresponding users will not be able to modify these settings on their devices.</Description>
+                    <PanelItems>
+                        <PanelItem type="paragraph">
+                            <Label>Un-check following checkbox in case you do not need the device to be encrypted.</Label>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Enable storage-encryption</Label>
+                            <Tooltip>Having this checked would enable Storage-encryption in the device.</Tooltip>
+                            <ItemId>ENCRYPT_STORAGE</ItemId>
+                            <Optional>
+                                <Checked>true</Checked>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Wi-Fi Settings</Name>
+            <Panels>
+                <Panel id="WIFI">
+                    <Title>Wi-Fi Settings</Title>
+                    <Description>This configurations can be used to configure Wi-Fi access on an Android device. Once this configuration profile is installed on a device, corresponding users will not be able to modify these settings on their devices.</Description>
+                    <PanelItems>
+                        <PanelItem type="paragraph">
+                            <Label>Please note that * sign represents required fields of data.</Label>
+                        </PanelItem>
+                        <PanelItem type="input">
+                            <Label>Service Set Identifier (SSID) *</Label>
+                            <Tooltip>Identification of the wireless network to be configured.</Tooltip>
+                            <ItemId>ssid</ItemId>
+                            <Optional>
+                                <Placeholder>Should be 1-to-30 characters long</Placeholder>
+                                <Rules>
+                                    <Regex>^.{1,30}$</Regex>
+                                    <ValidationMsg>Should be 1-to-30 characters long</ValidationMsg>
+                                    <Required>false</Required>
+                                </Rules>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="select">
+                            <Label>Security *</Label>
+                            <Tooltip>Minimum number of complex or non-alphanumeric characters allowed in a passcode</Tooltip>
+                            <ItemId>type</ItemId>
+                            <Optional>
+                                <InitialDataIndex></InitialDataIndex>
+                                <Options>
+                                    <Option>
+                                        <OptionName>None</OptionName>
+                                        <OptionValue></OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>WEP</OptionName>
+                                        <OptionValue>wep</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>WPA/WPA 2 PSK</OptionName>
+                                        <OptionValue>wpa</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>802.1x EAP</OptionName>
+                                        <OptionValue>802eap</OptionValue>
+                                    </Option>
+                                </Options>
+                                <SubPanels>
+                                    <SubPanel>
+                                        <PanelKey>none</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="none" />
+                                        </PanelItems>
+                                    </SubPanel>
+                                    <SubPanel>
+                                        <PanelKey>wep</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="input">
+                                                <Label>Password *</Label>
+                                                <Tooltip>Password for the wireless network.</Tooltip>
+                                                <ItemId>password</ItemId>
+                                                <Optional>
+                                                    <Placeholder></Placeholder>
+                                                    <Rules>
+                                                        <Regex></Regex>
+                                                        <ValidationMsg></ValidationMsg>
+                                                        <Required>false</Required>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                        </PanelItems>
+                                    </SubPanel>
+                                    <SubPanel>
+                                        <PanelKey>wpa</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="input">
+                                                <Label>Password *</Label>
+                                                <Tooltip>Password for the wireless network.</Tooltip>
+                                                <ItemId>password</ItemId>
+                                                <Optional>
+                                                    <Placeholder></Placeholder>
+                                                    <Rules>
+                                                        <Regex></Regex>
+                                                        <ValidationMsg></ValidationMsg>
+                                                        <Required>false</Required>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                        </PanelItems>
+                                    </SubPanel>
+                                    <SubPanel>
+                                        <PanelKey>802eap</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="select">
+                                                <Label>EAP Method</Label>
+                                                <Tooltip>EAP Method of the wireless network to be configured.</Tooltip>
+                                                <ItemId>eap</ItemId>
+                                                <Optional>
+                                                    <InitialDataIndex>peap</InitialDataIndex>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>PEAP</OptionName>
+                                                            <OptionValue>peap</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>TLS</OptionName>
+                                                            <OptionValue>tls</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>TTLS</OptionName>
+                                                            <OptionValue>ttls</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>PWD</OptionName>
+                                                            <OptionValue>pwd</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>SIM</OptionName>
+                                                            <OptionValue>sim</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>AKA</OptionName>
+                                                            <OptionValue>aka</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                    <SubPanels>
+                                                        <SubPanel>
+                                                            <PanelKey>peap</PanelKey>
+                                                            <PanelItems>
+                                                                <PanelItem type="select">
+                                                                    <Label>Phase 2 Authentication</Label>
+                                                                    <Tooltip>Phase 2 authentication of the wireless network to be configured.</Tooltip>
+                                                                    <ItemId>phase2</ItemId>
+                                                                    <Optional>
+                                                                        <Options>
+                                                                            <Option>
+                                                                                <OptionName>None</OptionName>
+                                                                                <OptionValue></OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>PAP</OptionName>
+                                                                                <OptionValue>pap</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>MCHAP</OptionName>
+                                                                                <OptionValue>mchap</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>MCHAPV2</OptionName>
+                                                                                <OptionValue>mchapv2</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>GTC</OptionName>
+                                                                                <OptionValue>gtc</OptionValue>
+                                                                            </Option>
+                                                                        </Options>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Identify</Label>
+                                                                    <Tooltip>Identify of the wireless network to be configured.</Tooltip>
+                                                                    <ItemId>identity</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be 1 to 30 characters long</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Anonymous Identity</Label>
+                                                                    <Tooltip>Identity of the wireless network to be configured.</Tooltip>
+                                                                    <ItemId>anonymousIdentity</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be 1 to 30 characters long</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="upload">
+                                                                    <Label>CA Certificate</Label>
+                                                                    <Tooltip>CA Certificate for the wireless network.</Tooltip>
+                                                                    <ItemId>cacert</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder></Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Password *</Label>
+                                                                    <Tooltip>Password for the wireless network.</Tooltip>
+                                                                    <ItemId>XXXXXXXXXXXXwirelessnetworkpw</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder></Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                        <SubPanel>
+                                                            <PanelKey>ttls</PanelKey>
+                                                            <PanelItems>
+                                                                <PanelItem type="select">
+                                                                    <Label>Phase 2 Authentication</Label>
+                                                                    <Tooltip>Phase 2 authentication of the wireless network to be configured.</Tooltip>
+                                                                    <ItemId>phase2</ItemId>
+                                                                    <Optional>
+                                                                        <Options>
+                                                                            <Option>
+                                                                                <OptionName>None</OptionName>
+                                                                                <OptionValue></OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>PAP</OptionName>
+                                                                                <OptionValue>pap</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>MCHAP</OptionName>
+                                                                                <OptionValue>mchap</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>MCHAPV2</OptionName>
+                                                                                <OptionValue>mchapv2</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>GTC</OptionName>
+                                                                                <OptionValue>gtc</OptionValue>
+                                                                            </Option>
+                                                                        </Options>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Identify</Label>
+                                                                    <Tooltip>Identify of the wireless network to be configured.</Tooltip>
+                                                                    <ItemId>identity</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be 1 to 30 characters long</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Anonymous Identity</Label>
+                                                                    <Tooltip>Identity of the wireless network to be configured.</Tooltip>
+                                                                    <ItemId>anonymousIdentity</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be 1 to 30 characters long</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="upload">
+                                                                    <Label>CA Certificate</Label>
+                                                                    <Tooltip>CA Certificate for the wireless network.</Tooltip>
+                                                                    <ItemId>cacert</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder></Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Password *</Label>
+                                                                    <Tooltip>Password for the wireless network.</Tooltip>
+                                                                    <ItemId>XXXXXXXXXXXXwirelessnetworkpw</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder></Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                        <SubPanel>
+                                                            <PanelKey>tls</PanelKey>
+                                                            <PanelItems>
+                                                                <PanelItem type="input">
+                                                                    <Label>Identify</Label>
+                                                                    <Tooltip>Identify of the wireless network to be configured.</Tooltip>
+                                                                    <ItemId>identity</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be 1 to 30 characters long</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="upload">
+                                                                    <Label>CA Certificate</Label>
+                                                                    <Tooltip>CA Certificate for the wireless network.</Tooltip>
+                                                                    <ItemId>cacert</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder></Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                        <SubPanel>
+                                                            <PanelKey>pwd</PanelKey>
+                                                            <PanelItems>
+                                                                <PanelItem type="input">
+                                                                    <Label>Identify</Label>
+                                                                    <Tooltip>Identify of the wireless network to be configured.</Tooltip>
+                                                                    <ItemId>identity</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be 1 to 30 characters long</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Password *</Label>
+                                                                    <Tooltip>Password for the wireless network.</Tooltip>
+                                                                    <ItemId>XXXXXXXXXXXXwirelessnetworkpw</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder></Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                        <SubPanel>
+                                                            <PanelKey>sim</PanelKey>
+                                                            <PanelItems>
+                                                                <PanelItem type="none"></PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                        <SubPanel>
+                                                            <PanelKey>aka</PanelKey>
+                                                            <PanelItems>
+                                                                <PanelItem type="none"></PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                    </SubPanels>
+                                                </Optional>
+                                            </PanelItem>
+                                        </PanelItems>
+                                    </SubPanel>
+                                </SubPanels>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Global Proxy Settings</Name>
+            <Panels>
+                <Panel id="GLOBAL_PROXY">
+                    <Title>Global Proxy Settings</Title>
+                    <Description>This configurations can be used to set a network-independent global HTTP proxy on an Android device. Once this configuration profile is installed on a device, all the network traffic will be routed through the proxy server.</Description>
+                    <PanelItems>
+                        <PanelItem type="alert">
+                            <Label>This profile requires the agent application to be the device owner.</Label>
+                        </PanelItem>
+                        <PanelItem type="alert">
+                            <Label>This proxy is only a recommendation and it is possible that some apps will ignore it.</Label>
+                        </PanelItem>
+                        <PanelItem type="paragraph">
+                            <Label>Please note that * sign represents required fields of data.</Label>
+                        </PanelItem>
+                        <PanelItem type="radioGroup">
+                            <Label>Proxy Configuration Type</Label>
+                            <Tooltip>Select the configuration type.</Tooltip>
+                            <ItemId>proxyConfigType</ItemId>
+                            <Optional>
+                                <InitialValue>MANUAL</InitialValue>
+                                <RadioGroup>
+                                    <Radio>
+                                        <OptionName>Manual</OptionName>
+                                        <OptionValue>MANUAL</OptionValue>
+                                    </Radio>
+                                    <Radio>
+                                        <OptionName>Auto</OptionName>
+                                        <OptionValue>AUTO</OptionValue>
+                                    </Radio>
+                                </RadioGroup>
+                                <SubPanels>
+                                    <SubPanel>
+                                        <PanelKey>MANUAL</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="input">
+                                                <Label>Proxy Host *</Label>
+                                                <Tooltip>Host name/IP address of the proxy server.</Tooltip>
+                                                <ItemId>XXXXXXXXXXXXproxyHost</ItemId>
+                                                <Optional>
+                                                    <Placeholder>192.168.8.1</Placeholder>
+                                                    <Rules>
+                                                        <Regex>^(0|[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]{1,3})\.(0|[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]{1,3})\.(0|[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]{1,3})\.(0|[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]{1,3})$</Regex>
+                                                        <ValidationMsg>Please enter valid IP address</ValidationMsg>
+                                                        <Required>false</Required>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="input">
+                                                <Label>Proxy Port  *</Label>
+                                                <Tooltip>Target port for the proxy server.</Tooltip>
+                                                <ItemId>XXXXXXXXXXXXproxyPort</ItemId>
+                                                <Optional>
+                                                    <Placeholder>Target port 0 - 65535</Placeholder>
+                                                    <Rules>
+                                                        <Regex>^(?:0|[1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9]|[1-5][0-9][0-9][0-9][0-9]|6[0-4][0-9][0-9][0-9]|65[0-4][0-9][0-9]|655[0-2][0-9]|6553[0-5])$</Regex>
+                                                        <ValidationMsg>Please enter valid port</ValidationMsg>
+                                                        <Required>false</Required>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="input">
+                                                <Label>Proxy Exclusion List</Label>
+                                                <Tooltip>Add host names to this separated by commas to prevent them from routing through the proxy server. The hostname entries can be wildcards such as *.example.com</Tooltip>
+                                                <ItemId>XXXXXXXXXXXXproxyExclList</ItemId>
+                                                <Optional>
+                                                    <Placeholder>Example : localhost, *.example.com</Placeholder>
+                                                    <Rules>
+                                                        <Regex></Regex>
+                                                        <ValidationMsg></ValidationMsg>
+                                                        <Required>false</Required>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                        </PanelItems>
+                                    </SubPanel>
+                                    <SubPanel>
+                                        <PanelKey>AUTO</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="input">
+                                                <Label>Proxy PAC File URL *</Label>
+                                                <Tooltip>URL for the proxy auto config PAC script.</Tooltip>
+                                                <ItemId>XXXXXXXXXXXXproxyPacUrl</ItemId>
+                                                <Optional>
+                                                    <Placeholder>http://exampleproxy.com/proxy.pac</Placeholder>
+                                                    <Rules>
+                                                        <Regex></Regex>
+                                                        <ValidationMsg></ValidationMsg>
+                                                        <Required>false</Required>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                        </PanelItems>
+                                    </SubPanel>
+                                </SubPanels>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Virtual Private Network</Name>
+            <Panels>
+                <Panel id="VPN">
+                    <Title>VPN Settings</Title>
+                    <Description>Configure the OpenVPN settings on Android devices. In order to enable this, device needs to have "OpenVPN for Android" application installed.</Description>
+                    <PanelItems>
+                        <PanelItem type="upload">
+                            <Label>OpenVPN Server Config file</Label>
+                            <Tooltip>OpenVPN configurations ovpn file.</Tooltip>
+                            <ItemId>XXXXXXXXXXvccvXX</ItemId>
+                            <Optional/>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+                <Panel id="VPN_ON">
+                    <Title>Always On VPN Settings</Title>
+                    <Description>Configure an always-on VPN connection through a specific VPN client application.</Description>
+                    <PanelItems>
+                        <PanelItem type="alert">
+                            <Label>Below configurations are valid only when the Agent is work-profile owner or device owner.</Label>
+                        </PanelItem>
+                        <PanelItem type="input">
+                            <Label>VPN Client Application Package name* </Label>
+                            <Tooltip>Package name of the VPN client application to be configured.</Tooltip>
+                            <ItemId>XXXXXXXXXXpackageName</ItemId>
+                            <Optional>
+                                <Placeholder>Should be a valid package name</Placeholder>
+                                <Rules>
+                                    <Regex></Regex>
+                                    <ValidationMsg></ValidationMsg>
+                                    <Required>false</Required>
+                                </Rules>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Certificates Install</Name>
+            <Panels>
+                <Panel id="INSTALL_CERT">
+                    <Title>Certificate Install Settings</Title>
+                    <Description>Configure the certificate install settings on Android devices.</Description>
+                    <PanelItems>
+                        <PanelItem type="customInputTable">
+                            <Label>Added Certificate List</Label>
+                            <Tooltip>Add a certificate.</Tooltip>
+                            <ItemId>CERT_LIST</ItemId>
+                            <Optional>
+                                <Button>
+                                    <ButtonId>addCertificate</ButtonId>
+                                    <ButtonLabel>Add Certificate</ButtonLabel>
+                                </Button>
+                                <DataSource>certificateInstallList</DataSource>
+                                <Columns>
+                                    <Column key="CERT_NAME" type="input">
+                                        <Name>Certificate name</Name>
+                                        <Others>
+                                            <Placeholder>Cert name</Placeholder>
+                                            <inputType>text</inputType>
+                                        </Others>
+                                    </Column>
+                                    <Column key="CERT_CONTENT_VIEW" type="upload">
+                                        <Name>Certificate File</Name>
+                                        <Others/>
+                                    </Column>
+                                </Columns>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Work-Profile Configurations</Name>
+            <Panels>
+                <Panel id="WORK_PROFILE">
+                    <Title>Work-Profile Configurations</Title>
+                    <Description>Configure these settings to manage the applications in the work profile.</Description>
+                    <PanelItems>
+                        <PanelItem type="input">
+                            <Label>Profile name</Label>
+                            <Tooltip>name of the Work-Profile created by IOT Server Agent.</Tooltip>
+                            <ItemId>XXXXXXXXczxProfilenam</ItemId>
+                            <Optional>
+                                <Placeholder></Placeholder>
+                                <Rules>
+                                    <Regex></Regex>
+                                    <ValidationMsg></ValidationMsg>
+                                    <Required>false</Required>
+                                </Rules>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="textArea">
+                            <Label>Enable System Apps</Label>
+                            <Tooltip>The set of system apps needed to be added to the work-profile.</Tooltip>
+                            <ItemId>XXXXXXXXXXXXEnableSystemApps</ItemId>
+                            <Optional>
+                                <Placeholder>Should be exact package names separated by commas. Ex: com.google.android.apps.maps, com.google.android.calculator</Placeholder>
+                                <RowCount>4</RowCount>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="textArea">
+                            <Label>Hide System Apps</Label>
+                            <Tooltip>The set of system apps needed to be hide in the work-profile.</Tooltip>
+                            <ItemId>XXXXXXXXXXXXHideSystemApps</ItemId>
+                            <Optional>
+                                <Placeholder>Should be exact package names separated by commas. Ex: com.google.android.apps.maps, com.google.android.calculator</Placeholder>
+                                <RowCount>4</RowCount>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="textArea">
+                            <Label>Unhide System Apps</Label>
+                            <Tooltip>The set of system apps needed to be unhide in the work-profile.</Tooltip>
+                            <ItemId>XXXXXXXXXXXXUNHideSystemApps</ItemId>
+                            <Optional>
+                                <Placeholder>Should be exact package names separated by commas. Ex: com.google.android.apps.maps, com.google.android.calculator</Placeholder>
+                                <RowCount>4</RowCount>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="textArea">
+                            <Label>Enable Google PlayStore Apps</Label>
+                            <Tooltip>The set of apps needed to be installed from Google PlayStore to work-profile.</Tooltip>
+                            <ItemId>XXXXXXXXXXXXEnableGooglePlayStore</ItemId>
+                            <Optional>
+                                <Placeholder>Should be exact package names separated by commas. Ex: com.google.android.apps.maps, com.google.android.calculator</Placeholder>
+                                <RowCount>4</RowCount>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>COSU Profile Configurations</Name>
+            <Panels>
+                <Panel id="COSU_PROFILE">
+                    <Title>COSU Profile Configurations</Title>
+                    <Description>This policy can be used to configure the profile of COSU Devices.</Description>
+                    <PanelItems>
+                        <PanelItem type="checkbox">
+                            <Label>Restrict Device Operation Time</Label>
+                            <ItemId>xxxxxxxxxxxRestrictDeviceOperationTime</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                                <SubPanels>
+                                    <SubPanel>
+                                        <PanelItems>
+                                            <PanelItem type="select">
+                                                <Label>Start Time</Label>
+                                                <Tooltip>Start time for the device</Tooltip>
+                                                <ItemId>STARTTIME</ItemId>
+                                                <Optional>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>12:00 Midnight</OptionName>
+                                                            <OptionValue>1440</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12:30 AM</OptionName>
+                                                            <OptionValue>30</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:00 AM</OptionName>
+                                                            <OptionValue>60</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:30 AM</OptionName>
+                                                            <OptionValue>90</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:00 AM</OptionName>
+                                                            <OptionValue>120</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:30 AM</OptionName>
+                                                            <OptionValue>150</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:00 AM</OptionName>
+                                                            <OptionValue>180</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:30 AM</OptionName>
+                                                            <OptionValue>210</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:00 AM</OptionName>
+                                                            <OptionValue>240</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:30 AM</OptionName>
+                                                            <OptionValue>60</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:00 AM</OptionName>
+                                                            <OptionValue>300</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:30 AM</OptionName>
+                                                            <OptionValue>330</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:00 AM</OptionName>
+                                                            <OptionValue>360</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:30 AM</OptionName>
+                                                            <OptionValue>390</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:00 AM</OptionName>
+                                                            <OptionValue>420</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:30 AM</OptionName>
+                                                            <OptionValue>450</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:00 AM</OptionName>
+                                                            <OptionValue>480</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:30 AM</OptionName>
+                                                            <OptionValue>510</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:00 AM</OptionName>
+                                                            <OptionValue>540</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:30 AM</OptionName>
+                                                            <OptionValue>570</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:00 AM</OptionName>
+                                                            <OptionValue>600</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:30 AM</OptionName>
+                                                            <OptionValue>630</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:00 AM</OptionName>
+                                                            <OptionValue>660</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:30 AM</OptionName>
+                                                            <OptionValue>690</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12:00 noon</OptionName>
+                                                            <OptionValue>720</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12:30 PM</OptionName>
+                                                            <OptionValue>750</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:00 PM</OptionName>
+                                                            <OptionValue>780</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:30 PM</OptionName>
+                                                            <OptionValue>810</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:00 PM</OptionName>
+                                                            <OptionValue>840</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:30 PM</OptionName>
+                                                            <OptionValue>870</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:00 PM</OptionName>
+                                                            <OptionValue>900</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:30 PM</OptionName>
+                                                            <OptionValue>930</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:00 PM</OptionName>
+                                                            <OptionValue>960</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:30 PM</OptionName>
+                                                            <OptionValue>990</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:00 PM</OptionName>
+                                                            <OptionValue>1020</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:30 PM</OptionName>
+                                                            <OptionValue>1050</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:00 PM</OptionName>
+                                                            <OptionValue>1080</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:30 PM</OptionName>
+                                                            <OptionValue>1110</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:00 PM</OptionName>
+                                                            <OptionValue>1140</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:30 PM</OptionName>
+                                                            <OptionValue>1170</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:00 PM</OptionName>
+                                                            <OptionValue>1200</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:30 PM</OptionName>
+                                                            <OptionValue>1230</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:00 PM</OptionName>
+                                                            <OptionValue>1260</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:30 PM</OptionName>
+                                                            <OptionValue>1290</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:00 PM</OptionName>
+                                                            <OptionValue>1320</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:30 PM</OptionName>
+                                                            <OptionValue>1350</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:00 PM</OptionName>
+                                                            <OptionValue>1380</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:30 PM</OptionName>
+                                                            <OptionValue>1410</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="select">
+                                                <Label>End Time</Label>
+                                                <Tooltip>Lock-down time for the device</Tooltip>
+                                                <ItemId>ENDTIME</ItemId>
+                                                <Optional>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>12:00 Midnight</OptionName>
+                                                            <OptionValue>1440</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12:30 AM</OptionName>
+                                                            <OptionValue>30</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:00 AM</OptionName>
+                                                            <OptionValue>60</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:30 AM</OptionName>
+                                                            <OptionValue>90</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:00 AM</OptionName>
+                                                            <OptionValue>120</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:30 AM</OptionName>
+                                                            <OptionValue>150</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:00 AM</OptionName>
+                                                            <OptionValue>180</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:30 AM</OptionName>
+                                                            <OptionValue>210</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:00 AM</OptionName>
+                                                            <OptionValue>240</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:30 AM</OptionName>
+                                                            <OptionValue>60</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:00 AM</OptionName>
+                                                            <OptionValue>300</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:30 AM</OptionName>
+                                                            <OptionValue>330</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:00 AM</OptionName>
+                                                            <OptionValue>360</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:30 AM</OptionName>
+                                                            <OptionValue>390</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:00 AM</OptionName>
+                                                            <OptionValue>420</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:30 AM</OptionName>
+                                                            <OptionValue>450</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:00 AM</OptionName>
+                                                            <OptionValue>480</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:30 AM</OptionName>
+                                                            <OptionValue>510</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:00 AM</OptionName>
+                                                            <OptionValue>540</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:30 AM</OptionName>
+                                                            <OptionValue>570</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:00 AM</OptionName>
+                                                            <OptionValue>600</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:30 AM</OptionName>
+                                                            <OptionValue>630</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:00 AM</OptionName>
+                                                            <OptionValue>660</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:30 AM</OptionName>
+                                                            <OptionValue>690</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12:00 noon</OptionName>
+                                                            <OptionValue>720</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12:30 PM</OptionName>
+                                                            <OptionValue>750</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:00 PM</OptionName>
+                                                            <OptionValue>780</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:30 PM</OptionName>
+                                                            <OptionValue>810</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:00 PM</OptionName>
+                                                            <OptionValue>840</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:30 PM</OptionName>
+                                                            <OptionValue>870</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:00 PM</OptionName>
+                                                            <OptionValue>900</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:30 PM</OptionName>
+                                                            <OptionValue>930</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:00 PM</OptionName>
+                                                            <OptionValue>960</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:30 PM</OptionName>
+                                                            <OptionValue>990</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:00 PM</OptionName>
+                                                            <OptionValue>1020</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:30 PM</OptionName>
+                                                            <OptionValue>1050</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:00 PM</OptionName>
+                                                            <OptionValue>1080</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:30 PM</OptionName>
+                                                            <OptionValue>1110</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:00 PM</OptionName>
+                                                            <OptionValue>1140</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:30 PM</OptionName>
+                                                            <OptionValue>1170</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:00 PM</OptionName>
+                                                            <OptionValue>1200</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:30 PM</OptionName>
+                                                            <OptionValue>1230</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:00 PM</OptionName>
+                                                            <OptionValue>1260</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:30 PM</OptionName>
+                                                            <OptionValue>1290</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:00 PM</OptionName>
+                                                            <OptionValue>1320</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:30 PM</OptionName>
+                                                            <OptionValue>1350</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:00 PM</OptionName>
+                                                            <OptionValue>1380</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:30 PM</OptionName>
+                                                            <OptionValue>1410</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="alert">
+                                                <Label>Device will be operable only during the above period.</Label>
+                                            </PanelItem>
+                                        </PanelItems>
+                                    </SubPanel>
+                                </SubPanels>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="checkbox">
+                            <Label>Device Global Configuration</Label>
+                            <ItemId>xxxxxxxxxxxDeviceGlobalConfiguration</ItemId>
+                            <Optional>
+                                <Checked>false</Checked>
+                                <SubPanels>
+                                    <SubPanel>
+                                        <PanelItems>
+                                            <PanelItem type="input">
+                                                <Label>Launcher background image</Label>
+                                                <Tooltip>This is the image that will be displayed in kiosk background.</Tooltip>
+                                                <ItemId>XXXXXXXXXXXXLauncherbackgroundimage</ItemId>
+                                               <Optional>
+                                                   <Placeholder>Should be a valid URL of jpg or jpeg or png</Placeholder>
+                                                   <Rules>
+                                                       <Regex></Regex>
+                                                       <Required>false</Required>
+                                                       <ValidationMsg></ValidationMsg>
+                                                   </Rules>
+                                               </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="input">
+                                                <Label>Company logo to display</Label>
+                                                <Tooltip>Company logo to display</Tooltip>
+                                                <ItemId>XXXLauncherbackgroundimage</ItemId>
+                                                <Optional>
+                                                    <Placeholder>Should be a valid URL ending with .jpg, .png, .jpeg</Placeholder>
+                                                    <Rules>
+                                                        <Regex></Regex>
+                                                        <Required>false</Required>
+                                                        <ValidationMsg></ValidationMsg>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="input">
+                                                <Label>Company name</Label>
+                                                <Tooltip>Company name</Tooltip>
+                                                <ItemId>XXXXXXXXCompanyName</ItemId>
+                                                <Optional>
+                                                    <Placeholder></Placeholder>
+                                                    <Rules>
+                                                        <Regex></Regex>
+                                                        <Required>false</Required>
+                                                        <ValidationMsg></ValidationMsg>
+                                                    </Rules>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="checkbox">
+                                                <Label>Is single application mode</Label>
+                                                <Tooltip>Is single application mode</Tooltip>
+                                                <ItemId>XXXXXSingleAppMode</ItemId>
+                                                <Optional>
+                                                    <Checked>false</Checked>
+                                                    <SubPanels>
+                                                        <SubPanel>
+                                                            <PanelItems>
+                                                                <PanelItem type="alert">
+                                                                    <Label>Selected initial app in Enrollment Application Install policy config will be selected for single application mode.</Label>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is application built for Kiosk</Label>
+                                                                    <Tooltip>Is single mode app built for Kisosk. Enable if lock task method is called in the application</Tooltip>
+                                                                    <ItemId>XXXXXXXBuildKoisk</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>true</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                    </SubPanels>
+                                                </Optional>
+                                            </PanelItem>
+
+                                        </PanelItems>
+                                    </SubPanel>
+                                </SubPanels>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Application Restrictions</Name>
+            <Panels>
+                <Panel id="APP_RESTRICTION">
+                    <Title>Application Restriction Settings</Title>
+                    <Description>This configuration can be used to encrypt data on an Android device, when the device is locked and make it readable when the passcode is entered. Once this configuration profile is installed on a device, corresponding users will not be able to modify these settings on their devices.</Description>
+                    <PanelItems>
+                        <PanelItem type="select">
+                            <Label>Select type</Label>
+                            <Tooltip>Select a type to proceed</Tooltip>
+                            <ItemId>restrictionType</ItemId>
+                            <Optional>
+                                <Options>
+                                    <Option>
+                                        <OptionName>None</OptionName>
+                                        <OptionValue></OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>Black List</OptionName>
+                                        <OptionValue>black-list</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>White List</OptionName>
+                                        <OptionValue>white-list</OptionValue>
+                                    </Option>
+                                </Options>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="inputTable">
+                            <Label>Restricted Application List</Label>
+                            <Tooltip>Add an application to restrict.</Tooltip>
+                            <ItemId>RestrictedApplicationList</ItemId>
+                            <Optional>
+                                <Button>
+                                    <ButtonLabel>Add Application</ButtonLabel>
+                                    <ButtonId>addApplication</ButtonId>
+                                </Button>
+                                <DataSource>RestrictedApplicationList</DataSource>
+                                <Columns>
+                                    <Column type="input" key="appName">
+                                        <Name>Application name/Description</Name>
+                                        <Others>
+                                            <Placeholder>Gmail</Placeholder>
+                                            <inputType>email</inputType>
+                                        </Others>
+                                    </Column>
+                                    <Column type="input" key="packageName">
+                                        <Name>Package name</Name>
+                                        <Others>
+                                            <Placeholder>com.google.android.gm</Placeholder>
+                                            <inputType>text</inputType>
+                                        </Others>
+                                    </Column>
+                                </Columns>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Runtime Permission Policy</Name>
+            <Panels>
+                <Panel id="RUNTIME_PERMISSION_POLICY">
+                    <Title>Runtime Permission Policy (COSU / Work Profile)</Title>
+                    <Description>This configuration can be used to set a runtime permission policy to an Android Device.</Description>
+                    <PanelItems>
+                        <PanelItem type="select">
+                            <Label>Set default runtime permission</Label>
+                            <ItemId>defaultPermissionType</ItemId>
+                            <Tooltip>When an app requests a runtime permission this enforces whether the user needs to prompted or the permission either automatically granted or denied</Tooltip>
+                            <Optional>
+                                <Options>
+                                    <Option>
+                                        <OptionName>NONE</OptionName>
+                                        <OptionValue></OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>PROMPT USER</OptionName>
+                                        <OptionValue>0</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>AUTO GRANT</OptionName>
+                                        <OptionValue>1</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>AUTO DENY</OptionName>
+                                        <OptionValue>2</OptionValue>
+                                    </Option>
+                                </Options>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="inputTable">
+                            <Label>Set app-specific runtime permissions</Label>
+                            <Tooltip>Add an application and set permission policy for a specific permission it need.</Tooltip>
+                            <ItemId>restricted-applications</ItemId>
+                            <Optional>
+                                <Button>
+                                    <ButtonId>addApplication-runtimePermission</ButtonId>
+                                    <ButtonLabel>Add Application</ButtonLabel>
+                                </Button>
+                                <DataSource>restrictedRuntimePermissionsList</DataSource>
+                                <Columns>
+                                    <Column type="input" key="appName">
+                                        <Name>Application</Name>
+                                        <Others>
+                                            <Placeholder>Android Pay</Placeholder>
+                                            <inputType>text</inputType>
+                                        </Others>
+                                    </Column>
+                                    <Column type="input" key="packageName">
+                                        <Name>Package name</Name>
+                                        <Others>
+                                            <Placeholder>com.google.android.pay</Placeholder>
+                                            <inputType>text</inputType>
+                                        </Others>
+                                    </Column>
+                                    <Column type="input" key="permissionName">
+                                        <Name>Permission name</Name>
+                                        <Others>
+                                            <Placeholder>android.permission.NFC</Placeholder>
+                                            <inputType>text</inputType>
+                                        </Others>
+                                    </Column>
+                                    <Column type="select" key="permissionType">
+                                        <Name>Permission Type</Name>
+                                        <Others>
+                                            <InitialDataIndex>1</InitialDataIndex>
+                                            <Options>
+                                                <Option>
+                                                    <OptionName>PROMPT USER</OptionName>
+                                                    <OptionValue>0</OptionValue>
+                                                </Option>
+                                                <Option>
+                                                    <OptionName>AUTO GRANT</OptionName>
+                                                    <OptionValue>1</OptionValue>
+                                                </Option>
+                                                <Option>
+                                                    <OptionName>AUTO DENY</OptionName>
+                                                    <OptionValue>2</OptionValue>
+                                                </Option>
+                                            </Options>
+                                        </Others>
+                                    </Column>
+                                </Columns>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>System Update Policy (COSU)</Name>
+            <Panels>
+                <Panel id="SYSTEM_UPDATE_POLICY">
+                    <Title>System Update Policy (COSU)</Title>
+                    <Description>This configuration can be used to set a passcode policy to an Android Device. Once this configuration profile is installed on a device, corresponding users will not be able to modify these settings on their devices.</Description>
+                    <PanelItems>
+                        <PanelItem type="radioGroup">
+                            <Label>System Update</Label>
+                            <Tooltip>Type of the System Update to be set by the Device Owner.</Tooltip>
+                            <ItemId>xxxxxxxxxENCRYPT_STORAGE</ItemId>
+                            <Optional>
+                                <InitialValue>automatic</InitialValue>
+                                <RadioGroup>
+                                    <Radio>
+                                        <OptionName>Automatic</OptionName>
+                                        <OptionValue>automatic</OptionValue>
+                                    </Radio>
+                                    <Radio>
+                                        <OptionName>Postpone</OptionName>
+                                        <OptionValue>postpone</OptionValue>
+                                    </Radio>
+                                    <Radio>
+                                        <OptionName>Window</OptionName>
+                                        <OptionValue>window</OptionValue>
+                                    </Radio>
+                                </RadioGroup>
+                                <SubPanels>
+                                    <SubPanel>
+                                        <PanelKey>automatic</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="none"/>
+                                        </PanelItems>
+                                    </SubPanel>
+                                    <SubPanel>
+                                        <PanelKey>postpone</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="none"/>
+                                        </PanelItems>
+                                    </SubPanel>
+                                    <SubPanel>
+                                        <PanelKey>window</PanelKey>
+                                        <PanelItems>
+                                            <PanelItem type="alert">
+                                                <Label>Below configuration of start time and end time are valid only when window option is selected.</Label>
+                                            </PanelItem>
+                                            <PanelItem type="select">
+                                                <Label>Start Time</Label>
+                                                <Tooltip>Window start time for system update</Tooltip>
+                                                <ItemId>cosuSystemUpdatePolicyWindowStartTime</ItemId>
+                                                <Optional>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>12:00 AM</OptionName>
+                                                            <OptionValue>1440</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:00 AM</OptionName>
+                                                            <OptionValue>60</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:00 AM</OptionName>
+                                                            <OptionValue>120</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:00 AM</OptionName>
+                                                            <OptionValue>180</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:00 AM</OptionName>
+                                                            <OptionValue>240</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:00 AM</OptionName>
+                                                            <OptionValue>300</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:00 AM</OptionName>
+                                                            <OptionValue>360</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:00 AM</OptionName>
+                                                            <OptionValue>420</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:00 AM</OptionName>
+                                                            <OptionValue>480</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:00 AM</OptionName>
+                                                            <OptionValue>540</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:00 AM</OptionName>
+                                                            <OptionValue>600</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:00 AM</OptionName>
+                                                            <OptionValue>660</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12:00 noon</OptionName>
+                                                            <OptionValue>720</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:00 PM</OptionName>
+                                                            <OptionValue>780</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:00 PM</OptionName>
+                                                            <OptionValue>840</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:00 PM</OptionName>
+                                                            <OptionValue>900</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:00 PM</OptionName>
+                                                            <OptionValue>960</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:00 PM</OptionName>
+                                                            <OptionValue>1020</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:00 PM</OptionName>
+                                                            <OptionValue>1080</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:00 PM</OptionName>
+                                                            <OptionValue>1140</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:00 PM</OptionName>
+                                                            <OptionValue>1200</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:00 PM</OptionName>
+                                                            <OptionValue>1260</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:00 PM</OptionName>
+                                                            <OptionValue>1320</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:00 PM</OptionName>
+                                                            <OptionValue>1380</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="select">
+                                                <Label>End Time</Label>
+                                                <Tooltip>Window end time for system update</Tooltip>
+                                                <ItemId>cosuSystemUpdatePolicyWindowEndTime</ItemId>
+                                                <Optional>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>12:00 AM</OptionName>
+                                                            <OptionValue>1440</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:00 AM</OptionName>
+                                                            <OptionValue>60</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:00 AM</OptionName>
+                                                            <OptionValue>120</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:00 AM</OptionName>
+                                                            <OptionValue>180</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:00 AM</OptionName>
+                                                            <OptionValue>240</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:00 AM</OptionName>
+                                                            <OptionValue>300</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:00 AM</OptionName>
+                                                            <OptionValue>360</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:00 AM</OptionName>
+                                                            <OptionValue>420</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:00 AM</OptionName>
+                                                            <OptionValue>480</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:00 AM</OptionName>
+                                                            <OptionValue>540</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:00 AM</OptionName>
+                                                            <OptionValue>600</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:00 AM</OptionName>
+                                                            <OptionValue>660</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>12:00 noon</OptionName>
+                                                            <OptionValue>720</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>01:00 PM</OptionName>
+                                                            <OptionValue>780</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>02:00 PM</OptionName>
+                                                            <OptionValue>840</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>03:00 PM</OptionName>
+                                                            <OptionValue>900</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>04:00 PM</OptionName>
+                                                            <OptionValue>960</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>05:00 PM</OptionName>
+                                                            <OptionValue>1020</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>06:00 PM</OptionName>
+                                                            <OptionValue>1080</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>07:00 PM</OptionName>
+                                                            <OptionValue>1140</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>08:00 PM</OptionName>
+                                                            <OptionValue>1200</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>09:00 PM</OptionName>
+                                                            <OptionValue>1260</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>10:00 PM</OptionName>
+                                                            <OptionValue>1320</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>11:00 PM</OptionName>
+                                                            <OptionValue>1380</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                </Optional>
+                                            </PanelItem>
+                                        </PanelItems>
+                                    </SubPanel>
+                                </SubPanels>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Enrollment Application Install</Name>
+            <Panels>
+                <Panel id="ENROLLMENT_APP_INSTALL">
+                    <Title>Enrollment Application Install</Title>
+                    <Description>This configuration can be used to install applications during Android device enrollment.</Description>
+                    <PanelItems>
+                        <PanelItem type="alert">
+                            <Label>This configuration will be applied only during Android device enrollment.</Label>
+                        </PanelItem>
+                        <PanelItem type="selectTable">
+                            <Label>Select Enrollment Applications.</Label>
+                        </PanelItem>
+                        <PanelItem type="title">
+                            <Label>Work profile global user configurations</Label>
+                        </PanelItem>
+                        <PanelItem type="select">
+                            <Label>App Auto Update Policy</Label>
+                            <Tooltip>The Auto-update policy for apps installed on the device</Tooltip>
+                            <ItemId>autoUpdatePolicy</ItemId>
+                            <Optional>
+                                <Options>
+                                    <Option>
+                                        <OptionName>When Connected to WiFi</OptionName>
+                                        <OptionValue>0</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>Auto Update Anytime</OptionName>
+                                        <OptionValue>1</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>Ask User to Update</OptionName>
+                                        <OptionValue>2</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>Disable Auto Update</OptionName>
+                                        <OptionValue>3</OptionValue>
+                                    </Option>
+                                </Options>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="select">
+                            <Label>App Availability to a User</Label>
+                            <Tooltip>The availability granted to the user for the specified app</Tooltip>
+                            <ItemId>productSetBehavior</ItemId>
+                            <Optional>
+                                <Options>
+                                    <Option>
+                                        <OptionName>All Approved Apps For Enterprise</OptionName>
+                                        <OptionValue>1</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>All Apps From Playstore</OptionName>
+                                        <OptionValue>2</OptionValue>
+                                    </Option>
+                                    <Option>
+                                        <OptionName>Only Whitelisted Apps</OptionName>
+                                        <OptionValue>3</OptionValue>
+                                    </Option>
+                                </Options>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+        <Policy>
+            <Name>Display Message Configuration</Name>
+            <Panels>
+                <Panel id="DISPLAY_MESSAGE_CONFIGURATION">
+                    <Title>Display Message Configuration</Title>
+                    <Description>Configure these settings to manage the applications in the show message.</Description>
+                    <PanelItems>
+                        <PanelItem type="textArea">
+                            <Label>Lock Screen Message</Label>
+                            <Tooltip>The message that needs to show on the lock-screen</Tooltip>
+                            <ItemId>lockScreenMessage</ItemId>
+                            <Optional>
+                                <LabelDescription>Below lock screen message is valid only when the Agent is the device owner.</LabelDescription>
+                                <Placeholder></Placeholder>
+                                <RowCount>4</RowCount>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="textArea">
+                            <Label>Setting App Support Message</Label>
+                            <Tooltip>The message that needs to show on the device administrators apps.</Tooltip>
+                            <ItemId>settingAppSupportMessage</ItemId>
+                            <Optional>
+                                <Placeholder></Placeholder>
+                                <RowCount>4</RowCount>
+                            </Optional>
+                        </PanelItem>
+                        <PanelItem type="textArea">
+                            <Label>Disabled Setting Support Message</Label>
+                            <Tooltip>The message that needs to show on the screens where functionality has been disabled by the admin. Max length is 200</Tooltip>
+                            <ItemId>disabledSettingSupportMessage</ItemId>
+                            <Optional>
+                                <Placeholder></Placeholder>
+                                <RowCount>4</RowCount>
+                            </Optional>
+                        </PanelItem>
+                    </PanelItems>
+                </Panel>
+            </Panels>
+        </Policy>
+    </PolicyUIConfigurations>
 </DeviceTypeConfiguration>
