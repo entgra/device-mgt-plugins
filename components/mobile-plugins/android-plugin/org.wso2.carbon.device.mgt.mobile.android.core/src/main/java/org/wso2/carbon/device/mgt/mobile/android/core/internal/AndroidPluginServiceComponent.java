@@ -22,11 +22,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.device.mgt.common.spi.DeviceTypeCommonService;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidGoogleEnterpriseService;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
 import org.wso2.carbon.device.mgt.mobile.android.core.dao.AbstractMobileDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.android.core.impl.AndroidGoogleEnterpriseServiceImpl;
 import org.wso2.carbon.device.mgt.mobile.android.core.impl.AndroidServiceImpl;
+import org.wso2.carbon.device.mgt.mobile.android.core.impl.DeviceTypeCommonServiceImpl;
 import org.wso2.carbon.device.mgt.mobile.android.core.util.MobileDeviceManagementUtil;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.registry.core.service.RegistryService;
@@ -68,6 +70,11 @@ public class AndroidPluginServiceComponent {
             AndroidDeviceManagementDataHolder.getInstance().setAndroidService(
                     androidService);
             bundleContext.registerService(AndroidService.class.getName(), androidService, null);
+
+            DeviceTypeCommonService deviceTypeCommonService = new DeviceTypeCommonServiceImpl();
+            AndroidDeviceManagementDataHolder.getInstance().setDeviceTypeCommonService(
+                    deviceTypeCommonService);
+            bundleContext.registerService(DeviceTypeCommonService.class.getName(), deviceTypeCommonService, null);
 
             AndroidGoogleEnterpriseService androidPluginService = new AndroidGoogleEnterpriseServiceImpl();
             AndroidDeviceManagementDataHolder.getInstance().setAndroidDeviceManagementService(

@@ -246,4 +246,44 @@ public interface DeviceTypeConfigurationAPI {
                             "Example: Mon, 05 Jan 2014 15:10:00 +0200.")
             @HeaderParam("If-Modified-Since") String ifModifiedSince);
 
+    @GET
+    @Path("/enrollment-qr-config/{ownershipType}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(
+            produces = MediaType.APPLICATION_JSON,
+            httpMethod = "GET",
+            value = "Getting the Enrollment QR config for device type Android",
+            notes = "Use this REST API to retrieve the Enrollment QR Config that is used for the Android device " +
+                    "enrollment.",
+            tags = "Android Configuration Management",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:enroll")
+                    })
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 400,
+                    message = "Bad Request. \n Invalid request."),
+            @ApiResponse(
+                    code = 200,
+                    message = "OK. \n Successfully fetched Android Enrollment QR configuration.",
+                    response = String.class,
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Content-Type",
+                                    description = "Content type of the body")
+                    }),
+            @ApiResponse(
+                    code = 500,
+                    message = "Internal Server Error. \n Server error occurred while fetching the Android Enrollment QR"
+                            + " configuration.")
+    })
+    Response getQRConfig(
+            @ApiParam(
+                    name = "ownershipType",
+                    value = "The ownership type that device has enrolled.",
+                    required = true)
+            @PathParam("ownershipType") String ownershipType);
 }

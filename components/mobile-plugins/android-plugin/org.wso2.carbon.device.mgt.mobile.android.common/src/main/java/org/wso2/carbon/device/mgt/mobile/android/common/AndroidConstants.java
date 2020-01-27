@@ -52,6 +52,8 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.common;
 
+import com.sun.org.apache.bcel.internal.generic.ATHROW;
+
 /**
  * Defines constants used in Android-REST API bundle.
  */
@@ -227,4 +229,28 @@ public final class AndroidConstants {
 
     }
 
+    public final class PlatformConfigs {
+        private PlatformConfigs() { throw new AssertionError(); }
+
+        public final class KioskConfigs {
+            private KioskConfigs() { throw new AssertionError(); }
+
+            public static final String ADMIN_COMPONENT_NAME = "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME";
+            public static final String WIFI_SSID = "android.app.extra.PROVISIONING_WIFI_SSID";
+            public static final String WIFI_PASSWORD = "android.app.extra.PROVISIONING_WIFI_PASSWORD";
+            public static final String WIFI_SECURITY = "android.app.extra.PROVISIONING_WIFI_SECURITY_TYPE";
+            public static final String SKIP_ENCRYPTION = "android.app.extra.PROVISIONING_SKIP_ENCRYPTION";
+            public static final String CHECKSUM = "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM";
+            public static final String DOWNLOAD_URL = "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION";
+            public static final String ANDROID_EXTRA = "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE";
+        }
+
+        public final class DefaultConfigs {
+            private DefaultConfigs() { throw new AssertionError(); }
+
+            public static final String ACCESS_TOKEN = "android.app.extra.token";
+            public static final String DEFAULT_OWNERSHIP = "android.app.extra.defaultOwner";
+            public static final String SERVER_IP = "android.app.extra.serverIp";
+        }
+    }
 }
