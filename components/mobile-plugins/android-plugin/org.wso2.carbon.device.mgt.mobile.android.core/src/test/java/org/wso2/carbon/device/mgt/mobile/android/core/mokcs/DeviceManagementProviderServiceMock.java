@@ -78,6 +78,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DeviceManagementProviderServiceMock implements DeviceManagementProviderService {
+
     @Override
     public List<Device> getAllDevices(String s) throws DeviceManagementException {
         return null;
@@ -610,6 +611,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public List<DeviceType> getDeviceTypes() throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<DeviceType> getDeviceTypes(PaginationRequest paginationRequest)
+            throws DeviceManagementException {
         return null;
     }
 
