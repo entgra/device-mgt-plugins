@@ -2682,6 +2682,9 @@
                                 <SubPanels>
                                     <SubPanel>
                                         <PanelItems>
+                                            <PanelItem type="alert">
+                                                <Label>Global configurations related to device.</Label>
+                                            </PanelItem>
                                             <PanelItem type="input">
                                                 <Label>Launcher background image</Label>
                                                 <Tooltip>This is the image that will be displayed in kiosk background.</Tooltip>
@@ -2746,7 +2749,497 @@
                                                     </SubPanels>
                                                 </Optional>
                                             </PanelItem>
-
+                                            <PanelItem type="checkbox">
+                                                <Label>Is idle media enabled</Label>
+                                                <Tooltip>Is idle media enabled</Tooltip>
+                                                <ItemId>XXXXXXXXXXIsidlemediaenabled</ItemId>
+                                                <Optional>
+                                                    <Checked>false</Checked>
+                                                    <SubPanels>
+                                                        <SubPanel>
+                                                            <PanelItems>
+                                                                <PanelItem type="input">
+                                                                    <Label>Media to display while idle</Label>
+                                                                    <Tooltip>Media to display while the device is idle</Tooltip>
+                                                                    <ItemId>XXXXXXxxxxxxMediadisplaywhileidle</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be a valid URL ending with .jpg, .png, .jpeg, .mp4, .3gp, .wmv, .mkv</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <Required>false</Required>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Idle graphic begin after(seconds)</Label>
+                                                                    <Tooltip>Idle graphic begin after the defined seconds</Tooltip>
+                                                                    <ItemId>XXXXXXxxxxxxIdlegraphicbeginafter</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Idle timeout in seconds</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <Required>false</Required>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                    </SubPanels>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="checkbox">
+                                                <Label>Is multi-user device</Label>
+                                                <Tooltip>Is multi-user device.</Tooltip>
+                                                <ItemId>XXXXXXXXXXIsimultiUserdevice</ItemId>
+                                                <Optional>
+                                                    <Checked>false</Checked>
+                                                    <SubPanels>
+                                                        <SubPanel>
+                                                            <PanelItems>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is login needed for user switch</Label>
+                                                                    <Tooltip>Permits repeating, ascending and descending character sequences</Tooltip>
+                                                                    <ItemId>isLoginRequired</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>true</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="alert">
+                                                                    <Label>Provide comma separated package name or web clip details for applications. eg: com.google.android.apps.maps, {\"identity\":\"http:entgra.io/\",\"title\":\"entgra-webclip\"}</Label>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Primary User Apps</Label>
+                                                                    <Tooltip>Primary User is the user to which the device is enrolled</Tooltip>
+                                                                    <ItemId>primaryUserApps</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Applications</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <Required>false</Required>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="inputTable">
+                                                                    <Label>Add User Applications</Label>
+                                                                    <Tooltip>Add User Applications.</Tooltip>
+                                                                    <ItemId>XXXXXXXXXXXXXXXXENCRYcbchdPT_STORAGE</ItemId>
+                                                                    <Optional>
+                                                                        <Button>
+                                                                            <ButtonLabel>Add User Apps</ButtonLabel>
+                                                                            <ButtonId>addUserApps</ButtonId>
+                                                                        </Button>
+                                                                        <DataSource>cosu-user-app-config</DataSource>
+                                                                        <Columns>
+                                                                            <Column type="input" key="username">
+                                                                                <Name>User</Name>
+                                                                                <Others>
+                                                                                    <Placeholder>Username</Placeholder>
+                                                                                    <inputType>text</inputType>
+                                                                                </Others>
+                                                                            </Column>
+                                                                            <Column type="input" key="visibleAppList">
+                                                                                <Name>Applications</Name>
+                                                                                <Others>
+                                                                                    <Placeholder></Placeholder>
+                                                                                    <inputType>text</inputType>
+                                                                                </Others>
+                                                                            </Column>
+                                                                        </Columns>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                    </SubPanels>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="select">
+                                                <Label>Device display orientation</Label>
+                                                <Tooltip>Device display orientation</Tooltip>
+                                                <ItemId>XXXXXXXXXXXDevicedisplayorientation</ItemId>
+                                                <Optional>
+                                                    <Options>
+                                                        <Option>
+                                                            <OptionName>Auto</OptionName>
+                                                            <OptionValue>auto</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>Portrait</OptionName>
+                                                            <OptionValue>portrait</OptionValue>
+                                                        </Option>
+                                                        <Option>
+                                                            <OptionName>Landscape</OptionName>
+                                                            <OptionValue>landscape</OptionValue>
+                                                        </Option>
+                                                    </Options>
+                                                </Optional>
+                                            </PanelItem>
+                                            <PanelItem type="checkbox">
+                                                <Label>Enable Browser Properties</Label>
+                                                <Tooltip>Browser Properties</Tooltip>
+                                                <ItemId>XXXXXXXXXXXXXXEnableBrowserProperties</ItemId>
+                                                <Optional>
+                                                    <Checked>false</Checked>
+                                                    <SubPanels>
+                                                        <SubPanel>
+                                                            <PanelItems>
+                                                                <PanelItem type="input">
+                                                                    <Label>Primary URL</Label>
+                                                                    <Tooltip>Primary URL </Tooltip>
+                                                                    <ItemId>XXXXXXXXXXXXprimaryURL</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be a valid URL</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <Required>false</Required>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Enable browser address bar</Label>
+                                                                    <Tooltip>Enables address bar of the browser</Tooltip>
+                                                                    <ItemId>isAddressBarEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is allow to go back on a page</Label>
+                                                                    <Tooltip>Allow to go back in a page</Tooltip>
+                                                                    <ItemId>showBackController</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is it allowed to go forward in browser</Label>
+                                                                    <Tooltip>Is it allowed to go forward in a web page</Tooltip>
+                                                                    <ItemId>isForwardControllerEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is home button enabled</Label>
+                                                                    <Tooltip>Is home button enabled</Tooltip>
+                                                                    <ItemId>isHomeButtonEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is page reload enabled</Label>
+                                                                    <Tooltip>Is page reload enabled</Tooltip>
+                                                                    <ItemId>isReloadEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Only allowed to visit the primary url</Label>
+                                                                    <Tooltip>Only allowed to visit the primary url</Tooltip>
+                                                                    <ItemId>lockToPrimaryURL</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>true</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is javascript enabled</Label>
+                                                                    <Tooltip>Is javascript enabled</Tooltip>
+                                                                    <ItemId>isJavascriptEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>true</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is copying to visit the primary url</Label>
+                                                                    <Tooltip>Is copying to visit the primary url</Tooltip>
+                                                                    <ItemId>isTextCopyEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is downloading files enabled</Label>
+                                                                    <Tooltip>Is downloading files enabled</Tooltip>
+                                                                    <ItemId>isDownloadsEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is Kiosk limited to one webapp</Label>
+                                                                    <Tooltip>Is Kiosk limited to one webapp</Tooltip>
+                                                                    <ItemId>isLockedToBrowser</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is form auto-fill enabled</Label>
+                                                                    <Tooltip>Is form auto-fill enabled.</Tooltip>
+                                                                    <ItemId>isFormAutoFillEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is content access enabled</Label>
+                                                                    <Tooltip>Enables or disable content URL access within WebView. Content URL access allows WebView to load content from a content provider installed in the system.</Tooltip>
+                                                                    <ItemId>isContentAccessEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is file access allowed</Label>
+                                                                    <Tooltip>Sets whether javascript running in the context of a file schema URL should be allowed to access content from other file scheme URLs.</Tooltip>
+                                                                    <ItemId>isFileAccessAllowed</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is allowed universal access from file URLs</Label>
+                                                                    <Tooltip>Sets whether JavaScript running in the context of a file scheme URL should be allowed to access content from any origin</Tooltip>
+                                                                    <ItemId>isAllowedUniversalAccessFromFileURLs</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is application cache enabled</Label>
+                                                                    <Tooltip>Is application cache enabled</Tooltip>
+                                                                    <ItemId>isAppCacheEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Application cache file path</Label>
+                                                                    <Tooltip>Sets the path to the Application Cache files. In order for the Application Caches API to be enabled, this method must be called with a path to which the application can write</Tooltip>
+                                                                    <ItemId>appCachePath</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be a valid path</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="select">
+                                                                    <Label>Application cache mode</Label>
+                                                                    <Tooltip>Overrides the way the cache is used. The way the cache is used is based on the navigation
+                                                                        type. For a normal page load, the cache is checked and content is re-validated as needed.
+                                                                        When navigating back, content is not revalidated, instead the content is just retrieved from the cache.
+                                                                        This method allows the client to override this behavior by specifying one of LOAD_DEFAULT,
+                                                                        LOAD_CACHE_ELSE_NETWORK, LOAD_NO_CACHE or LOAD_CACHE_ONLY</Tooltip>
+                                                                    <ItemId>cacheMode</ItemId>
+                                                                    <Optional>
+                                                                        <Options>
+                                                                            <Option>
+                                                                                <OptionName>LOAD_DEFAULT</OptionName>
+                                                                                <OptionValue>-1</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>LOAD_CACHE_ELSE_NETWORK</OptionName>
+                                                                                <OptionValue>1</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>LOAD_NO_CACHE</OptionName>
+                                                                                <OptionValue>2</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>LOAD_CACHE_ONLY</OptionName>
+                                                                                <OptionValue>3</OptionValue>
+                                                                            </Option>
+                                                                        </Options>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Should load images</Label>
+                                                                    <Tooltip>Sets whether the browser should load image resources (through network and cached).
+                                                                        Note that this method controls loading of all images, including those embedded using the data URI
+                                                                        scheme.</Tooltip>
+                                                                    <ItemId>isLoadsImagesAutomatically</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>true</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Block image loads via network</Label>
+                                                                    <Tooltip>Sets whether the browser should not load image resources from the network (resources accessed via http and https URI schemes)</Tooltip>
+                                                                    <ItemId>isBlockNetworkImage</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Block all resource loads from network</Label>
+                                                                    <Tooltip>Sets whether the browser should not load any resources from the network.</Tooltip>
+                                                                    <ItemId>isBlockNetworkLoads</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Support zooming</Label>
+                                                                    <Tooltip>Sets whether the browser should support zooming using its on-screen zoom controls and gestures</Tooltip>
+                                                                    <ItemId>isSupportZoomEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Show on-screen zoom controllers</Label>
+                                                                    <Tooltip>Sets whether the browser should display on-screen zoom controls. Gesture based controllers are still available</Tooltip>
+                                                                    <ItemId>isDisplayZoomControls</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Text zoom percentage</Label>
+                                                                    <Tooltip>Sets the text zoom of the page in percent</Tooltip>
+                                                                    <ItemId>textZoom</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be a positive number</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Default font size</Label>
+                                                                    <Tooltip>Sets the default font size</Tooltip>
+                                                                    <ItemId>defaultFontSize</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be a positive number between 1 and 72</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Default text encoding name</Label>
+                                                                    <Tooltip>Sets the default text encoding name to use when decoding html pages</Tooltip>
+                                                                    <ItemId>defaultTextEncodingName</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should a valid text encoding</Placeholder>
+                                                                        <Rules>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                            <Required>false</Required>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is database storage API enabled</Label>
+                                                                    <Tooltip>Sets whether the database storage API is enabled.</Tooltip>
+                                                                    <ItemId>isDatabaseEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is DOM storage API enabled</Label>
+                                                                    <Tooltip>Sets whether the DOM storage API is enabled.</Tooltip>
+                                                                    <ItemId>isDomStorageEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is Geo-location enabled</Label>
+                                                                    <Tooltip>Sets whether Geo-location API is enabled.</Tooltip>
+                                                                    <ItemId>geolocationEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Can JavaScript open windows</Label>
+                                                                    <Tooltip>JavaScript can open window automatically or not. This applies to the JavaScript function window.open()</Tooltip>
+                                                                    <ItemId>isJavaScriptCanOpenWindowsAutomatically</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>false</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Does media playback requires user consent</Label>
+                                                                    <Tooltip>Sets whether the browser requires a user gesture to play media. If false, the browser can play media without user consent</Tooltip>
+                                                                    <ItemId>isMediaPlaybackRequiresUserGesture</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>true</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Is safe browsing enabled</Label>
+                                                                    <Tooltip>Sets whether safe browsing in enabled. Safe browsing allows browser to protect against malware and phishing attacks by verifying the links.</Tooltip>
+                                                                    <ItemId>isSafeBrowsingEnabled</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>true</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="checkbox">
+                                                                    <Label>Use wide view port</Label>
+                                                                    <Tooltip>Sets whether the browser should enable support for the viewport HTML meta tag or should
+                                                                        use a wide viewport. When the value of the setting is false, the layout width is always set to the
+                                                                        width of the browser control in  device-independent (CSS) pixels. When the value is true and the
+                                                                        page contains the viewport meta tag, the value of the width specified in th tag is used. If the page
+                                                                        does not contain the tag or does not provide a width, then a wide viewport will be used</Tooltip>
+                                                                    <ItemId>isUseWideViewPort</ItemId>
+                                                                    <Optional>
+                                                                        <Checked>true</Checked>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="input">
+                                                                    <Label>Browser user agent string</Label>
+                                                                    <Tooltip>Sets the WebView's user-agent string</Tooltip>
+                                                                    <ItemId>XXXXXXXuserAgentString</ItemId>
+                                                                    <Optional>
+                                                                        <Placeholder>Should be a valid user agent string</Placeholder>
+                                                                        <Rules>
+                                                                            <Required>false</Required>
+                                                                            <Regex></Regex>
+                                                                            <ValidationMsg></ValidationMsg>
+                                                                        </Rules>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                                <PanelItem type="select">
+                                                                    <Label>Mixed content mode</Label>
+                                                                    <Tooltip>Configures the browser's behavior when a secure origin attempts to load a resource from an insecure origin</Tooltip>
+                                                                    <ItemId>mixedContentMode</ItemId>
+                                                                    <Optional>
+                                                                        <Options>
+                                                                            <Option>
+                                                                                <OptionName>MIXED_CONTENT_ALWAYS_ALLOW</OptionName>
+                                                                                <OptionValue>0</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>MIXED_CONTENT_NEVER_ALLOW</OptionName>
+                                                                                <OptionValue>1</OptionValue>
+                                                                            </Option>
+                                                                            <Option>
+                                                                                <OptionName>MIXED_CONTENT_COMPATIBILITY_MODE</OptionName>
+                                                                                <OptionValue>2</OptionValue>
+                                                                            </Option>
+                                                                        </Options>
+                                                                    </Optional>
+                                                                </PanelItem>
+                                                            </PanelItems>
+                                                        </SubPanel>
+                                                    </SubPanels>
+                                                </Optional>
+                                            </PanelItem>
                                         </PanelItems>
                                     </SubPanel>
                                 </SubPanels>
