@@ -19,6 +19,8 @@ package org.wso2.carbon.device.mgt.mobile.android.core.mokcs;
 
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.Feature;
+import org.wso2.carbon.device.mgt.common.PaginationRequest;
+import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.policy.mgt.Policy;
 import org.wso2.carbon.device.mgt.common.policy.mgt.Profile;
 import org.wso2.carbon.device.mgt.common.policy.mgt.ProfileFeature;
@@ -138,5 +140,17 @@ public class PolicyManagerServiceMock implements PolicyManagerService {
     @Override
     public boolean isCompliant(DeviceIdentifier deviceIdentifier) throws PolicyComplianceException {
         return false;
+    }
+
+    @Override
+    public PaginationResult getPolicyCompliance(PaginationRequest paginationRequest, String s,
+                                                boolean b, boolean b1, String s1, String s2)
+            throws PolicyComplianceException {
+        return null;
+    }
+
+    @Override
+    public List<ComplianceFeature> getNoneComplianceFeatures(int i) throws PolicyComplianceException {
+        return null;
     }
 }
