@@ -328,6 +328,18 @@
                         </select>
                     </div>
 
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="passcode-policy-max-time-to-lock">
+                            Time to auto lock seconds*
+                            <span class="helper" title="Time it takes lock a device automatially when idle">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                        </label>
+                        <input id="passcode-policy-max-time-to-lock" type="text" class="form-control operationDataKeys"
+                               data-key="passcodePolicyMaxTimeToLock" >
+                    </div>
+
                     <!--Passcode policy for work profile only-->
                     <h2 class="sub-title panel-title">Passcode policy for work profile</h2>
                     <div class="wr-input-control">
@@ -464,6 +476,19 @@
                                 <option value="9">09</option>
                                 <option value="10">10</option>
                             </select>
+                        </div>
+
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="wp-passcode-policy-max-time-to-lock">
+                                Time to auto lock seconds*
+                                <span class="helper" title="Time it takes lock a device automatially when idle">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                                <br>
+                            </label>
+                            <input id="wp-passcode-policy-max-time-to-lock" type="text" class="form-control
+                        operationDataKeys"
+                                   data-key="passcodePolicyMaxTimeToLockWP" >
                         </div>
 
                     </div>
