@@ -78,16 +78,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DeviceManagementProviderServiceMock implements DeviceManagementProviderService {
-    @Override
-    public boolean deleteDeviceTypeVersions(DeviceType deviceType)
-            throws DeviceManagementException {
-        return false;
-    }
-
-    @Override
-    public void disEnrollDevices(List<Device> list) throws DeviceManagementException {
-
-    }
 
     @Override
     public List<Device> getAllDevices(String s) throws DeviceManagementException {
@@ -625,6 +615,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public List<DeviceType> getDeviceTypes(PaginationRequest paginationRequest)
+            throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
     public List<DeviceLocationHistory> getDeviceLocationInfo(DeviceIdentifier deviceIdentifier, long l,
                                                              long l1) throws DeviceManagementException {
         return null;
@@ -695,10 +691,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override public void disEnrollDevices(List<Device> list) throws DeviceManagementException {
 
-    }
-
-    @Override public boolean deleteDeviceType(String s, DeviceType deviceType) throws DeviceManagementException {
-        return false;
     }
 
     @Override
