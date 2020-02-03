@@ -17,8 +17,9 @@
 */
 package org.wso2.carbon.device.mgt.mobile.android.common.exception;
 
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 
-public class AndroidDeviceMgtPluginException extends Exception{
+public class AndroidDeviceMgtPluginException extends DeviceManagementException {
 
     private static final long serialVersionUID = -2297311387874900305L;
     private String errorMessage;

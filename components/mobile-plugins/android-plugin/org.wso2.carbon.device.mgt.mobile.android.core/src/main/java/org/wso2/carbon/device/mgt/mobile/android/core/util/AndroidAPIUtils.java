@@ -30,6 +30,7 @@ import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagement
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.common.spi.DeviceTypeCommonService;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
@@ -99,6 +100,18 @@ public class AndroidAPIUtils {
             throw new IllegalStateException(msg);
         }
         return deviceManagementProviderService;
+    }
+
+    public static DeviceTypeCommonService getDeviceTypeCommonService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        DeviceTypeCommonService deviceTypeCommonService = (DeviceTypeCommonService) ctx
+                .getOSGiService(DeviceTypeCommonService.class, null);
+        if (deviceTypeCommonService == null) {
+            String msg = "Device Type Common service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return deviceTypeCommonService;
     }
 
     public static DeviceInformationManager getDeviceInformationManagerService() {

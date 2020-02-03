@@ -54,23 +54,23 @@ public class EventReceiverAPIImpl implements EventReceiverAPI {
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
             Message message = androidService.publishEvents(eventBeanWrapper);
             return Response.status(Integer.parseInt(message.getResponseCode())).entity(message.getResponseMessage()).build();
-        } catch (DeviceManagementException e) {
-            String errorMessage = "Error occurred while checking Operation Analytics is Enabled.";
-            log.error(errorMessage, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(errorMessage).build()).build();
         } catch (UnexpectedServerErrorException e) {
             String errorMessage = "Error occurred while getting the Data publisher Service instance.";
             log.error(errorMessage, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
-        } catch (AndroidDeviceMgtPluginException e){
+        } catch (AndroidDeviceMgtPluginException e) {
             String errorMessage = "Error occurred while publishing events.";
             log.error(errorMessage, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
+                            .setMessage(errorMessage).build()).build();
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Error occurred while checking Operation Analytics is Enabled.";
+            log.error(errorMessage, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(errorMessage).build()).build();
         }
     }
