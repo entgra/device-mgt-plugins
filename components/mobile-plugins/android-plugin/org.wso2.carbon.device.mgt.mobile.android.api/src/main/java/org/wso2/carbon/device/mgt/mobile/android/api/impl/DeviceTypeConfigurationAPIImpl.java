@@ -39,7 +39,9 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidConfigurationException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
+import org.wso2.carbon.device.mgt.common.spi.DeviceTypeCommonService;
 import org.wso2.carbon.device.mgt.mobile.android.api.DeviceTypeConfigurationAPI;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.AndroidPlatformConfiguration;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
@@ -54,9 +56,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
 @Path("/configuration")
 @Produces(MediaType.APPLICATION_JSON)
@@ -123,6 +127,37 @@ public class DeviceTypeConfigurationAPIImpl implements DeviceTypeConfigurationAP
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
                     new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
                             .setMessage(msg).build()).build();
+        }
+    }
+
+    @GET
+    @Path("/enrollment-qr-config/{ownershipType}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getQRConfig(
+            @PathParam("ownershipType") String ownershipType) {
+        try {
+            DeviceTypeCommonService deviceTypeCommonService = AndroidAPIUtils.getDeviceTypeCommonService();
+            Map<String, Object> enrollmentQRConfig =  deviceTypeCommonService.getEnrollmentQRCode(ownershipType);
+            if (enrollmentQRConfig.isEmpty()) {
+                String msg = "Couldn't find Enrollment QR code config for Android. Please contact administrator.";
+                log.error(msg);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(msg).build();
+            }
+            return Response.status(Response.Status.OK).entity(enrollmentQRConfig).build();
+        } catch (BadRequestException e) {
+            String msg = "Bad Request, trying to get Enrollment QR code for invalid device ownership type "
+                    + ownershipType;
+            log.error(msg, e);
+            return Response.status(Response.Status.BAD_REQUEST).entity(msg).build();
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred while retrieving the license configured for Android device enrolment";
+            log.error(msg, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(msg).build();
+        } catch (InvalidConfigurationException e) {
+            String msg = "Platform configuration is not configured properly to generate QR code for the Android "
+                    + "enrollment. Device ownership mode is " + ownershipType;
+            log.error(msg, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(msg).build();
         }
     }
 }

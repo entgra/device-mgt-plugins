@@ -85,6 +85,7 @@
                             org.wso2.carbon.device.application.mgt.common.*,
                             org.wso2.carbon.user.core.*,
                             org.wso2.carbon.user.api.*,
+                            org.wso2.carbon.identity.jwt.client.extension.*,
                             org.apache.commons.httpclient,
                             org.apache.http,
                             org.apache.http.client.methods,
