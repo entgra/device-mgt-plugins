@@ -44,6 +44,8 @@ var androidOperationConstants = {
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION": "wifi",
     "WIFI_OPERATION_CODE": "WIFI",
+    "APN_OPERATION": "apn",
+    "APN_OPERATION_CODE": "APN",
     "GLOBAL_PROXY_OPERATION": "global-proxy",
     "GLOBAL_PROXY_OPERATION_CODE": "GLOBAL_PROXY",
     "VPN_OPERATION": "vpn",

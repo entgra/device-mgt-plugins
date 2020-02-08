@@ -76,6 +76,15 @@
             <span id="vpn-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
             <span id="vpn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('apn', this)">
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-apn fw-stack-2x"></i>
+                </span>
+            Access Point Name
+            <span id="apn-configured" class="has-configured status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('cert', this)">
                 <span class="wr-hidden-operations-icon fw-stack">
                     <i class="fw fw-pages fw-stack-2x"></i>
@@ -1096,6 +1105,66 @@
             </div>
         </div>
         <!-- /encrypt-storage -->
+
+
+        <!-- APN -->
+        <div class="wr-hidden-operation" data-operation="apn">
+            <div class="panel panel-default operation-data" data-operation="apn" data-operation-code="APN">
+                <div id="apn-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        APN Settings
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#apn-body">
+                            <input type="checkbox"/>
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                    </h2>
+                    <div class="panel-title-description">
+                        Configure the APN settings on Android devices.
+                        This feature only support for the Android 9.0 onwards only.
+                    </div>
+                </div>
+                <div id="apn-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                     aria-labelledby="apn-body">
+                    <hr/>
+
+                    Please note that * sign represents required fields of data.
+                    <br>
+                    <br>
+                    <div id="apn-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-name">
+                            Name*
+                            <span class="helper" title="Apn settings">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            APN name should be 1-to-30 characters long
+                        </label>
+                        <input id="apn-name" type="text" class="form-control operationDataKeys" data-key="apnName"
+                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-name">
+                            APN*
+                            <span class="helper" title="Apn settings">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            APN should be 1-to-30 characters long
+                        </label>
+                        <input id="apn-apn" type="text" class="form-control operationDataKeys" data-key="apnApn"
+                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <!-- APN -->
 
         <!-- wi-fi -->
         <div class="wr-hidden-operation" data-operation="wifi">
@@ -2528,7 +2597,6 @@
             </div>
         </div>
         <!-- /VPN -->
-
 
         <!--cert-->
         <div class="wr-hidden-operation" data-operation="cert">

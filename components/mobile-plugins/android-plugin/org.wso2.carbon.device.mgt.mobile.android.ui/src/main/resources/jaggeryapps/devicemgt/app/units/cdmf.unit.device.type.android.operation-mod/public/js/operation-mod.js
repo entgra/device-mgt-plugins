@@ -49,6 +49,7 @@ var androidOperationModule = function () {
     var androidOperationConstants = {
         "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
         "VPN_OPERATION_CODE": "VPN",
+        "APN_OPERATION_CODE": "APN",
         "CAMERA_OPERATION_CODE": "CAMERA",
         "BACKUP_SERVICE_CODE": "BACKUP_SERVICE",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
@@ -67,6 +68,7 @@ var androidOperationModule = function () {
         "DISALLOW_CONFIG_MOBILE_NETWORKS": "DISALLOW_CONFIG_MOBILE_NETWORKS",
         "DISALLOW_CONFIG_TETHERING": "DISALLOW_CONFIG_TETHERING",
         "DISALLOW_CONFIG_VPN": "DISALLOW_CONFIG_VPN",
+        "DISALLOW_CONFIG_APN": "DISALLOW_CONFIG_APN",
         "DISALLOW_CONFIG_WIFI": "DISALLOW_CONFIG_WIFI",
         "DISALLOW_APPS_CONTROL": "DISALLOW_APPS_CONTROL",
         "DISALLOW_CREATE_WINDOWS": "DISALLOW_CREATE_WINDOWS",
@@ -177,6 +179,28 @@ var androidOperationModule = function () {
                     "wifiAnoIdentity": operationPayload["anonymousIdentity"],
                     "wifiCaCert": operationPayload["cacert"],
                     "wifiCaCertName": operationPayload["cacertName"]
+                };
+                break;
+            case androidOperationConstants["APN_OPERATION_CODE"]:
+                payload = {
+                    "apnName": operationPayload["name"],
+                    "apnApn": operationPayload["apn"]
+                    "apnProxy": operationPayload["apnProxy"],
+                    "apnPort": operationPayload["apnPort"],
+                    "apnUserName": operationPayload["apnUserName"],
+                    "apnPassword": operationPayload["apnPassword"],
+                    "apnServer": operationPayload["apnServer"],
+                    "apnMMSC": operationPayload["apnMMSC"],
+                    "apnMMSPort": operationPayload["apnMMSPort"],
+                    "apnMCC": operationPayload["apnMCC"],
+                    "apnMNC": operationPayload["apnMNC"],
+                    "apnAuthenticationType": operationPayload["apnAuthenticationType"],
+                    "apnAPNType": operationPayload["apnAPNType"],
+                    "apnAPNProtocol": operationPayload["apnAPNProtocol"],
+                    "apnRoamingProtocol": operationPayload["apnRoamingProtocol"],
+                    "apnEnableDisable": operationPayload["apnEnableDisable"],
+                    "apnBearer": operationPayload["apnBearer"],
+                    "apnMVNPType": operationPayload["apnMVNPType"]
                 };
                 break;
             case androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"]:
@@ -365,6 +389,7 @@ var androidOperationModule = function () {
                         "DISALLOW_CONFIG_MOBILE_NETWORKS": operationData["disallowConfigMobileNetworks"],
                         "DISALLOW_CONFIG_TETHERING": operationData["disallowConfigTethering"],
                         "DISALLOW_CONFIG_VPN": operationData["disallowConfigVpn"],
+                        "DISALLOW_CONFIG_APN": operationData["disallowConfigApn"],
                         "DISALLOW_CONFIG_WIFI": operationData["disallowConfigWifi"],
                         "DISALLOW_APPS_CONTROL": operationData["disallowAppControl"],
                         "DISALLOW_CREATE_WINDOWS": operationData["disallowCreateWindows"],
@@ -459,6 +484,32 @@ var androidOperationModule = function () {
                         "anonymousIdentity": operationData["wifiAnoIdentity"],
                         "cacert": operationData["wifiCaCert"],
                         "cacertName": operationData["wifiCaCertName"]
+                    }
+                };
+                break;
+
+            case androidOperationConstants["APN_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "name": operationData["apnName"],
+                        "apn": operationData["apnApn"]
+                        "apnProxy": operationData["apnProxy"],
+                        "apnPort": operationData["apnPort"],
+                        "apnUserName": operationData["apnUserName"],
+                        "apnPassword": operationData["apnPassword"],
+                        "apnServer": operationData["apnServer"],
+                        "apnMMSC": operationData["apnMMSC"],
+                        "apnMMSPort": operationData["apnMMSPort"],
+                        "apnMCC": operationData["apnMCC"],
+                        "apnMNC": operationData["apnMNC"],
+                        "apnAuthenticationType": operationData["apnAuthenticationType"],
+                        "apnAPNType": operationData["apnAPNType"],
+                        "apnAPNProtocol": operationData["apnAPNProtocol"],
+                        "apnRoamingProtocol": operationData["apnRoamingProtocol"],
+                        "apnEnableDisable": operationData["apnEnableDisable"],
+                        "apnBearer": operationData["apnBearer"],
+                        "apnMVNPType": operationData["apnMVNPType"]
                     }
                 };
                 break;
@@ -761,6 +812,7 @@ var androidOperationModule = function () {
             "CAMERA": "control-camera",
             "BACKUP_SERVICE": "enable-backup",
             "VPN": "configure-vpn",
+            "APN": "configure-apn",
             "DEVICE_LOCK": "lock-devices",
             "DEVICE_UNLOCK": "unlock-devices",
             "DEVICE_LOCATION": "location",
@@ -1246,6 +1298,9 @@ var androidOperationModule = function () {
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_VPN"]) {
                 restrictions["disallowConfigVpn"] = restriction["enabled"];
+                continue;
+            } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_APN"]) {
+                restrictions["disallowConfigApn"] = restriction["enabled"];
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_WIFI"]) {
                 restrictions["disallowConfigWifi"] = restriction["enabled"];
