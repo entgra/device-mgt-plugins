@@ -184,23 +184,25 @@ var androidOperationModule = function () {
             case androidOperationConstants["APN_OPERATION_CODE"]:
                 payload = {
                     "apnName": operationPayload["name"],
-                    "apnApn": operationPayload["apn"]
-                    "apnProxy": operationPayload["apnProxy"],
-                    "apnPort": operationPayload["apnPort"],
-                    "apnUserName": operationPayload["apnUserName"],
-                    "apnPassword": operationPayload["apnPassword"],
-                    "apnServer": operationPayload["apnServer"],
-                    "apnMMSC": operationPayload["apnMMSC"],
-                    "apnMMSPort": operationPayload["apnMMSPort"],
-                    "apnMCC": operationPayload["apnMCC"],
-                    "apnMNC": operationPayload["apnMNC"],
-                    "apnAuthenticationType": operationPayload["apnAuthenticationType"],
-                    "apnAPNType": operationPayload["apnAPNType"],
-                    "apnAPNProtocol": operationPayload["apnAPNProtocol"],
-                    "apnRoamingProtocol": operationPayload["apnRoamingProtocol"],
-                    "apnEnableDisable": operationPayload["apnEnableDisable"],
-                    "apnBearer": operationPayload["apnBearer"],
-                    "apnMVNPType": operationPayload["apnMVNPType"]
+                    "apnApn": operationPayload["apn"],
+                    "apnProxyAddress": operationPayload["proxyAddress"],
+                    "apnProxyPort": operationPayload["proxyPort"],
+                    "apnUsername": operationPayload["username"],
+                    "apnPassword": operationPayload["password"],
+                    "apnServer": operationPayload["server"],
+                    "apnMMSC": operationPayload["mMSC"],
+                    "apnMMSProxyAddress": operationPayload["mmsProxyAddress"],
+                    "apnMMSProxyPort": operationPayload["mMSProxyPort"],
+                    "apnMCC": operationPayload["mCC"],
+                    "apnMNC": operationPayload["mNC"],
+                    "apnAuthenticationType": operationPayload["authenticationType"],
+                    "apnType": operationPayload["type"],
+                    "apnProtocol": operationPayload["protocol"],
+                    "apnRoamingProtocol": operationPayload["roamingProtocol"],
+                    "apnIsEnable": operationPayload["isEnable"],
+                    "apnBearer": operationPayload["bearer"],
+                    "apnMVNOType": operationPayload["mVNOType"],
+                    "apnMVNOValue": operationPayload["mVNOValue"]
                 };
                 break;
             case androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"]:
@@ -493,23 +495,25 @@ var androidOperationModule = function () {
                 payload = {
                     "operation": {
                         "name": operationData["apnName"],
-                        "apn": operationData["apnApn"]
-                        "apnProxy": operationData["apnProxy"],
-                        "apnPort": operationData["apnPort"],
-                        "apnUserName": operationData["apnUserName"],
-                        "apnPassword": operationData["apnPassword"],
-                        "apnServer": operationData["apnServer"],
-                        "apnMMSC": operationData["apnMMSC"],
-                        "apnMMSPort": operationData["apnMMSPort"],
-                        "apnMCC": operationData["apnMCC"],
-                        "apnMNC": operationData["apnMNC"],
-                        "apnAuthenticationType": operationData["apnAuthenticationType"],
-                        "apnAPNType": operationData["apnAPNType"],
-                        "apnAPNProtocol": operationData["apnAPNProtocol"],
-                        "apnRoamingProtocol": operationData["apnRoamingProtocol"],
-                        "apnEnableDisable": operationData["apnEnableDisable"],
-                        "apnBearer": operationData["apnBearer"],
-                        "apnMVNPType": operationData["apnMVNPType"]
+                        "apn": operationData["apnApn"],
+                        "proxyAddress": operationData["apnProxyAddress"],
+                        "proxyPort": operationData["apnProxyPort"],
+                        "username": operationData["apnUsername"],
+                        "password": operationData["apnPassword"],
+                        "server": operationData["apnServer"],
+                        "mMSC": operationData["apnMMSC"],
+                        "mmsProxyAddress": operationData["apnMMSProxyAddress"],
+                        "mMSProxyPort": operationData["apnMMSProxyPort"],
+                        "mCC": operationData["apnMCC"],
+                        "mNC": operationData["apnMNC"],
+                        "authenticationType": operationData["apnAuthenticationType"],
+                        "type": operationData["apnType"],
+                        "protocol": operationData["apnProtocol"],
+                        "roamingProtocol": operationData["apnRoamingProtocol"],
+                        "isEnable": operationData["aapnIsEnable"],
+                        "bearer": operationData["apnBearer"],
+                        "mVNOType": operationData["apnMVNOType"],
+                        "mVNOValue": operationData["apnMVNOValue"]
                     }
                 };
                 break;

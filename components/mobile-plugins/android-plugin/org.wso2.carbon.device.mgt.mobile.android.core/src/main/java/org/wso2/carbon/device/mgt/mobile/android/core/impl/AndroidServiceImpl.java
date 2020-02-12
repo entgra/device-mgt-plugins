@@ -684,6 +684,29 @@ public class AndroidServiceImpl implements AndroidService {
     }
 
     @Override
+    public Activity configureAPN(APNBeanWrapper apnBeanWrapper)
+            throws OperationManagementException, AndroidDeviceMgtPluginException {
+        try {
+            if (apnBeanWrapper == null || apnBeanWrapper.getOperation() == null) {
+                String errorMessage = "The payload of the apn operation is incorrect";
+                log.error(errorMessage);
+                throw new BadRequestException(errorMessage);
+            }
+            APN apn = apnBeanWrapper.getOperation();
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(AndroidConstants.OperationCodes.APN);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setPayLoad(apn.toJSON());
+            return AndroidDeviceUtils.getOperationResponse(apnBeanWrapper.getDeviceIDs(), operation);
+        } catch (InvalidDeviceException e) {
+            String errorMessage = "Invalid Device Identifiers found.";
+            log.error(errorMessage, e);
+            throw new BadRequestException(errorMessage, e);
+        }
+    }
+
+
+    @Override
     public Activity configureWifi(WifiBeanWrapper wifiBeanWrapper)
             throws OperationManagementException, AndroidDeviceMgtPluginException {
         try {
@@ -876,8 +899,6 @@ public class AndroidServiceImpl implements AndroidService {
             throw new BadRequestException(errorMessage, e);
         }
     }
-
-
 
     @Override
     public Message updateApplicationList(String id, List<AndroidApplication> androidApplications)
