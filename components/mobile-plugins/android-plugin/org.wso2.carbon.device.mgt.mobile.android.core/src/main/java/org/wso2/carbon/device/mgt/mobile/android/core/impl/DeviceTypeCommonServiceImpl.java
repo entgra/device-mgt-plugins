@@ -72,10 +72,6 @@ public class DeviceTypeCommonServiceImpl implements DeviceTypeCommonService {
         }
 
         for (ConfigurationEntry configEntry : platformConfiguration.getConfiguration()) {
-            if (AndroidConstants.PlatformConfigs.DefaultConfigs.DEFAULT_OWNERSHIP.equals(configEntry.getName())) {
-                defaultQREnrollmentPayload
-                        .put(AndroidConstants.PlatformConfigs.DefaultConfigs.DEFAULT_OWNERSHIP, configEntry.getValue());
-            }
             if (AndroidConstants.PlatformConfigs.DefaultConfigs.SERVER_IP.equals(configEntry.getName())) {
                 defaultQREnrollmentPayload
                         .put(AndroidConstants.PlatformConfigs.DefaultConfigs.SERVER_IP, configEntry.getValue());
@@ -110,6 +106,8 @@ public class DeviceTypeCommonServiceImpl implements DeviceTypeCommonService {
 
         }
 
+        defaultQREnrollmentPayload
+                .put(AndroidConstants.PlatformConfigs.DefaultConfigs.DEFAULT_OWNERSHIP, ownershipType.toUpperCase());
         defaultQREnrollmentPayload.put(AndroidConstants.PlatformConfigs.DefaultConfigs.ACCESS_TOKEN, accessToken);
         qrEnrollmentPayload
                 .put(AndroidConstants.PlatformConfigs.KioskConfigs.ANDROID_EXTRA, defaultQREnrollmentPayload);
