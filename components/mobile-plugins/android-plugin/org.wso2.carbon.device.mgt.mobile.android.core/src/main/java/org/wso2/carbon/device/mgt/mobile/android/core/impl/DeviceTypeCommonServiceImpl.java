@@ -74,7 +74,8 @@ public class DeviceTypeCommonServiceImpl implements DeviceTypeCommonService {
         for (ConfigurationEntry configEntry : platformConfiguration.getConfiguration()) {
             if (AndroidConstants.PlatformConfigs.DefaultConfigs.DEFAULT_OWNERSHIP.equals(configEntry.getName())) {
                 defaultQREnrollmentPayload
-                        .put(AndroidConstants.PlatformConfigs.DefaultConfigs.DEFAULT_OWNERSHIP, configEntry.getValue());
+                        .put(AndroidConstants
+                                .PlatformConfigs.DefaultConfigs.DEFAULT_OWNERSHIP, ownershipType.toUpperCase());
             }
             if (AndroidConstants.PlatformConfigs.DefaultConfigs.SERVER_IP.equals(configEntry.getName())) {
                 defaultQREnrollmentPayload
