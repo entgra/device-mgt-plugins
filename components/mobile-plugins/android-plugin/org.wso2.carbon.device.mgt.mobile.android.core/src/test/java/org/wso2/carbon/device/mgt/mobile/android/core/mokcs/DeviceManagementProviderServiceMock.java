@@ -45,6 +45,7 @@ import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
+import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.DeviceConfiguration;
@@ -179,7 +180,8 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
         return null;
     }
 
-    @Override public Device getDevice(DeviceData deviceData, boolean b) throws DeviceManagementException {
+    @Override
+    public Device getDevice(DeviceData deviceData, boolean b) throws DeviceManagementException {
         return null;
     }
 
@@ -541,12 +543,14 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
         return null;
     }
 
-    @Override public List<Activity> getFilteredActivities(String operationCode, int limit, int offset)
+    @Override
+    public List<Activity> getFilteredActivities(String operationCode, int limit, int offset)
             throws OperationManagementException {
         return null;
     }
 
-    @Override public int getTotalCountOfFilteredActivities(String operationCode) throws OperationManagementException {
+    @Override
+    public int getTotalCountOfFilteredActivities(String operationCode) throws OperationManagementException {
         return 0;
     }
 
@@ -670,33 +674,40 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
         return false;
     }
 
-    @Override public boolean addDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
+    @Override
+    public boolean addDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
             throws DeviceManagementException {
         return false;
     }
 
-    @Override public List<DeviceTypeVersion> getDeviceTypeVersions(String s) throws DeviceManagementException {
+    @Override
+    public List<DeviceTypeVersion> getDeviceTypeVersions(String s) throws DeviceManagementException {
         return null;
     }
 
-    @Override public boolean updateDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
+    @Override
+    public boolean updateDeviceTypeVersion(DeviceTypeVersion deviceTypeVersion)
             throws DeviceManagementException {
         return false;
     }
 
-    @Override public boolean isDeviceTypeVersionChangeAuthorized(String s, String s1) throws DeviceManagementException {
+    @Override
+    public boolean isDeviceTypeVersionChangeAuthorized(String s, String s1) throws DeviceManagementException {
         return false;
     }
 
-    @Override public DeviceTypeVersion getDeviceTypeVersion(String s, String s1) throws DeviceManagementException {
+    @Override
+    public DeviceTypeVersion getDeviceTypeVersion(String s, String s1) throws DeviceManagementException {
         return null;
     }
 
-    @Override public boolean deleteDeviceTypeVersions(DeviceType deviceType) throws DeviceManagementException {
+    @Override
+    public boolean deleteDeviceTypeVersions(DeviceType deviceType) throws DeviceManagementException {
         return false;
     }
 
-    @Override public void disEnrollDevices(List<Device> list) throws DeviceManagementException {
+    @Override
+    public void disEnrollDevices(List<Device> list) throws DeviceManagementException {
 
     }
 
@@ -719,11 +730,26 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
         return null;
     }
 
-    @Override public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, String s)
+    @Override
+    public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, String s)
             throws DeviceManagementException {
         return null;
     }
 
     @Override
-    public boolean deleteDevices(List<String> deviceIdentifiers) throws DeviceManagementException, InvalidDeviceException {return false;}
+    public PaginationResult getApplications(PaginationRequest paginationRequest)
+            throws ApplicationManagementException, DeviceTypeNotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<String> getAppVersions(String s) throws ApplicationManagementException {
+        return null;
+    }
+
+    @Override
+    public boolean deleteDevices(List<String> deviceIdentifiers)
+            throws DeviceManagementException, InvalidDeviceException {
+        return false;
+    }
 }
