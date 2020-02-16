@@ -489,7 +489,6 @@ var androidOperationModule = function () {
                     }
                 };
                 break;
-
             case androidOperationConstants["APN_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {

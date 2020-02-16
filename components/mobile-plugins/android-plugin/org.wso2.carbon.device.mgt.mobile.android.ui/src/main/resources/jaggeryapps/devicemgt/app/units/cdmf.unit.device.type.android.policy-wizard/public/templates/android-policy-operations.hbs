@@ -1133,72 +1133,72 @@
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-name">
                             APN Name
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="Sets the name of the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            APN name should be 1-to-30 characters long
+                            Name to set for the APN (This value may be null)
                         </label>
                         <input id="apn-name" type="text" class="form-control operationDataKeys" data-key="apnName"
-                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                               maxlength="100" placeholder="[ Name to set for the APN (This value may be null) ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-apn">
-                            APN Entry Point
-                            <span class="helper" title="Apn settings">
+                            APN Entry Name
+                            <span class="helper" title="Sets a human-readable name that describes the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Entry Point should be 1-to-30 characters long
+                            APN Entry Name to set for the APN (This value may be null)
                         </label>
                         <input id="apn-apn" type="text" class="form-control operationDataKeys" data-key="apnApn"
-                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                               maxlength="100" placeholder="[ APN Entry Name to set for the APN (This value may be null) ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-proxy-address">
                             APN Proxy Address
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="Sets the proxy address of the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Proxy Address should be 1-to-30 characters long
+                            APN Proxy Address the proxy address to set for the APN
                         </label>
                         <input id="apn-proxy-address" type="text" class="form-control operationDataKeys" data-key="apnProxyAddress"
-                               maxlength="100" placeholder="[ Enter a valid Proxy Address ]"/>
+                               maxlength="100" placeholder="[ 192.168.8.1 ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-proxy-port">
                             APN Proxy Port
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="Sets the proxy port of the APN.">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Proxy Port should be 1-to-30 characters long
+                            APN Proxy port should be between 0 - 65535
                         </label>
                         <input id="apn-proxy-port" type="text" class="form-control operationDataKeys" data-key="apnProxyPort"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
+                               maxlength="100" placeholder="[ Enter a valid proxy port between 0 - 65535]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-username">
                             APN Username
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="Sets the APN username of the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            APN username should be 1-to-30 characters long
+                            APN username to set for the APN (This value may be null)
                         </label>
                         <input id="apn-username" type="text" class="form-control operationDataKeys" data-key="apnUsername"
-                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                               maxlength="100" placeholder="[ APN username to set for the APN (This value may be null)]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-password">
                             APN Password
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="Sets the APN password of the APN.">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
@@ -1211,7 +1211,7 @@
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-server">
                             Server
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="Apn server settings">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
@@ -1219,176 +1219,200 @@
                             Server should be 1-to-30 characters long
                         </label>
                         <input id="apn-server" type="text" class="form-control operationDataKeys" data-key="apnServer"
-                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                               maxlength="100" placeholder="[ APN server to set for the APN ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-mmsc">
                             MMSC
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="Sets the MMSC Uri of the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            MMSC should be 1-to-30 characters long
+                            MMSC Uri to set for the APN This value may be null
                         </label>
                         <input id="apn-mmsc" type="text" class="form-control operationDataKeys" data-key="apnMMSC"
-                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                               maxlength="100" placeholder="[ MMSC Uri to set for the APN (This value may be null) ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-mms-proxy-address">
                             MMS Proxy Address
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="Sets the MMS proxy address of the APN.">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            MMS Proxy Address should be 1-to-30 characters long
+                            MMS Proxy Address to set for the APN This value may be null.
                         </label>
                         <input id="apn-mms-proxy-address" type="text" class="form-control operationDataKeys" data-key="apnMMSProxyAddress"
-                               maxlength="100" placeholder="[ Enter a valid Proxy Address ]"/>
+                               maxlength="100" placeholder="[ 192.168.8.1 ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-mms-proxy-port">
                             MMS Proxy Port
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="MMS Proxy Port to set for the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            MMS Proxy Port should be 1-to-30 characters long
+                            MMS Proxy Port to set for the APN
                         </label>
                         <input id="apn-mms-proxy-port" type="text" class="form-control operationDataKeys" data-key="apnMMSProxyPort"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
-                    </div>
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="apn-mmsc">
-                            MMSC
-                            <span class="helper" title="Apn settings">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                        </label>
-                        <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Proxy Port should be 1-to-30 characters long
-                        </label>
-                        <input id="apn-mmsc" type="text" class="form-control operationDataKeys" data-key="apnMMSC"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
+                               maxlength="100" placeholder="[ MMS Proxy Port sould be between 0 - 65535 ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-mcc">
                             MCC
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="MCC to set for the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            MCC should be 1-to-30 characters long
+                            MCC to set for the APN
                         </label>
                         <input id="apn-mcc" type="text" class="form-control operationDataKeys" data-key="apnMCC"
-                               maxlength="100" placeholder="[ should be 1-to-30 characters long ]"/>
+                               maxlength="100" placeholder="[ MCC to set for the APN ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-mnc">
                             MNC
-                            <span class="helper" title="Apn settings">
+                            <span class="helper" title="MNC to set for the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
                         </label>
                         <label id="apnValidationText" class="wr-input-label hidden">
-                            MNC should be 1-to-30 characters long
+                            MNC to set for the APN
                         </label>
                         <input id="apn-mnc" type="text" class="form-control operationDataKeys" data-key="apnMNC"
-                               maxlength="100" placeholder="[ should be 1-to-30 characters long ]"/>
+                               maxlength="100" placeholder="[ MCC to set for the APN ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-authentication-type">
                             Authentication Type
-                            <span class="helper" title="Apn settings">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
+                            <span class="helper"
+                                  title="Sets the authentication type of the APN.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
                         </label>
-                        <label id="apnValidationText" class="wr-input-label hidden">
-                            Authentication Type should be 1-to-30 characters long
-                        </label>
-                        <input id="apn-authentication-type" type="text" class="form-control operationDataKeys" data-key="apnAuthenticationType"
-                               maxlength="100" placeholder="[ should be 1-to-30 characters long ]"/>
+                        <select class="form-control operationDataKeys" id="apn-authentication-type"
+                                 data-key="apnAuthenticationType">
+                            <option value="none" selected>NONE </option>
+                            <option value="pap">PAP</option>
+                            <option value="chap">CHAP </option>
+                            <option value="pap_or_chap">PAP_OR_CHAP</option>
+                        </select>
                     </div>
+
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="apn-type">
-                            APN Type
-                            <span class="helper" title="Apn settings">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                        </label>
-                        <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Type should be 1-to-30 characters long
-                        </label>
-                        <input id="apn-type" type="text" class="form-control operationDataKeys" data-key="apnType"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
-                    </div>
+                         <label class="wr-input-label" for="apn-type">
+                             APN Type
+                             <span class="helper"
+                                   title="APN Type">
+                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                     </span>
+                         </label>
+                         <select class="form-control operationDataKeys" id="apn-type"
+                                  data-key="apnType">
+                             <option value="default" selected>DEFAULT</option>
+                             <option value="cbs">CBS</option>
+                             <option value="dun">DUN</option>
+                             <option value="ims">IMS</option>
+                             <option value="mms">MMS</option>
+                             <option value="supl">SUPL</option>
+                             <option value="ia">IA</option>
+                             <option value="hipri">HIPRI</option>
+                             <option value="fota">FOTA</option>
+                             <option value="emergency">EMERGENCY</option>
+                         </select>
+                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-protocol">
                             APN Protocol
-                            <span class="helper" title="Apn settings">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
+                            <span class="helper"
+                                  title="Sets the protocol to use to connect to this APN.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
                         </label>
-                        <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Protocol should be 1-to-30 characters long
-                        </label>
-                        <input id="apn-protocol" type="text" class="form-control operationDataKeys" data-key="apnProtocol"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
+                        <select class="form-control operationDataKeys" id="apn-protocol"
+                                 data-key="apnProtocol">
+                            <option value="ipv4v6" selected>IPV4V6</option>
+                            <option value="ip">IP</option>
+                            <option value="ipv6">IPV6</option>
+                            <option value="ppp">PPP</option>
+                        </select>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-roaming-protocol">
                             APN Roaming Protocol
-                            <span class="helper" title="Apn settings">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
+                            <span class="helper"
+                                  title="Sets the protocol to use to connect to this APN when the device is roaming.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
                         </label>
-                        <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Protocol should be 1-to-30 characters long
-                        </label>
-                        <input id="apn-roaming-protocol" type="text" class="form-control operationDataKeys" data-key="apnRoamingProtocol"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
+                        <select class="form-control operationDataKeys" id="apn-roaming-protocol"
+                                 data-key="apnRoamingProtocol">
+                            <option value="ipv4v6" selected>IPV4V6</option>
+                            <option value="ip">IP</option>
+                            <option value="ipv6">IPV6</option>
+                            <option value="ppp">PPP</option>
+                        </select>
                     </div>
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="apn-is-enable">
-                            Enable/Disable
-                            <span class="helper" title="Apn settings">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
+                        <label class="wr-input-label" for="apn-bearer">
+                            APN Bearer
+                            <span class="helper"
+                                  title="Sets Radio Technology (Network Type) info for this APN">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
                         </label>
-                        <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Is Enable
-                        </label>
-                        <input id="apn-is-enable" type="text" class="form-control operationDataKeys" data-key="apnIsEnable"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
+                         <select class="form-control operationDataKeys" id="apn-bearer"
+                                 data-key="apnBearer">
+                            <option value="unspecified" selected>UNSPECIFIED</option>
+                            <option value="cdma">CDMA</option>
+                            <option value="lte">LTE</option>
+                            <option value="hspap">HSPAP</option>
+                            <option value="hspa">HSPA</option>
+                            <option value="hsupa">HSUPA</option>
+                            <option value="hsdpa">HSDPA</option>
+                            <option value="gprs">GPRS</option>
+                            <option value="edge">EDGE</option>
+                            <option value="ehrpd">EHRPD</option>
+                            <option value="evdo_a">EVDO_A</option>
+                            <option value="evdo_b">EVDO_B</option>
+                            <option value="evdo_0">EVDO_0</option>
+                            <option value="1xrtt">1xRTT</option>
+                            <option value="iwlan">IWLAN</option>
+                        </select>
                     </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label checkbox" for="apn-is-enable">
+                            APN Enable/Disable
+                            <br>
+                            <input id="apn-is-enable" type="checkbox"
+                            class="operationDataKeys" data-key="apnIsEnable" />
+                            <span class="helper"
+                                  title="Apn enable disable settings">
+                                Enable/Disable
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-mvno-type">
                             Mobile Virtual Network Operator Type
-                            <span class="helper" title="Apn settings">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
+                            <span class="helper"
+                                  title="Mobile Virtual Network Operator Type">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
                         </label>
-                        <label id="apnValidationText" class="wr-input-label hidden">
-                            APN MVNO should be 1-to-30 characters long
-                        </label>
-                        <input id="apn-mvno-type" type="text" class="form-control operationDataKeys" data-key="apnMVNOType"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
-                    </div>
-                    <div class="wr-input-control">
-                        <label class="wr-input-label" for="apn-mvno-value">
-                            Mobile Virtual Network Operator Value
-                            <span class="helper" title="Apn settings">
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </span>
-                        </label>
-                        <label id="apnValidationText" class="wr-input-label hidden">
-                            APN Proxy Port should be 1-to-30 characters long
-                        </label>
-                        <input id="apn-mvno-value" type="text" class="form-control operationDataKeys" data-key="apnMVNOValue"
-                               maxlength="100" placeholder="[ Enter a valid Proxy port ]"/>
+                        <select class="form-control operationDataKeys" id="apn-mvno-type"
+                                 data-key="apnMVNOType">
+                            <option value="gid" selected>GID</option>
+                            <option value="spn">SPN</option>
+                            <option value="iccid">ICCID</option>
+                            <option value="imsi">IMSI</option>
+                        </select>
                     </div>
                 </div>
             </div>
