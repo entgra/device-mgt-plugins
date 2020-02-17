@@ -1628,12 +1628,15 @@
                 <div id="apn-body" class="panel-collapse panel-body collapse" role="tabpanel"
                      aria-labelledby="apn-body">
                     <hr/>
+                    Please note that * sign represents required fields of data.
+                    <br>
+                    <br>
                     <div id="apn-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-name">
-                            APN Name
+                            APN Name*
                             <span class="helper" title="Sets the name of the APN">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
@@ -1772,7 +1775,7 @@
                             MCC to set for the APN
                         </label>
                         <input id="apn-mcc" type="text" class="form-control operationDataKeys" data-key="apnMCC"
-                               maxlength="100" placeholder="[ MCC to set for the APN ]"/>
+                               maxlength="100" placeholder="[ 413 ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-mnc">
@@ -1785,7 +1788,7 @@
                             MNC to set for the APN
                         </label>
                         <input id="apn-mnc" type="text" class="form-control operationDataKeys" data-key="apnMNC"
-                               maxlength="100" placeholder="[ MCC to set for the APN ]"/>
+                               maxlength="100" placeholder="[ 02 ]"/>
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-authentication-type">
@@ -1828,7 +1831,7 @@
                      </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-protocol">
-                            APN Protocol
+                            APN Protocol*
                             <span class="helper"
                                   title="Sets the protocol to use to connect to this APN.">
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1844,7 +1847,7 @@
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-roaming-protocol">
-                            APN Roaming Protocol
+                            APN Roaming Protocol*
                             <span class="helper"
                                   title="Sets the protocol to use to connect to this APN when the device is roaming.">
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1860,7 +1863,7 @@
                     </div>
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="apn-bearer">
-                            APN Bearer
+                            APN Bearer*
                             <span class="helper"
                                   title="Sets Radio Technology (Network Type) info for this APN">
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
@@ -1890,7 +1893,7 @@
                             APN Enable/Disable
                             <br>
                             <input id="apn-is-enable" type="checkbox"
-                            class="operationDataKeys" data-key="apnIsEnable" />
+                            class="operationDataKeys" data-key="apnIsEnable" checked/>
                             <span class="helper"
                                   title="Apn enable disable settings">
                                 Enable/Disable
