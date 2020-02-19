@@ -805,39 +805,6 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
     }
 
     @POST
-    @Path("/configure-apn")
-    @Override
-    public Response configureAPN(APNBeanWrapper apnBeanWrapper) {
-        if (log.isDebugEnabled()) {
-            log.debug("Invoking 'apn' operation");
-        }
-        try {
-            AndroidService androidService = AndroidAPIUtils.getAndroidService();
-            Activity activity = androidService.configureAPN(apnBeanWrapper);
-            return Response.status(Response.Status.CREATED).entity(activity).build();
-        } catch (OperationManagementException e) {
-            String errorMessage = "Issue in retrieving operation management service instance";
-            log.error(errorMessage, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(errorMessage).build()).build();
-
-        } catch (BadRequestException e){
-            String errorMessage = "Invalid Device Identifiers found.";
-            log.error(errorMessage, e);
-            return Response.status(Response.Status.BAD_REQUEST).entity(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_BAD_REQUEST)
-                            .setMessage(errorMessage).build()).build();
-        } catch (AndroidDeviceMgtPluginException e) {
-            String errorMessage = "Error occur while executing configure APN operation";
-            log.error(errorMessage, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
-                    new ErrorResponse.ErrorResponseBuilder().setCode(HttpStatusCodes.STATUS_CODE_SERVER_ERROR)
-                            .setMessage(errorMessage).build()).build();
-        }
-    }
-
-    @POST
     @Path("/configure-wifi")
     @Override
     public Response configureWifi(WifiBeanWrapper wifiBeanWrapper) {

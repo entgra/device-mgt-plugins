@@ -235,12 +235,6 @@ import java.util.List;
                         permissions = {"/device-mgt/devices/owning-device/operations/android/wifi"}
                 ),
                 @Scope(
-                        name = "Configure APN",
-                        description = "Configure APN on Android Device",
-                        key = "perm:android:configure-apn",
-                        permissions = {"/device-mgt/devices/owning-device/operations/android/apn"}
-                ),
-                @Scope(
                         name = "Configure Global Proxy",
                         description = "Configure Global Proxy on Android Device",
                         key = "perm:android:configure-global-proxy",
@@ -1644,65 +1638,6 @@ public interface DeviceManagementAdminAPI {
                     value = "The properties required to send a notification. Provide the message you wish to send and the ID of the " +
                             "Android device. Multiple device IDs can be added by using comma separated values.",
                     required = true) NotificationBeanWrapper notificationBeanWrapper);
-
-    @POST
-    @Path("/configure-apn")
-    @ApiOperation(
-            consumes = MediaType.APPLICATION_JSON,
-            httpMethod = "POST",
-            value = "Configuring APN on Android Devices",
-            notes = "Configure APN on Android devices.",
-            response = Activity.class,
-            tags = "Android Device Management Administrative Service",
-            extensions = {
-                    @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:configure-apn")
-                    })
-            }
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    code = 201,
-                    message = "Created. \n Successfully scheduled the configure APN operation.",
-                    response = Activity.class,
-                    responseHeaders = {
-                            @ResponseHeader(
-                                    name = "Content-Location",
-                                    description = "URL of the activity instance that refers to the scheduled operation."),
-                            @ResponseHeader(
-                                    name = "Content-Type",
-                                    description = "Content type of the body"),
-                            @ResponseHeader(
-                                    name = "ETag",
-                                    description = "Entity Tag of the response resource.\n" +
-                                            "Used by caches, or in conditional requests."),
-                            @ResponseHeader(
-                                    name = "Last-Modified",
-                                    description = "Date and time the resource was last modified.\n" +
-                                            "Used by caches, or in conditional requests.")}),
-            @ApiResponse(
-                    code = 303,
-                    message = "See Other. \n The source can be retrieved from the URL specified in the location header.",
-                    responseHeaders = {
-                            @ResponseHeader(
-                                    name = "Content-Location",
-                                    description = "The Source URL of the document.")}),
-            @ApiResponse(
-                    code = 400,
-                    message = "Bad Request. \n Invalid request or validation error."),
-            @ApiResponse(
-                    code = 415,
-                    message = "Unsupported media type. \n The format of the requested entity was not supported."),
-            @ApiResponse(
-                    code = 500,
-                    message = "Internal Server Error. \n " +
-                            "Server error occurred while configuring APN.")
-    })
-    Response configureAPN(
-            @ApiParam(
-                    name = "apn",
-                    value = "The properties required to configure APN.",
-                    required = true) APNBeanWrapper apnBeanWrapper);
 
     @POST
     @Path("/configure-wifi")
