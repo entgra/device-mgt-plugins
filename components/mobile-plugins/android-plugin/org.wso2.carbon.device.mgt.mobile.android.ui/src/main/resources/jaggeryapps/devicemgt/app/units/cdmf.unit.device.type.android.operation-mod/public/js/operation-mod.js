@@ -509,7 +509,7 @@ var androidOperationModule = function () {
                         "type": operationData["apnType"],
                         "protocol": operationData["apnProtocol"],
                         "roamingProtocol": operationData["apnRoamingProtocol"],
-                        "isEnable": operationData["aapnIsEnable"],
+                        "isEnable": operationData["apnIsEnable"],
                         "bearer": operationData["apnBearer"],
                         "mVNOType": operationData["apnMVNOType"],
                         "mVNOValue": operationData["apnMVNOValue"]
