@@ -946,7 +946,7 @@ public class AndroidServiceImpl implements AndroidService {
             throw new DeviceManagementException(msg, e);
         }
         try {
-            return MobileDeviceManagementUtil.getPendingOperations(device);
+            return MobileDeviceManagementUtil.getPendingOperations(device, deviceIdentifier);
         } catch (OperationManagementException e) {
             String msg = "Issue in retrieving operation management service instance";
             log.error(msg, e);

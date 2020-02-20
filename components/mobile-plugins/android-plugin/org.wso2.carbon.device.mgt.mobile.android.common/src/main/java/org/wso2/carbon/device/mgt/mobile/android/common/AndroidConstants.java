@@ -192,6 +192,14 @@ public final class AndroidConstants {
         public static final String IS_ACTIVE = "isActive";
         public static final String FREE_SUB_METHOD = "FREE";
         public static final String PAID_SUB_METHOD = "PAID";
+        public static final String TYPE = "type";
+        public static final String ENTERPRISE = "ENTERPRISE";
+        public static final String WEB_CLIP = "WEB_CLIP";
+        public static final String WEBAPP = "WEBAPP";
+        public static final String PACKAGE_NAME = "packageName";
+        public static final String APP_IDENTIFIER = "appIdentifier";
+        public static final String AGENT_VERSION = "AGENT_VERSION";
+
     }
 
     public final class ApplicationInstall {
@@ -220,6 +228,9 @@ public final class AndroidConstants {
         public static final String BEHAVIOUR_WHITELISTED_APPS_ONLY = "whitelist";
         public static final String INSTALL = "INSTALL";
         public static final String UNINSTALL = "UNINSTALL";
+        public static final String INSTALL_APPLICATION = "INSTALL_APPLICATION";
+        public static final String UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
+
     }
 
     public final class ErrorMessages {
