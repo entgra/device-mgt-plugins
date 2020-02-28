@@ -61,9 +61,9 @@ import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceM
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.EnterpriseServiceException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.NotFoundException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.UnexpectedServerErrorException;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidAPIUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidDeviceUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidEnterpriseUtils;
 import org.wso2.carbon.device.mgt.mobile.android.api.invoker.GoogleAPIInvoker;
 import org.wso2.carbon.policy.mgt.common.FeatureManagementException;
 
@@ -737,7 +737,7 @@ public class AndroidEnterpriseAPIImpl implements AndroidEnterpriseAPI {
                     String trimmedPackage = productId.replaceFirst("app:", "");
                     productIds.add(trimmedPackage);
                 }
-                ApplicationManager appManager = AndroidEnterpriseUtils.getAppManagerServer();
+                ApplicationManager appManager = AndroidAPIUtils.getAppManagerService();
                 List<ApplicationReleaseDTO> packageDetails = appManager.getReleaseByPackageNames(productIds);
 
 

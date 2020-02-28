@@ -59,7 +59,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.VpnBeanWrap
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WebClipBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WifiBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WipeDataBeanWrapper;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
+import org.wso2.carbon.device.mgt.mobile.android.core.util.MobileDeviceManagementUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -381,7 +381,7 @@ public class TestUtils {
         location.setCountry("Sri Lanka");
         location.setLatitude(6.9);
         location.setLongitude(79.5);
-        location.setDeviceIdentifier(AndroidDeviceUtils.convertToDeviceIdentifierObject(getDeviceId()));
+        location.setDeviceIdentifier(MobileDeviceManagementUtil.convertToDeviceIdentifierObject(getDeviceId()));
         return location;
     }
 

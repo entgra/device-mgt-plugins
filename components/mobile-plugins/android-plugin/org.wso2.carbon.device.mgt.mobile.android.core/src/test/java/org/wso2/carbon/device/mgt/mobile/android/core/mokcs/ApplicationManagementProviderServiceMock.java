@@ -35,6 +35,11 @@ public class ApplicationManagementProviderServiceMock implements ApplicationMana
     }
 
     @Override
+    public void updateApplicationListInstalledInDevice(Device device, List<Application> list) throws ApplicationManagementException {
+
+    }
+
+    @Override
     public List<Application> getApplicationListForDevice(DeviceIdentifier deviceIdentifier)
             throws ApplicationManagementException {
         return null;

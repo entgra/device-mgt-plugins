@@ -27,7 +27,7 @@ public class AndroidDataSourceConfigurations {
 
     private MobileDataSourceConfig iosDataSourceConfiguration;
     @XmlElement(name = "DataSourceConfiguration")
-    public MobileDataSourceConfig getIosDataSourceConfiguration() {
+    public MobileDataSourceConfig getMobileDataSourceConfiguration() {
         return iosDataSourceConfiguration;
     }
 

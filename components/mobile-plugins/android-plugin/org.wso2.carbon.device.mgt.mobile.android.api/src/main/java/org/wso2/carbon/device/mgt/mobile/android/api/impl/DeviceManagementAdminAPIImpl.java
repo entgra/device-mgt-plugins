@@ -38,11 +38,14 @@ package org.wso2.carbon.device.mgt.mobile.android.api.impl;
 import com.google.api.client.http.HttpStatusCodes;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ProfileOperation;
 import org.wso2.carbon.device.mgt.mobile.android.api.DeviceManagementAdminAPI;
+import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.ApplicationInstallationBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.ApplicationRestrictionBeanWrapper;
@@ -66,7 +69,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.WipeDataBea
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidAPIUtils;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -75,6 +78,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/admin/devices")
@@ -1003,6 +1007,7 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
                             .setMessage(errorMessage).build()).build();
         }
     }
+
     @POST
     @Path("/send-app-conf")
     @Override
@@ -1015,9 +1020,17 @@ public class DeviceManagementAdminAPIImpl implements DeviceManagementAdminAPI {
         try{
             AndroidService androidService = AndroidAPIUtils.getAndroidService();
             ProfileOperation operation = androidService.sendApplicationConfiguration(applicationRestrictionBeanWrapper);
-            Response response = AndroidAPIUtils.getOperationResponse(applicationRestrictionBeanWrapper.getDeviceIDs(),
-                    operation);
-            return Response.status(Response.Status.CREATED).entity(response).build();
+            DeviceIdentifier deviceIdentifier;
+            List<DeviceIdentifier> deviceIdentifiers = new ArrayList<>();
+            for (String deviceId : applicationRestrictionBeanWrapper.getDeviceIDs()) {
+                deviceIdentifier = new DeviceIdentifier();
+                deviceIdentifier.setId(deviceId);
+                deviceIdentifier.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
+                deviceIdentifiers.add(deviceIdentifier);
+            }
+            Activity activity = AndroidAPIUtils.getDeviceManagementService().addOperation(
+                    DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, operation, deviceIdentifiers);
+            return Response.status(Response.Status.CREATED).entity(activity).build();
         } catch (InvalidDeviceException e) {
             String errorMessage = "Invalid Device Identifiers found.";
             log.error(errorMessage, e);

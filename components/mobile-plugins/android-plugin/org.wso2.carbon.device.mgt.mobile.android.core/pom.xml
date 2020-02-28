@@ -92,7 +92,7 @@
                             org.wso2.carbon.device.mgt.analytics.data.publisher.*
                         </Import-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.mobile.android.core.internal,
+                            !org.wso2.carbon.device.mgt.mobile.android.core.internal.*,
                             org.wso2.carbon.device.mgt.mobile.android.core.*
                         </Export-Package>
                     </instructions>

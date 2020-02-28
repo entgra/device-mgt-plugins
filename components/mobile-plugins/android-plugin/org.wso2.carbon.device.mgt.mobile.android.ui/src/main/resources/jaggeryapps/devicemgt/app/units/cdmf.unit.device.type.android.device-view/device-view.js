@@ -160,7 +160,7 @@ function onRequest(context) {
                         viewModel["osBuildDate"] = new Date(filteredDeviceData["latestDeviceInfo"]["osBuildDate"] * 1000);
                     }
                 }
-                if (filteredDeviceData["latestDeviceInfo"]["location"]["latitude"] &&
+                if (filteredDeviceData["latestDeviceInfo"]["location"] && filteredDeviceData["latestDeviceInfo"]["location"]["latitude"] &&
                     filteredDeviceData["latestDeviceInfo"]["location"]["longitude"]) {
                     viewModel["location"] = {};
                     viewModel["location"]["latitude"] = filteredDeviceData["latestDeviceInfo"]["location"]["latitude"];
