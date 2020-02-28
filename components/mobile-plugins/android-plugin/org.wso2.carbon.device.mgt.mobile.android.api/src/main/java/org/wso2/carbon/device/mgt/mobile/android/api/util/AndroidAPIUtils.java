@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.android.core.util;
+package org.wso2.carbon.device.mgt.mobile.android.api.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -102,13 +102,15 @@ public class AndroidAPIUtils {
     }
 
     public static DeviceManagementProviderService getDeviceManagementService() {
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        DeviceManagementProviderService deviceManagementProviderService =
-                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
         if (deviceManagementProviderService == null) {
-            String msg = "Device Management service has not initialized.";
-            log.error(msg);
-            throw new IllegalStateException(msg);
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                String msg = "Device Management service has not initialized.";
+                log.error(msg);
+                throw new IllegalStateException(msg);
+            }
         }
         return deviceManagementProviderService;
     }
@@ -127,26 +129,15 @@ public class AndroidAPIUtils {
         return deviceTypeCommonService;
     }
 
-    public static DeviceInformationManager getDeviceInformationManagerService() {
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        DeviceInformationManager informationManager =
-                (DeviceInformationManager) ctx.getOSGiService(DeviceInformationManager.class, null);
-        if (informationManager == null) {
-            String msg = "Information Manager service not initialized.";
-            log.error(msg);
-            throw new IllegalStateException(msg);
-        }
-        return informationManager;
-    }
-
     public static PolicyManagerService getPolicyManagerService() {
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
-                PolicyManagerService.class, null);
         if (policyManagerService == null) {
-            String msg = "Policy Manager service has not initialized";
-            log.error(msg);
-            throw new IllegalStateException(msg);
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            policyManagerService = (PolicyManagerService) ctx.getOSGiService(PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                String msg = "Policy Manager service has not initialized";
+                log.error(msg);
+                throw new IllegalStateException(msg);
+            }
         }
         return policyManagerService;
     }
