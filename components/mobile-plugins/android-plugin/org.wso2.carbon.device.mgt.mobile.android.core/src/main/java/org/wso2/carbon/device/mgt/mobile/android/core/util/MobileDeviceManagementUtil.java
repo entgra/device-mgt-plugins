@@ -84,7 +84,7 @@ import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManag
 import org.wso2.carbon.device.mgt.core.search.mgt.impl.Utils;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceState;
-import org.wso2.carbon.device.mgt.mobile.android.common.config.datasource.AndroidDataSourceConfigurations;
+import org.wso2.carbon.device.mgt.mobile.android.common.config.datasource.AndroidDBConfigurations;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.core.internal.AndroidDeviceManagementDataHolder;
@@ -111,22 +111,22 @@ public class MobileDeviceManagementUtil {
 
     private static final Log log = LogFactory.getLog(MobileDeviceManagementUtil.class);
 
-    public static final String IOS_DB_CONFIG_PATH = CarbonUtils.getCarbonConfigDirPath() + File.separator +
+    public static final String ANDROID_DB_CONFIG_PATH = CarbonUtils.getCarbonConfigDirPath() + File.separator +
             "/android-dbconfig.xml";
 
-    public static AndroidDataSourceConfigurations iosDataSourceConfigurations;
+    public static AndroidDBConfigurations androidDBConfigurations;
 
-    public static AndroidDataSourceConfigurations getDataSourceConfigurations() {
-        return iosDataSourceConfigurations;
+    public static AndroidDBConfigurations getDataSourceConfigurations() {
+        return androidDBConfigurations;
     }
 
     public static synchronized void initConfig() throws DeviceManagementException {
         try {
-            File mobileDeviceMgtConfig = new File(IOS_DB_CONFIG_PATH);
+            File mobileDeviceMgtConfig = new File(ANDROID_DB_CONFIG_PATH);
             Document doc = convertToDocuments(mobileDeviceMgtConfig);
-            JAXBContext iosDeviceMgtContext = JAXBContext.newInstance(AndroidDataSourceConfigurations.class);
-            Unmarshaller unmarshaller = iosDeviceMgtContext.createUnmarshaller();
-            iosDataSourceConfigurations = (AndroidDataSourceConfigurations) unmarshaller.unmarshal(doc);
+            JAXBContext androidDeviceMgtContext = JAXBContext.newInstance(AndroidDBConfigurations.class);
+            Unmarshaller unmarshaller = androidDeviceMgtContext.createUnmarshaller();
+            androidDBConfigurations = (AndroidDBConfigurations) unmarshaller.unmarshal(doc);
         } catch (Exception e) {
             throw new DeviceManagementException(
                     "Error occurred while initializing Mobile Device Management config", e);

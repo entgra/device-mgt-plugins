@@ -95,7 +95,7 @@ public class AndroidPluginServiceComponent {
 
             MobileDeviceManagementUtil.initConfig();
             AbstractMobileDeviceManagementDAOFactory.init("android", MobileDeviceManagementUtil
-                    .getDataSourceConfigurations().getMobileDataSourceConfiguration());
+                    .getDataSourceConfigurations().getDataSourceConfiguration());
 
             AndroidService androidService = new AndroidServiceImpl();
             AndroidDeviceManagementDataHolder.getInstance().setAndroidService(androidService);

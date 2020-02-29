@@ -72,7 +72,7 @@
                             org.wso2.carbon.device.mgt.core.*,
                             org.wso2.carbon.ndatasource.core,
                             org.wso2.carbon.policy.mgt.common.*,
-                            org.wso2.carbon.policy.mgt.core.*,
+                            org.wso2.carbon.policy.mgt.core,
                             org.wso2.carbon.registry.core,
                             org.wso2.carbon.registry.core.session,
                             org.wso2.carbon.registry.core.service,
@@ -81,6 +81,8 @@
                             org.wso2.carbon.apimgt.application.extension.*,
                             org.wso2.carbon.analytics.datasource.commons.*,
                             org.wso2.carbon.base,
+                            org.wso2.carbon.analytics.api,
+                            org.wso2.carbon.device.mgt.analytics.data.publisher.service,
                             com.google.gson.*,
                             org.wso2.carbon.device.application.mgt.common.*,
                             org.wso2.carbon.user.core.*,
@@ -92,7 +94,7 @@
                             org.wso2.carbon.device.mgt.analytics.data.publisher.*
                         </Import-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.mobile.android.core.internal.*,
+                            !org.wso2.carbon.device.mgt.mobile.android.core.internal,
                             org.wso2.carbon.device.mgt.mobile.android.core.*
                         </Export-Package>
                     </instructions>

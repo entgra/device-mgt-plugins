@@ -22,16 +22,16 @@ package org.wso2.carbon.device.mgt.mobile.android.common.config.datasource;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "iosDBConfigurations")
-public class AndroidDataSourceConfigurations {
+@XmlRootElement(name = "AndroidDBConfigurations")
+public class AndroidDBConfigurations {
 
-    private MobileDataSourceConfig iosDataSourceConfiguration;
+    private MobileDataSourceConfig DataSourceConfiguration;
     @XmlElement(name = "DataSourceConfiguration")
-    public MobileDataSourceConfig getMobileDataSourceConfiguration() {
-        return iosDataSourceConfiguration;
+    public MobileDataSourceConfig getDataSourceConfiguration() {
+        return DataSourceConfiguration;
     }
 
-    public void setIosDataSourceConfiguration(MobileDataSourceConfig iosDataSourceConfiguration) {
-        this.iosDataSourceConfiguration = iosDataSourceConfiguration;
+    public void setDataSourceConfiguration(MobileDataSourceConfig DataSourceConfiguration) {
+        this.DataSourceConfiguration = DataSourceConfiguration;
     }
 }
