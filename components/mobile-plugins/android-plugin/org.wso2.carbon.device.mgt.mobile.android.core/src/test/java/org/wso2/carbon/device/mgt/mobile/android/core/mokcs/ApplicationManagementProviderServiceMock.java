@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.core.mokcs;
 
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
@@ -35,8 +36,18 @@ public class ApplicationManagementProviderServiceMock implements ApplicationMana
     }
 
     @Override
+    public void updateApplicationListInstalledInDevice(Device device, List<Application> list) throws ApplicationManagementException {
+
+    }
+
+    @Override
     public List<Application> getApplicationListForDevice(DeviceIdentifier deviceIdentifier)
             throws ApplicationManagementException {
+        return null;
+    }
+
+    @Override
+    public List<Application> getApplicationListForDevice(Device device) throws ApplicationManagementException {
         return null;
     }
 

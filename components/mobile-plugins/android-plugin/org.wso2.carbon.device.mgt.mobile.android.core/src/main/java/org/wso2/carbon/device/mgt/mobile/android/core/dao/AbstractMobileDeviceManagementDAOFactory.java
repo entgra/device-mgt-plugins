@@ -80,12 +80,11 @@ public abstract class AbstractMobileDeviceManagementDAOFactory {
             List<JNDILookupDefinition.JNDIProperty> jndiPropertyList =
                     jndiConfig.getJndiProperties();
             if (jndiPropertyList != null) {
-                Hashtable<Object, Object> jndiProperties = new Hashtable<Object, Object>();
+                Hashtable<Object, Object> jndiProperties = new Hashtable<>();
                 for (JNDILookupDefinition.JNDIProperty prop : jndiPropertyList) {
                     jndiProperties.put(prop.getName(), prop.getValue());
                 }
-                dataSource =
-                        MobileDeviceManagementDAOUtil
+                dataSource = MobileDeviceManagementDAOUtil
                                 .lookupDataSource(jndiConfig.getJndiName(), jndiProperties);
             } else {
                 dataSource = MobileDeviceManagementDAOUtil

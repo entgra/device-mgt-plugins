@@ -18,9 +18,16 @@
 
 package org.wso2.carbon.device.mgt.mobile.android.core.internal;
 
+import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
+import org.wso2.carbon.device.mgt.analytics.data.publisher.service.EventsPublisherService;
+import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.spi.DeviceTypeCommonService;
+import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
+import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidGoogleEnterpriseService;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
+import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
 /**
@@ -30,6 +37,13 @@ public class AndroidDeviceManagementDataHolder {
 
 	private RegistryService registryService;
     private AndroidGoogleEnterpriseService androidDeviceManagementService;
+    private DeviceManagementProviderService deviceManagementProviderService;
+    private ApplicationManagementProviderService applicationManagementProviderService;
+    private NotificationManagementService notificationManagementService;
+    private DeviceInformationManager deviceInformationManager;
+    private PolicyManagerService policyManagerService;
+    private AnalyticsDataAPI analyticsDataAPI;
+    private EventsPublisherService eventsPublisherService;
     private AndroidService androidService;
 
 	private DeviceTypeCommonService deviceTypeCommonService;
@@ -74,5 +88,61 @@ public class AndroidDeviceManagementDataHolder {
 
 	public void setDeviceTypeCommonService(DeviceTypeCommonService deviceTypeCommonService) {
 		this.deviceTypeCommonService = deviceTypeCommonService;
+	}
+
+	public DeviceManagementProviderService getDeviceManagementProviderService() {
+		return deviceManagementProviderService;
+	}
+
+	public void setDeviceManagementProviderService(DeviceManagementProviderService deviceManagementProviderService) {
+		this.deviceManagementProviderService = deviceManagementProviderService;
+	}
+
+	public ApplicationManagementProviderService getApplicationManagementProviderService() {
+		return applicationManagementProviderService;
+	}
+
+	public void setApplicationManagementProviderService(ApplicationManagementProviderService applicationManagementProviderService) {
+		this.applicationManagementProviderService = applicationManagementProviderService;
+	}
+
+	public NotificationManagementService getNotificationManagementService() {
+		return notificationManagementService;
+	}
+
+	public void setNotificationManagementService(NotificationManagementService notificationManagementService) {
+		this.notificationManagementService = notificationManagementService;
+	}
+
+	public DeviceInformationManager getDeviceInformationManager() {
+		return deviceInformationManager;
+	}
+
+	public void setDeviceInformationManager(DeviceInformationManager deviceInformationManager) {
+		this.deviceInformationManager = deviceInformationManager;
+	}
+
+	public PolicyManagerService getPolicyManagerService() {
+		return policyManagerService;
+	}
+
+	public void setPolicyManagerService(PolicyManagerService policyManagerService) {
+		this.policyManagerService = policyManagerService;
+	}
+
+	public AnalyticsDataAPI getAnalyticsDataAPI() {
+		return analyticsDataAPI;
+	}
+
+	public void setAnalyticsDataAPI(AnalyticsDataAPI analyticsDataAPI) {
+		this.analyticsDataAPI = analyticsDataAPI;
+	}
+
+	public EventsPublisherService getEventsPublisherService() {
+		return eventsPublisherService;
+	}
+
+	public void setEventsPublisherService(EventsPublisherService eventsPublisherService) {
+		this.eventsPublisherService = eventsPublisherService;
 	}
 }

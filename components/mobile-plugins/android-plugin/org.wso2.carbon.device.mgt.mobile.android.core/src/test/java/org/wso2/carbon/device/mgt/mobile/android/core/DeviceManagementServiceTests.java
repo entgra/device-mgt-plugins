@@ -36,23 +36,22 @@ import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.mobile.android.common.Message;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.AndroidDevice;
-import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.core.impl.AndroidServiceImpl;
+import org.wso2.carbon.device.mgt.mobile.android.core.internal.AndroidDeviceManagementDataHolder;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.ApplicationManagementProviderServiceMock;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.DeviceInformationManagerServiceMock;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.DeviceManagementProviderServiceMock;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.NotificationManagementServiceMock;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.PolicyManagerServiceMock;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.utils.TestUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
+import org.wso2.carbon.device.mgt.mobile.android.core.util.MobileDeviceManagementUtil;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
 @PowerMockIgnore({"javax.ws.rs.*", "org.apache.log4j.*"})
-@PrepareForTest(AndroidAPIUtils.class)
+@PrepareForTest({AndroidDeviceManagementDataHolder.class, MobileDeviceManagementUtil.class})
 public class DeviceManagementServiceTests {
 
     private AndroidServiceImpl androidService;
@@ -69,32 +68,32 @@ public class DeviceManagementServiceTests {
     }
 
     private void mockDeviceManagementService() {
-        PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getDeviceManagementService"))
+        PowerMockito.stub(PowerMockito.method(AndroidDeviceManagementDataHolder.class, "getDeviceManagementProviderService"))
                 .toReturn(new DeviceManagementProviderServiceMock());
     }
 
     private void mockApplicationManagerService() {
-        PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getApplicationManagerService"))
+        PowerMockito.stub(PowerMockito.method(AndroidDeviceManagementDataHolder.class, "getApplicationManagementProviderService"))
                 .toReturn(new ApplicationManagementProviderServiceMock());
     }
 
     private void mockPolicyManagerService() {
-        PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getPolicyManagerService"))
+        PowerMockito.stub(PowerMockito.method(AndroidDeviceManagementDataHolder.class, "getPolicyManagerService"))
                 .toReturn(new PolicyManagerServiceMock());
     }
 
     private void mockDeviceInformationManagerService() {
-        PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getDeviceInformationManagerService"))
+        PowerMockito.stub(PowerMockito.method(AndroidDeviceManagementDataHolder.class, "getDeviceInformationManager"))
                 .toReturn(new DeviceInformationManagerServiceMock());
     }
 
     private void mockNotificationManagementService() {
-        PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getNotificationManagementService"))
+        PowerMockito.stub(PowerMockito.method(AndroidDeviceManagementDataHolder.class, "getNotificationManagementService"))
                 .toReturn(new NotificationManagementServiceMock());
     }
 
     private void mockUser() {
-        PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getAuthenticatedUser"))
+        PowerMockito.stub(PowerMockito.method(MobileDeviceManagementUtil.class, "getAuthenticatedUser"))
                 .toReturn("admin");
     }
 
@@ -110,25 +109,25 @@ public class DeviceManagementServiceTests {
 
     @Test (expectedExceptions = {InvalidDeviceException.class})
     public void testGetPendingOperationsForNullDevice()
-            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, InvalidDeviceException {
         List<? extends Operation> resultOperations = new ArrayList<>();
         androidService.getPendingOperations(null, resultOperations);
     }
 
     @Test (expectedExceptions = {InvalidDeviceException.class})
     public void testGetPendingOperationsForInvalidDevice()
-            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         List<? extends Operation> resultOperations = new ArrayList<>();
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject("1234");
+        DeviceIdentifier deviceIdentifier = MobileDeviceManagementUtil.convertToDeviceIdentifierObject("1234");
         androidService.getPendingOperations(deviceIdentifier, resultOperations);
     }
 
     @Test
     public void testGetPendingOperationsNullResponse()
-            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, InvalidDeviceException {
         mockDeviceManagementService();
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
+        DeviceIdentifier deviceIdentifier = MobileDeviceManagementUtil.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
         List<? extends Operation> pendingOperations = androidService
                 .getPendingOperations(deviceIdentifier, null);
         Assert.assertNotNull(pendingOperations);
@@ -137,10 +136,10 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithMonitorResponse()
-            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         mockPolicyManagerService();
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
+        DeviceIdentifier deviceIdentifier = MobileDeviceManagementUtil.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
         List<? extends Operation> pendingOperations = androidService
                 .getPendingOperations(deviceIdentifier, TestUtils.getSuccessMonitorOperationResponse());
         Assert.assertNotNull(pendingOperations);
@@ -149,10 +148,10 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithApplicationResponse()
-            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         mockApplicationManagerService();
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
+        DeviceIdentifier deviceIdentifier = MobileDeviceManagementUtil.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
         List<? extends Operation> pendingOperations = androidService
                 .getPendingOperations(deviceIdentifier, TestUtils.getSuccessApplicationOperationResponse());
         Assert.assertNotNull(pendingOperations);
@@ -161,10 +160,10 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithDeviceInfoResponse()
-            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         mockDeviceInformationManagerService();
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
+        DeviceIdentifier deviceIdentifier = MobileDeviceManagementUtil.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
         List<? extends Operation> pendingOperations = androidService
                 .getPendingOperations(deviceIdentifier, TestUtils.getSuccessInfoOperationResponse());
         Assert.assertNotNull(pendingOperations);
@@ -173,9 +172,9 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithInProgressResponse()
-            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, InvalidDeviceException {
         mockDeviceManagementService();
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
+        DeviceIdentifier deviceIdentifier = MobileDeviceManagementUtil.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
         List<? extends Operation> pendingOperations = androidService
                 .getPendingOperations(deviceIdentifier, TestUtils.getInProgressOperationResponse());
         Assert.assertNotNull(pendingOperations);
@@ -184,10 +183,10 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testGetPendingOperationsWithErrorResponse()
-            throws DeviceManagementException, InvalidDeviceException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException, InvalidDeviceException {
         mockDeviceManagementService();
         mockNotificationManagementService();
-        DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
+        DeviceIdentifier deviceIdentifier = MobileDeviceManagementUtil.convertToDeviceIdentifierObject(TestUtils.getDeviceId());
         List<? extends Operation> pendingOperations = androidService
                 .getPendingOperations(deviceIdentifier, TestUtils.getErrorOperationResponse());
         Assert.assertNotNull(pendingOperations);
@@ -196,7 +195,7 @@ public class DeviceManagementServiceTests {
 
     @Test
     public void testEnrollDeviceWithoutLocationSuccess()
-            throws DeviceManagementException, AndroidDeviceMgtPluginException {
+            throws DeviceManagementException {
         mockDeviceManagementService();
         mockPolicyManagerService();
         mockUser();
@@ -206,8 +205,7 @@ public class DeviceManagementServiceTests {
     }
 
     @Test
-    public void testEnrollDeviceWithLocationSuccess()
-            throws DeviceManagementException, AndroidDeviceMgtPluginException {
+    public void testEnrollDeviceWithLocationSuccess() throws DeviceManagementException {
         mockDeviceManagementService();
         mockDeviceInformationManagerService();
         mockPolicyManagerService();
@@ -247,8 +245,7 @@ public class DeviceManagementServiceTests {
     }
 
     @Test
-    public void testEnrollDeviceUnSuccess()
-            throws DeviceManagementException, AndroidDeviceMgtPluginException {
+    public void testEnrollDeviceUnSuccess() throws DeviceManagementException {
         mockDeviceManagementService();
         mockUser();
         AndroidDevice androidDevice = TestUtils.getBasicAndroidDevice();
@@ -259,8 +256,7 @@ public class DeviceManagementServiceTests {
     }
 
     @Test
-    public void testIsEnrolledExists()
-            throws DeviceManagementException {
+    public void testIsEnrolledExists() throws DeviceManagementException {
         mockDeviceManagementService();
         Message message = androidService.isEnrolled(TestUtils.getDeviceId(), null);
         Assert.assertNotNull(message);
@@ -268,8 +264,7 @@ public class DeviceManagementServiceTests {
     }
 
     @Test
-    public void testIsEnrolledNonExist()
-            throws DeviceManagementException {
+    public void testIsEnrolledNonExist() throws DeviceManagementException {
         mockDeviceManagementService();
         Message message = androidService.isEnrolled("1234", null);
         Assert.assertNotNull(message);
@@ -277,8 +272,7 @@ public class DeviceManagementServiceTests {
     }
 
     @Test
-    public void testIsEnrolledNull()
-            throws DeviceManagementException {
+    public void testIsEnrolledNull() throws DeviceManagementException {
         mockDeviceManagementService();
         Message response = androidService.isEnrolled(null, null);
         Assert.assertNotNull(response);
@@ -286,8 +280,7 @@ public class DeviceManagementServiceTests {
     }
 
     @Test
-    public void testModifyEnrollmentSuccess()
-            throws DeviceManagementException, AndroidDeviceMgtPluginException {
+    public void testModifyEnrollmentSuccess() throws DeviceManagementException {
         mockDeviceManagementService();
         mockUser();
         boolean status = androidService.modifyEnrollment(TestUtils.getDeviceId(), TestUtils.getBasicAndroidDevice());
@@ -295,28 +288,24 @@ public class DeviceManagementServiceTests {
     }
 
     @Test
-    public void testModifyEnrollmentUnSuccess()
-            throws DeviceManagementException, AndroidDeviceMgtPluginException {
+    public void testModifyEnrollmentUnSuccess() throws DeviceManagementException {
         mockDeviceManagementService();
         mockUser();
         AndroidDevice androidDevice = TestUtils.getBasicAndroidDevice();
         androidDevice.setDeviceIdentifier("1234");
-        boolean status = androidService
-                .modifyEnrollment(TestUtils.getDeviceId(), androidDevice);
+        boolean status = androidService.modifyEnrollment(TestUtils.getDeviceId(), androidDevice);
         Assert.assertFalse(status);
     }
 
     @Test
-    public void testDisEnrollDeviceSuccess()
-            throws DeviceManagementException {
+    public void testDisEnrollDeviceSuccess() throws DeviceManagementException {
         mockDeviceManagementService();
         boolean status = androidService.disEnrollDevice(TestUtils.getDeviceId());
         Assert.assertTrue(status);
     }
 
     @Test
-    public void testDisEnrollUnSuccess()
-            throws DeviceManagementException {
+    public void testDisEnrollUnSuccess() throws DeviceManagementException {
         mockDeviceManagementService();
         boolean status = androidService.disEnrollDevice("1234");
         Assert.assertFalse(status);
