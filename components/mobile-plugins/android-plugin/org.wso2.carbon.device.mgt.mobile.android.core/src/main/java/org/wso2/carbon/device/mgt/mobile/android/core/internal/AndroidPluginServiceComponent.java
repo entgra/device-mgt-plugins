@@ -32,11 +32,11 @@ import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManag
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidGoogleEnterpriseService;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
+import org.wso2.carbon.device.mgt.mobile.android.core.MobileDeviceConfigFactory;
 import org.wso2.carbon.device.mgt.mobile.android.core.dao.AbstractMobileDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.android.core.impl.AndroidGoogleEnterpriseServiceImpl;
 import org.wso2.carbon.device.mgt.mobile.android.core.impl.AndroidServiceImpl;
 import org.wso2.carbon.device.mgt.mobile.android.core.impl.DeviceTypeCommonServiceImpl;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.MobileDeviceManagementUtil;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.registry.core.service.RegistryService;
@@ -81,6 +81,7 @@ import org.wso2.carbon.registry.core.service.RegistryService;
  * unbind="unsetRegistryService"
  */
 
+@SuppressWarnings("unused")
 public class AndroidPluginServiceComponent {
 
     private static final Log log = LogFactory.getLog(AndroidPluginServiceComponent.class);
@@ -93,8 +94,8 @@ public class AndroidPluginServiceComponent {
         try {
             BundleContext bundleContext = componentContext.getBundleContext();
 
-            MobileDeviceManagementUtil.initConfig();
-            AbstractMobileDeviceManagementDAOFactory.init("android", MobileDeviceManagementUtil
+            MobileDeviceConfigFactory.init();
+            AbstractMobileDeviceManagementDAOFactory.init("android", MobileDeviceConfigFactory
                     .getDataSourceConfigurations().getDataSourceConfiguration());
 
             AndroidService androidService = new AndroidServiceImpl();

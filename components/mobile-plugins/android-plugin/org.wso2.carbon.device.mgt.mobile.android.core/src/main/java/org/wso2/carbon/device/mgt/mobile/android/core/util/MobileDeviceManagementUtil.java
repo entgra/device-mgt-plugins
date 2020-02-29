@@ -111,40 +111,6 @@ public class MobileDeviceManagementUtil {
 
     private static final Log log = LogFactory.getLog(MobileDeviceManagementUtil.class);
 
-    public static final String ANDROID_DB_CONFIG_PATH = CarbonUtils.getCarbonConfigDirPath() + File.separator +
-            "/android-dbconfig.xml";
-
-    public static AndroidDBConfigurations androidDBConfigurations;
-
-    public static AndroidDBConfigurations getDataSourceConfigurations() {
-        return androidDBConfigurations;
-    }
-
-    public static synchronized void initConfig() throws DeviceManagementException {
-        try {
-            File mobileDeviceMgtConfig = new File(ANDROID_DB_CONFIG_PATH);
-            Document doc = convertToDocuments(mobileDeviceMgtConfig);
-            JAXBContext androidDeviceMgtContext = JAXBContext.newInstance(AndroidDBConfigurations.class);
-            Unmarshaller unmarshaller = androidDeviceMgtContext.createUnmarshaller();
-            androidDBConfigurations = (AndroidDBConfigurations) unmarshaller.unmarshal(doc);
-        } catch (Exception e) {
-            throw new DeviceManagementException(
-                    "Error occurred while initializing Mobile Device Management config", e);
-        }
-    }
-
-    public static Document convertToDocuments(File file) throws DeviceManagementException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        try {
-            DocumentBuilder docBuilder = factory.newDocumentBuilder();
-            return docBuilder.parse(file);
-        } catch (Exception e) {
-            throw new DeviceManagementException("Error occurred while parsing file, while converting " +
-                    "to a org.w3c.dom.Document : " + e.getMessage(), e);
-        }
-    }
-
     public static Activity getOperationResponse(List<String> deviceIDs, Operation operation)
             throws AndroidDeviceMgtPluginException, OperationManagementException, InvalidDeviceException {
         if (deviceIDs == null || deviceIDs.isEmpty()) {
