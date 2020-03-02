@@ -28,18 +28,16 @@ import org.powermock.modules.testng.PowerMockObjectFactory;
 import org.testng.IObjectFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.ObjectFactory;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.core.impl.AndroidServiceImpl;
+import org.wso2.carbon.device.mgt.mobile.android.core.internal.AndroidDeviceManagementDataHolder;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.DeviceManagementProviderServiceMock;
 import org.wso2.carbon.device.mgt.mobile.android.core.mokcs.utils.TestUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
 
 @PowerMockIgnore({"javax.ws.rs.*", "org.apache.log4j.*"})
-@PrepareForTest(AndroidAPIUtils.class)
+@PrepareForTest(AndroidDeviceManagementDataHolder.class)
 public class DeviceManagementAdminServiceTests {
 
     private AndroidServiceImpl androidService;
@@ -56,7 +54,7 @@ public class DeviceManagementAdminServiceTests {
     }
 
     private void mockDeviceManagementService() {
-        PowerMockito.stub(PowerMockito.method(AndroidAPIUtils.class, "getDeviceManagementService"))
+        PowerMockito.stub(PowerMockito.method(AndroidDeviceManagementDataHolder.class, "getDeviceManagementProviderService"))
                 .toReturn(new DeviceManagementProviderServiceMock());
     }
 

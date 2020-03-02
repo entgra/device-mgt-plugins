@@ -36,7 +36,7 @@ import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
+import org.wso2.carbon.device.mgt.mobile.android.core.internal.AndroidDeviceManagementDataHolder;
 import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
 import org.wso2.carbon.identity.jwt.client.extension.exception.JWTClientException;
 
@@ -50,7 +50,7 @@ public class DeviceTypeCommonServiceImpl implements DeviceTypeCommonService {
 
     @Override
     public Map<String, Object> getEnrollmentQRCode(String ownershipType) throws DeviceManagementException {
-        AndroidService androidService = AndroidAPIUtils.getAndroidService();
+        AndroidService androidService = AndroidDeviceManagementDataHolder.getInstance().getAndroidService();
         PlatformConfiguration platformConfiguration = androidService.getPlatformConfig();
 
         Map<String, Object> qrEnrollmentPayload = new HashMap<>();

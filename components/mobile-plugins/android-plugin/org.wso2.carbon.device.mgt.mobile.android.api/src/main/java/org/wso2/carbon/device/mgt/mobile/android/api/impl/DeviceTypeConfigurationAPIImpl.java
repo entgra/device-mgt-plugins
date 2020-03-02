@@ -48,7 +48,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.AndroidDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.BadRequestException;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidAPIUtils;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
