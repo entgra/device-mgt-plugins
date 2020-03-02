@@ -65,9 +65,9 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EnterpriseU
 import org.wso2.carbon.device.mgt.mobile.android.common.dto.AndroidEnterpriseUser;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.*;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidDeviceUtils;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidEnterpriseUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidAPIUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidDeviceUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidEnterpriseUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -389,7 +389,7 @@ public class DeviceManagementAPIImpl implements DeviceManagementAPI {
                         googleAPIInvoker.updateAppsForUser(enterpriseConfigs.getEnterpriseId(), userDetail.getGoogleUserId(),
                                 AndroidEnterpriseUtils.convertToDeviceInstance(enterpriseInstallPolicy));
                     }
-                    AndroidEnterpriseUtils.getAppSubscriptionService().performEntAppSubscription(uuid,
+                    AndroidAPIUtils.getAppSubscriptionService().performEntAppSubscription(uuid,
                             Arrays.asList(CarbonContext.getThreadLocalCarbonContext().getUsername()),
                             SubscriptionType.USER.toString(), SubAction.INSTALL.toString(), false);
                 }
