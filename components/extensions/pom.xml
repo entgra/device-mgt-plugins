@@ -38,6 +38,7 @@
         <module>siddhi-extensions</module>
 		<module>pull-notification-listeners</module>
         <module>remote-session-extension</module>
+        <module>health-check-api</module>
     </modules>
 
     <build>

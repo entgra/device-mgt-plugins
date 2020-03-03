@@ -758,6 +758,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public int getFunctioningDevicesInSystem() throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
     public boolean deleteDevices(List<String> deviceIdentifiers)
             throws DeviceManagementException, InvalidDeviceException {
         return false;
