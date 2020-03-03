@@ -43,6 +43,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpPost;
@@ -81,6 +82,7 @@ import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.ComplianceFeature;
 import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.PolicyComplianceException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
+import org.wso2.carbon.device.mgt.core.operation.mgt.util.OperationIdComparator;
 import org.wso2.carbon.device.mgt.core.search.mgt.impl.Utils;
 import org.wso2.carbon.device.mgt.mobile.android.common.AndroidConstants;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.DeviceState;
@@ -101,6 +103,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -138,10 +141,16 @@ public class MobileDeviceManagementUtil {
     }
 
     public static List<? extends Operation> getPendingOperations
-            (Device device) throws OperationManagementException {
-        List<? extends Operation> operations;
-        operations = AndroidDeviceManagementDataHolder.getInstance().getDeviceManagementProviderService()
-                .getPendingOperations(device);
+            (Device device, DeviceIdentifier deviceIdentifier) throws OperationManagementException {
+        List<? extends Operation> operations = AndroidDeviceManagementDataHolder.getInstance()
+                .getDeviceManagementProviderService().getPendingOperations(device);
+        if (operations != null) {
+            List<Operation> pendingOperations = new ArrayList<>(operations);
+            if (!pendingOperations.isEmpty() && deviceIdentifier != null) {
+                handleAppManagerPayloadForOldAgent(deviceIdentifier, pendingOperations);
+                operations = pendingOperations;
+            }
+        }
         return operations;
     }
 
@@ -224,6 +233,62 @@ public class MobileDeviceManagementUtil {
                 throw new OperationManagementException("Error occurred while unenrolling the device.", e);
             }
 
+        }
+    }
+
+    /**
+     * App Installation and App Un-installation payloads are modified as per old app manager payloads to
+     * support old android agent versions. Old android agent versions are detected on the unavailability of
+     * AGENT_VERSION value.
+     *
+     * @param deviceIdentifier of the Device
+     * @param operations list of pending operations
+     * @throws OperationManagementException when there is an error in retreiveing device information
+     */
+    private static void handleAppManagerPayloadForOldAgent(
+            DeviceIdentifier deviceIdentifier, List<Operation> operations) throws OperationManagementException {
+        List<Operation> appManagerOperations = new ArrayList<>();
+        Iterator<? extends Operation> operationIterator = operations.iterator();
+        while (operationIterator.hasNext()) {
+            Operation op = operationIterator.next();
+            if (AndroidConstants.ApplicationInstall.INSTALL_APPLICATION.equals(op.getCode())
+                || AndroidConstants.ApplicationInstall.UNINSTALL_APPLICATION.equals(op.getCode())) {
+                DeviceInfo deviceInfo;
+                try {
+                    deviceInfo = AndroidDeviceManagementDataHolder.getInstance().getDeviceInformationManager()
+                            .getDeviceInfo(deviceIdentifier);
+                } catch (DeviceDetailsMgtException e) {
+                    String msg = "Error occurred while retrieving device info from DeviceInformationManagerService "
+                                 + "of device " + deviceIdentifier;
+                    log.error(msg);
+                    throw new OperationManagementException(msg, e);
+                }
+                if (deviceInfo != null
+                    && deviceInfo.getDeviceDetailsMap() != null
+                    && !deviceInfo.getDeviceDetailsMap().isEmpty()
+                    && StringUtils.isBlank(deviceInfo.getDeviceDetailsMap().get(
+                        AndroidConstants.ApplicationProperties.AGENT_VERSION))) {
+                    JSONObject appPayload = new JSONObject(op.getPayLoad().toString());
+                    String appType = appPayload.getString(AndroidConstants.ApplicationProperties.TYPE);
+                    if (AndroidConstants.ApplicationProperties.ENTERPRISE.equals(appType)) {
+                        appPayload.put(AndroidConstants.ApplicationProperties.PACKAGE_NAME,
+                                       appPayload.getString(AndroidConstants.ApplicationProperties.APP_IDENTIFIER));
+                        op.setPayLoad(appPayload.toString());
+                        appManagerOperations.add(op);
+                        operationIterator.remove();
+                    } else if (AndroidConstants.ApplicationProperties.WEB_CLIP.equals(appType)) {
+                        appPayload.put(AndroidConstants.ApplicationProperties.TYPE,
+                                       AndroidConstants.ApplicationProperties.WEBAPP);
+                        op.setPayLoad(appPayload.toString());
+                        appManagerOperations.add(op);
+                        operationIterator.remove();
+                    }
+                }
+            }
+        }
+        if (!appManagerOperations.isEmpty()) {
+            operations.addAll(appManagerOperations);
+            operations.sort(new OperationIdComparator());
         }
     }
 
@@ -524,7 +589,7 @@ public class MobileDeviceManagementUtil {
     public static void updateDisEnrollOperationStatus(Device device)
             throws DeviceManagementException {
         try {
-            List<? extends Operation> pendingOperations = getPendingOperations(device);
+            List<? extends Operation> pendingOperations = getPendingOperations(device, null);
             if (pendingOperations != null && !pendingOperations.isEmpty()) {
                 for (Operation operation : pendingOperations) {
                     operation.setStatus(Operation.Status.ERROR);
