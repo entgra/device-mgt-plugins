@@ -58,7 +58,9 @@ var androidOperationConstants = {
     "ENROLLMENT_APP_INSTALL_CODE": "ENROLLMENT_APP_INSTALL",
     "CERTIFICATE_INSTALL": "INSTALL_CERT",
     "DISPLAY_MESSAGE_CONFIGURATION_OPERATION": "display-message-configuration",
-    "DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE": "DISPLAY_MESSAGE_CONFIGURATION"
+    "DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE": "DISPLAY_MESSAGE_CONFIGURATION",
+    "APP_USAGE_TIME_CONFIGURATION_OPERATION": "application-list",
+    "APP_USAGE_TIME_CONFIGURATION_OPERATION_CODE": "APPLICATION_LIST"
 };
 
 /**
@@ -626,6 +628,262 @@ var validatePolicyProfile = function () {
             validationStatusArray.push(validationStatus);
         }
 
+        // Validating APP_USAGE_TIME_CONFIGURATION
+        if ($.inArray(androidOperationConstants["APP_USAGE_TIME_CONFIGURATION_OPERATION_CODE"], configuredOperations) !== -1) {
+            // if APP_USAGE_TIME_CONFIGURATION policy is configured
+            operation = androidOperationConstants["APP_USAGE_TIME_CONFIGURATION_OPERATION"];
+            // initializing continueToCheckNextInputs to true
+            continueToCheckNextInputs = true;
+
+            // var usageTimeType = $("#app-usage-time-category").val();
+            var usageTimeApplicationsGridChildInputs = "div#app-usage-time .child-input";
+
+            // if (!usageTimeType) {
+            //     validationStatus = {
+            //         "error": true,
+            //         "subErrorMsg": "App usage type is not provided.",
+            //         "erroneousFeature": operation
+            //     };
+            //     continueToCheckNextInputs = false;
+            // }
+
+            if (continueToCheckNextInputs) {
+                if ($(usageTimeApplicationsGridChildInputs).length === 0) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Applications are not provided in application list.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                } else {
+                    childInputCount = 0;
+                    childInputArray = [];
+                    emptyChildInputCount = 0;
+                    inputs = 0;
+
+                    // Looping through each child input
+                    $(usageTimeApplicationsGridChildInputs).each(function () {
+                        childInputCount++;
+
+                        // If child input is of second column
+                        childInput = $(this).val();
+                        childInputArray.push(childInput);
+                        // Updating emptyChildInputCount
+                        if (!childInput) {
+                            // If child input field is empty
+                            emptyChildInputCount++;
+                        }
+                    });
+
+                    // Updating validationStatus
+                    if (emptyChildInputCount > 0) {
+                        // If empty child inputs are present
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "One or more package names of applications are empty.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+
+                    } else {
+                        allowTimeArray = [];
+                        periodTimeArray = [];
+
+                        var appList = $("#app-usage-time").find(".child-input");
+                        var i = 0;
+                        var loopcount = 1;
+                        for (var j = 1; j < appList.length; j += i) {
+                            if (loopcount % 2 !== 1) {
+                                i = 3;
+                                periodTimeArray.push($(appList[j]).val());
+                            } else {
+                                i = 2;
+                                allowTimeArray.push($(appList[j]).val());
+                            }
+                            loopcount++;
+                        }
+                        result = periodTimeArray.map(function (item, i) {
+                            return Number(item) >= Number(allowTimeArray[i]);
+
+                        });
+
+                        for (var a = 0; a <= result.length; a++) {
+                            if (result[a] === false) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Allowed time type should be minimum or " +
+                                                   "equal than period time.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+
+                        //check the duplicate values for package name
+                        var q = 0;
+                        duplicateValue = [];
+                        for (var k = 0; k < appList.length; k += q) {
+
+                            duplicateValue.push($(appList[k]).val());
+                            q = 5;
+                        }
+                        for (var b = 0; b <= duplicateValue.length; b++) {
+                            for (var c = 0; c <= duplicateValue.length; c++) {
+                                if (c !== b) {
+                                    if (String(duplicateValue[b]).valueOf() ===
+                                        String(duplicateValue[c]).valueOf()) {
+                                        validationStatus = {
+                                            "error": true,
+                                            "subErrorMsg": "Duplicate values exist with " +
+                                                           "for package names.",
+                                            "erroneousFeature": operation
+                                        };
+                                        continueToCheckNextInputs = false;
+                                    }
+                                }
+                            }
+                        }
+
+                        periodTimeValue = [];
+                        allowTimeValue = [];
+                        var checkNumber = 0;
+                        var e = 1;
+                        var timeCount = 1;
+                        for (var d = 2; d < appList.length; d += e) {
+                            if (timeCount % 2 !== 1) {
+                                e = 3;
+                                periodTimeValue.push($(appList[d]).val());
+                            } else {
+                                e = 2;
+                                allowTimeValue.push($(appList[d]).val());
+                            }
+                            timeCount++;
+                        }
+
+                        //check the limit of the allow time
+                        allowTimeValueResult = allowTimeArray.map(function (item, i) {
+                            if (Number(item) === 60) {
+                                return Number(allowTimeValue[i]) < 60;
+                            } else if (Number(item) === 3600) {
+                                return Number(allowTimeValue[i]) < 24;
+                            } else if (Number(item) === 86400) {
+                                return Number(allowTimeValue[i]) < 7;
+                            } else {
+                                return Number(allowTimeValue[i]) < 4;
+                            }
+                        });
+
+                        for (var a = 0; a <= allowTimeValueResult.length; a++) {
+                            if (allowTimeValueResult[a] === false) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Allow time values must be a number and " +
+                                                   "the maximum values are " +
+                                                   "(minutes = 59,hours = 23,day = 6," +
+                                                   "week = 3).",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+                        //check whether the value is a positive number and the integer number
+                        for (var c = 0; c < allowTimeValue.length; c++) {
+                            checkNumber = Number(allowTimeValue[c]);
+                            if (Number.isInteger(checkNumber) === false || checkNumber <= 0) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Allow time must be a integer and a " +
+                                                   "positive number.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+
+                        //check the limit of the period time
+                        periodValueResult = periodTimeArray.map(function (item, i) {
+                            if (Number(item) === 60) {
+                                return Number(periodTimeValue[i]) < 60;
+                            } else if (Number(item) === 3600) {
+                                return Number(periodTimeValue[i]) < 24;
+                            } else if (Number(item) === 86400) {
+                                return Number(periodTimeValue[i]) < 7;
+                            } else if (Number(item) === 604800) {
+                                return Number(periodTimeValue[i]) < 4;
+                            } else {
+                                return Number(periodTimeValue[i]) < 29;
+                            }
+                        });
+                        for (var a = 0; a <= periodValueResult.length; a++) {
+                            if (periodValueResult[a] === false) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Period time values must be a number and " +
+                                                   "the maximum values are " +
+                                                   "(minutes = 59,hours = 23,day = 6," +
+                                                   "week = 3) and can select 1 to 28 days for the month .",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+                        //check whether the value is a positive number and the integer number
+                        for (var c = 0; c < periodTimeValue.length; c++) {
+                            checkNumber = Number(periodTimeValue[c]);
+                            if (Number.isInteger(checkNumber) === false || checkNumber <= 0) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Period time must be a integer and a " +
+                                                   "positive number.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+
+                        //check the period time value is greater than allow time value when the
+                        // both have the same time type
+                        var checkValueResult = [];
+
+                        typeResult = periodTimeArray.map(function (item, i) {
+                            return Number(item) === Number(allowTimeArray[i]);
+                        });
+                        for (var x = 0; x <= typeResult.length; x++) {
+                            if (typeResult[x] === true) {
+                                checkValueResult = periodTimeValue.map(function (item, i) {
+                                    return Number(item) < Number(allowTimeValue[i]);
+                                });
+                            }
+                        }
+                        for (var r = 0; r <= checkValueResult.length; r++) {
+                            if (checkValueResult[r] === true) {
+                                validationStatus = {
+                                    "error": true,
+                                    "subErrorMsg": "Allowed time value should be minimum or " +
+                                                   "equal than period time value when both have " +
+                                                   "the same time type.",
+                                    "erroneousFeature": operation
+                                };
+                                continueToCheckNextInputs = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // at-last, if the value of continueToCheckNextInputs is still true
+            // this means that no error is found
+            if (continueToCheckNextInputs) {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+            }
+
+            // updating validationStatusArray with validationStatus
+            validationStatusArray.push(validationStatus);
+        }
+
         // Validating PROXY
         if ($.inArray(androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"], configuredOperations) !== -1) {
             // if PROXY is configured
@@ -1107,6 +1365,81 @@ var changeAndroidWifiPolicyEAP = function (select, superSelect) {
         changeAndroidWifiPolicy(superSelect);
     }
 };
+
+//This function will display apps allowed and period time as a sentence
+function onCreateSentence() {
+    childInputCount = 0;
+    childInputArray = [];
+    var usageTimeApplicationsGridChildInputs = "div#app-usage-time .child-input";
+    $(usageTimeApplicationsGridChildInputs).each(function () {
+        childInputCount++;
+        var childInput = $(this).val();
+        childInputArray.push(childInput);
+    });
+    if(childInputArray.length !== 0) {
+        var allowType = null, periodType = null, allowTimeType, periodTimeType;
+        var packageName = childInputArray[(childInputArray.length-5)];
+        var allowTime = childInputArray[(childInputArray.length-3)];
+        var periodTime = childInputArray[(childInputArray.length-1)];
+        var convertAllowTimeType = childInputArray[(childInputArray.length-4)];
+        var convertPeriodTimeType = childInputArray[(childInputArray.length-2)];
+
+        switch (convertAllowTimeType) {
+            case "60":
+                allowType = "minute";
+                break;
+            case "3600":
+                allowType = "hour";
+                break;
+            case "86400":
+                allowType = "day";
+                break;
+            case "604800":
+                allowType = "week";
+        }
+        if (allowTime > 1) {
+            allowTimeType = (allowType + "s");
+        } else {
+            allowTimeType = allowType;
+        }
+
+        switch (convertPeriodTimeType) {
+            case "60":
+                periodType = "minute";
+                break;
+            case "3600":
+                periodType = "hour";
+                break;
+            case "86400":
+                periodType = "day";
+                break;
+            case "604800":
+                periodType = "week";
+                break;
+            case "2592000":
+                periodType = "month";
+        }
+        if (periodType !== "month") {
+            if (periodTime > 1) {
+                periodTimeType = (periodType + "s");
+            } else {
+                periodTimeType = periodType;
+            }
+            if (packageName != null) {
+                document.getElementById("demoSentence").innerHTML = "<strong>" + packageName + "</strong>" + " package can be use for " + "<strong>" +
+                                                                    allowTime + "</strong>" + " " + "<strong>" + allowTimeType + "</strong>" + " with in " +
+                                                                    "<strong>" + periodTime + "</strong>" + " " + "<strong>" + periodTimeType + "</strong>" + " period.";
+            }
+        } else {
+            periodTimeType = periodType;
+            if (packageName != null) {
+                document.getElementById("demoSentence").innerHTML = "<strong>" + packageName + "</strong>" + " package can be use for " + "<strong>" +
+                                                                    allowTime + "</strong>" + " " + "<strong>" + allowTimeType + "</strong>" + " and the apps usage is calculated on " +
+                                                                    "<strong>" + periodTime + "</strong>" + " th of every " + "<strong>" + periodTimeType + "</strong>" + ".";
+            }
+        }
+    }
+}
 
 /**
  * Pass a div Id and a check box to view or hide div content based on checkbox value
