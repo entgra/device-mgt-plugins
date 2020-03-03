@@ -309,27 +309,29 @@
                     </div>
 
                     <div class="wr-input-control">
-                        <label class="wr-input-label" for="passcodePolicyMaxFailedAttempts">
-                            Maximum number of failed attempts
+                        <label class="wr-input-label" for="maximumNumberOfFailedAttemptsBeforeDeviceLock">
+                            Maximum number of failed attempts before device lock
+                            <span class="helper"
+                                  title="The maximum number of incorrect password entries allowed. If the correct password is not entered within the allowed number of attempts, the device will be locked.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <input id="Maximum-number-of-failed-attempts-before-device-lock" type="text" class="form-control operationDataKeys"
+                               data-key="maximumNumberOfFailedAttemptsBeforeDeviceLock" maxlength="2"
+                               placeholder="[ Requires Number Input ]" disabled>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="maximumNumberOfFailedAttemptsBeforeDeviceWipe">
+                            Maximum number of failed attempts before device reset
                             <span class="helper"
                                   title="The maximum number of incorrect password entries allowed. If the correct password is not entered within the allowed number of attempts, the data on the device will be erased.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
                         </label>
-                        <select id="passcode-policy-max-failed-attempts" class="form-control operationDataKeys"
-                                data-key="passcodePolicyMaxFailedAttempts" data-default="0" disabled>
-                            <option value="" selected="selected">
-                                None
-                            </option>
-                            <option value="3">03</option>
-                            <option value="4">04</option>
-                            <option value="5">05</option>
-                            <option value="6">06</option>
-                            <option value="7">07</option>
-                            <option value="8">08</option>
-                            <option value="9">09</option>
-                            <option value="10">10</option>
-                        </select>
+                        <input id="Maximum-number-of-failed-attempts-before-device-wipe" type="text" class="form-control operationDataKeys"
+                               data-key="maximumNumberOfFailedAttemptsBeforeDeviceWipe" maxlength="2"
+                               placeholder="[ Requires Number Input ]" disabled>
                     </div>
 
                     <div class="wr-input-control">
