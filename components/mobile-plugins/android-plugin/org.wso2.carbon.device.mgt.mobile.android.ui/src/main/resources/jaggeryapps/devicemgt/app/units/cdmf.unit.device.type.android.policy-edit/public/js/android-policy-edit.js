@@ -49,6 +49,8 @@ var androidOperationConstants = {
     "GLOBAL_PROXY_OPERATION_CODE": "GLOBAL_PROXY",
     "VPN_OPERATION": "vpn",
     "VPN_OPERATION_CODE": "VPN",
+    "APN_OPERATION": "apn",
+    "APN_OPERATION_CODE": "APN",
     "APPLICATION_OPERATION": "app-restriction",
     "APPLICATION_OPERATION_CODE": "APP-RESTRICTION",
     "KIOSK_APPS_CODE": "KIOSK_APPS",
@@ -950,6 +952,89 @@ var validatePolicyProfile = function () {
             }
 
             // updating validationStatusArray with validationStatus
+            validationStatusArray.push(validationStatus);
+        }
+
+        // Validating APN
+        if ($.inArray(androidOperationConstants["APN_OPERATION_CODE"], configuredOperations) !== -1) {
+            // if APN is configured
+            operation = androidOperationConstants["APN_OPERATION"];
+            // initializing continueToCheckNextInputs to true
+            continueToCheckNextInputs = true;
+
+            var apnName= $("input#apn-name").val();
+            var apnProxyPort = $("input#apn-proxy-port").val();
+            var apnMMSProxyPort = $("input#apn-mms-proxy-port").val();
+            var apnMCC = $("input#apn-mcc").val();
+            var apnMNC = $("input#apn-mnc").val();
+
+            if (!apnName) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "APN name is required.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+
+            if (!$.isNumeric(apnProxyPort)) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "APN Proxy port requires a number input.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            } else if (!inputIsValidAgainstRange(apnProxyPort, 0, 65535)) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "APN Proxy port is not within the range of valid port numbers.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+
+            if (!$.isNumeric(apnMMSProxyPort)) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "APN MMS proxy port requires a number input.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            } else if (!inputIsValidAgainstRange(apnMMSProxyPort, 0, 65535)) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "APN MMS proxy port is not within the range of valid port numbers.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+
+            if (!$.isNumeric(apnMCC)) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "APN MCC requires a number input.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+
+            if (!$.isNumeric(apnMNC)) {
+                validationStatus = {
+                    "error": true,
+                    "subErrorMsg": "APN MNC requires a number input.",
+                    "erroneousFeature": operation
+                };
+                continueToCheckNextInputs = false;
+            }
+
+            // at-last, if the value of continueToCheckNextInputs is still true
+            // this means that no error is found
+            if (continueToCheckNextInputs) {
+                validationStatus = {
+                    "error": false,
+                    "okFeature": operation
+                };
+            }
             validationStatusArray.push(validationStatus);
         }
 
