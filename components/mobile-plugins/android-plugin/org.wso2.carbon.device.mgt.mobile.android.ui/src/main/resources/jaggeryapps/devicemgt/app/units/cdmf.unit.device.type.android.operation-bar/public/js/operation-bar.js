@@ -481,7 +481,9 @@ var generatePayload = function (operationCode, operationData, deviceList) {
                     "minComplexChars": operationData["passcodePolicyMinComplexChars"],
                     "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
                     "pinHistory": operationData["passcodePolicyPasscodeHistory"],
-                    "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
+                    "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"],
+                    "maxFailedAttemptsDeviceLock": operationData["maximumNumberOfFailedAttemptsBeforeDeviceLock"],
+                    "maxFailedAttemptsDeviceWipe": operationData["maximumNumberOfFailedAttemptsBeforeDeviceWipe"]
                 }
             };
             break;

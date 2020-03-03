@@ -132,7 +132,8 @@ var androidOperationModule = function () {
                     "passcodePolicyMinComplexChars": operationPayload["minComplexChars"],
                     "passcodePolicyMaxPasscodeAgeInDays": operationPayload["maxPINAgeInDays"],
                     "passcodePolicyPasscodeHistory": operationPayload["pinHistory"],
-                    "passcodePolicyMaxFailedAttempts": operationPayload["maxFailedAttempts"]
+                    "maximumNumberOfFailedAttemptsBeforeDeviceLock": operationPayload["maxFailedAttemptsDeviceLock"],
+                    "maximumNumberOfFailedAttemptsBeforeDeviceWipe": operationPayload["maxFailedAttemptsDeviceWipe"]
                 };
                 if (operationPayload["passcodePolicyWPExist"] === true) {
                     payload["passcodePolicyWPExist"] = operationPayload["passcodePolicyWPExist"];
@@ -515,7 +516,8 @@ var androidOperationModule = function () {
                         "minComplexChars": operationData["passcodePolicyMinComplexChars"],
                         "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
                         "pinHistory": operationData["passcodePolicyPasscodeHistory"],
-                        "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
+                        "maxFailedAttemptsDeviceLock": operationData["maximumNumberOfFailedAttemptsBeforeDeviceLock"],
+                        "maxFailedAttemptsDeviceWipe": operationData["maximumNumberOfFailedAttemptsBeforeDeviceWipe"]
                     }
                 };
                 workProfilePasscode = {};
