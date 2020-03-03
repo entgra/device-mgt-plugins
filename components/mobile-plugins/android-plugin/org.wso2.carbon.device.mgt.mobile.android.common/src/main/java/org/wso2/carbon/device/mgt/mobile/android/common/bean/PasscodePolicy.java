@@ -31,13 +31,20 @@ import java.io.Serializable;
 		+ "password policy")
 public class PasscodePolicy extends AndroidOperation implements Serializable {
 
-	@ApiModelProperty(name = "maxFailedAttempts", value = "The maximum number of times the end-user can enter"
-			+ " his/her device passcode incorrectly. EMM will take different courses of action based on the"
-			+ " OS when  the failed attempts exceed the maximum failed attempts.  Android devices will be "
-			+ "automatically reset to the original factory settings", required = true)
+	@ApiModelProperty(name = "maxFailedAttemptsDeviceLock", value = "The maximum number of times the end-user can enter"
+	                                                      + " his/her device passcode incorrectly. EMM will take different courses of action based on the"
+	                                                      + " OS when  the failed attempts exceed the maximum failed attempts.  Android devices will be "
+	                                                      + "automatically locked and admin can unlock the device", required = true)
 
-    @Max(10)
-	private int maxFailedAttempts;
+	@Max(10)
+	private int maxFailedAttemptsDeviceLock;
+	@ApiModelProperty(name = "maxFailedAttemptsDeviceWipe", value = "The maximum number of times the end-user can enter"
+	                                                                + " his/her device passcode incorrectly. EMM will take different courses of action based on the"
+	                                                                + " OS when  the failed attempts exceed the maximum failed attempts.  Android devices will be "
+	                                                                + "automatically wiped to factory settings", required = true)
+
+	@Max(10)
+	private int maxFailedAttemptsDeviceWipe;
 	@ApiModelProperty(name = "minLength", value = "The minimum number of alphanumerical values that the "
 			+ "end-user can enter as his/her passcode", required = true)
 	@Max(15)
@@ -63,12 +70,12 @@ public class PasscodePolicy extends AndroidOperation implements Serializable {
 			+ "Minimum length\n" + "Minimum complex characters", required = true)
 	private boolean allowSimple;
 
-	public int getMaxFailedAttempts() {
-		return maxFailedAttempts;
+	public int getMaxFailedAttemptsDeviceLock(){
+		return maxFailedAttemptsDeviceLock;
 	}
 
-	public void setMaxFailedAttempts(int maxFailedAttempts) {
-		this.maxFailedAttempts = maxFailedAttempts;
+	public int getMaxFailedAttemptsDeviceWipe(){
+		return maxFailedAttemptsDeviceWipe;
 	}
 
 	public int getMinLength() {
