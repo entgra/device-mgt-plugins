@@ -368,6 +368,21 @@ var validatePolicyProfile = function () {
                 }
             }
 
+             //validating davice lock fail attempts for device wipe
+             var passcodePolicyMaxfailAttemptsForDeviceLock = $("input#Maximum-number-of-failed-attempts-before-device-lock").val();
+             var passcodePolicyMaxfailAttemptsForDeviceWipe = $("input#Maximum-number-of-failed-attempts-before-device-wipe").val();
+
+             if (passcodePolicyMaxfailAttemptsForDeviceLock && passcodePolicyMaxfailAttemptsForDeviceWipe) {
+                 if (passcodePolicyMaxfailAttemptsForDeviceLock >= passcodePolicyMaxfailAttemptsForDeviceWipe) {
+                     validationStatus = {
+                         "error": true,
+                         "subErrorMsg": "Provided maximum faild attempts for device wipe should be grater than device lock fail attempts.",
+                         "erroneousFeature": operation
+                     };
+                     continueToCheckNextInputs = false;
+                 }
+             }
+
             // validating second and last input: passcodePolicyPasscodeHistory
             if (continueToCheckNextInputs) {
                 var passcodePolicyPasscodeHistory = $("input#passcode-policy-passcode-history").val();
