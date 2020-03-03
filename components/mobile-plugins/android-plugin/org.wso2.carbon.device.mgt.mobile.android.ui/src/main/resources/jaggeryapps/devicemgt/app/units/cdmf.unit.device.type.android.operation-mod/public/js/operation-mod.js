@@ -49,6 +49,7 @@ var androidOperationModule = function () {
     var androidOperationConstants = {
         "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
         "VPN_OPERATION_CODE": "VPN",
+        "APN_OPERATION_CODE": "APN",
         "CAMERA_OPERATION_CODE": "CAMERA",
         "BACKUP_SERVICE_CODE": "BACKUP_SERVICE",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
@@ -67,6 +68,7 @@ var androidOperationModule = function () {
         "DISALLOW_CONFIG_MOBILE_NETWORKS": "DISALLOW_CONFIG_MOBILE_NETWORKS",
         "DISALLOW_CONFIG_TETHERING": "DISALLOW_CONFIG_TETHERING",
         "DISALLOW_CONFIG_VPN": "DISALLOW_CONFIG_VPN",
+        "DISALLOW_CONFIG_APN": "DISALLOW_CONFIG_APN",
         "DISALLOW_CONFIG_WIFI": "DISALLOW_CONFIG_WIFI",
         "DISALLOW_APPS_CONTROL": "DISALLOW_APPS_CONTROL",
         "DISALLOW_CREATE_WINDOWS": "DISALLOW_CREATE_WINDOWS",
@@ -111,7 +113,8 @@ var androidOperationModule = function () {
         "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
         "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING",
         "CERT_ADD_OPERATION_CODE": "INSTALL_CERT",
-        "DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE": "DISPLAY_MESSAGE_CONFIGURATION"
+        "DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE": "DISPLAY_MESSAGE_CONFIGURATION",
+        "APPLICATION_LIST_OPERATION_CODE": "APPLICATION_LIST"
     };
 
     /**
@@ -134,18 +137,18 @@ var androidOperationModule = function () {
                     "passcodePolicyPasscodeHistory": operationPayload["pinHistory"],
                     "maximumNumberOfFailedAttemptsBeforeDeviceLock": operationPayload["maxFailedAttemptsDeviceLock"],
                     "maximumNumberOfFailedAttemptsBeforeDeviceWipe": operationPayload["maxFailedAttemptsDeviceWipe"]
+                    "passcodePolicyMaxTimeToLock": operationPayload["maxTimeToLock"],
+                    "passcodePolicyWPExist": operationPayload["passcodePolicyWPExist"]
                 };
                 if (operationPayload["passcodePolicyWPExist"] === true) {
-                    payload["passcodePolicyWPExist"] = operationPayload["passcodePolicyWPExist"];
-                    payload["passcodePolicyAllowSimpleWP"] = operationPayload.workProfilePasscode["passcodePolicyAllowSimpleWP"];
-                    payload["passcodePolicyRequireAlphanumericWP"] = operationPayload.workProfilePasscode["passcodePolicyRequireAlphanumericWP"];
-                    payload["passcodePolicyMinLengthWP"] = operationPayload.workProfilePasscode["passcodePolicyMinLengthWP"];
-                    payload["passcodePolicyMinComplexCharsWP"] = operationPayload.workProfilePasscode["passcodePolicyMinComplexCharsWP"];
-                    payload["passcodePolicyMaxPasscodeAgeInDaysWP"] = operationPayload.workProfilePasscode["passcodePolicyMaxPasscodeAgeInDaysWP"];
-                    payload["passcodePolicyPasscodeHistoryWP"] = operationPayload.workProfilePasscode["passcodePolicyPasscodeHistoryWP"];
-                    payload["passcodePolicyMaxFailedAttemptsWP"] = operationPayload.workProfilePasscode["passcodePolicyMaxFailedAttemptsWP"];
-                } else {
-                    payload["passcodePolicyWPExist"] = operationPayload["passcodePolicyWPExist"];
+                    payload["passcodePolicyAllowSimpleWP"] = operationPayload.workProfilePasscode["allowSimpleWP"];
+                    payload["passcodePolicyRequireAlphanumericWP"] = operationPayload.workProfilePasscode["requireAlphanumericWP"];
+                    payload["passcodePolicyMinLengthWP"] = operationPayload.workProfilePasscode["minLengthWP"];
+                    payload["passcodePolicyMinComplexCharsWP"] = operationPayload.workProfilePasscode["minComplexCharsWP"];
+                    payload["passcodePolicyMaxPasscodeAgeInDaysWP"] = operationPayload.workProfilePasscode["maxPINAgeInDaysWP"];
+                    payload["passcodePolicyPasscodeHistoryWP"] = operationPayload.workProfilePasscode["pinHistoryWP"];
+                    payload["passcodePolicyMaxFailedAttemptsWP"] = operationPayload.workProfilePasscode["maxFailedAttemptsWP"];
+                    payload["passcodePolicyMaxTimeToLockWP"] = operationPayload.workProfilePasscode["maxTimeToLockWP"];
                 }
                 break;
             case androidOperationConstants["CAMERA_OPERATION_CODE"]:
@@ -178,6 +181,30 @@ var androidOperationModule = function () {
                     "wifiAnoIdentity": operationPayload["anonymousIdentity"],
                     "wifiCaCert": operationPayload["cacert"],
                     "wifiCaCertName": operationPayload["cacertName"]
+                };
+                break;
+            case androidOperationConstants["APN_OPERATION_CODE"]:
+                payload = {
+                    "apnName": operationPayload["name"],
+                    "apnApn": operationPayload["apn"],
+                    "apnProxyAddress": operationPayload["proxyAddress"],
+                    "apnProxyPort": operationPayload["proxyPort"],
+                    "apnUsername": operationPayload["username"],
+                    "apnPassword": operationPayload["password"],
+                    "apnServer": operationPayload["server"],
+                    "apnMMSC": operationPayload["mMSC"],
+                    "apnMMSProxyAddress": operationPayload["mmsProxyAddress"],
+                    "apnMMSProxyPort": operationPayload["mMSProxyPort"],
+                    "apnMCC": operationPayload["mCC"],
+                    "apnMNC": operationPayload["mNC"],
+                    "apnAuthenticationType": operationPayload["authenticationType"],
+                    "apnType": operationPayload["type"],
+                    "apnProtocol": operationPayload["protocol"],
+                    "apnRoamingProtocol": operationPayload["roamingProtocol"],
+                    "apnIsEnable": operationPayload["isEnable"],
+                    "apnBearer": operationPayload["bearer"],
+                    "apnMVNOType": operationPayload["mVNOType"],
+                    "apnMVNOValue": operationPayload["mVNOValue"]
                 };
                 break;
             case androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"]:
@@ -345,6 +372,12 @@ var androidOperationModule = function () {
                     "disabledSettingSupportMessage": operationPayload["disabledSettingSupportMessage"]
                 };
                 break;
+            case androidOperationConstants["APPLICATION_LIST_OPERATION_CODE"]:
+                payload = {
+                    "appUsageTimeCategory": "screenUsageTime",
+                    "appTimeData": operationPayload["appTimeData"]
+                };
+                break;
         }
         return payload;
     };
@@ -366,6 +399,7 @@ var androidOperationModule = function () {
                         "DISALLOW_CONFIG_MOBILE_NETWORKS": operationData["disallowConfigMobileNetworks"],
                         "DISALLOW_CONFIG_TETHERING": operationData["disallowConfigTethering"],
                         "DISALLOW_CONFIG_VPN": operationData["disallowConfigVpn"],
+                        "DISALLOW_CONFIG_APN": operationData["disallowConfigApn"],
                         "DISALLOW_CONFIG_WIFI": operationData["disallowConfigWifi"],
                         "DISALLOW_APPS_CONTROL": operationData["disallowAppControl"],
                         "DISALLOW_CREATE_WINDOWS": operationData["disallowCreateWindows"],
@@ -463,6 +497,33 @@ var androidOperationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["APN_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "name": operationData["apnName"],
+                        "apn": operationData["apnApn"],
+                        "proxyAddress": operationData["apnProxyAddress"],
+                        "proxyPort": operationData["apnProxyPort"],
+                        "username": operationData["apnUsername"],
+                        "password": operationData["apnPassword"],
+                        "server": operationData["apnServer"],
+                        "mMSC": operationData["apnMMSC"],
+                        "mmsProxyAddress": operationData["apnMMSProxyAddress"],
+                        "mMSProxyPort": operationData["apnMMSProxyPort"],
+                        "mCC": operationData["apnMCC"],
+                        "mNC": operationData["apnMNC"],
+                        "authenticationType": operationData["apnAuthenticationType"],
+                        "type": operationData["apnType"],
+                        "protocol": operationData["apnProtocol"],
+                        "roamingProtocol": operationData["apnRoamingProtocol"],
+                        "isEnable": operationData["apnIsEnable"],
+                        "bearer": operationData["apnBearer"],
+                        "mVNOType": operationData["apnMVNOType"],
+                        "mVNOValue": operationData["apnMVNOValue"]
+                    }
+                };
+                break;
             case androidOperationConstants["GLOBAL_PROXY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
@@ -516,25 +577,24 @@ var androidOperationModule = function () {
                         "minComplexChars": operationData["passcodePolicyMinComplexChars"],
                         "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
                         "pinHistory": operationData["passcodePolicyPasscodeHistory"],
+                        "maxTimeToLock": operationData["passcodePolicyMaxTimeToLock"],
+                        "passcodePolicyWPExist": operationData["passcodePolicyWPExist"]
                         "maxFailedAttemptsDeviceLock": operationData["maximumNumberOfFailedAttemptsBeforeDeviceLock"],
                         "maxFailedAttemptsDeviceWipe": operationData["maximumNumberOfFailedAttemptsBeforeDeviceWipe"]
                     }
                 };
                 workProfilePasscode = {};
                 if (operationData["passcodePolicyWPExist"] === true) {
-                    payload.operation["passcodePolicyWPExist"] = operationData["passcodePolicyWPExist"];
-                    workProfilePasscode["passcodePolicyAllowSimpleWP"] = operationData["passcodePolicyAllowSimpleWP"];
-                    workProfilePasscode["passcodePolicyRequireAlphanumericWP"] = operationData["passcodePolicyRequireAlphanumericWP"];
-                    workProfilePasscode["passcodePolicyMinLengthWP"] = operationData["passcodePolicyMinLengthWP"];
-                    workProfilePasscode["passcodePolicyMinComplexCharsWP"] = operationData["passcodePolicyMinComplexCharsWP"];
-                    workProfilePasscode["passcodePolicyMaxPasscodeAgeInDaysWP"] = operationData["passcodePolicyMaxPasscodeAgeInDaysWP"];
-                    workProfilePasscode["passcodePolicyPasscodeHistoryWP"] = operationData["passcodePolicyPasscodeHistoryWP"];
-                    workProfilePasscode["passcodePolicyMaxFailedAttemptsWP"] = operationData["passcodePolicyMaxFailedAttemptsWP"]  ;
+                    workProfilePasscode["allowSimpleWP"] = operationData["passcodePolicyAllowSimpleWP"];
+                    workProfilePasscode["requireAlphanumericWP"] = operationData["passcodePolicyRequireAlphanumericWP"];
+                    workProfilePasscode["minLengthWP"] = operationData["passcodePolicyMinLengthWP"];
+                    workProfilePasscode["minComplexCharsWP"] = operationData["passcodePolicyMinComplexCharsWP"];
+                    workProfilePasscode["maxPINAgeInDaysWP"] = operationData["passcodePolicyMaxPasscodeAgeInDaysWP"];
+                    workProfilePasscode["pinHistoryWP"] = operationData["passcodePolicyPasscodeHistoryWP"];
+                    workProfilePasscode["maxFailedAttemptsWP"] = operationData["passcodePolicyMaxFailedAttemptsWP"]  ;
+                    workProfilePasscode["maxTimeToLockWP"] = operationData["passcodePolicyMaxTimeToLockWP"];
                     payload.operation.workProfilePasscode = workProfilePasscode;
-                } else {
-                    payload["passcodePolicyWPExist"] = operationData["passcodePolicyWPExist"];
                 }
-                break;
                 break;
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
                 payload = {
@@ -742,6 +802,15 @@ var androidOperationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["APPLICATION_LIST_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "appUsageTimeCategory": "screenUsageTime",
+                        "appTimeData": operationData["appTimeData"]
+                    }
+                };
+                break;
             default:
                 // If the operation is neither of above, it is a command operation
                 operationType = operationTypeConstants["COMMAND"];
@@ -763,6 +832,7 @@ var androidOperationModule = function () {
             "CAMERA": "control-camera",
             "BACKUP_SERVICE": "enable-backup",
             "VPN": "configure-vpn",
+            "APN": "configure-apn",
             "DEVICE_LOCK": "lock-devices",
             "DEVICE_UNLOCK": "unlock-devices",
             "DEVICE_LOCATION": "location",
@@ -1248,6 +1318,9 @@ var androidOperationModule = function () {
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_VPN"]) {
                 restrictions["disallowConfigVpn"] = restriction["enabled"];
+                continue;
+            } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_APN"]) {
+                restrictions["disallowConfigApn"] = restriction["enabled"];
                 continue;
             } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_WIFI"]) {
                 restrictions["disallowConfigWifi"] = restriction["enabled"];

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.device.mgt.mobile.android.core.util;
+package org.wso2.carbon.device.mgt.mobile.android.api.util;
 
 import com.google.api.services.androidenterprise.model.AppVersion;
 import com.google.api.services.androidenterprise.model.AutoInstallConstraint;
@@ -43,7 +43,6 @@ import org.wso2.carbon.device.application.mgt.common.exception.ApplicationManage
 import org.wso2.carbon.device.application.mgt.common.response.Application;
 import org.wso2.carbon.device.application.mgt.common.response.Category;
 import org.wso2.carbon.device.application.mgt.common.services.ApplicationManager;
-import org.wso2.carbon.device.application.mgt.common.services.SubscriptionManager;
 import org.wso2.carbon.device.application.mgt.common.wrapper.ApplicationUpdateWrapper;
 import org.wso2.carbon.device.application.mgt.common.wrapper.PublicAppReleaseWrapper;
 import org.wso2.carbon.device.application.mgt.common.wrapper.PublicAppWrapper;
@@ -80,15 +79,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AndroidEnterpriseUtils {
 
     private static Log log = LogFactory.getLog(AndroidEnterpriseUtils.class);
+    private static RealmService realmService = null;
     private static List<String> templates = Arrays.asList(AndroidConstants
             .USER_CLAIM_EMAIL_ADDRESS_PLACEHOLDER, AndroidConstants.USER_CLAIM_FIRST_NAME_PLACEHOLDER,
             AndroidConstants.USER_CLAIM_LAST_NAME_PLACEHOLDER);
-
 
     public static Device convertToDeviceInstance(EnterpriseInstallPolicy enterpriseInstallPolicy)
             throws EnterpriseServiceException {
@@ -171,15 +169,16 @@ public class AndroidEnterpriseUtils {
     }
 
     private static UserStoreManager getUserStoreManager() throws EnterpriseServiceException {
-        RealmService realmService;
-        UserStoreManager userStoreManager = null;
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
         if (realmService == null) {
-            String msg = "Realm service has not initialized.";
-            log.error(msg);
-            throw new IllegalStateException(msg);
+            realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+            if (realmService == null) {
+                String msg = "Realm service has not initialized.";
+                log.error(msg);
+                throw new IllegalStateException(msg);
+            }
         }
+        UserStoreManager userStoreManager;
         int tenantId = ctx.getTenantId();
         try {
             userStoreManager = realmService.getTenantUserRealm(tenantId).getUserStoreManager();
@@ -224,9 +223,9 @@ public class AndroidEnterpriseUtils {
     public static EnterpriseConfigs getEnterpriseConfigs() throws AndroidDeviceMgtPluginException {
         EnterpriseConfigs enterpriseConfigs = getEnterpriseConfigsFromGoogle();
         if (enterpriseConfigs.getErrorResponse() != null) {
-            if (enterpriseConfigs.getErrorResponse().getCode() == 500l) {
+            if (enterpriseConfigs.getErrorResponse().getCode() == 500) {
                 throw new UnexpectedServerErrorException(enterpriseConfigs.getErrorResponse().getMessage());
-            } else if (enterpriseConfigs.getErrorResponse().getCode() == 500l) {
+            } else if (enterpriseConfigs.getErrorResponse().getCode() == 404) {
                 throw new NotFoundException(enterpriseConfigs.getErrorResponse().getMessage());
             }
         }
@@ -263,25 +262,17 @@ public class AndroidEnterpriseUtils {
         return enterpriseConfigs;
     }
 
-    public static ApplicationManager getAppManagerServer() {
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        return (ApplicationManager) ctx.getOSGiService(ApplicationManager.class, null);
-    }
-
-    public static SubscriptionManager getAppSubscriptionService() {
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        return (SubscriptionManager) ctx.getOSGiService(SubscriptionManager.class, null);
-    }
-
     public static void persistApp(ProductsListResponse productListResponse) throws ApplicationManagementException {
 
-        ApplicationManager applicationManager = getAppManagerServer();
+        ApplicationManager applicationManager = AndroidAPIUtils.getAppManagerService();
         List<Category> categories = applicationManager.getRegisteredCategories();
         if (productListResponse != null && productListResponse.getProduct() != null
                 && !productListResponse.getProduct().isEmpty()) {
 
-            List<String> packageNamesOfApps = productListResponse.getProduct().stream()
-                    .map(product -> (product.getProductId().replaceFirst("app:", ""))).collect(Collectors.toList());
+            List<String> packageNamesOfApps = new ArrayList<>();
+            for (Product product : productListResponse.getProduct()) {
+                packageNamesOfApps.add(product.getProductId().replaceFirst("app:", ""));
+            }
 
             List<Application> existingApps = applicationManager.getApplications(packageNamesOfApps);
             List<Product> products = productListResponse.getProduct();
@@ -303,8 +294,7 @@ public class AndroidEnterpriseUtils {
                         publicAppReleaseWrapper.setDescription(product.getRecentChanges());
                         publicAppReleaseWrapper.setReleaseType("ga");
                         publicAppReleaseWrapper.setVersion(getAppString(product.getAppVersion()));
-                        publicAppReleaseWrapper
-                                .setSupportedOsVersions(String.valueOf(product.getMinAndroidSdkVersion()) + "-ALL");
+                        publicAppReleaseWrapper.setSupportedOsVersions(product.getMinAndroidSdkVersion() + "-ALL");
 
                         ApplicationArtifact applicationArtifact = generateArtifacts(product);
                         applicationManager.updatePubAppRelease(app.getApplicationReleases().get(0).getUuid(),
@@ -359,13 +349,6 @@ public class AndroidEnterpriseUtils {
         }
     }
 
-    /**
-     * To generate {@link ApplicationUpdateWrapper}
-     *
-     * @param product {@link Product}
-     * @param categories List of categories registered with app manager
-     * @return {@link ApplicationUpdateWrapper}
-     */
     private static ApplicationUpdateWrapper generatePubAppUpdateWrapper(Product product, List<Category> categories) {
         ApplicationUpdateWrapper applicationUpdateWrapper = new ApplicationUpdateWrapper();
         applicationUpdateWrapper.setName(product.getTitle());
@@ -396,13 +379,6 @@ public class AndroidEnterpriseUtils {
         return applicationUpdateWrapper;
     }
 
-    /**
-     * To generate {@link PublicAppWrapper}
-     *
-     * @param product {@link Product}
-     * @param categories List of categories registered with app manager
-     * @return {@link PublicAppWrapper}
-     */
     private static PublicAppWrapper generatePubAppWrapper(Product product, List<Category> categories) {
         PublicAppWrapper publicAppWrapper = new PublicAppWrapper();
         publicAppWrapper.setName(product.getTitle());
@@ -434,13 +410,6 @@ public class AndroidEnterpriseUtils {
         return publicAppWrapper;
     }
 
-    /**
-     * To generate {@link ApplicationArtifact}
-     *
-     * @param product {@link Product}
-     * @return {@link ApplicationArtifact}
-     * @throws ApplicationManagementException if I/O exception occurred while generating application artifact.
-     */
     private static ApplicationArtifact generateArtifacts(Product product) throws ApplicationManagementException {
         ApplicationArtifact applicationArtifact = new ApplicationArtifact();
         try {

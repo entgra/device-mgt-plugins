@@ -29,7 +29,7 @@ import org.wso2.carbon.device.mgt.mobile.android.common.bean.ErrorResponse;
 import org.wso2.carbon.device.mgt.mobile.android.common.bean.wrapper.EventBeanWrapper;
 import org.wso2.carbon.device.mgt.mobile.android.common.exception.*;
 import org.wso2.carbon.device.mgt.mobile.android.common.spi.AndroidService;
-import org.wso2.carbon.device.mgt.mobile.android.core.util.AndroidAPIUtils;
+import org.wso2.carbon.device.mgt.mobile.android.api.util.AndroidAPIUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
