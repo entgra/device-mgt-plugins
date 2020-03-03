@@ -1,5 +1,6 @@
 package org.wso2.carbon.device.mgt.mobile.android.core.mokcs;
 
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceInfo;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
@@ -9,9 +10,15 @@ import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManag
 import java.util.List;
 
 public class DeviceInformationManagerServiceMock implements DeviceInformationManager {
+
     @Override
     public void addDeviceInfo(DeviceIdentifier deviceIdentifier, DeviceInfo deviceInfo)
             throws DeviceDetailsMgtException {
+
+    }
+
+    @Override
+    public void addDeviceInfo(Device device, DeviceInfo deviceInfo) throws DeviceDetailsMgtException {
 
     }
 
@@ -27,6 +34,11 @@ public class DeviceInformationManagerServiceMock implements DeviceInformationMan
 
     @Override
     public void addDeviceLocation(DeviceLocation deviceLocation) throws DeviceDetailsMgtException {
+
+    }
+
+    @Override
+    public void addDeviceLocation(Device device, DeviceLocation deviceLocation) throws DeviceDetailsMgtException {
 
     }
 

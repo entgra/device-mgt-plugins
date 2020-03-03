@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright (c) 2019, Entgra (pvt) Ltd. (http://entgra.io)
+  ~
+  ~  All Rights Reserved.
+  ~
+  ~  Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~  Proprietary and confidential.
+  -->
+
+<api context="/" name="health-check-api" xmlns="http://ws.apache.org/ns/synapse">
+    <resource faultSequence="fault" methods="GET" url-mapping="/">
+        <inSequence>
+            <payloadFactory>
+                <format>
+                    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                        <soapenv:Body>
+                            <text xmlns="http://ws.apache.org/commons/ns/payload">OK</text>
+                        </soapenv:Body>
+                    </soapenv:Envelope>
+                </format>
+            </payloadFactory>
+            <property name="messageType" value="text/plain" scope="axis2"/>
+            <respond/>
+        </inSequence>
+        <outSequence>
+        </outSequence>
+    </resource>
+</api>

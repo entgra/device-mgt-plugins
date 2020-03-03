@@ -191,6 +191,17 @@
              <span id="display-message-configuration-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
          </a>
 
+          <a href="javascript:void(0)" class="application-list" onclick="showAdvanceOperation('application-list', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+              <i class="fw fw-clock fw-stack-2x"></i>
+            </span>
+             App Usage Time Configuration
+             <span id="application-list-configured" class="has-configured status-icon hidden"><i
+                     class="fw fw-success"></i></span>
+             <span id="application-list-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
+             <span id="application-list-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+          </a>
+
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -3770,6 +3781,159 @@
                 </div>
         </div>
         <!--/Display Message Configuration-->
+
+        <!--App Usage Time Configuration-->
+        <div class="wr-hidden-operation" data-operation="application-list">
+                <div class="panel panel-default operation-data" data-operation="application-list" data-operation-code="APPLICATION_LIST">
+                        <div id="application-list-policy-heading" class="panel-heading" role="tab">
+                            <h2 class="sub-title panel-title">
+                                App Usage Time Configuration
+                                <label id="application-list-policy-lbl" class="wr-input-control switch" data-toggle="collapse"
+                                       data-target="#application-list-policy-body">
+                                    <input type="checkbox"/>
+                                    <span class="helper"></span>
+                                    <span class="text"></span>
+                                </label>
+                            </h2>
+                            <div class="panel-title-description">
+                                Configure these settings to manage the applications usage time.
+                            </div>
+                        </div>
+                        <div id="application-list-policy-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                             aria-labelledby="app-usage-configuration-policy-body">
+                            <hr/>
+                        <br>
+                        <div>
+                            <ul class="message message-info">
+                                <i class="icon fw fw-info"></i>
+                                This policy works only for Android 5.1 (Lolipop) or later versions.
+                            </ul>
+                            <br><br>
+                        </div>
+                        <div id="application-list-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                             <i class="icon fw fw-error"></i><span></span>
+                        </div>
+{{!--                             <div class="wr-input-control"> --}}
+{{!--                                 <div id="global-data-select"> --}}
+{{!--                                     <div class="wr-input-control"> --}}
+{{!--                                         <label class="wr-input-label" for="application-usage-category"> --}}
+{{!--                                             App Usage Time Category --}}
+{{!--                                         </label> --}}
+{{!--                                         <select id="app-usage-time-category" --}}
+{{!--                                                 class="form-control operationDataKeys" --}}
+{{!--                                                 data-key="appUsageTimeCategory"> --}}
+{{!--                                             <option value="" selected="selected">None</option> --}}
+{{!--                                             <option value="screenUsageTime">App Screen Usage Time</option> --}}
+{{!--                                         </select> --}}
+{{!--                                     </div> --}}
+{{!--                                 </div> --}}
+{{!--                             </div> --}}
+                            <div class="wr-input-control">
+                                 <label class="wr-input-label" for="application-list-applications">
+                                     <br><br>Set app-specific time.
+                                 </label>
+                                 <br/>
+                                 <a href="#app-usage-time-grid" class="btn btn-secondary grid-input-add "
+                                    data-click-event="add-form">
+                                     <span class="icon fw-stack">
+                                         <i class="fw fw-add fw-stack-1x"></i>
+                                         <i class="fw fw-circle-outline fw-stack-2x"></i>
+                                     </span>
+                                     Add Application
+                                 </a>
+                                 <div id="app-usage-time"
+                                      class="operationDataKeys grouped-array-input multi-column-key-value-pair-array"
+                                      data-key="appTimeData" data-column-count="5">
+                                      <table class="table table-responsive table-striped">
+                                         <thead>
+                                         <tr>
+                                             <th>No:</th>
+                                             <th>Package Name</th>
+                                             <th>Allowed Time Type</th>
+                                             <th>Allowed Time</th>
+                                             <th>Period Time Type</th>
+                                             <th>Period Time</th>
+                                             <th></th>
+                                         </tr>
+                                         </thead>
+                                         <tbody data-add-form-container="#app-usage-time-grid">
+                                         <tr data-help-text="add-form">
+                                             <td colspan="7">
+                                                 No entries added yet .
+                                             </td>
+                                         </tr>
+                                         </tbody>
+                                      </table>
+                                      <table class="template hidden">
+                                         <tbody data-add-form="#app-usage-time-grid">
+                                         <tr data-add-form-element="clone" onChange="onCreateSentence()">
+                                             <td data-title="No:">
+                                                 <span class="index"></span>
+                                             </td>
+                                             <td data-title="Package Name">
+                                                 <input id="package-name" type="text"
+                                                        class="form-control grid-input-text"
+                                                        data-child-key="packageName"
+                                                        maxlength="50" data-default="" placeholder="[ com.google.android.pay ]"/>
+                                             </td>
+                                             <td data-title="Allowed Time Type">
+                                                 <select id="app-usage-policy-allowed-time-type"
+                                                         class="form-control operationDataKeys"
+                                                         data-child-key="allowedTimeType">
+                                                     <option value="" selected="selected">None</option>
+                                                     <option value="60">Minute</option>
+                                                     <option value="3600">Hour</option>
+                                                     <option value="86400">Day</option>
+                                                     <option value="604800">Week</option>
+                                                 </select>
+                                             </td>
+                                             <td data-title="Allowed Time">
+                                                 <input id="allowed-time" type="text" class="form-control grid-input-text"
+                                                        data-child-key="allowedTime" maxlength="10" data-default=""
+                                                        placeholder="[ time ]"/>
+                                             </td>
+                                             <td data-title="Period Time Type">
+                                                 <select id="app-usage-policy-period-time-type"
+                                                         class="form-control operationDataKeys"
+                                                         data-child-key="periodTimeType"
+                                                         onchange="changeAndroidAppUsagePolicy(this)">
+                                                     <option value="" selected="selected">None</option>
+                                                     <option value="60">Minute</option>
+                                                     <option value="3600">Hour</option>
+                                                     <option value="86400">Day</option>
+                                                     <option value="604800">Week</option>
+                                                     <option value="2592000">Month</option>
+                                                 </select>
+                                             </td>
+                                             <td data-title="Period Time">
+                                                    <input  id="period" type="text" class="form-control grid-input-text"
+                                                        data-child-key="periodTime" maxlength="10" data-default=""
+                                                        placeholder="[ time ]"/>
+                                             </td>
+                                             <td>
+                                                 <span class="list-group-item-actions">
+                                                     <a href="#app-usage-time-grid"
+                                                        class="grid-input-remove"
+                                                        data-click-event="remove-form">
+                                                         <span class="fw-stack helper" title="Remove Entry">
+                                                             <i class="fw fw-circle-outline fw-stack-2x"></i>
+                                                             <i class="fw fw-delete fw-stack-1x"></i>
+                                                         </span>
+                                                     </a>
+                                                 </span>
+                                             </td>
+                                         </tr>
+                                         </tbody>
+                                      </table>
+                                 </div>
+                            </div>
+                            <div id="demoSentence">
+                            </div>
+                        </div>
+                </div>
+        </div>
+        <!--/App Usage Time Configuration-->
+
     </div>
     <script type="text/javascript">applyDataTable();</script>
 </div>
