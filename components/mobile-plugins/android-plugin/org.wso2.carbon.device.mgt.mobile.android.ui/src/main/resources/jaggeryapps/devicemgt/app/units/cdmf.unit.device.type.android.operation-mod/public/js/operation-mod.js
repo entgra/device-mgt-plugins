@@ -111,7 +111,8 @@ var androidOperationModule = function () {
         "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
         "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING",
         "CERT_ADD_OPERATION_CODE": "INSTALL_CERT",
-        "DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE": "DISPLAY_MESSAGE_CONFIGURATION"
+        "DISPLAY_MESSAGE_CONFIGURATION_OPERATION_CODE": "DISPLAY_MESSAGE_CONFIGURATION",
+        "APPLICATION_LIST_OPERATION_CODE": "APPLICATION_LIST"
     };
 
     /**
@@ -342,6 +343,12 @@ var androidOperationModule = function () {
                     "lockScreenMessage": operationPayload["lockScreenMessage"],
                     "settingAppSupportMessage": operationPayload["settingAppSupportMessage"],
                     "disabledSettingSupportMessage": operationPayload["disabledSettingSupportMessage"]
+                };
+                break;
+            case androidOperationConstants["APPLICATION_LIST_OPERATION_CODE"]:
+                payload = {
+                    "appUsageTimeCategory": "screenUsageTime",
+                    "appTimeData": operationPayload["appTimeData"]
                 };
                 break;
         }
@@ -737,6 +744,15 @@ var androidOperationModule = function () {
                         "lockScreenMessage": operationData["lockScreenMessage"],
                         "settingAppSupportMessage": operationData["settingAppSupportMessage"],
                         "disabledSettingSupportMessage": operationData["disabledSettingSupportMessage"]
+                    }
+                };
+                break;
+            case androidOperationConstants["APPLICATION_LIST_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "appUsageTimeCategory": "screenUsageTime",
+                        "appTimeData": operationData["appTimeData"]
                     }
                 };
                 break;
