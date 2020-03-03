@@ -59,6 +59,17 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('apn', this)">
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-apn fw-stack-2x"></i>
+                </span>
+            Access Point Name
+            <span id="apn-configured" class="has-configured status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="apn-ok" class="has-success status-icon hidden"><i class="fw fw-success"></i></span>
+            <span id="apn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
+
         <a href="javascript:void(0)" onclick="showAdvanceOperation('cert', this)">
                 <span class="wr-hidden-operations-icon fw-stack">
                     <i class="fw fw-pages fw-stack-2x"></i>
@@ -1294,6 +1305,318 @@
             </div>
         </div>
         <!-- /wi-fi -->
+
+        <!-- APN -->
+        <div class="wr-hidden-operation" data-operation="apn">
+            <div class="panel panel-default operation-data" data-operation="apn" data-operation-code="APN">
+                <div id="apn-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        APN Settings
+                        <label class="wr-input-control switch hidden" data-toggle="collapse" data-target="#apn-body">
+                            <input type="checkbox"/>
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                    </h2>
+                    <div class="panel-title-description">
+                        Configure the APN settings on Android devices.
+                        This feature only support for the Android 9.0 onwards only.
+                    </div>
+                </div>
+                <div id="apn-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                     aria-labelledby="apn-body">
+                    <hr/>
+                    <div id="apn-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-name">
+                            APN Name
+                            <span class="helper" title="Sets the name of the APN">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            Name to set for the APN (This value may be null)
+                        </label>
+                        <input id="apn-name" type="text" class="form-control operationDataKeys" data-key="apnName"
+                               maxlength="100" placeholder="[ Name to set for the APN (This value may be null) ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-apn">
+                            APN Entry Name
+                            <span class="helper" title="Sets a human-readable name that describes the APN">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            APN Entry Name to set for the APN (This value may be null)
+                        </label>
+                        <input id="apn-apn" type="text" class="form-control operationDataKeys" data-key="apnApn"
+                               maxlength="100" placeholder="[ APN Entry Name to set for the APN (This value may be null) ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-proxy-address">
+                            APN Proxy Address
+                            <span class="helper" title="Sets the proxy address of the APN">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            APN Proxy Address the proxy address to set for the APN
+                        </label>
+                        <input id="apn-proxy-address" type="text" class="form-control operationDataKeys" data-key="apnProxyAddress"
+                               maxlength="100" placeholder="[ 192.168.8.1 ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-proxy-port">
+                            APN Proxy Port
+                            <span class="helper" title="Sets the proxy port of the APN.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            APN Proxy port should be between 0 - 65535
+                        </label>
+                        <input id="apn-proxy-port" type="text" class="form-control operationDataKeys" data-key="apnProxyPort"
+                               maxlength="100" placeholder="[ Enter a valid proxy port between 0 - 65535]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-username">
+                            APN Username
+                            <span class="helper" title="Sets the APN username of the APN">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            APN username to set for the APN (This value may be null)
+                        </label>
+                        <input id="apn-username" type="text" class="form-control operationDataKeys" data-key="apnUsername"
+                               maxlength="100" placeholder="[ APN username to set for the APN (This value may be null)]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-password">
+                            APN Password
+                            <span class="helper" title="Sets the APN password of the APN.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            APN Password should be strong
+                        </label>
+                        <input id="apn-password" type="password" class="form-control operationDataKeys" data-key="apnPassword"
+                               maxlength="100" placeholder="[ Enter a strong password ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-server">
+                            Server
+                            <span class="helper" title="Apn server settings">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            Server should be 1-to-30 characters long
+                        </label>
+                        <input id="apn-server" type="text" class="form-control operationDataKeys" data-key="apnServer"
+                               maxlength="100" placeholder="[ APN server to set for the APN ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-mmsc">
+                            MMSC
+                            <span class="helper" title="MMSC Uri to set for the APN (This value may be null)">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            MMSC Uri to set for the APN This value may be null
+                        </label>
+                        <input id="apn-mmsc" type="text" class="form-control operationDataKeys" data-key="apnMMSC"
+                               maxlength="100" placeholder="[192.168.8.1]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-mms-proxy-address">
+                            MMS Proxy Address
+                            <span class="helper" title="Sets the MMS proxy address of the APN.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            MMS Proxy Address to set for the APN This value may be null.
+                        </label>
+                        <input id="apn-mms-proxy-address" type="text" class="form-control operationDataKeys" data-key="apnMMSProxyAddress"
+                               maxlength="100" placeholder="[ 192.168.8.1 ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-mms-proxy-port">
+                            MMS Proxy Port
+                            <span class="helper" title="MMS Proxy Port to set for the APN">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            MMS Proxy Port to set for the APN
+                        </label>
+                        <input id="apn-mms-proxy-port" type="text" class="form-control operationDataKeys" data-key="apnMMSProxyPort"
+                               maxlength="100" placeholder="[ MMS Proxy Port sould be between 0 - 65535 ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-mcc">
+                            MCC
+                            <span class="helper" title="MCC to set for the APN">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            MCC to set for the APN
+                        </label>
+                        <input id="apn-mcc" type="text" class="form-control operationDataKeys" data-key="apnMCC"
+                               maxlength="100" placeholder="[ MCC to set for the APN ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-mnc">
+                            MNC
+                            <span class="helper" title="MNC to set for the APN">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="apnValidationText" class="wr-input-label hidden">
+                            MNC to set for the APN
+                        </label>
+                        <input id="apn-mnc" type="text" class="form-control operationDataKeys" data-key="apnMNC"
+                               maxlength="100" placeholder="[ MCC to set for the APN ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-authentication-type">
+                            Authentication Type
+                            <span class="helper"
+                                  title="Sets the authentication type of the APN.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                        </label>
+                        <select class="form-control operationDataKeys" id="apn-authentication-type"
+                                 data-key="apnAuthenticationType" disabled>
+                            <option value="none" selected>NONE </option>
+                            <option value="pap">PAP</option>
+                            <option value="chap">CHAP </option>
+                            <option value="pap_or_chap">PAP_OR_CHAP</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control">
+                         <label class="wr-input-label" for="apn-type">
+                             APN Type
+                             <span class="helper"
+                                   title="APN Type">
+                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                     </span>
+                         </label>
+                         <select class="form-control operationDataKeys" id="apn-type"
+                                  data-key="apnType" disabled>
+                             <option value="default" selected>DEFAULT</option>
+                             <option value="cbs">CBS</option>
+                             <option value="dun">DUN</option>
+                             <option value="ims">IMS</option>
+                             <option value="mms">MMS</option>
+                             <option value="supl">SUPL</option>
+                             <option value="ia">IA</option>
+                             <option value="hipri">HIPRI</option>
+                             <option value="fota">FOTA</option>
+                             <option value="emergency">EMERGENCY</option>
+                         </select>
+                     </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-protocol">
+                            APN Protocol
+                            <span class="helper"
+                                  title="Sets the protocol to use to connect to this APN.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                        </label>
+                        <select class="form-control operationDataKeys" id="apn-protocol"
+                                 data-key="apnProtocol" disabled>
+                            <option value="ipv4v6" selected>IPV4V6</option>
+                            <option value="ip">IP</option>
+                            <option value="ipv6">IPV6</option>
+                            <option value="ppp">PPP</option>
+                        </select>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-roaming-protocol">
+                            APN Roaming Protocol
+                            <span class="helper"
+                                  title="Sets the protocol to use to connect to this APN when the device is roaming.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                        </label>
+                        <select class="form-control operationDataKeys" id="apn-roaming-protocol"
+                                 data-key="apnRoamingProtocol" disabled>
+                            <option value="ipv4v6" selected>IPV4V6</option>
+                            <option value="ip">IP</option>
+                            <option value="ipv6">IPV6</option>
+                            <option value="ppp">PPP</option>
+                        </select>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-bearer">
+                            APN Bearer
+                            <span class="helper"
+                                  title="Sets Radio Technology (Network Type) info for this APN">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                         <select class="form-control operationDataKeys" id="apn-bearer"
+                                 data-key="apnBearer" disabled>
+                            <option value="unspecified" selected>UNSPECIFIED</option>
+                            <option value="cdma">CDMA</option>
+                            <option value="lte">LTE</option>
+                            <option value="hspap">HSPAP</option>
+                            <option value="hspa">HSPA</option>
+                            <option value="hsupa">HSUPA</option>
+                            <option value="hsdpa">HSDPA</option>
+                            <option value="gprs">GPRS</option>
+                            <option value="edge">EDGE</option>
+                            <option value="ehrpd">EHRPD</option>
+                            <option value="evdo_a">EVDO_A</option>
+                            <option value="evdo_b">EVDO_B</option>
+                            <option value="evdo_0">EVDO_0</option>
+                            <option value="1xrtt">1xRTT</option>
+                            <option value="iwlan">IWLAN</option>
+                        </select>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label checkbox" for="apn-is-enable">
+                            APN Enable/Disable
+                            <br>
+                            <input id="apn-is-enable" type="checkbox"
+                            class="operationDataKeys" data-key="apnIsEnable" disabled/>
+                            <span class="helper"
+                                  title="Apn enable disable settings">
+                                Enable/Disable
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="apn-mvno-type">
+                            Mobile Virtual Network Operator Type
+                            <span class="helper"
+                                  title="Mobile Virtual Network Operator Type">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                        </label>
+                        <select class="form-control operationDataKeys" id="apn-mvno-type"
+                                 data-key="apnMVNOType" disabled>
+                            <option value="gid" selected>GID</option>
+                            <option value="spn">SPN</option>
+                            <option value="iccid">ICCID</option>
+                            <option value="imsi">IMSI</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- APN -->
 
         <!-- global-proxy -->
         <div class="wr-hidden-operation" data-operation="global-proxy">
