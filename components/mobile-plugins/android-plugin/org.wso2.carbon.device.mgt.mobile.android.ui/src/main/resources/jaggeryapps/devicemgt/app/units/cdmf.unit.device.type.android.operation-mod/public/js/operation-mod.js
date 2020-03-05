@@ -136,7 +136,7 @@ var androidOperationModule = function () {
                     "passcodePolicyMaxPasscodeAgeInDays": operationPayload["maxPINAgeInDays"],
                     "passcodePolicyPasscodeHistory": operationPayload["pinHistory"],
                     "maximumNumberOfFailedAttemptsBeforeDeviceLock": operationPayload["maxFailedAttemptsDeviceLock"],
-                    "maximumNumberOfFailedAttemptsBeforeDeviceWipe": operationPayload["maxFailedAttemptsDeviceWipe"]
+                    "maximumNumberOfFailedAttemptsBeforeDeviceWipe": operationPayload["maxFailedAttemptsDeviceWipe"],
                     "passcodePolicyMaxTimeToLock": operationPayload["maxTimeToLock"],
                     "passcodePolicyWPExist": operationPayload["passcodePolicyWPExist"]
                 };
@@ -578,7 +578,7 @@ var androidOperationModule = function () {
                         "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
                         "pinHistory": operationData["passcodePolicyPasscodeHistory"],
                         "maxTimeToLock": operationData["passcodePolicyMaxTimeToLock"],
-                        "passcodePolicyWPExist": operationData["passcodePolicyWPExist"]
+                        "passcodePolicyWPExist": operationData["passcodePolicyWPExist"],
                         "maxFailedAttemptsDeviceLock": operationData["maximumNumberOfFailedAttemptsBeforeDeviceLock"],
                         "maxFailedAttemptsDeviceWipe": operationData["maximumNumberOfFailedAttemptsBeforeDeviceWipe"]
                     }
