@@ -25,11 +25,6 @@
                 <Name>jdbc/MobileAndroidDM_DS</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
-        <DataSourceConfiguration type="windows">
-            <JndiLookupDefinition>
-                <Name>jdbc/MobileWindowsDM_DS</Name>
-            </JndiLookupDefinition>
-        </DataSourceConfiguration>
     </DataSourceConfigurations>
     </ManagementRepository>
     <APIPublisher>

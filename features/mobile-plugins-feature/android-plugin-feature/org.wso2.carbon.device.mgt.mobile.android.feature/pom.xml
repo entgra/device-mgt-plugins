@@ -17,7 +17,8 @@
   ~ under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
@@ -29,7 +30,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.device.mgt.mobile.android.feature</artifactId>
     <packaging>pom</packaging>
-    <version>5.0.7-SNAPSHOT</version>
     <name>WSO2 Carbon - Android Device Management Feature</name>
     <url>http://wso2.org</url>
     <description>This feature contains the core bundles required for Android Device Management
@@ -39,11 +39,7 @@
     <dependencies>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.mobile.android.core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.mobile.android.common</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.mobile.android</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database.wso2</groupId>
@@ -247,10 +243,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.android.core:${carbon.devicemgt.plugins.version}
-                                </bundleDef>
-                                <bundleDef>
-                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.android.common:${carbon.devicemgt.plugins.version}
+                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.android:${carbon.devicemgt.plugins.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>

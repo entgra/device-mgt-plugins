@@ -59,7 +59,7 @@ hr {
     color: #006eff;
 }
 .enrollment-qr-container canvas {
-    width: 15%;
+    width: 14%;
 }
 
 @media (min-width:992px){

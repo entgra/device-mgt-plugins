@@ -23,7 +23,6 @@ function onRequest(context) {
     viewModel["isVirtual"] = request.getParameter("type") == 'virtual';
     viewModel["isCloud"] = isCloud;
     viewModel["hostName"] = devicemgtProps["httpsURL"];
-    viewModel["accessToken"] = session.get("tokenPair");
     if (isCloud) {
         viewModel["enrollmentURL"] = "https://play.google.com/store/apps/details?id=org.wso2.iot.agent";
     } else {
