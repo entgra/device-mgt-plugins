@@ -1,152 +1,56 @@
-
+{{unit "cdmf.unit.lib.qrcode"}}
 {{unit "cdmf.unit.device.type.qr-modal" enrollmentURL=enrollmentURL deviceTypeName="Android"}}
+{{unit "cdmf.unit.device.type.email.invite-modal" deviceTypeView="android"}}
 
 <div class="row">
     <div class="col-lg-12">
         {{#if isVirtual}}
             <h1 class="grey ">DOWNLOAD THE VIRTUAL ANDROID DEVICE</h1>
         {{else}}
-            <h2 class="grey ">ENROLL THE ANDROID AGENT</h2>
+            <h1 class="grey ">DOWNLOAD THE ANDROID AGENT</h1>
         {{/if}}
         <hr>
     </div>
 </div>
 
 <div class="row">
-    <h3>Step 01 - Get your Android Agent.</h3>
-    <hr><br>
-        <p>The Android agent can be downloaded by 2 methods.
-            Either the generated QR code can be scanned, and the agent APK downloaded from the link,
-            or the agent APK can be manually downloaded via the "Download APK" button, transferred to
-            the device and then installed.</p>
-        <br>
-        <button  id="button-download-qr" onclick="displayAgentDownloadQR();" class="btn btn-default btn-primary">Get Android Agent</button>
-        <br>
-
-        {{!-- Agent download qr class --}}
-
-        <div id="download-agent-qr" style="display:none" class="row">
-        {{!-- <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 add-padding-top-2x">
+    <!--<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 add-padding-top-2x">
         <img src="{{@unit.publicUri}}/images/android-icon.png" class="img-responsive">
-        </div> --}}
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 add-padding-top-2x add-padding-bottom-2x">
-            {{#if isVirtual}}
-                <h3 class="text-center add-padding-bottom-4x">Download our virtual Android device, enroll it with WSO2
+    </div>-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 add-padding-top-2x add-padding-bottom-2x">
+        {{#if isVirtual}}
+            <h3 class="text-center add-padding-bottom-4x">Download our virtual Android device, enroll it with WSO2
                 {{#if isCloud}}
                     Device Cloud
                 {{else}}
                     IoT Server
                 {{/if}}and try it out!</h3>
-                    <div class="text-center"><a
+            <div class="text-center"><a
                     href="{{@unit.publicUri}}/assets/android-tryit.ZIP"
                     class="btn-operations remove-margin download_agent">
-                    <i class="fw fw-download fw-inverse fw-lg add-margin-1x"></i>Download the virtual Android device</a>
-                    </div>
-                {{else}}
-                    <h3 class="text-center">Scan to get the Android Agent.</h3>
-                    <div class="enrollment-qr-container text-center"></div>
-                    <h3 class="text-center add-margin-bottom-2x add-margin-top-2x">or</h3>
-                    {{#if isCloud}}
-                        <div class="text-center">
-                            <a href='https://play.google.com/store/apps/details?id=org.wso2.iot.agent&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'
-                                target="_blank">
-                            <img alt='Get it on Google Play'
-                                src='{{@unit.publicUri}}/images/en_badge_web_generic_export.png'/>
-                            </a>
-                        </div>
-                    {{else}}
-                        <div class="text-center">
-                            <a href="{{enrollmentURL}}"
-                                class="btn-operations remove-margin download_agent">
-                            <i class="fw fw-download fw-inverse fw-lg add-margin-1x"></i> Download APK</a>
-                        </div>
-                    {{/if}}
-                {{/if}}
-        </div>
-            {{#if isCloud}}
-                <p class="doc-link text-center">Need help? Read <a
-                    {{#if isVirtual}}
-                        href="https://docs.wso2.com/display/DeviceCloud/Quick+Start+Guide"
-                    {{else}}
-                        href="https://docs.wso2.com/display/DeviceCloud/Enrolling+an+Android+Device"
-                    {{/if}}
-                        target="_blank">Entgra Device Cloud documentation.</a>
-                </p>
-            {{else}}
-                <p class="doc-link text-center">Need help? Read <a
-                    {{#if isVirtual}}
-                        href="https://entgra.atlassian.net/wiki/spaces/IoTS340/pages/28278950/Android+Virtual+Device"
-                    {{else}}
-                        href="https://entgra.atlassian.net/wiki/spaces/IoTS340/pages/28278906/Android"
-                    {{/if}}
-                        target="_blank">Entgra IoT Server documentation.</a></p>
-            {{/if}}
-        </div>
-    <hr>
-    <h3>Step 02 - Enroll the Android Agent.</h3><br>
-        <p>Your device can be enrolled with Entgra IoTS automatically via QR code or manually by a wizard.
-            To enroll automatically, first download and install the agent as mentioned in Step 1 then proceed with the ENROLL WITH QR option from the device setup activity.
-            Thereafter select the ownership configuration and scan the generated QR to complete the process.
-            To enroll manually; select the Manual enrollment option from the setup activity and follow the succeeding steps.</p>
-        <br>
-        {{#unless isVirtual}}
-            {{#unless isCloud}}
-            <div>
-                <button  id="button-enroll-qr" onclick="displayEnrollmentQR();" class="btn btn-default btn-primary">Enroll using QR</button>
-                <button  id="button-enroll-manual" onclick="manualEnrollmentGuide();" class="btn btn-default btn-primary">Enroll manually</button>
+                <i class="fw fw-download fw-inverse fw-lg add-margin-1x"></i>Download the virtual Android device</a>
             </div>
-            {{/unless}}
-            {{else}}
-                <button  id="button-enroll-manual" onclick="manualEnrollmentGuide();" class="btn btn-default btn-primary">Enroll manually</button>
-        {{/unless}}
-
-    {{!-- Agent enroll QR code class --}}
-        <div id="enroll-agent-qr" style="display:none" class="row">
-            {{#unless isVirtual}}
-                {{#unless isCloud}}
-                <h3 class="text-center">Generate QR code to QR based Provisioning.</h3>
-                <hr>
-                    <div class="text-center">
-                        <label class="text-center add-margin-bottom-2x add-margin-top-2x">Select device ownership</label>
-                        <select id="android-device-ownership" class="text-center" data-default="0" onchange="generateKIOSKQRCode('.kiosk-enrollment-qr-container');">
-                            <option value="BYOD">Select</option>
-                            <option value="BYOD">BYOD</option>
-                            <option value="COPE">COPE</option>
-                            <option value="COSU">COSU (KIOSK)</option>
-                            <option value="WORK_PROFILE">WORK PROFILE</option>
-                            <option value="GOOGLE_ENTERPRISE">GOOGLE_WORK_PROFILE</option>
-
-                        </select>
-                    </div>
-                    <div class="text-center" id="android-qr-code">
-                        <div class="a-token" data-atoken="{{accessToken}}"></div>
-                            <div class="row" id="enrollment_qr_content">
-                            <div class="col-xs-12 col-sm-12.enrollment-qr-container canvas  col-md-12 col-lg-12 add-padding-top-2x add-padding-bottom-2x">
-                                <div class="kiosk-enrollment-qr-container text-center" data-toggle="popover"
-                                    data-trigger="focus" data-placement="bottom">
-                                </div>
-                            </div>
-
-                        </div>
-                </div>
+        {{else}}
+            <h3 class="text-center">Scan to get the Android Agent.</h3>
+            <div class="enrollment-qr-container text-center"></div>
+            <h3 class="text-center add-margin-bottom-2x add-margin-top-2x">or</h3>
                 <div class="text-center">
-                    <div class="text-center " alt="Responsive image" id="qr-code-img">
-                        <img src="{{@unit.publicUri}}/images/application.svg" height="300" width="300" style="width:50%;">
-                    </div>
-                    <h3 id="enroll-qr-heading" style="display:none" class="text-center fw fw-lg add-margin-1x">Scan to enroll android agent</h3>
+                    <a href="{{enrollmentURL}}"
+                       class="btn-operations remove-margin download_agent">
+                        <i class="fw fw-download fw-inverse fw-lg add-margin-1x"></i> Download APK</a>
                 </div>
-                <hr>
-                {{/unless}}
-        {{/unless}}
+        {{/if}}
+    </div>
+        <p class="doc-link text-center">Need help? Read <a
+            {{#if isVirtual}}
+            href="https://entgra.atlassian.net/wiki/spaces/IoTS340/pages/28278950/Android+Virtual+Device"
+            {{else}}
+            href="https://entgra.atlassian.net/wiki/spaces/IoTS340/pages/28278906/Android"
+            {{/if}}
+            target="_blank">Entgra IoT Server documentation.</a></p>
 </div>
 
-{{!-- Warning message  --}}
-<div id="android-configurations-alert" style="display:none" class="alert alert-warning text-center ">
-    <strong>Warning!</strong> Android Platform Configurations is empty. Please set Platform Configurations before generating QR code.
-</div>
-
-<div id="android-enroll-manually-instructions" class="row" style="display:none">
-    <div class="row">
+<div class="row">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-12 add-padding-top-2x ">
         {{#if isVirtual}}
             <h3 class="uppercase">TRY OUT THE VIRTUAL ANDROID DEVICE</h3>
@@ -156,6 +60,8 @@
         <hr>
     </div>
 </div>
+
+<div class="row grey-bg">
     {{#if isCloud}}
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 add-padding-top-2x add-padding-bottom-2x">
             <h5><strong>Step 1</strong></h5>
@@ -182,14 +88,14 @@
                         </li>
                     </ol>
                 </div>
-                <img src="{{@unit.publicUri}}/images/android-tryit.png" style="width:70%;" class="img-responsive">
+                <img src="{{@unit.publicUri}}/images/android-tryit.png" class="img-responsive">
             {{else}}
                 <div class="add-min-height">
                     <p>Let's start by opening the Android agent on your device.
                         <br/>Tap on <b>WSO2 Device Management Agent</b>.
                     </p>
                 </div>
-                <img src="{{@unit.publicUri}}/images/launch_agent.png" style="width:70%;" class="img-responsive">
+                <img src="{{@unit.publicUri}}/images/launch_agent.png" class="img-responsive">
             {{/if}}
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 col-md-offset-1 col-lg-offset-1 add-padding-top-2x add-padding-bottom-2x">
@@ -201,7 +107,7 @@
                     <li>Password: <i>Your Cloud password.</i></li>
                 </ul>
             </div>
-            <img src="{{@unit.publicUri}}/images/register-cloud.png" style="width:70%;" class="img-responsive">
+            <img src="{{@unit.publicUri}}/images/register-cloud.png" class="img-responsive">
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 col-md-offset-1 col-lg-offset-1 add-padding-top-2x add-padding-bottom-2x">
             <h5><strong>Step 3</strong></h5>
@@ -241,28 +147,29 @@
                         </li>
                     </ol>
                 </div>
-                <img src="{{@unit.publicUri}}/images/android-tryit.png" style="width:70%;" class="img-responsive">
+                <img src="{{@unit.publicUri}}/images/android-tryit.png" class="img-responsive">
             {{else}}
                 <div class="add-min-height">
                     <p>Let's start by installing the Android agent on your device. Open the downloaded file, and tap
                         <b>INSTALL</b>.</p>
                 </div>
-                <img src="{{@unit.publicUri}}/images/install_agent.png" style="width:70%;" class="img-responsive">
+                <img src="{{@unit.publicUri}}/images/install_agent.png" class="img-responsive">
             {{/if}}
         </div>
+
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 add-padding-top-2x add-padding-bottom-2x">
             <h5><strong>Step 2</strong></h5>
             <div class="add-min-height">
                 <p>Tap Skip to proceed with the default enrollment process.</p>
             </div>
-            <img src="{{@unit.publicUri}}/images/set_profile.png" style="width:70%;" class="img-responsive">
+            <img src="{{@unit.publicUri}}/images/set_profile.png" class="img-responsive">
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 add-padding-top-2x add-padding-bottom-2x">
             <h5><strong>Step 3</strong></h5>
             <div class="add-min-height">
                 <p>Enter the server address based on your environment, in the text box provided.</p>
             </div>
-            <img src="{{@unit.publicUri}}/images/registration.png" style="width:70%;" class="img-responsive">
+            <img src="{{@unit.publicUri}}/images/registration.png" class="img-responsive">
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 add-padding-top-2x add-padding-bottom-2x">
             <h5><strong>Step 4</strong></h5>
@@ -274,7 +181,7 @@
                     <li>Password: <i>Your password.</i></li>
                 </ul>
             </div>
-            <img src="{{@unit.publicUri}}/images/register.png" style="width:70%;" class="img-responsive">
+            <img src="{{@unit.publicUri}}/images/register.png" class="img-responsive">
         </div>
     {{/if}}
 </div>

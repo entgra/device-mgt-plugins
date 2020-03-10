@@ -363,7 +363,6 @@ var generatePayload = function (operationCode, operationData, deviceList) {
                     "DISALLOW_AUTOFILL": operationData["disallowAutoFill"],
                     "DISALLOW_BLUETOOTH": operationData["disallowBluetooth"],
                     "DISALLOW_BLUETOOTH_SHARING": operationData["disallowBluetoothSharing"],
-                    "DISALLOW_REMOVE_USER": operationData["disallowRemoveUser"],
                     "DISALLOW_DATA_ROAMING": operationData["disallowDataRoaming"]
                 }
             };
@@ -601,6 +600,5 @@ var androidOperationConstants = {
     "DISALLOW_AUTOFILL": "DISALLOW_AUTOFILL",
     "DISALLOW_BLUETOOTH": "DISALLOW_BLUETOOTH",
     "DISALLOW_BLUETOOTH_SHARING": "DISALLOW_BLUETOOTH_SHARING",
-    "DISALLOW_REMOVE_USER": "DISALLOW_REMOVE_USER",
     "DISALLOW_DATA_ROAMING": "DISALLOW_DATA_ROAMING"
 };
