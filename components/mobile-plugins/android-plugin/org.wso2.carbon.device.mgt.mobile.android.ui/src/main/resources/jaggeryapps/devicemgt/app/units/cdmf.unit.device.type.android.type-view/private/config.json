@@ -13,7 +13,6 @@
             "perm:android:lock-devices",
             "perm:android:configure-vpn",
             "perm:android:configure-wifi",
-            "perm:android:configure-global-proxy",
             "perm:android:enroll",
             "perm:android:uninstall-application",
             "perm:android:manage-configuration",
@@ -36,9 +35,7 @@
             "perm:android:unlock-devices",
             "perm:android:control-camera",
             "perm:android:reboot",
-            "perm:android:change-LockTask",
-            "perm:android:logcat",
-            "perm:android:send-app-restrictions"
+            "perm:android:logcat"
         ],
         "features": {
             "DEVICE_RING": {
@@ -74,11 +71,6 @@
                 "icon": "fw-refresh",
                 "filter" : {"property" : "ownership", "value" : "COPE", "text": "This feature is only available in COPE/COSU"},
                 "permission": "/device-mgt/devices/owning-device/operations/android/reboot"
-            },
-            "CHANGE_LOCK_TASK_MODE": {
-                "icon": "fw-mobile",
-                "filter" : {"property" : "ownership", "value" : "COPE", "text": "This feature is only available in COSU(KIOSK)"},
-                "permission": "/device-mgt/devices/owning-device/operations/android/change-LockTask"
             },
             "UPGRADE_FIRMWARE": {
                 "icon": "fw-hardware",
@@ -221,24 +213,6 @@
                     }
                 ],
                 "permission": "/device-mgt/devices/owning-device/operations/android/wipe"
-            },
-            "REMOTE_APP_CONFIG": {
-                "icon": "fw-lock",
-                "formParams": [
-                    {
-                        "type": "text",
-                        "id": "app-id",
-                        "optional": false,
-                        "label": "Application identifier"
-                    },
-                    {
-                        "type": "text",
-                        "id": "payload",
-                        "optional": false,
-                        "label": "Application restriction payload"
-                    }
-                ],
-                "permission": "/device-mgt/devices/owning-device/operations/android/send-app-conf"
             }
         }
     }

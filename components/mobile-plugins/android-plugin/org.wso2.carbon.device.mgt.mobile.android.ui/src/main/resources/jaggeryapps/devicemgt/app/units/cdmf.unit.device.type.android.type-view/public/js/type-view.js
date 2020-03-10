@@ -31,20 +31,6 @@ var backendEndBasePath = "/api/device-mgt/v1.0";
 //    });
 //}
 
-var kioskConfigs = {
-    "adminComponentName": "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME",
-    "wifiSSID": "android.app.extra.PROVISIONING_WIFI_SSID",
-    "wifiPassword": "android.app.extra.PROVISIONING_WIFI_PASSWORD",
-    "wifiSecurity": "android.app.extra.PROVISIONING_WIFI_SECURITY_TYPE",
-    "skipEncryption": "android.app.extra.PROVISIONING_SKIP_ENCRYPTION",
-    "checksum": "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM",
-    "downloadURL": "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION",
-    "androidExtra": "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE",
-    "accessToken": "android.app.extra.token",
-    "defaultOwnership": "android.app.extra.defaultOwner",
-    "serverIp": "android.app.extra.serverIp"
-};
-
 /*
  * set popup maximum height function.
  */
@@ -70,134 +56,20 @@ function hidePopup() {
     $(modalPopupContent).html("");
     $(modalPopupContent).removeClass("operation-data");
     $(modalPopup).modal('hide');
-    $('body').removeClass('modal-open').css('padding-right', '0px');
+    $('body').removeClass('modal-open').css('padding-right','0px');
     $('.modal-backdrop').remove();
 }
 
 /*
  * QR-code generation function.
  */
-function generateQRCode() {
+function generateQRCode(qrCodeClass) {
     var enrollmentURL = $("#qr-code-modal").data("enrollment-url");
     $(qrCodeClass).qrcode({
         text: enrollmentURL,
-        width: 150,
-        height: 150
+        width: 200,
+        height: 200
     });
-}
-
-/*
- * QR-code generation function for KIOSK.
- */
-function generateKIOSKQRCode(qrCodeClass) {
-
-    var payload = {};
-    var androidConfigAPI = "/api/device-mgt/android/v1.0/configuration";
-
-    var isKioskConfigured = false;
-    var defaultOwnerVal = {};
-    var serverIp = {};
-    $("#android-qr-code").show();
-    $("#enrollment_qr_content").show();
-    $("#qr-code-img").hide();
-    $("#enroll-qr-heading").show();
-    var ownership_type = $("#android-device-ownership").find("option:selected").attr("value");
-
-    invokerUtil.get(
-        androidConfigAPI,
-        function(data) {
-            data = JSON.parse(data);
-            if (data != null && data.configuration != null) {
-                if (ownership_type == "COSU" || ownership_type == "COPE") {
-                    for (var i = 0; i < data.configuration.length; i++) {
-                        var config = data.configuration[i];
-                        if (config.name === kioskConfigs["adminComponentName"]) {
-                            isKioskConfigured = true;
-                            payload[config.name] = config.value;
-                        } else if (config.name === kioskConfigs["wifiSSID"]) {
-                            payload[config.name] = config.value;
-                        } else if (config.name === kioskConfigs["wifiPassword"]) {
-                            payload[config.name] = config.value;
-                        } else if (config.name === kioskConfigs["wifiSecurity"]) {
-                            payload[config.name] = config.value;
-                        } else if (config.name === kioskConfigs["checksum"]) {
-                            payload[config.name] = config.value;
-                        } else if (config.name === kioskConfigs["downloadURL"]) {
-                            payload[config.name] = config.value;
-                        } else if (config.name === kioskConfigs["skipEncryption"]) {
-                            payload[config.name] = Boolean(config.value);
-                        } else if (config.name === kioskConfigs["defaultOwnership"]) {
-                            defaultOwnerVal[config.name] = ownership_type;
-                        } else if (config.name === kioskConfigs["serverIp"]) {
-                            serverIp[config.name] = config.value;
-                        }
-                    }
-                } else {
-                    for (var i = 0; i < data.configuration.length; i++) {
-                        var config = data.configuration[i];
-                        if (config.name === kioskConfigs["adminComponentName"]) {
-                            isKioskConfigured = true;
-                            payload[config.name] = config.value;
-                        } else if (config.name === kioskConfigs["defaultOwnership"]) {
-                            defaultOwnerVal[config.name] = ownership_type;
-                        } else if (config.name === kioskConfigs["serverIp"]) {
-                            serverIp[config.name] = config.value;
-                        }
-                    }
-                }
-            }
-        },
-        function(data) {
-            console.log(data);
-        });
-
-    var aToken = $(".a-token");
-    var tokenPair = aToken.data("atoken");
-
-    var accessToken = {};
-    accessToken[kioskConfigs["accessToken"]] = tokenPair["accessToken"];
-    var sumExtra = $.extend(accessToken, defaultOwnerVal, serverIp);
-    payload[kioskConfigs["androidExtra"]] = sumExtra;
-    $(".kiosk-enrollment-qr-container").empty();
-    if (isKioskConfigured) {
-        $(qrCodeClass).qrcode({
-            text: JSON.stringify(payload),
-            width: 350,
-            height: 350
-        });
-    } else {
-        $("#android-configurations-alert").fadeToggle(500);
-        $("#kiosk_content").hide();
-    }
-}
-
-function displayAgentDownloadQR() {
-    $(".enrollment-qr-container").empty();
-    generateQRCode(".enrollment-qr-container");
-    $("#download-agent-qr").fadeToggle(1000);
-    $("#enroll-agent-qr").fadeOut(1000);
-    $("#android-enroll-manually-instructions").fadeOut(1000);
-    $('html,body').animate({
-        scrollTop: $('#download-agent-qr').position().top
-    }, 800);
-}
-
-function displayEnrollmentQR() {
-    $("#download-agent-qr").fadeOut(1000);
-    $("#enroll-agent-qr").fadeToggle(1000);
-    $("#android-enroll-manually-instructions").fadeOut(1000);
-    $('html,body').animate({
-        scrollTop: $('#enroll-agent-qr').position().top
-    }, 800);
-}
-
-function manualEnrollmentGuide() {
-    $("#enroll-agent-qr").fadeOut(1000);
-    $("#download-agent-qr").fadeOut(1000);
-    $("#android-enroll-manually-instructions").fadeToggle(1000);
-    $('html,body').animate({
-        scrollTop: $('#android-enroll-manually-instructions').position().top
-    }, 800);
 }
 
 function toggleEnrollment() {
@@ -206,7 +78,7 @@ function toggleEnrollment() {
     modalDialog.show();
 }
 
-var updateNotificationCountOnSuccess = function(data, textStatus, jqXHR) {
+var updateNotificationCountOnSuccess = function (data, textStatus, jqXHR) {
     var notificationBubble = "#notification-bubble";
     if (jqXHR.status == 200 && data) {
         var responsePayload = JSON.parse(data);
@@ -244,12 +116,12 @@ function loadNewNotifications() {
         var notifications = $("#notifications");
         var currentUser = notifications.data("currentUser");
 
-        $.template("notification-listing", notifications.attr("src"), function(template) {
+        $.template("notification-listing", notifications.attr("src"), function (template) {
             var serviceURL = backendEndBasePath + "/notifications?offset=0&limit=5&status=NEW";
             invokerUtil.get(
                 serviceURL,
                 // on success
-                function(data, textStatus, jqXHR) {
+                function (data, textStatus, jqXHR) {
                     if (jqXHR.status == 200 && data) {
                         var viewModel = {};
                         var responsePayload = JSON.parse(data);
@@ -271,7 +143,7 @@ function loadNewNotifications() {
                     }
                 },
                 // on error
-                function(jqXHR) {
+                function (jqXHR) {
                     if (jqXHR.status = 500) {
                         $(messageSideBar).html("<h4 class ='message-danger'>Unexpected error occurred while trying " +
                             "to retrieve any new notifications.</h4>");
@@ -287,7 +159,7 @@ function loadNewNotifications() {
  * notification listing sidebar.
  * @return {Null}
  */
-$.sidebar_toggle = function(action, target, container) {
+$.sidebar_toggle = function (action, target, container) {
     var elem = '[data-toggle=sidebar]',
         button,
         containerOffsetLeft,
@@ -301,7 +173,7 @@ $.sidebar_toggle = function(action, target, container) {
         buttonParent;
 
     var sidebar_window = {
-        update: function(target, container, button) {
+        update: function (target, container, button) {
             containerOffsetLeft = $(container).data('offset-left') ? $(container).data('offset-left') : 0;
             containerOffsetRight = $(container).data('offset-right') ? $(container).data('offset-right') : 0;
             targetOffsetLeft = $(target).data('offset-left') ? $(target).data('offset-left') : 0;
@@ -316,7 +188,7 @@ $.sidebar_toggle = function(action, target, container) {
             }
         },
 
-        show: function() {
+        show: function () {
             if ($(target).data('sidebar-fixed') == true) {
                 $(target).height($(window).height() - $(target).data('fixed-offset'));
             }
@@ -360,7 +232,7 @@ $.sidebar_toggle = function(action, target, container) {
             $(target).trigger('shown.sidebar');
         },
 
-        hide: function() {
+        hide: function () {
             $(target).trigger('hide.sidebar');
             $(target).removeClass('toggled');
             if (button !== undefined) {
@@ -407,7 +279,7 @@ $.sidebar_toggle = function(action, target, container) {
     // binding click function
     var body = 'body';
     $(body).off('click', elem);
-    $(body).on('click', elem, function(e) {
+    $(body).on('click', elem, function (e) {
         e.preventDefault();
         button = $(this);
         container = button.data('container');
@@ -425,41 +297,41 @@ $.sidebar_toggle = function(action, target, container) {
     });
 };
 
-$.fn.collapse_nav_sub = function() {
+$.fn.collapse_nav_sub = function () {
     var navSelector = 'ul.nav';
 
     if (!$(navSelector).hasClass('collapse-nav-sub')) {
-        $(navSelector + ' > li', this).each(function() {
+        $(navSelector + ' > li', this).each(function () {
             var position = $(this).offset().left - $(this).parent().scrollLeft();
             $(this).attr('data-absolute-position', (position + 5));
         });
 
-        $(navSelector + ' li', this).each(function() {
+        $(navSelector + ' li', this).each(function () {
             if ($('ul', this).length !== 0) {
                 $(this).addClass('has-sub');
             }
         });
 
-        $(navSelector + ' > li', this).each(function() {
+        $(navSelector + ' > li', this).each(function () {
             $(this).css({
                 'left': $(this).data('absolute-position'),
                 'position': 'absolute'
             });
         });
 
-        $(navSelector + ' li.has-sub', this).on('click', function() {
+        $(navSelector + ' li.has-sub', this).on('click', function () {
             var elem = $(this);
             if (elem.attr('aria-expanded') !== 'true') {
-                elem.siblings().fadeOut(100, function() {
-                    elem.animate({ 'left': '15' }, 200, function() {
+                elem.siblings().fadeOut(100, function () {
+                    elem.animate({'left': '15'}, 200, function () {
                         $(elem).first().children('ul').fadeIn(200);
                     });
                 });
                 elem.siblings().attr('aria-expanded', 'false');
                 elem.attr('aria-expanded', 'true');
             } else {
-                $(elem).first().children('ul').fadeOut(100, function() {
-                    elem.animate({ 'left': $(elem).data('absolute-position') }, 200, function() {
+                $(elem).first().children('ul').fadeOut(100, function () {
+                    elem.animate({'left': $(elem).data('absolute-position')}, 200, function () {
                         elem.siblings().fadeIn(100);
                     });
                 });
@@ -468,24 +340,26 @@ $.fn.collapse_nav_sub = function() {
             }
         });
 
-        $(navSelector + ' > li.has-sub ul', this).on('click', function(e) {
+        $(navSelector + ' > li.has-sub ul', this).on('click', function (e) {
             e.stopPropagation();
         });
         $(navSelector).addClass('collapse-nav-sub');
     }
 };
 
-$(document).ready(function() {
+$(document).ready(function () {
     $.sidebar_toggle();
 
+    generateQRCode(".enrollment-qr-container");
+
     if (typeof $.fn.collapse == 'function') {
-        $('.navbar-collapse.tiles').on('shown.bs.collapse', function() {
+        $('.navbar-collapse.tiles').on('shown.bs.collapse', function () {
             $(this).collapse_nav_sub();
         });
     }
 
     loadNewNotificationsOnSideViewPanel();
-    $("#right-sidebar").on("click", ".new-notification", function() {
+    $("#right-sidebar").on("click", ".new-notification", function () {
         var notificationId = $(this).data("id");
         var redirectUrl = $(this).data("url");
         var markAsReadNotificationsEpr = backendEndBasePath + "/notifications/" + notificationId + "/mark-checked";
@@ -495,14 +369,14 @@ $(document).ready(function() {
             markAsReadNotificationsEpr,
             null,
             // on success
-            function(data) {
+            function (data) {
                 data = JSON.parse(data);
                 if (data.statusCode == responseCodes["ACCEPTED"]) {
                     location.href = redirectUrl;
                 }
             },
             // on error
-            function() {
+            function () {
                 var content = "<li class='message message-danger'><h4><i class='icon fw fw-error'></i>Warning</h4>" +
                     "<p>Unexpected error occurred while loading notification. Please refresh the pa{{#if isCloud}}ge and" +
                     " try again</p></li>";

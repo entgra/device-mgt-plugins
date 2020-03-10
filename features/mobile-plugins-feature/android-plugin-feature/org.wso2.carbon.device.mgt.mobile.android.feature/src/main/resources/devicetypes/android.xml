@@ -129,12 +129,6 @@
                             <id>lock-message</id>
                             <label>Message to be sent to the device</label>
                         </uiParam>
-                        <uiParam optional="true">
-                            <type>checkbox</type>
-                            <id>hard-lock</id>
-                            <label>Hard lock enabled (OEM Mode Only)</label>
-                            <helper>This feature is only available in OEM Mode.</helper>
-                        </uiParam>
                     </uiParams>
                 </params>
                 <metadata>
@@ -168,85 +162,6 @@
                     <method>POST</method>
                     <contentType>application/json</contentType>
                     <permission>/device-mgt/devices/owning-device/operations/android/clear-passwor</permission>
-                </metadata>
-            </Operation>
-        </Feature>
-        <Feature type="operation" code="DEVICE_REBOOT">
-            <Name>Reboot</Name>
-            <Description>Reboot the device</Description>
-            <Operation hidden="false" icon="fw-refresh">
-                <params/>
-                <metadata>
-                    <uri>/api/device-mgt/android/v1.0/admin/devices/reboot</uri>
-                    <method>POST</method>
-                    <contentType>application/json</contentType>
-                    <permission>/device-mgt/devices/owning-device/operations/android/reboot</permission>
-                    <filters>
-                        <filter>
-                            <property>ownership</property>
-                            <value>COPE</value>
-                            <description>This feature is only available in COPE/COSU</description>
-                        </filter>
-                    </filters>
-                </metadata>
-            </Operation>
-        </Feature>
-        <Feature type="operation" code="CHANGE_LOCK_TASK_MODE">
-            <Name>Change LockTask</Name>
-            <Description>Change LockTask mode of KIOSK device</Description>
-            <Operation hidden="false" icon="fw-mobile">
-                <params/>
-                <metadata>
-                    <uri>/api/device-mgt/android/v1.0/admin/devices/change-LockTask</uri>
-                    <method>POST</method>
-                    <contentType>application/json</contentType>
-                    <permission>/device-mgt/devices/owning-device/operations/android/change-LockTask</permission>
-                    <filters>
-                        <filter>
-                            <property>ownership</property>
-                            <value>COPE</value>
-                            <description>This feature is only available in COSU(KIOSK)</description>
-                        </filter>
-                    </filters>
-                </metadata>
-            </Operation>
-        </Feature>
-        <Feature type="operation" code="UPGRADE_FIRMWARE">
-            <Name>Upgrade Firmware</Name>
-            <Description>Upgrade Firmware</Description>
-            <Operation hidden="false" icon="fw-hardware">
-                <params>
-                    <uiParams>
-                        <uiParam optional="true">
-                            <type>checkbox</type>
-                            <id>immediate</id>
-                            <label>Instant Upgrade</label>
-                            <helper>Once enabled, device firmware upgrade process will start instantly.</helper>
-                        </uiParam>
-                        <uiParam optional="false">
-                            <type>text</type>
-                            <id>schedule</id>
-                            <label>Enter the date and time to schedule firmware upgrade.</label>
-                        </uiParam>
-                        <uiParam optional="true">
-                            <type>text</type>
-                            <id>server</id>
-                            <label>Enter firmware upgrade server URL (ie. http://abc.com or http://abc.com/ota)</label>
-                        </uiParam>
-                    </uiParams>
-                </params>
-                <metadata>
-                    <uri>/api/device-mgt/android/v1.0/admin/devices/upgrade-firmware</uri>
-                    <method>POST</method>
-                    <contentType>application/json</contentType>
-                    <permission>/device-mgt/devices/owning-device/operations/android/upgrade-firmware</permission>
-                    <filters>
-                        <filter>
-                            <property>ownership</property>
-                            <value>COPE</value>
-                            <description>This feature is only available in COPE/COSU</description>
-                        </filter>
-                    </filters>
                 </metadata>
             </Operation>
         </Feature>
@@ -632,39 +547,6 @@
         <Feature type="operation" hidden="false" code="DEVICE_UNLOCK">
             <Name>Unlock the device</Name>
             <Description>Unlock the device</Description>
-        </Feature>
-        <Feature type="operation" code="REMOTE_APP_CONFIG">
-            <Name>Send app restriction</Name>
-            <Description>Send remote configurations to an app</Description>
-            <Operation disabled="false" hidden="false" icon="fw-gadget">
-                <params>
-                    <uiParams>
-                        <uiParam optional="false">
-                            <type>text</type>
-                            <id>app-id</id>
-                            <label>Application identifier</label>
-                        </uiParam>
-                        <uiParam optional="false">
-                            <type>text</type>
-                            <id>payload</id>
-                            <label>Application restriction payload</label>
-                        </uiParam>
-                    </uiParams>
-                </params>
-                <metadata>
-                    <uri>/api/device-mgt/android/v1.0/admin/devices/send-app-conf</uri>
-                    <method>POST</method>
-                    <contentType>application/json</contentType>
-                    <permission>/device-mgt/devices/owning-device/operations/android/send-app-conf</permission>
-                    <filters>
-                        <filter>
-                            <property>ownership</property>
-                            <value>COPE</value>
-                            <description>This feature is only available in COSU(KIOSK)</description>
-                        </filter>
-                    </filters>
-                </metadata>
-            </Operation>
         </Feature>
     </Features>
     <TaskConfiguration>
