@@ -278,7 +278,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                     try {
                         DeviceInformationManager informationManager = AndroidAPIUtils
                                 .getDeviceInformationManagerService();
-                        informationManager.addDeviceLocation(device, deviceLocation);
+                        informationManager.addDeviceLocation(deviceLocation);
                     } catch (DeviceDetailsMgtException e) {
                         String msg = "Error occurred while updating the device location upon android " +
                                 "', which carries the id '" + androidDevice.getDeviceIdentifier() + "'";
