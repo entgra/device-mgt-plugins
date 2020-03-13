@@ -37,21 +37,6 @@
         <classes>classes</classes>
         <source>src/main/java</source>
 
-        <!-- device-types component related properties -->
-        <device.types>device-types</device.types>
-        <device.types.androidsense.api>
-            ${basedir}/../${device.types}/androidsense-plugin/org.wso2.carbon.device.mgt.iot.androidsense.api
-        </device.types.androidsense.api>
-        <device.types.arduino.api>
-            ${basedir}/../${device.types}/arduino-plugin/org.wso2.carbon.device.mgt.iot.arduino.api
-        </device.types.arduino.api>
-        <device.types.raspberrypi.api>
-            ${basedir}/../${device.types}/raspberrypi-plugin/org.wso2.carbon.device.mgt.iot.raspberrypi.api
-        </device.types.raspberrypi.api>
-        <device.types.virtualfirealarm.api>
-            ${basedir}/../${device.types}/virtual-fire-alarm-plugin/org.wso2.carbon.device.mgt.iot.virtualfirealarm.api
-        </device.types.virtualfirealarm.api>
-
         <!-- extensions  component related properties -->
         <extensions>extensions</extensions>
 
@@ -151,42 +136,6 @@
                                                 <!-- Need to list the newly added exec files here -->
                                             </executiondata>
                                             <structure name="Carbon Device Management Plugins Component Coverage Report">
-                                                <group name="device-types">
-                                                    <group name="androidsense-plugin">
-                                                        <classfiles>
-                                                            <fileset dir="${device.types.androidsense.api}/${target}/${classes}" />
-                                                        </classfiles>
-                                                        <sourcefiles encoding="UTF-8">
-                                                            <fileset dir="${device.types.androidsense.api}/${source}" />
-                                                        </sourcefiles>
-                                                    </group>
-                                                    <group name="arudino-plugin">
-                                                        <classfiles>
-                                                            <fileset dir="${device.types.arduino.api}/${target}/${classes}" />
-                                                        </classfiles>
-                                                        <sourcefiles encoding="UTF-8">
-                                                            <fileset dir="${device.types.arduino.api}/${source}" />
-                                                        </sourcefiles>
-                                                    </group>
-
-                                                    <group name="raspberrypi-plugin">
-                                                        <classfiles>
-                                                            <fileset dir="${device.types.raspberrypi.api}/${target}/${classes}" />
-                                                        </classfiles>
-                                                        <sourcefiles encoding="UTF-8">
-                                                            <fileset dir="${device.types.raspberrypi.api}/${source}" />
-                                                        </sourcefiles>
-                                                    </group>
-                                                    <group name="virtual-fire-alarm-plugin">
-                                                        <classfiles>
-                                                            <fileset dir="${device.types.virtualfirealarm.api}/${target}/${classes}" />
-                                                        </classfiles>
-                                                        <sourcefiles encoding="UTF-8">
-                                                            <fileset dir="${device.types.virtualfirealarm.api}/${source}" />
-                                                        </sourcefiles>
-                                                    </group>
-                                                </group>
-
                                                 <group name="extensions">
                                                     <group name="cdmf-transport-adapters">
                                                         <group name="input">
