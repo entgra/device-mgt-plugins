@@ -1144,12 +1144,6 @@
                 <version>${android.agent.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.entgra.emm</groupId>
-                <artifactId>io.entgra.emm.android.agent.debug</artifactId>
-                <type>apk</type>
-                <version>${android.agent.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.apis</groupId>
                 <artifactId>google-api-services-androidenterprise</artifactId>
                 <version>v1-rev214-1.25.0</version>
@@ -1167,7 +1161,7 @@
         <carbon.devicemgt.plugins.version>5.0.7-SNAPSHOT</carbon.devicemgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
-        <android.agent.version>4.0.3</android.agent.version>
+        <android.agent.version>4.0.0</android.agent.version>
 
         <!-- Java Version Compatibility -->
         <wso2.maven.compiler.source>1.8</wso2.maven.compiler.source>

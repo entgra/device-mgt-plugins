@@ -38,11 +38,6 @@
             <artifactId>io.entgra.emm.android.agent.release</artifactId>
             <type>apk</type>
         </dependency>
-        <dependency>
-            <groupId>io.entgra.emm</groupId>
-            <artifactId>io.entgra.emm.android.agent.debug</artifactId>
-            <type>apk</type>
-        </dependency>
     </dependencies>
 
     <build>
@@ -79,12 +74,12 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>io.entgra.emm</groupId>
-                                    <artifactId>io.entgra.emm.android.agent.debug</artifactId>
+                                    <artifactId>io.entgra.emm.android.agent.release</artifactId>
                                     <type>apk</type>
                                     <version>${android.agent.version}</version>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.basedir}/target/</outputDirectory>
-                                    <destFileName>client-debug.apk</destFileName>
+                                    <destFileName>android-agent.apk</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
