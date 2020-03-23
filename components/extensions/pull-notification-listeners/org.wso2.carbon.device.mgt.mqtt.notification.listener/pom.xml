@@ -56,10 +56,6 @@
 			<artifactId>org.eclipse.osgi.services</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.osgi</groupId>
-			<artifactId>org.eclipse.osgi.services</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.input.adapter.extension</artifactId>
 		</dependency>
