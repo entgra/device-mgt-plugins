@@ -625,9 +625,8 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public void notifyPullNotificationSubscriber(DeviceIdentifier deviceIdentifier, Operation operation)
+    public void notifyPullNotificationSubscriber(Device device, Operation operation)
             throws PullNotificationExecutionFailedException {
-
     }
 
     @Override
