@@ -21,6 +21,8 @@ package org.wso2.carbon.device.mgt.mqtt.notification.listener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationExecutionFailedException;
 import org.wso2.carbon.device.mgt.mqtt.notification.listener.internal.MqttNotificationDataHolder;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterSubscription;
@@ -48,11 +50,14 @@ public class DeviceTypeOperationAdapterSubscription implements InputEventAdapter
             PrivilegedCarbonContext.getThreadLocalCarbonContext().setUsername(PrivilegedCarbonContext.
                     getThreadLocalCarbonContext().getUserRealm().getRealmConfiguration().getAdminUserName());
             deviceType = notificationMessage.getDeviceIdentifier().getType();
+            Device device = MqttNotificationDataHolder.getInstance().getDeviceManagementProviderService()
+                    .getDevice(notificationMessage.getDeviceIdentifier(), false);
             MqttNotificationDataHolder.getInstance().getDeviceManagementProviderService().
-                    notifyPullNotificationSubscriber(notificationMessage.getDeviceIdentifier(),
-                                                     notificationMessage.getOperation());
+                    notifyPullNotificationSubscriber(device, notificationMessage.getOperation());
         } catch (UserStoreException e) {
             log.error("Failed to retrieve tenant username", e);
+        } catch (DeviceManagementException e) {
+            log.error("Failed to retrieve device " + notificationMessage.getDeviceIdentifier(), e);
         } catch (PullNotificationExecutionFailedException e) {
             log.error("Failed to execute device type pull notification subscriber execution for device type" + deviceType,
                     e);
