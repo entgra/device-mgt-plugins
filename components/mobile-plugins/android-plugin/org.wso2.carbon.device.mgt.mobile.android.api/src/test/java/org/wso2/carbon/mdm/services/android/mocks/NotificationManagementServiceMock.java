@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.services.android.mocks;
 
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
@@ -31,6 +32,11 @@ public class NotificationManagementServiceMock implements NotificationManagement
     @Override
     public boolean addNotification(DeviceIdentifier deviceIdentifier, Notification notification)
             throws NotificationManagementException {
+        return false;
+    }
+
+    @Override
+    public boolean addNotification(Device device, Notification notification) throws NotificationManagementException {
         return false;
     }
 

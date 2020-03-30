@@ -17,6 +17,7 @@
  */
 package org.wso2.carbon.mdm.services.android.mocks;
 
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.Feature;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
@@ -122,8 +123,18 @@ public class PolicyManagerServiceMock implements PolicyManagerService {
     }
 
     @Override
+    public Policy getAppliedPolicyToDevice(Device device) throws PolicyManagementException {
+        return null;
+    }
+
+    @Override
     public List<ComplianceFeature> checkPolicyCompliance(DeviceIdentifier deviceIdentifier, Object o)
             throws PolicyComplianceException {
+        return null;
+    }
+
+    @Override
+    public List<ComplianceFeature> checkPolicyCompliance(Device device, Object o) throws PolicyComplianceException {
         return null;
     }
 
@@ -133,7 +144,17 @@ public class PolicyManagerServiceMock implements PolicyManagerService {
     }
 
     @Override
+    public boolean checkCompliance(Device device, Object o) throws PolicyComplianceException {
+        return false;
+    }
+
+    @Override
     public NonComplianceData getDeviceCompliance(DeviceIdentifier deviceIdentifier) throws PolicyComplianceException {
+        return null;
+    }
+
+    @Override
+    public NonComplianceData getDeviceCompliance(Device device) throws PolicyComplianceException {
         return null;
     }
 
