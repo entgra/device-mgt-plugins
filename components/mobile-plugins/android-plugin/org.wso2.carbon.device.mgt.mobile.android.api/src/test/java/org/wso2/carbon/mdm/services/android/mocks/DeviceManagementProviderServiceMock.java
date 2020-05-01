@@ -66,7 +66,6 @@ import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
 import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationExecutionFailedException;
 import org.wso2.carbon.device.mgt.common.push.notification.NotificationStrategy;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
-import org.wso2.carbon.device.mgt.common.ui.policy.mgt.PolicyConfigurationManager;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.dto.DeviceTypeVersion;
 import org.wso2.carbon.device.mgt.core.geo.GeoCluster;
@@ -341,11 +340,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public FeatureManager getFeatureManager(String s) {
-        return null;
-    }
-
-    @Override
-    public PolicyConfigurationManager getPolicyUIConfigurationManager(String s) throws DeviceTypeNotFoundException {
         return null;
     }
 
