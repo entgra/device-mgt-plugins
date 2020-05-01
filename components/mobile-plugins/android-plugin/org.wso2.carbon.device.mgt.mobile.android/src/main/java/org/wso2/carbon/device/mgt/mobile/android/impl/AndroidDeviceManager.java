@@ -31,7 +31,6 @@ import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.license.mgt.LicenseManagementException;
 import org.wso2.carbon.device.mgt.common.license.mgt.LicenseManager;
-import org.wso2.carbon.device.mgt.common.ui.policy.mgt.PolicyConfigurationManager;
 import org.wso2.carbon.device.mgt.extensions.license.mgt.registry.RegistryBasedLicenseManager;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.AbstractMobileDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.mobile.android.impl.dao.AndroidDAOFactory;
@@ -87,11 +86,6 @@ public class AndroidDeviceManager implements DeviceManager {
     @Override
     public FeatureManager getFeatureManager() {
         return featureManager;
-    }
-
-    @Override
-    public PolicyConfigurationManager getPolicyUIConfigurationManager() {
-        return null;
     }
 
     @Override
