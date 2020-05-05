@@ -167,8 +167,8 @@ public class AndroidDeviceUtils {
             if (log.isDebugEnabled()) {
                 log.debug("Received compliance status from MONITOR operation ID: " + operation.getId());
             }
-            AndroidAPIUtils.getPolicyManagerService().checkPolicyCompliance(deviceIdentifier,
-                                                                            getComplianceFeatures(operation.getPayLoad()));
+            AndroidAPIUtils.getPolicyManagerService().checkPolicyCompliance(device,
+                    getComplianceFeatures(operation.getPayLoad()));
         } else if (!Operation.Status.ERROR.equals(operation.getStatus()) && AndroidConstants.
                 OperationCodes.APPLICATION_LIST.equals(operation.getCode())) {
             if (log.isDebugEnabled()) {
