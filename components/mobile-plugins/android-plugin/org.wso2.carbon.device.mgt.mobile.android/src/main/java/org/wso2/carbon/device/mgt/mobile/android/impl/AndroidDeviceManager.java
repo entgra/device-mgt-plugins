@@ -286,11 +286,6 @@ public class AndroidDeviceManager implements DeviceManager {
     }
 
     @Override
-    public boolean isClaimable(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-        return false;
-    }
-
-    @Override
     public boolean setStatus(DeviceIdentifier deviceIdentifier, String currentUser,
                              EnrolmentInfo.Status status) throws DeviceManagementException {
         return false;

@@ -429,13 +429,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public boolean isClaimable(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-        return false;
-    }
-
-    @Override
-    public boolean setStatus(DeviceIdentifier deviceIdentifier, String s, EnrolmentInfo.Status status)
-            throws DeviceManagementException {
+    public boolean setStatus(Device device, EnrolmentInfo.Status status) throws DeviceManagementException {
         return false;
     }
 
@@ -457,6 +451,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public void addTaskOperation(String s, Operation operation) throws OperationManagementException {
+
+    }
+
+    @Override
     public List<? extends Operation> getOperations(DeviceIdentifier deviceIdentifier)
             throws OperationManagementException {
         return null;
@@ -465,6 +464,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public PaginationResult getOperations(DeviceIdentifier deviceIdentifier, PaginationRequest paginationRequest)
             throws OperationManagementException {
+        return null;
+    }
+
+    @Override
+    public List<? extends Operation> getOperations(DeviceIdentifier deviceIdentifier, Operation.Status status) throws OperationManagementException {
         return null;
     }
 
@@ -668,7 +672,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public boolean updateEnrollment(String s, List<String> list) throws DeviceManagementException, UserNotFoundException, InvalidDeviceException {
+    public boolean updateEnrollment(String s, boolean b, List<String> list) throws DeviceManagementException, UserNotFoundException, InvalidDeviceException {
         return false;
     }
 
@@ -741,4 +745,10 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     public int getFunctioningDevicesInSystem() throws DeviceManagementException {
         return 0;
     }
+
+    @Override
+    public boolean isOperationExist(DeviceIdentifier deviceIdentifier, int i) throws OperationManagementException {
+        return false;
+    }
+
 }

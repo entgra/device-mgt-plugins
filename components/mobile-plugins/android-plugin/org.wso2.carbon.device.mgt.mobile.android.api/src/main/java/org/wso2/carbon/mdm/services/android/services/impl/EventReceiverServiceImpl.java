@@ -76,7 +76,7 @@ public class EventReceiverServiceImpl implements EventReceiverService {
             }
             DeviceIdentifier deviceIdentifier = new DeviceIdentifier(eventBeanWrapper.getDeviceIdentifier(),
                                                                      AndroidConstants.DEVICE_TYPE_ANDROID);
-            device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+            device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier, false);
             if (device != null && EnrolmentInfo.Status.ACTIVE != device.getEnrolmentInfo().getStatus()){
                 return Response.status(Response.Status.ACCEPTED).entity("Device is not in Active state.").build();
             } else if (device == null){

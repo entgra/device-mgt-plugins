@@ -223,10 +223,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 
     private void updateOperations(Device device, List<? extends Operation> operations)
             throws OperationManagementException, PolicyComplianceException,
-            ApplicationManagementException, NotificationManagementException, DeviceManagementException {
-        DeviceIdentifier id = new DeviceIdentifier();
-        id.setId(device.getDeviceIdentifier());
-        id.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
+            ApplicationManagementException, NotificationManagementException {
         String deviceName = device.getName();
         for (Operation operation : operations) {
             AndroidDeviceUtils.updateOperation(device, operation);
@@ -238,7 +235,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                         Status.NEW.toString());
                 notification.setDescription(operation.getCode() + " operation failed to execute on device " +
                         deviceName + " (ID: " + device.getDeviceIdentifier() + ")");
-                AndroidAPIUtils.getNotificationManagementService().addNotification(id, notification);
+                AndroidAPIUtils.getNotificationManagementService().addNotification(device, notification);
             }
             if (log.isDebugEnabled()) {
                 log.debug("Updating operation '" + operation.toString() + "'");
@@ -358,7 +355,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     public Response isEnrolled(@PathParam("id") String id, @HeaderParam("If-Modified-Since") String ifModifiedSince) {
         DeviceIdentifier deviceIdentifier = AndroidDeviceUtils.convertToDeviceIdentifierObject(id);
         try {
-            Device device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+            Device device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier, false);
             if (device != null) {
                 String status = String.valueOf(device.getEnrolmentInfo().getStatus());
                 Message responseMessage = new Message();
@@ -389,7 +386,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
         deviceIdentifier.setId(id);
         deviceIdentifier.setType(AndroidConstants.DEVICE_TYPE_ANDROID);
         try {
-            device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier);
+            device = AndroidAPIUtils.getDeviceManagementService().getDevice(deviceIdentifier, false);
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while getting enrollment details of the Android device that carries the id '" +
                     id + "'";
