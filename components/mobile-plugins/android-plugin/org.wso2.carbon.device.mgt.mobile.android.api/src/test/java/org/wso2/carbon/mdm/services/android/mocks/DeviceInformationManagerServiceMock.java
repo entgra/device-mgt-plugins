@@ -27,6 +27,11 @@ public class DeviceInformationManagerServiceMock implements DeviceInformationMan
     }
 
     @Override
+    public DeviceInfo getDeviceInfo(Device device) throws DeviceDetailsMgtException {
+        return null;
+    }
+
+    @Override
     public List<DeviceInfo> getDevicesInfo(List<DeviceIdentifier> list) throws DeviceDetailsMgtException {
         return null;
     }
