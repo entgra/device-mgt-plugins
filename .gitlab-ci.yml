@@ -12,6 +12,7 @@ cache:
 build:
   stage: build
   script:
+    - rm -rf .m2/repository/
     - mvn $MAVEN_CLI_OPTS clean install -Dmaven.test.skip=true
 
 test:
