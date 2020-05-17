@@ -24,5 +24,6 @@ deploy:
   stage: deploy
   script:
     - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true
+    - rm -rf .m2/repository/*
   only:
     - master@entgra/carbon-device-mgt-plugins
