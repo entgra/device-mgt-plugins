@@ -751,4 +751,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
         return false;
     }
 
+    @Override public List<Device> getDeviceByIdList(List<String> list) throws DeviceManagementException {
+        return null;
+    }
 }
