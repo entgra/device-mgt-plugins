@@ -65,10 +65,4 @@ public class DeviceInformationManagerServiceMock implements DeviceInformationMan
     public int publishEvents(String s, String s1, String s2, String s3) throws DeviceDetailsMgtException {
         return 0;
     }
-
-    @Override
-    public void addDeviceLocations(Device device, List<DeviceLocation> deviceLocations) throws
-            DeviceDetailsMgtException{
-
-    }
 }
