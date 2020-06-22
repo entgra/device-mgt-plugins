@@ -46,6 +46,11 @@ public class DeviceInformationManagerServiceMock implements DeviceInformationMan
 
     }
 
+    @Override public void addDeviceLocations(Device device, List<DeviceLocation> list)
+            throws DeviceDetailsMgtException {
+
+    }
+
     @Override
     public DeviceLocation getDeviceLocation(DeviceIdentifier deviceIdentifier) throws DeviceDetailsMgtException {
         return null;
