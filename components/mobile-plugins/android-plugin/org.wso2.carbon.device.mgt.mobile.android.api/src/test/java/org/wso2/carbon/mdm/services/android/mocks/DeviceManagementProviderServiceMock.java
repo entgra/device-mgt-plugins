@@ -58,6 +58,7 @@ import org.wso2.carbon.device.mgt.common.exceptions.UnauthorizedDeviceAccessExce
 import org.wso2.carbon.device.mgt.common.exceptions.UserNotFoundException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
+import org.wso2.carbon.device.mgt.common.invitation.mgt.DeviceEnrollmentInvitationDetails;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
@@ -754,4 +755,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override public List<Device> getDeviceByIdList(List<String> list) throws DeviceManagementException {
         return null;
     }
+
+    @Override public DeviceEnrollmentInvitationDetails getDeviceEnrollmentInvitationDetails(String s) { return null; }
 }
