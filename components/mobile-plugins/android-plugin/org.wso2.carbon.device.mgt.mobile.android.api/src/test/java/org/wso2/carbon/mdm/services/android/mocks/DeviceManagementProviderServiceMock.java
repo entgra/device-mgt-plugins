@@ -457,6 +457,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public void addTaskOperation(String s, List<Device> list, Operation operation)
+            throws OperationManagementException {
+
+    }
+
+    @Override
     public List<? extends Operation> getOperations(DeviceIdentifier deviceIdentifier)
             throws OperationManagementException {
         return null;
@@ -757,4 +763,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override public DeviceEnrollmentInvitationDetails getDeviceEnrollmentInvitationDetails(String s) { return null; }
+
+    @Override
+    public List<Device> getDevicesByIdentifiersAndStatuses(List<String> list,
+                                                           List<EnrolmentInfo.Status> list1)
+            throws DeviceManagementException {
+        return null;
+    }
 }
