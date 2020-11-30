@@ -41,6 +41,7 @@ import org.wso2.carbon.device.mgt.common.DeviceTransferRequest;
 import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.DeviceConfiguration;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceData;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocationHistorySnapshot;
@@ -764,9 +765,13 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override public DeviceEnrollmentInvitationDetails getDeviceEnrollmentInvitationDetails(String s) { return null; }
 
+    @Override public void triggerCorrectiveActions(String s, String s1, List<String> list,
+            List<ConfigurationEntry> list1) throws DeviceManagementException, DeviceNotFoundException {
+
+    }
+
     @Override
-    public List<Device> getDevicesByIdentifiersAndStatuses(List<String> list,
-                                                           List<EnrolmentInfo.Status> list1)
+    public List<Device> getDevicesByIdentifiersAndStatuses(List<String> list, List<EnrolmentInfo.Status> list1)
             throws DeviceManagementException {
         return null;
     }
