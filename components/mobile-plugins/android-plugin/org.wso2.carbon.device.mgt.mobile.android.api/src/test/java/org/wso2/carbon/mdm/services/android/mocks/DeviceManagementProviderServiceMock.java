@@ -38,6 +38,7 @@ package org.wso2.carbon.mdm.services.android.mocks;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceTransferRequest;
+import org.wso2.carbon.device.mgt.common.DynamicTaskContext;
 import org.wso2.carbon.device.mgt.common.StartupOperationConfig;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
@@ -90,6 +91,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public List<Device> getAllDevices(String s, boolean b) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<Device> getAllocatedDevices(String s, int i, int i1)
+            throws DeviceManagementException {
         return null;
     }
 
@@ -453,7 +460,9 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public void addTaskOperation(String s, Operation operation) throws OperationManagementException {
+    public void addTaskOperation(String s, Operation operation,
+                                 DynamicTaskContext dynamicTaskContext)
+            throws OperationManagementException {
 
     }
 
