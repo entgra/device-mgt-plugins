@@ -35,6 +35,7 @@
 
 package org.wso2.carbon.mdm.services.android.mocks;
 
+import org.wso2.carbon.device.mgt.common.ActivityPaginationRequest;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceTransferRequest;
@@ -84,6 +85,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DeviceManagementProviderServiceMock implements DeviceManagementProviderService {
+
     @Override
     public List<Device> getAllDevices(String s) throws DeviceManagementException {
         return null;
@@ -450,7 +452,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public void notifyOperationToDevices(Operation operation, List<DeviceIdentifier> list)
             throws DeviceManagementException {
-
     }
 
     @Override
@@ -460,16 +461,13 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public void addTaskOperation(String s, Operation operation,
-                                 DynamicTaskContext dynamicTaskContext)
+    public void addTaskOperation(String s, Operation operation, DynamicTaskContext dynamicTaskContext)
             throws OperationManagementException {
-
     }
 
     @Override
     public void addTaskOperation(String s, List<Device> list, Operation operation)
             throws OperationManagementException {
-
     }
 
     @Override
@@ -485,7 +483,8 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public List<? extends Operation> getOperations(DeviceIdentifier deviceIdentifier, Operation.Status status) throws OperationManagementException {
+    public List<? extends Operation> getOperations(DeviceIdentifier deviceIdentifier, Operation.Status status)
+            throws OperationManagementException {
         return null;
     }
 
@@ -506,7 +505,8 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public Operation getNextPendingOperation(DeviceIdentifier deviceIdentifier, long l) throws OperationManagementException {
+    public Operation getNextPendingOperation(DeviceIdentifier deviceIdentifier, long l)
+            throws OperationManagementException {
         return null;
     }
 
@@ -522,7 +522,8 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public boolean updateProperties(DeviceIdentifier deviceIdentifier, List<Device.Property> list) throws DeviceManagementException {
+    public boolean updateProperties(DeviceIdentifier deviceIdentifier, List<Device.Property> list)
+            throws DeviceManagementException {
         return false;
     }
 
@@ -575,19 +576,16 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public List<Activity> getActivitiesUpdatedAfterByUser(long l, String s, int i, int i1) throws OperationManagementException {
+    public List<Activity> getActivitiesUpdatedAfterByUser(long l, String s, int i, int i1)
+            throws OperationManagementException {
         return null;
     }
 
     @Override
-    public int getActivityCountUpdatedAfter(long l) throws OperationManagementException {
-        return 0;
-    }
+    public int getActivityCountUpdatedAfter(long l) throws OperationManagementException { return 0; }
 
     @Override
-    public int getActivityCountUpdatedAfterByUser(long l, String s) throws OperationManagementException {
-        return 0;
-    }
+    public int getActivityCountUpdatedAfterByUser(long l, String s) throws OperationManagementException { return 0; }
 
     @Override
     public List<MonitoringOperation> getMonitoringOperationList(String s) {
@@ -632,7 +630,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public void registerDeviceType(DeviceManagementService deviceManagementService) throws DeviceManagementException {
-
     }
 
     @Override
@@ -651,8 +648,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public List<DeviceLocationHistorySnapshot> getDeviceLocationInfo(DeviceIdentifier deviceIdentifier,
-                                                                     long l, long l1)
+    public List<DeviceLocationHistorySnapshot> getDeviceLocationInfo(DeviceIdentifier deviceIdentifier, long l, long l1)
             throws DeviceManagementException {
         return null;
     }
@@ -689,7 +685,8 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public boolean updateEnrollment(String s, boolean b, List<String> list) throws DeviceManagementException, UserNotFoundException, InvalidDeviceException {
+    public boolean updateEnrollment(String s, boolean b, List<String> list)
+            throws DeviceManagementException, UserNotFoundException, InvalidDeviceException {
         return false;
     }
 
@@ -734,48 +731,52 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public DeviceConfiguration getDeviceConfiguration(Map<String, String> map) throws DeviceManagementException, DeviceNotFoundException, UnauthorizedDeviceAccessException, AmbiguousConfigurationException {
+    public DeviceConfiguration getDeviceConfiguration(Map<String, String> map)
+            throws DeviceManagementException, DeviceNotFoundException, UnauthorizedDeviceAccessException,
+            AmbiguousConfigurationException {
         return null;
     }
 
     @Override
-    public List<String> transferDeviceToTenant(DeviceTransferRequest deviceTransferRequest) throws DeviceManagementException, DeviceNotFoundException {
+    public List<String> transferDeviceToTenant(DeviceTransferRequest deviceTransferRequest)
+            throws DeviceManagementException, DeviceNotFoundException {
         return null;
     }
 
     @Override
-    public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, String s) throws DeviceManagementException {
+    public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, String s)
+            throws DeviceManagementException {
         return null;
     }
 
     @Override
-    public PaginationResult getApplications(PaginationRequest paginationRequest) throws ApplicationManagementException, DeviceTypeNotFoundException {
+    public PaginationResult getApplications(PaginationRequest paginationRequest)
+            throws ApplicationManagementException, DeviceTypeNotFoundException {
         return null;
     }
 
     @Override
-    public List<String> getAppVersions(String s) throws ApplicationManagementException {
-        return null;
-    }
+    public List<String> getAppVersions(String s) throws ApplicationManagementException { return null; }
 
     @Override
-    public int getFunctioningDevicesInSystem() throws DeviceManagementException {
-        return 0;
-    }
+    public int getFunctioningDevicesInSystem() throws DeviceManagementException { return 0; }
 
     @Override
     public boolean isOperationExist(DeviceIdentifier deviceIdentifier, int i) throws OperationManagementException {
         return false;
     }
 
-    @Override public List<Device> getDeviceByIdList(List<String> list) throws DeviceManagementException {
+    @Override
+    public List<Device> getDeviceByIdList(List<String> list) throws DeviceManagementException {
         return null;
     }
 
-    @Override public DeviceEnrollmentInvitationDetails getDeviceEnrollmentInvitationDetails(String s) { return null; }
+    @Override
+    public DeviceEnrollmentInvitationDetails getDeviceEnrollmentInvitationDetails(String s) { return null; }
 
-    @Override public void triggerCorrectiveActions(String s, String s1, List<String> list,
-            List<ConfigurationEntry> list1) throws DeviceManagementException, DeviceNotFoundException {
+    @Override
+    public void triggerCorrectiveActions(String s, String s1, List<String> list, List<ConfigurationEntry> list1)
+            throws DeviceManagementException, DeviceNotFoundException {
 
     }
 
@@ -783,5 +784,17 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     public List<Device> getDevicesByIdentifiersAndStatuses(List<String> list, List<EnrolmentInfo.Status> list1)
             throws DeviceManagementException {
         return null;
+    }
+
+    @Override
+    public List<Activity> getActivities(ActivityPaginationRequest activityPaginationRequest)
+            throws OperationManagementException {
+        return null;
+    }
+
+    @Override
+    public int getActivitiesCount(ActivityPaginationRequest activityPaginationRequest)
+            throws OperationManagementException {
+        return 0;
     }
 }
