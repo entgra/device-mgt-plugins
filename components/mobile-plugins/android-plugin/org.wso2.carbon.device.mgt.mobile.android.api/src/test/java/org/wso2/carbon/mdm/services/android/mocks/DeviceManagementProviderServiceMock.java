@@ -797,4 +797,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
             throws OperationManagementException {
         return 0;
     }
+
+    @Override
+    public License getLicenseConfig(String s) throws DeviceManagementException { return null; }
 }
