@@ -744,7 +744,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, String s)
+    public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, List<String> list1)
             throws DeviceManagementException {
         return null;
     }
