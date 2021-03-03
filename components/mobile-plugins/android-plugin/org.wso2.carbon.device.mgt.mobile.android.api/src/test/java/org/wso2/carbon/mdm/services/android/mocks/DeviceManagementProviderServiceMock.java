@@ -254,6 +254,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public List<Device> getDevicesOfUser(String s, List<String> list, boolean b) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
     public List<Device> getDevicesOfUser(String s, String s1) throws DeviceManagementException {
         return null;
     }
@@ -270,6 +275,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public List<Device> getAllDevicesOfRole(String s, boolean b) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<Device> getAllDevicesOfRole(String s, List<String> list, boolean b) throws DeviceManagementException {
         return null;
     }
 
