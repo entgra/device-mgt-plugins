@@ -23,7 +23,7 @@
     <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
     <artifactId>carbon-device-mgt-plugins-parent</artifactId>
     <packaging>pom</packaging>
-    <version>5.0.16-SNAPSHOT</version>
+    <version>6.0.0-SNAPSHOT</version>
     <name>WSO2 Carbon - Device Management Plugins Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Carbon - Device Management Plugins Parent</description>
@@ -1123,11 +1123,11 @@
     <properties>
 
         <!-- Carbon Device Management -->
-        <carbon.devicemgt.version>4.1.16-SNAPSHOT</carbon.devicemgt.version>
-        <carbon.devicemgt.version.range>[4.1.15, 5.0.0)</carbon.devicemgt.version.range>
+        <carbon.devicemgt.version>5.0.0-SNAPSHOT</carbon.devicemgt.version>
+        <carbon.devicemgt.version.range>[5.0.0-SNAPSHOT, 6.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon Device Management Plugins -->
-        <carbon.devicemgt.plugins.version>5.0.16-SNAPSHOT</carbon.devicemgt.plugins.version>
+        <carbon.devicemgt.plugins.version>${project.version}</carbon.devicemgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.0</android.agent.version>
