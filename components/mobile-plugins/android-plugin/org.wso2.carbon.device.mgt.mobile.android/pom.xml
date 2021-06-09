@@ -56,8 +56,8 @@
                         <Bundle-Description>Device Management Mobile Android Impl Bundle</Bundle-Description>
                         <Private-Package>org.wso2.carbon.device.mgt.mobile.android.internal</Private-Package>
                         <Import-Package>
-                            org.osgi.framework,
-                            org.osgi.service.component,
+                            org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
+                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
                             org.apache.commons.logging,
                             javax.xml,
                             javax.xml.stream,
