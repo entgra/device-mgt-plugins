@@ -21,7 +21,7 @@
     <parent>
         <artifactId>android-plugin</artifactId>
         <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-        <version>5.0.16-SNAPSHOT</version>
+        <version>6.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -172,6 +172,15 @@
     </profiles>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.json.wso2</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
         <!--project dependancies-->
         <dependency>
             <groupId>org.apache.cxf</groupId>
@@ -246,22 +255,6 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.analytics.data.publisher</artifactId>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.analytics</groupId>
-            <artifactId>org.wso2.carbon.analytics.api</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>

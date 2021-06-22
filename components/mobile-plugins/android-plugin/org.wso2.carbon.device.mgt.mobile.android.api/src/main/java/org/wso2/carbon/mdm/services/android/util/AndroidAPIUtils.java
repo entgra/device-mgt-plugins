@@ -20,9 +20,7 @@ package org.wso2.carbon.mdm.services.android.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.analytics.data.publisher.service.EventsPublisherService;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
@@ -41,8 +39,8 @@ public class AndroidAPIUtils {
     private static PolicyManagerService policyManagerService = null;
     private static ApplicationManagementProviderService applicationManagementProviderService = null;
     private static NotificationManagementService notificationManagementService = null;
-    private static EventsPublisherService eventsPublisherService = null;
-    private static AnalyticsDataAPI analyticsDataAPI = null;
+//    private static EventsPublisherService eventsPublisherService = null;
+//    private static AnalyticsDataAPI analyticsDataAPI = null;
 
     private AndroidAPIUtils() {
         throw new IllegalStateException("Utility class");
@@ -126,30 +124,30 @@ public class AndroidAPIUtils {
         return notificationManagementService;
     }
 
-    public static EventsPublisherService getEventPublisherService() {
-        if (eventsPublisherService == null) {
-            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            eventsPublisherService = (EventsPublisherService) ctx.getOSGiService(EventsPublisherService.class, null);
-            if (eventsPublisherService == null) {
-                String msg = "Event Publisher service has not initialized.";
-                log.error(msg);
-                throw new IllegalStateException(msg);
-            }
-        }
-        return eventsPublisherService;
-    }
+//    public static EventsPublisherService getEventPublisherService() {
+//        if (eventsPublisherService == null) {
+//            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+//            eventsPublisherService = (EventsPublisherService) ctx.getOSGiService(EventsPublisherService.class, null);
+//            if (eventsPublisherService == null) {
+//                String msg = "Event Publisher service has not initialized.";
+//                log.error(msg);
+//                throw new IllegalStateException(msg);
+//            }
+//        }
+//        return eventsPublisherService;
+//    }
 
-    public static AnalyticsDataAPI getAnalyticsDataAPI() {
-        if (analyticsDataAPI == null) {
-            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-            analyticsDataAPI = (AnalyticsDataAPI) ctx.getOSGiService(AnalyticsDataAPI.class, null);
-            if (analyticsDataAPI == null) {
-                String msg = "Analytics api service has not initialized.";
-                log.error(msg);
-                throw new IllegalStateException(msg);
-            }
-        }
-        return analyticsDataAPI;
-    }
+//    public static AnalyticsDataAPI getAnalyticsDataAPI() {
+//        if (analyticsDataAPI == null) {
+//            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+//            analyticsDataAPI = (AnalyticsDataAPI) ctx.getOSGiService(AnalyticsDataAPI.class, null);
+//            if (analyticsDataAPI == null) {
+//                String msg = "Analytics api service has not initialized.";
+//                log.error(msg);
+//                throw new IllegalStateException(msg);
+//            }
+//        }
+//        return analyticsDataAPI;
+//    }
 
 }
