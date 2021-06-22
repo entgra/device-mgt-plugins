@@ -27,3 +27,4 @@ deploy:
     - rm -rf .m2/repository/*
   only:
     - master@entgra/carbon-device-mgt-plugins
+    - kernel-4.6.x@entgra/carbon-device-mgt-plugins
