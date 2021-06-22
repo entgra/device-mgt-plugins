@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
         <artifactId>cdmf-transport-adapters</artifactId>
-        <version>5.0.16-SNAPSHOT</version>
+        <version>6.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -57,22 +57,22 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-						<Private-Package>
-							org.wso2.carbon.device.mgt.input.adapter.extension.internal,
-							org.wso2.carbon.device.mgt.input.adapter.extension.internal.*
-						</Private-Package>
+			<Private-Package>
+			    org.wso2.carbon.device.mgt.input.adapter.extension.internal,
+			    org.wso2.carbon.device.mgt.input.adapter.extension.internal.*
+			</Private-Package>
                         <Export-Package>
                             org.wso2.carbon.device.mgt.input.adapter.extension.*,
-							!org.wso2.carbon.device.mgt.input.adapter.extension.internal,
+			    !org.wso2.carbon.device.mgt.input.adapter.extension.internal,
                         </Export-Package>
-						<Import-Package>
-							org.osgi.framework,
-							org.osgi.service.component,
-							com.jayway.jsonpath,
-							org.apache.commons.logging,
-							org.json.simple,
-							org.json.simple.parser
-						</Import-Package>
+			<Import-Package>
+                            org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
+                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
+			    com.jayway.jsonpath,
+			    org.apache.commons.logging,
+			    org.json.simple,
+			    org.json.simple.parser
+			</Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
