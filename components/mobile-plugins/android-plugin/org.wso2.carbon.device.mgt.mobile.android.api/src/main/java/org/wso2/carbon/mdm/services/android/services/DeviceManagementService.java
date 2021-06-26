@@ -71,12 +71,14 @@ import java.util.List;
                         name = "Enroll Device",
                         description = "Register an Android device",
                         key = "perm:android:enroll",
+                        roles = {"Internal/everyone"},
                         permissions = {"/device-mgt/devices/enroll/android"}
                 ),
                 @Scope(
                         name = "Un-enroll Device",
                         description = "Unregister an Android device",
                         key = "perm:android:disenroll",
+                        roles = {"Internal/everyone"},
                         permissions = {"/device-mgt/devices/disenroll/android"}
                 )
         }

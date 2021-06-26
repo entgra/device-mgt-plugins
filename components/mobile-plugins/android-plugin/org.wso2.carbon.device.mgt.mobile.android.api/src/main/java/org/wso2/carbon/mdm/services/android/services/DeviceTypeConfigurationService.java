@@ -68,18 +68,21 @@ import javax.ws.rs.core.Response;
                         name = "Enroll Device",
                         description = "Register an Android device",
                         key = "perm:android:enroll",
+                        roles = {"Internal/everyone"},
                         permissions = {"/device-mgt/devices/enroll/android"}
                 ),
                 @Scope(
                         name = "View Configurations",
                         description = "Getting Android Platform Configurations",
                         key = "perm:android:view-configuration",
+                        roles = {"Internal/everyone"},
                         permissions = {"/device-mgt/devices/enroll/android"}
                 ),
                 @Scope(
                         name = "Manage Configurations",
                         description = "Updating Android Platform Configurations",
                         key = "perm:android:manage-configuration",
+                        roles = {"Internal/everyone"},
                         permissions = {"/device-mgt/platform-configurations/manage"}
                 )
         }
