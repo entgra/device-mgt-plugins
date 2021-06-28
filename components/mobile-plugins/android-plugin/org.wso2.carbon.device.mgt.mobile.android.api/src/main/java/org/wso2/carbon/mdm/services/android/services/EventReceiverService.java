@@ -68,6 +68,7 @@ import javax.ws.rs.core.Response;
                         name = "Enroll Device",
                         description = "Register an Android device",
                         key = "perm:android:enroll",
+                        roles = {"Internal/devicemgt-user"},
                         permissions = {"/device-mgt/devices/enroll/android"}
                 )
         }
