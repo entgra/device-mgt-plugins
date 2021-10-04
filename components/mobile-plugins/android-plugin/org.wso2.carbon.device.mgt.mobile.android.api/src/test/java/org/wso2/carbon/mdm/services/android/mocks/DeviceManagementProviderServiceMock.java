@@ -809,4 +809,10 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public License getLicenseConfig(String s) throws DeviceManagementException { return null; }
+
+    @Override
+    public PaginationResult getDevicesDetails(PaginationRequest paginationRequest, List<Integer> list, String s)
+            throws DeviceManagementException {
+        return null;
+    }
 }
