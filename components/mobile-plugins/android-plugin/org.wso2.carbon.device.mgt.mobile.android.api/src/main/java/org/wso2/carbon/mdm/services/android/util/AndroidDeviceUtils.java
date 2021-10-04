@@ -26,12 +26,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
-import org.wso2.carbon.analytics.api.AnalyticsDataAPIUtil;
-import org.wso2.carbon.analytics.dataservice.commons.AnalyticsDataResponse;
-import org.wso2.carbon.analytics.dataservice.commons.SearchResultEntry;
-import org.wso2.carbon.analytics.datasource.commons.Record;
-import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
@@ -108,53 +102,53 @@ public class AndroidDeviceUtils {
                 DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, operation, deviceIdentifiers);
     }
 
-    public static List<DeviceState> getAllEventsForDevice(String tableName, String query) throws AnalyticsException {
-        int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
-        AnalyticsDataAPI analyticsDataAPI = AndroidAPIUtils.getAnalyticsDataAPI();
-        int eventCount = analyticsDataAPI.searchCount(tenantId, tableName, query);
-        if (eventCount == 0) {
-            return null;
-        }
-        List<SearchResultEntry> resultEntries = analyticsDataAPI.search(tenantId, tableName, query, 0, eventCount);
-        List<String> recordIds = getRecordIds(resultEntries);
-        AnalyticsDataResponse response = analyticsDataAPI.get(tenantId, tableName, 1, null, recordIds);
-        Map<String, DeviceState> deviceStateses = createDeviceStatusData(AnalyticsDataAPIUtil.listRecords(
-                analyticsDataAPI, response));
-        return getSortedDeviceStateData(deviceStateses, resultEntries);
-    }
+//    public static List<DeviceState> getAllEventsForDevice(String tableName, String query) throws AnalyticsException {
+//        int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+//        AnalyticsDataAPI analyticsDataAPI = AndroidAPIUtils.getAnalyticsDataAPI();
+//        int eventCount = analyticsDataAPI.searchCount(tenantId, tableName, query);
+//        if (eventCount == 0) {
+//            return null;
+//        }
+//        List<SearchResultEntry> resultEntries = analyticsDataAPI.search(tenantId, tableName, query, 0, eventCount);
+//        List<String> recordIds = getRecordIds(resultEntries);
+//        AnalyticsDataResponse response = analyticsDataAPI.get(tenantId, tableName, 1, null, recordIds);
+//        Map<String, DeviceState> deviceStateses = createDeviceStatusData(AnalyticsDataAPIUtil.listRecords(
+//                analyticsDataAPI, response));
+//        return getSortedDeviceStateData(deviceStateses, resultEntries);
+//    }
 
-    private static List<String> getRecordIds(List<SearchResultEntry> searchResults) {
-        List<String> ids = new ArrayList<>();
-        for (SearchResultEntry searchResult : searchResults) {
-            ids.add(searchResult.getId());
-        }
-        return ids;
-    }
+//    private static List<String> getRecordIds(List<SearchResultEntry> searchResults) {
+//        List<String> ids = new ArrayList<>();
+//        for (SearchResultEntry searchResult : searchResults) {
+//            ids.add(searchResult.getId());
+//        }
+//        return ids;
+//    }
 
-    public static Map<String, DeviceState> createDeviceStatusData(List<Record> records) {
-        Map<String, DeviceState> deviceStatuses = new HashMap<>();
-        for (Record record : records) {
-            DeviceState deviceState = createDeviceStatusData(record);
-            deviceStatuses.put(deviceState.getId(), deviceState);
-        }
-        return deviceStatuses;
-    }
+//    public static Map<String, DeviceState> createDeviceStatusData(List<Record> records) {
+//        Map<String, DeviceState> deviceStatuses = new HashMap<>();
+//        for (Record record : records) {
+//            DeviceState deviceState = createDeviceStatusData(record);
+//            deviceStatuses.put(deviceState.getId(), deviceState);
+//        }
+//        return deviceStatuses;
+//    }
 
-    private static DeviceState createDeviceStatusData(Record record) {
-        DeviceState deviceState = new DeviceState();
-        deviceState.setId(record.getId());
-        deviceState.setValues(record.getValues());
-        return deviceState;
-    }
+//    private static DeviceState createDeviceStatusData(Record record) {
+//        DeviceState deviceState = new DeviceState();
+//        deviceState.setId(record.getId());
+//        deviceState.setValues(record.getValues());
+//        return deviceState;
+//    }
 
-    public static List<DeviceState> getSortedDeviceStateData(Map<String, DeviceState> sensorDatas,
-                                                             List<SearchResultEntry> searchResults) {
-        List<DeviceState> sortedRecords = new ArrayList<>();
-        for (SearchResultEntry searchResultEntry : searchResults) {
-            sortedRecords.add(sensorDatas.get(searchResultEntry.getId()));
-        }
-        return sortedRecords;
-    }
+//    public static List<DeviceState> getSortedDeviceStateData(Map<String, DeviceState> sensorDatas,
+//                                                             List<SearchResultEntry> searchResults) {
+//        List<DeviceState> sortedRecords = new ArrayList<>();
+//        for (SearchResultEntry searchResultEntry : searchResults) {
+//            sortedRecords.add(sensorDatas.get(searchResultEntry.getId()));
+//        }
+//        return sortedRecords;
+//    }
 
     public static void updateOperation(Device device, Operation operation)
             throws OperationManagementException, PolicyComplianceException, ApplicationManagementException {

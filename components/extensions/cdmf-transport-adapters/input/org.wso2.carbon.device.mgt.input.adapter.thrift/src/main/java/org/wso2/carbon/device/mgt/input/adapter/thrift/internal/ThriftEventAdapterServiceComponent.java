@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * @scr.component name="input.wso2EventAdapterService.component" immediate="true"
+ * @scr.component name="input.iot.thrift.AdapterService.component" immediate="true"
  * @scr.reference name="agentserverservice.service"
  * interface="org.wso2.carbon.databridge.core.DataBridgeSubscriberService" cardinality="1..1"
  * policy="dynamic" bind="setDataBridgeSubscriberService" unbind="unSetDataBridgeSubscriberService"

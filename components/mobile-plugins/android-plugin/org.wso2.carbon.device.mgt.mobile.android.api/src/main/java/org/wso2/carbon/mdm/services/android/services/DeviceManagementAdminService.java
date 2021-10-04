@@ -71,156 +71,182 @@ import java.util.List;
                         name = "Lock Device",
                         description = "Hard lock own device",
                         key = "perm:android:lock-devices",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/lock"}
                 ),
                 @Scope(
                         name = "Unlock Device",
                         description = "Unlock permanently locked device",
                         key = "perm:android:unlock-devices",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/unlock"}
                 ),
                 @Scope(
                         name = "Get Location",
                         description = "Request device location coordinates",
                         key = "perm:android:location",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/location"}
                 ),
                 @Scope(
                         name = "Clear Password",
                         description = "Clear the password on Android devices",
                         key = "perm:android:clear-password",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/clear-password"}
                 ),
                 @Scope(
                         name = "Control Camera",
                         description = "Enabling or Disabling the Camera on Android Devices",
                         key = "perm:android:control-camera",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/camera"}
                 ),
                 @Scope(
                         name = "Get Info",
                         description = "Requesting device information from Android Devices",
                         key = "perm:android:info",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/info"}
                 ),
                 @Scope(
                         name = "Get Logs",
                         description = "Requesting Logcat Details from Android Devices",
                         key = "perm:android:logcat",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/logcat"}
                 ),
                 @Scope(
                         name = "Enterprise Wipe",
                         description = "Enterprise Wiping Android Devices",
                         key = "perm:android:enterprise-wipe",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/enterprise-wipe"}
                 ),
                 @Scope(
                         name = "Factory Reset",
                         description = "Factory Resetting Android Devices",
                         key = "perm:android:wipe",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/wipe"}
                 ),
                 @Scope(
                         name = "Get Installed Applications",
                         description = "Get list of installed applications",
                         key = "perm:android:applications",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/applications"}
                 ),
                 @Scope(
                         name = "Ring Device",
                         description = "Ring Android devices",
                         key = "perm:android:ring",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/ring"}
                 ),
                 @Scope(
                         name = "Reboot Device",
                         description = "Reboot Android devices",
                         key = "perm:android:reboot",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/reboot"}
                 ),
                 @Scope(
                         name = "Mute Device",
                         description = "Mute Android devices",
                         key = "perm:android:mute",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/mute"}
                 ),
                 @Scope(
                         name = "Install Applications",
                         description = "Installing an Application on Android Devices",
                         key = "perm:android:install-application",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/install-app"}
                 ),
                 @Scope(
                         name = "Update Applications",
                         description = "Updating an Application on Android Devices",
                         key = "perm:android:update-application",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/update-app"}
                 ),
                 @Scope(
                         name = "Uninstall Applications",
                         description = "Uninstalling an Application on Android Devices",
                         key = "perm:android:uninstall-application",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/uninstall-app"}
                 ),
                 @Scope(
                         name = "Blacklist Applications",
                         description = "Blacklisting applications on Android Devices",
                         key = "perm:android:blacklist-applications",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/blacklist-app"}
                 ),
                 @Scope(
                         name = "Upgrade Firmware",
                         description = "Upgrading Firmware of Android Devices",
                         key = "perm:android:upgrade-firmware",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/upgrade"}
                 ),
                 @Scope(
                         name = "Configure VPN",
                         description = "Configure VPN on Android Device",
                         key = "perm:android:configure-vpn",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/vpn"}
                 ),
                 @Scope(
                         name = "Send Notification",
                         description = "Sending a notification to Android Device",
                         key = "perm:android:send-notification",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/send-notification"}
                 ),
                 @Scope(
                         name = "Configure Wi-Fi",
                         description = "Configure Wi-Fi on Android Device",
                         key = "perm:android:configure-wifi",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/wifi"}
                 ),
                 @Scope(
                         name = "Encrypt Storage",
                         description = "Encrypting storage on Android Device",
                         key = "perm:android:encrypt-storage",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/encrypt"}
                 ),
                 @Scope(
                         name = "Change Password",
                         description = "Changing the lock code of an Android Device",
                         key = "perm:android:change-lock-code",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/change-lock-code"}
                 ),
                 @Scope(
                         name = "Password Policy",
                         description = "Set password policy of an Android Device",
                         key = "perm:android:set-password-policy",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/password-policy"}
                 ),
                 @Scope(
                         name = "Add Web clip",
                         description = "Setting a Web Clip on Android Devices",
                         key = "perm:android:set-webclip",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/webclip"}
                 ),
                 @Scope(
                         name = "File Transfer",
                         description = "Transferring a file to android devices",
                         key = "perm:android:file-transfer",
+                        roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/file-transfer"}
                 )
         }
