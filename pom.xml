@@ -1127,7 +1127,7 @@
         <carbon.devicemgt.version.range>[5.0.0-SNAPSHOT, 6.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon Device Management Plugins -->
-        <carbon.devicemgt.plugins.version>${project.version}</carbon.devicemgt.plugins.version>
+        <carbon.devicemgt.plugins.version>6.0.0-SNAPSHOT</carbon.devicemgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.0</android.agent.version>
