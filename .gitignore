@@ -7,6 +7,7 @@ target
 *.iws
 *.ipr
 .idea
+.factorypath
 
 # Mac crap
 .DS_Store
