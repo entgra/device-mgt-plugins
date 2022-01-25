@@ -1123,8 +1123,8 @@
     <properties>
 
         <!-- Carbon Device Management -->
-        <carbon.devicemgt.version>5.0.1-SNAPSHOT</carbon.devicemgt.version>
-        <carbon.devicemgt.version.range>[5.0.1-SNAPSHOT, 6.0.0)</carbon.devicemgt.version.range>
+        <carbon.devicemgt.version>5.0.2-SNAPSHOT</carbon.devicemgt.version>
+        <carbon.devicemgt.version.range>[5.0.2-SNAPSHOT, 6.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon Device Management Plugins -->
         <carbon.devicemgt.plugins.version>6.0.1-SNAPSHOT</carbon.devicemgt.plugins.version>
