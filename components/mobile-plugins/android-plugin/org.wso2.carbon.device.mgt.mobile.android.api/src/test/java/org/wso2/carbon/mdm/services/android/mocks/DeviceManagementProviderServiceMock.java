@@ -72,6 +72,7 @@ import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
 import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationExecutionFailedException;
 import org.wso2.carbon.device.mgt.common.push.notification.NotificationStrategy;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.common.type.mgt.DeviceStatus;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.dto.DeviceTypeVersion;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
@@ -457,6 +458,26 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public boolean setStatus(String s, EnrolmentInfo.Status status) throws DeviceManagementException {
         return false;
+    }
+
+    @Override
+    public List<DeviceStatus> getDeviceStatusHistory(Device device) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<DeviceStatus> getDeviceStatusHistory(Device device, Date date, Date date1) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<DeviceStatus> getDeviceCurrentEnrolmentStatusHistory(Device device) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<DeviceStatus> getDeviceCurrentEnrolmentStatusHistory(Device device, Date date, Date date1) throws DeviceManagementException {
+        return null;
     }
 
     @Override
