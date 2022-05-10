@@ -81,6 +81,7 @@ import org.wso2.carbon.mdm.services.android.utils.TestUtils;
 
 import org.apache.commons.collections.map.SingletonMap;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -142,6 +143,16 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public PaginationResult getAllDevices(PaginationRequest paginationRequest, boolean b)
             throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public PaginationResult getAllDevicesBillings(PaginationRequest paginationRequest, int i, String s, Timestamp timestamp, Timestamp timestamp1, boolean b) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public PaginationResult createBillingFile(int i, String s, Timestamp timestamp, Timestamp timestamp1, boolean b) throws DeviceManagementException {
         return null;
     }
 
@@ -466,7 +477,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public List<DeviceStatus> getDeviceStatusHistory(Device device, Date date, Date date1) throws DeviceManagementException {
+    public List<DeviceStatus> getDeviceStatusHistory(Device device, Date date, Date date1, boolean b) throws DeviceManagementException {
         return null;
     }
 
