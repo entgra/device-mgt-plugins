@@ -78,7 +78,7 @@ public class TaskConfiguration {
             this.recurrency = recurrency;
         }
 
-        @XmlElement(name = "Enabled")
+        @XmlElement(name = "Enable")
         public boolean isEnabled() {
             return isEnabled;
         }
