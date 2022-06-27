@@ -392,6 +392,41 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public void handleOperationMonitoringTaskConfigUpdate(String deviceType, OperationMonitoringTaskConfig operationMonitoringTaskConfig) {
+
+    }
+
+    @Override
+    public void registerDeviceMonitoringTasks() throws DeviceManagementException {
+
+    }
+
+    @Override
+    public OperationMonitoringTaskConfig getOperationMonitoringTaskConfig(String deviceType) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public OperationMonitoringTaskConfig getOperationMonitoringTaskConfigFromPlatformConfig(String deviceType) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public ConfigurationEntry getConfigurationEntryByName(String name, String deviceType) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public ConfigurationEntry getConfigurationEntryByName(PlatformConfiguration platformConfiguration, String name) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public void addDefaultOperationMonitoringTaskConfigurationEntryIfNotExist(PlatformConfiguration platformConfiguration, String deviceType) {
+
+    }
+
+    @Override
     public License getLicense(String s, String s1) throws DeviceManagementException {
         return null;
     }
@@ -645,7 +680,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public OperationMonitoringTaskConfig getDeviceMonitoringConfig(String s) {
+    public OperationMonitoringTaskConfig getDefaultOperationMonitoringTaskConfig(String s) {
         return null;
     }
 
@@ -667,6 +702,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public boolean changeDeviceStatus(DeviceIdentifier deviceIdentifier, EnrolmentInfo.Status status)
             throws DeviceManagementException {
+        return false;
+    }
+
+    @Override
+    public boolean isDeviceEnrolled() throws DeviceManagementException {
         return false;
     }
 

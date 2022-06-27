@@ -556,14 +556,17 @@
             <Operation>
                 <Name>DEVICE_INFO</Name>
                 <RecurrentTimes>1</RecurrentTimes>
+                <Enable>true</Enable>
             </Operation>
             <Operation>
                 <Name>APPLICATION_LIST</Name>
                 <RecurrentTimes>5</RecurrentTimes>
+                <Enable>true</Enable>
             </Operation>
             <Operation>
                 <Name>DEVICE_LOCATION</Name>
                 <RecurrentTimes>1</RecurrentTimes>
+                <Enable>true</Enable>
             </Operation>
         </Operations>
     </TaskConfiguration>
