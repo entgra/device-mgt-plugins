@@ -23,7 +23,7 @@
     <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
     <artifactId>carbon-device-mgt-plugins-parent</artifactId>
     <packaging>pom</packaging>
-    <version>6.0.3-SNAPSHOT</version>
+    <version>6.0.3</version>
     <name>WSO2 Carbon - Device Management Plugins Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Carbon - Device Management Plugins Parent</description>
@@ -1127,7 +1127,7 @@
         <carbon.devicemgt.version.range>[5.0.0, 6.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon Device Management Plugins -->
-        <carbon.devicemgt.plugins.version>6.0.3-SNAPSHOT</carbon.devicemgt.plugins.version>
+        <carbon.devicemgt.plugins.version>6.0.3</carbon.devicemgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.0</android.agent.version>
@@ -1313,7 +1313,7 @@
         <url>https://gitlab.com/entgra/carbon-device-mgt-plugins.git</url>
         <developerConnection>scm:git:https://gitlab.com/entgra/carbon-device-mgt-plugins.git</developerConnection>
         <connection>scm:git:https://gitlab.com/entgra/carbon-device-mgt-plugins.git</connection>
-        <tag>HEAD</tag>
+        <tag>v6.0.3</tag>
     </scm>
 
 
