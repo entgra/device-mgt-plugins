@@ -551,22 +551,24 @@
     </Features>
     <TaskConfiguration>
         <Enable>true</Enable>
-        <Frequency>60000</Frequency>
         <Operations>
             <Operation>
                 <Name>DEVICE_INFO</Name>
                 <RecurrentTimes>1</RecurrentTimes>
                 <Enable>true</Enable>
+                <Frequency>600000</Frequency>
             </Operation>
             <Operation>
                 <Name>APPLICATION_LIST</Name>
                 <RecurrentTimes>5</RecurrentTimes>
                 <Enable>true</Enable>
+                <Frequency>600000</Frequency>
             </Operation>
             <Operation>
                 <Name>DEVICE_LOCATION</Name>
                 <RecurrentTimes>1</RecurrentTimes>
                 <Enable>true</Enable>
+                <Frequency>600000</Frequency>
             </Operation>
         </Operations>
     </TaskConfiguration>
