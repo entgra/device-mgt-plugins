@@ -61,6 +61,9 @@ import org.wso2.carbon.device.mgt.common.exceptions.UnauthorizedDeviceAccessExce
 import org.wso2.carbon.device.mgt.common.exceptions.UserNotFoundException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
+import org.wso2.carbon.device.mgt.common.geo.service.GeoCluster;
+import org.wso2.carbon.device.mgt.common.geo.service.GeoCoordinate;
+import org.wso2.carbon.device.mgt.common.geo.service.GeoQuery;
 import org.wso2.carbon.device.mgt.common.invitation.mgt.DeviceEnrollmentInvitationDetails;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
@@ -72,8 +75,8 @@ import org.wso2.carbon.device.mgt.common.push.notification.NotificationStrategy;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.dto.DeviceTypeVersion;
-import org.wso2.carbon.device.mgt.core.geo.GeoCluster;
-import org.wso2.carbon.device.mgt.core.geo.geoHash.GeoCoordinate;
+
+
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.EmailMetaInfo;
 import org.wso2.carbon.mdm.services.android.utils.TestUtils;
@@ -674,10 +677,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public List<GeoCluster> findGeoClusters(String deviceType, GeoCoordinate geoCoordinate,
-                                            GeoCoordinate geoCoordinate1, int i) throws DeviceManagementException {
+    public List<GeoCluster> findGeoClusters(GeoQuery geoQuery) throws DeviceManagementException {
         return null;
     }
+
+
 
     @Override
     public int getDeviceCountOfTypeByStatus(String s, String s1) throws DeviceManagementException {
@@ -754,10 +758,10 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public PaginationResult getAppSubscribedDevices(int i, int i1, List<Integer> list, List<String> list1)
-            throws DeviceManagementException {
+    public PaginationResult getAppSubscribedDevices(PaginationRequest paginationRequest, List<Integer> list) throws DeviceManagementException {
         return null;
     }
+
 
     @Override
     public PaginationResult getApplications(PaginationRequest paginationRequest)
@@ -810,4 +814,9 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public License getLicenseConfig(String s) throws DeviceManagementException { return null; }
+
+    @Override
+    public PaginationResult getDevicesDetails(PaginationRequest paginationRequest, List<Integer> list, String s) throws DeviceManagementException {
+        return null;
+    }
 }
