@@ -141,6 +141,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public PaginationResult getAllDevicesIds(PaginationRequest paginationRequest) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
     public PaginationResult getAllDevices(PaginationRequest paginationRequest, boolean b)
             throws DeviceManagementException {
         return null;
@@ -153,6 +158,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public PaginationResult createBillingFile(int i, String s, Timestamp timestamp, Timestamp timestamp1, boolean b) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public PaginationResult getAllDevicesIdList(PaginationRequest paginationRequest) throws DeviceManagementException {
         return null;
     }
 
