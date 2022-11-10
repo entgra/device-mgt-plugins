@@ -1310,9 +1310,9 @@
     </properties>
 
     <scm>
-        <url>https://gitlab.com/entgra/carbon-device-mgt-plugins.git</url>
-        <developerConnection>scm:git:https://gitlab.com/entgra/carbon-device-mgt-plugins.git</developerConnection>
-        <connection>scm:git:https://gitlab.com/entgra/carbon-device-mgt-plugins.git</connection>
+        <url>https://repository.entgra.net/community/device-mgt-plugins.git</url>
+        <developerConnection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git</developerConnection>
+        <connection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git</connection>
         <tag>HEAD</tag>
     </scm>
 
