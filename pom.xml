@@ -23,7 +23,7 @@
     <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
     <artifactId>carbon-device-mgt-plugins-parent</artifactId>
     <packaging>pom</packaging>
-    <version>6.0.6-SNAPSHOT</version>
+    <version>6.0.7-SNAPSHOT</version>
     <name>WSO2 Carbon - Device Management Plugins Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Carbon - Device Management Plugins Parent</description>
@@ -1123,11 +1123,11 @@
     <properties>
 
         <!-- Carbon Device Management -->
-        <carbon.devicemgt.version>5.0.12-SNAPSHOT</carbon.devicemgt.version>
+        <carbon.devicemgt.version>5.0.13-SNAPSHOT</carbon.devicemgt.version>
         <carbon.devicemgt.version.range>[5.0.0, 6.0.0)</carbon.devicemgt.version.range>
 
         <!-- Carbon Device Management Plugins -->
-        <carbon.devicemgt.plugins.version>6.0.6-SNAPSHOT</carbon.devicemgt.plugins.version>
+        <carbon.devicemgt.plugins.version>6.0.7-SNAPSHOT</carbon.devicemgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.0</android.agent.version>
@@ -1310,9 +1310,9 @@
     </properties>
 
     <scm>
-        <url>https://gitlab.com/entgra/carbon-device-mgt-plugins.git</url>
-        <developerConnection>scm:git:https://gitlab.com/entgra/carbon-device-mgt-plugins.git</developerConnection>
-        <connection>scm:git:https://gitlab.com/entgra/carbon-device-mgt-plugins.git</connection>
+        <url>https://repository.entgra.net/community/device-mgt-plugins.git</url>
+        <developerConnection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git</developerConnection>
+        <connection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git</connection>
         <tag>HEAD</tag>
     </scm>
 
@@ -1438,6 +1438,16 @@
 
     <pluginRepositories>
         <pluginRepository>
+            <id>internal.nexus</id>
+            <name>Entgra Internal Repository</name>
+            <url>https://nexus-local.entgra.io/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
             <id>wso2.releases</id>
             <name>WSO2 internal Repository</name>
             <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
@@ -1478,6 +1488,16 @@
              by default) and nothing else. We had troubles with other repositories in
              the past. Therefore configuring additional repositories here should be
              considered very carefully. -->
+        <repository>
+            <id>internal.nexus</id>
+            <name>Entgra Internal Repository</name>
+            <url>https://nexus-local.entgra.io/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
         <repository>
             <id>wso2-nexus</id>
             <name>WSO2 internal Repository</name>
