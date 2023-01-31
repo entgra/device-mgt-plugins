@@ -854,7 +854,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public Boolean SendDeviceNameChangedNotification(Device device) throws DeviceManagementException {
+    public Boolean sendDeviceNameChangedNotification(Device device) throws DeviceManagementException {
         return null;
     }
 }
