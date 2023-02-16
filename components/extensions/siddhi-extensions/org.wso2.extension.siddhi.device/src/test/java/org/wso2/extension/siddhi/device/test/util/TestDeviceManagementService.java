@@ -17,19 +17,17 @@
  */
 package org.wso2.extension.siddhi.device.test.util;
 
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceManager;
-import org.wso2.carbon.device.mgt.common.DeviceStatusTaskPluginConfig;
-import org.wso2.carbon.device.mgt.common.InitialOperationConfig;
-import org.wso2.carbon.device.mgt.common.MonitoringOperation;
-import org.wso2.carbon.device.mgt.common.OperationMonitoringTaskConfig;
-import org.wso2.carbon.device.mgt.common.ProvisioningConfig;
+import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
 import org.wso2.carbon.device.mgt.common.general.GeneralConfig;
+import org.wso2.carbon.device.mgt.common.invitation.mgt.DeviceEnrollmentInvitationDetails;
+import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.common.policy.mgt.PolicyMonitoringManager;
 import org.wso2.carbon.device.mgt.common.pull.notification.PullNotificationSubscriber;
 import org.wso2.carbon.device.mgt.common.push.notification.PushNotificationConfig;
 import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.common.type.mgt.DeviceTypePlatformDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +110,26 @@ public class TestDeviceManagementService implements DeviceManagementService {
 
     @Override
     public GeneralConfig getGeneralConfig() {
+        return null;
+    }
+
+    @java.lang.Override
+    public StartupOperationConfig getStartupOperationConfig() {
+        return null;
+    }
+
+    @java.lang.Override
+    public DeviceTypePlatformDetails getDeviceTypePlatformDetails() {
+        return null;
+    }
+
+    @java.lang.Override
+    public DeviceEnrollmentInvitationDetails getDeviceEnrollmentInvitationDetails() {
+        return null;
+    }
+
+    @java.lang.Override
+    public License getLicenseConfig() {
         return null;
     }
 }

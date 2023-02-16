@@ -24,8 +24,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.DeviceNotFoundException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceNotFoundException;
 import org.wso2.carbon.device.mgt.common.group.mgt.DeviceGroup;
 import org.wso2.carbon.device.mgt.common.group.mgt.GroupAlreadyExistException;
 import org.wso2.carbon.device.mgt.common.group.mgt.GroupManagementException;
@@ -151,7 +151,7 @@ public class ExtensionTestCase extends BaseDeviceManagementTest {
 
         DeviceConfigurationManager.getInstance().getDeviceManagementConfig().setDeviceCacheConfiguration(configuration);
         List<DeviceIdentifier> list = TestDataHolder.getDeviceIdentifiersList(DEVICE_TYPE);
-        DeviceGroup deviceGroup = groupManagementProviderService.getGroup(TestDataHolder.generateDummyGroupData(1).getName());
+        DeviceGroup deviceGroup = groupManagementProviderService.getGroup(TestDataHolder.generateDummyGroupData(1).getName(), true);
         Assert.assertNotNull(deviceGroup);
         groupManagementProviderService.addDevices(deviceGroup.getGroupId(), list);
     }
@@ -199,9 +199,9 @@ public class ExtensionTestCase extends BaseDeviceManagementTest {
         executionPlanRuntime.start();
         DeviceIdentifier deviceIdentifier = TestDataHolder.getDeviceIdentifiersList(DEVICE_TYPE).get(0);
         inputHandler.send(new Object[]{groupManagementProviderService.getGroup(
-                TestDataHolder.generateDummyGroupData(1).getName()).getGroupId(), deviceIdentifier.getId(), deviceIdentifier.getType()});
+                TestDataHolder.generateDummyGroupData(1).getName(), true).getGroupId(), deviceIdentifier.getId(), deviceIdentifier.getType()});
         inputHandler.send(new Object[]{groupManagementProviderService.getGroup(
-                TestDataHolder.generateDummyGroupData(2).getName()).getGroupId(), deviceIdentifier.getId(), deviceIdentifier.getType()});
+                TestDataHolder.generateDummyGroupData(2).getName(), true).getGroupId(), deviceIdentifier.getId(), deviceIdentifier.getType()});
         SiddhiTestHelper.waitForEvents(100, 1, count, 10000);
         Assert.assertTrue(eventArrived);
         Assert.assertEquals(1, count.get());

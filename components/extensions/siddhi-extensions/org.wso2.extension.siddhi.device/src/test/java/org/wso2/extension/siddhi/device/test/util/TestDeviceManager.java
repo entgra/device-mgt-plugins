@@ -17,7 +17,7 @@ package org.wso2.extension.siddhi.device.test.util;
 
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.DeviceManager;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.FeatureManager;
@@ -106,11 +106,6 @@ public class TestDeviceManager implements DeviceManager {
     }
 
     @Override
-    public boolean isClaimable(DeviceIdentifier deviceId) throws DeviceManagementException {
-        return false;
-    }
-
-    @Override
     public boolean setStatus(DeviceIdentifier deviceId, String currentOwner, EnrolmentInfo.Status status)
             throws DeviceManagementException {
         return false;
@@ -131,4 +126,8 @@ public class TestDeviceManager implements DeviceManager {
         return false;
     }
 
+    @java.lang.Override
+    public void deleteDevices(java.util.List<java.lang.String> list) throws DeviceManagementException {
+
+    }
 }
