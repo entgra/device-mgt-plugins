@@ -18,8 +18,6 @@
  */
 package org.wso2.extension.siddhi.device;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
@@ -29,6 +27,7 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dao.GroupManagementDAOFactory;
+import org.wso2.carbon.device.mgt.core.metadata.mgt.dao.MetadataManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.notification.mgt.dao.NotificationManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.operation.mgt.dao.OperationManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
@@ -46,7 +45,6 @@ import java.sql.Statement;
 public abstract class BaseDeviceManagementTest {
 
     private DataSource dataSource;
-    private static final Log log = LogFactory.getLog(BaseDeviceManagementTest.class);
 
     @BeforeSuite
     public void setupDataSource() throws Exception {
@@ -61,6 +59,7 @@ public abstract class BaseDeviceManagementTest {
         GroupManagementDAOFactory.init(dataSource);
         OperationManagementDAOFactory.init(dataSource);
         NotificationManagementDAOFactory.init(dataSource);
+        MetadataManagementDAOFactory.init(dataSource);
     }
 
     @BeforeClass
