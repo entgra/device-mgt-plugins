@@ -36,6 +36,7 @@
         <module>cdmf-transport-adapters</module>
         <!--<module>mb-extensions</module>-->
 		<module>pull-notification-listeners</module>
+        <module>emqx-extensions</module>
     </modules>
 
     <build>
