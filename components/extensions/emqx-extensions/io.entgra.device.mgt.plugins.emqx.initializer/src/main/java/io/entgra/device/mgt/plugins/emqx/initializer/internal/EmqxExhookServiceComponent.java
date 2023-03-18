@@ -15,9 +15,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.entgra.device.mgt.plugins.emqx.initializer;
+package io.entgra.device.mgt.plugins.emqx.initializer.internal;
 
-import io.entgra.device.mgt.plugins.emqx.initializer.internal.EmqxExhookInitializer;
+import io.entgra.device.mgt.plugins.emqx.initializer.EmqxExhookInitializer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;

@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.entgra.device.mgt.plugins.emqx.initializer;
+package io.entgra.device.mgt.plugins.emqx.initializer.internal;
 
 public class EmqxExhookDataHolder {
 
