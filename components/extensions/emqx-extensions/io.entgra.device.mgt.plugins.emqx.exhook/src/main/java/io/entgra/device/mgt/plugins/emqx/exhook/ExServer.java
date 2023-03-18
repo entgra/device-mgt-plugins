@@ -36,7 +36,13 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.wso2.carbon.device.mgt.core.config.DeviceConfigurationManager;
 import org.wso2.carbon.device.mgt.core.config.keymanager.KeyManagerConfigurations;
-
+import org.wso2.carbon.device.mgt.core.internal.DeviceManagementDataHolder;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -155,9 +161,45 @@ public class ExServer {
             responseObserver.onCompleted();
         }
 
+        public static DeviceManagementProviderService getDeviceManagementService() {
+            PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                String msg = "DeviceImpl Management provider service has not initialized.";
+                logger.error(msg);
+//                throw new IllegalStateException(msg);
+            }
+            return deviceManagementProviderService;
+        }
         @Override
         public void onClientConnack(ClientConnackRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onClientConnack", request);
+            if (request.getResultCode().equals("success")) {
+                String accessToken = accessTokenMap.get(request.getConninfo().getClientid());
+                String scopeString = authorizedScopeMap.get(accessToken);
+                String[] scopeArray = scopeString.split(" ");
+                String deviceType = null;
+                String deviceId = null;
+                for (String scope : scopeArray) {
+                    if (scope.startsWith("device_")) {
+                        String[] scopeParts = scope.split("_");
+                        deviceType = scopeParts[1];
+                        deviceId = scopeParts[2];
+                        break;
+                    }
+                }
+                if (!StringUtils.isEmpty(deviceType) && !StringUtils.isEmpty(deviceId)) {
+                    try {
+                        PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain("carbon.super");
+                        PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(-1234);
+                        DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();
+                        deviceManagementProviderService.changeDeviceStatus(new DeviceIdentifier(deviceId, deviceType), EnrolmentInfo.Status.ACTIVE);
+                    } catch (DeviceManagementException e) {
+                        logger.error("onClientConnack: Error while setting device status");
+                    }
+                }
+            }
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -396,6 +438,33 @@ public class ExServer {
         @Override
         public void onSessionTerminated(SessionTerminatedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onSessionTerminated", request);
+
+            String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
+            if (!StringUtils.isEmpty(accessToken)) {
+                String scopeString = authorizedScopeMap.get(accessToken);
+                String[] scopeArray = scopeString.split(" ");
+                String deviceType = null;
+                String deviceId = null;
+                for (String scope : scopeArray) {
+                    if (scope.startsWith("device_")) {
+                        String[] scopeParts = scope.split("_");
+                        deviceType = scopeParts[1];
+                        deviceId = scopeParts[2];
+                        break;
+                    }
+                }
+                if (!StringUtils.isEmpty(deviceType) && !StringUtils.isEmpty(deviceId)) {
+                    try {
+                        PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain("carbon.super");
+                        PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(-1234);
+                        DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();;
+                        deviceManagementProviderService.changeDeviceStatus(new DeviceIdentifier(deviceId, deviceType), EnrolmentInfo.Status.UNREACHABLE);
+                    } catch (DeviceManagementException e) {
+                        logger.error("onSessionTerminated: Error while setting device status");
+                    }
+                }
+            }
+
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
