@@ -64,6 +64,7 @@ public class MQTTEventAdapterConstants {
     public static final String EMPTY = "";
     public static final String MQTT_CONTENT_VALIDATION_DEFAULT_PARAMETERS = "";
     public static final String TOPIC = "topic";
+    public static final String DEVICE_ID_INDEX = "deviceIdIndex";
     public static final String PAYLOAD = "payload";
     public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String AUTHORIZATION_HEADER_VALUE_PREFIX = "Basic ";
