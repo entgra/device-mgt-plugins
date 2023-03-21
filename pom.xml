@@ -37,12 +37,9 @@
     <modules>
         <module>components/extensions</module>
         <module>components/mobile-plugins</module>
-        <!--<module>components/device-types</module>-->
-        <!--<module>components/analytics</module>-->
         <!--<module>components/test-coverage</module>-->
-        <!--<module>features/analytics-feature</module>-->
+        <module>features/analytics-feature</module>
         <module>features/mobile-plugins-feature</module>
-        <!--<module>features/device-types-feature</module>-->
         <module>features/extensions-feature</module>
     </modules>
 
@@ -540,9 +537,9 @@
 
             <!--Orbit dependencies-->
             <dependency>
-                <groupId>com.h2database.wso2</groupId>
-                <artifactId>h2-database-engine</artifactId>
-                <version>${orbit.h2.engine.version}</version>
+                <groupId>org.wso2.orbit.com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${orbit.h2.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomcat.wso2</groupId>
@@ -1213,6 +1210,7 @@
         <eclipse.osgi.version>3.9.1.v20140110-1610</eclipse.osgi.version>
 
         <!--Orbit versions-->
+        <orbit.h2.version>1.4.199.wso2v1</orbit.h2.version>
         <orbit.h2.engine.version>1.2.140.wso2v3</orbit.h2.engine.version>
         <orbit.tomcat.version>7.0.85.wso2v1</orbit.tomcat.version>
         <orbit.tomcat.jdbc.pooling.version>7.0.34.wso2v2</orbit.tomcat.jdbc.pooling.version>
@@ -1339,7 +1337,7 @@
         <io.github.openfeign.version>9.3.1</io.github.openfeign.version>
         <javax.ws.rs.jsr311-api.version>[1.1.0, 2.0.0)</javax.ws.rs.jsr311-api.version>
         <maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
-        <siddhi.version>3.1.2</siddhi.version>
+        <siddhi.version>3.2.6</siddhi.version>
         <maven.scr.version>1.7.2</maven.scr.version>
         <maven.javadoc.skip>true</maven.javadoc.skip>
 

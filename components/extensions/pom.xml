@@ -37,6 +37,7 @@
         <!--<module>mb-extensions</module>-->
 		<module>pull-notification-listeners</module>
         <module>emqx-extensions</module>
+        <module>siddhi-extensions</module>
     </modules>
 
     <build>
