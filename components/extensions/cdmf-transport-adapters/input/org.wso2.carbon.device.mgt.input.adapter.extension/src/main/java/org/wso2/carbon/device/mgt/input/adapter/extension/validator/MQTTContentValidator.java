@@ -36,6 +36,7 @@ public class MQTTContentValidator implements ContentValidator {
     private static final String DEVICE_ID_JSON_PATH = "event.metaData.deviceId";
     private static final String DEVICE_TYPE_JSON_PATH = "event.metaData.deviceId";
     private static final String TOPIC = "topic";
+    private static final String DEVICE_ID_INDEX = "deviceIdIndex";
     private static final int DEVICE_ID_TOPIC_HIERARCHY_INDEX = 2;
 
     @Override
@@ -46,9 +47,13 @@ public class MQTTContentValidator implements ContentValidator {
     @Override
     public ContentInfo validate(Object msgPayload, Map<String, Object> dynamicParams) {
         String topic = (String) dynamicParams.get(TOPIC);
+        if (!dynamicParams.containsKey(DEVICE_ID_INDEX)) {
+            log.error("device id not found in topic ");
+            return null;
+        }
+        int deviceIdIndex = (int)dynamicParams.get(DEVICE_ID_INDEX);
         String topics[] = topic.split("/");
-        int deviceIdInTopicHierarchyLevelIndex = DEVICE_ID_TOPIC_HIERARCHY_INDEX;
-        String deviceIdFromTopic = topics[deviceIdInTopicHierarchyLevelIndex];
+        String deviceIdFromTopic = topics[deviceIdIndex];
         boolean status;
         String message = (String) msgPayload;
         if (message.startsWith(JSON_ARRAY_START_CHAR)) {

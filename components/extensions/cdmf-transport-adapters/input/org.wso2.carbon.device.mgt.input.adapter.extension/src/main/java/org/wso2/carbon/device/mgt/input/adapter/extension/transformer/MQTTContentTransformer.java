@@ -35,6 +35,7 @@ import java.util.Map;
 public class MQTTContentTransformer implements ContentTransformer {
     private static final String MQTT_CONTENT_TRANSFORMER = "device-meta-transformer";
     private static final String TOPIC = "topic";
+    private static final String DEVICE_ID_INDEX = "deviceIdIndex";
     private static String JSON_ARRAY_START_CHAR = "[";
 
     private static final Log log = LogFactory.getLog(MQTTContentTransformer.class);
@@ -47,15 +48,19 @@ public class MQTTContentTransformer implements ContentTransformer {
     @Override
     public Object transform(Object messagePayload, Map<String, Object> dynamicProperties) {
         String topic = (String) dynamicProperties.get(TOPIC);
+        if (!dynamicProperties.containsKey(DEVICE_ID_INDEX)) {
+            log.error("device id not found in topic ");
+            return false;
+        }
+        int deviceIdIndex = (int)dynamicProperties.get(DEVICE_ID_INDEX);
         String topics[] = topic.split("/");
-        String deviceId = topics[2];
-        String deviceType = topics[1];
+        String deviceId = topics[deviceIdIndex];
         String message = (String) messagePayload;
         try {
             if (message.startsWith(JSON_ARRAY_START_CHAR)) {
-                return processMultipleEvents(message, deviceId, deviceType);
+                return processMultipleEvents(message, deviceId, deviceId);
             } else {
-                return processSingleEvent(message, deviceId, deviceType);
+                return processSingleEvent(message, deviceId, deviceId);
             }
         } catch (ParseException e) {
             log.error("Invalid input " + message, e);

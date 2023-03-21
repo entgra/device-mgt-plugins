@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
         <artifactId>cdmf-transport-adapters</artifactId>
-        <version>6.0.12-SNAPSHOT</version>
+        <version>6.0.13-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -79,6 +79,10 @@
         <dependency>
             <groupId>org.wso2.carbon.devicemgt</groupId>
             <artifactId>org.wso2.carbon.identity.jwt.client.extension</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
+            <artifactId>org.wso2.carbon.apimgt.keymgt.extension</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
@@ -151,7 +155,10 @@
                             org.wso2.carbon.utils.multitenancy,
                             org.apache.axis2.context,
                             org.wso2.carbon.core.multitenancy.utils,
-                            org.wso2.carbon.utils
+                            org.wso2.carbon.utils,
+                            org.wso2.carbon.apimgt.keymgt.extension;version="[5.0,6)",
+                            org.wso2.carbon.apimgt.keymgt.extension.exception;version="[5.0,6)",
+                            org.wso2.carbon.apimgt.keymgt.extension.service;version="[5.0,6)"
                         </Import-Package>
                     </instructions>
                 </configuration>

@@ -17,22 +17,18 @@
 */
 package org.wso2.carbon.device.mgt.input.adapter.mqtt.util;
 
-import org.apache.axis2.context.ConfigurationContext;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicHeader;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.wso2.carbon.apimgt.keymgt.extension.DCRResponse;
+import org.wso2.carbon.apimgt.keymgt.extension.TokenRequest;
+import org.wso2.carbon.apimgt.keymgt.extension.TokenResponse;
+import org.wso2.carbon.apimgt.keymgt.extension.exception.BadRequestException;
+import org.wso2.carbon.apimgt.keymgt.extension.exception.KeyMgtException;
+import org.wso2.carbon.apimgt.keymgt.extension.service.KeyMgtService;
+import org.wso2.carbon.apimgt.keymgt.extension.service.KeyMgtServiceImpl;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.core.ServerStatus;
 import org.wso2.carbon.core.multitenancy.utils.TenantAxisUtils;
@@ -43,18 +39,10 @@ import org.wso2.carbon.device.mgt.input.adapter.mqtt.internal.InputAdapterServic
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterConfiguration;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterListener;
 import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterRuntimeException;
-import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
 import org.wso2.carbon.identity.jwt.client.extension.exception.JWTClientException;
-import org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +56,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
 
     private MQTTBrokerConnectionConfiguration mqttBrokerConnectionConfiguration;
     private String topic;
+    private String topicStructure;
     private String tenantDomain;
     private volatile boolean connectionSucceeded = false;
     private ContentValidator contentValidator;
@@ -88,13 +77,10 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
         this.mqttBrokerConnectionConfiguration = mqttBrokerConnectionConfiguration;
         this.cleanSession = mqttBrokerConnectionConfiguration.isCleanSession();
         int keepAlive = mqttBrokerConnectionConfiguration.getKeepAlive();
-        this.topic = PropertyUtils.replaceTenantDomainProperty(topic);
+        this.topicStructure = new String(topic);
+        this.topic = PropertyUtils.replacePlaceholders(topic);
         this.eventAdapterListener = inputEventAdapterListener;
-        this.tenantDomain = this.topic.split("/")[0];
-        //this is to allow server listener from IoT Core to connect.
-        if (this.tenantDomain.equals("+")) {
-            this.tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        }
+        this.tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
 
         //SORTING messages until the server fetches them
         String temp_directory = System.getProperty("java.io.tmpdir");
@@ -146,58 +132,21 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
             //getJWT Client Parameters.
             if (dcrUrlString != null && !dcrUrlString.isEmpty()) {
                 try {
-                    URL dcrUrl = new URL(dcrUrlString);
-                    HttpClient httpClient = MQTTUtil.getHttpClient(dcrUrl.getProtocol());
-                    HttpPost postMethod = new HttpPost(dcrUrlString);
-                    RegistrationProfile registrationProfile = new RegistrationProfile();
-                    registrationProfile.setCallbackUrl(MQTTEventAdapterConstants.EMPTY_STRING);
-                    registrationProfile.setGrantType(MQTTEventAdapterConstants.GRANT_TYPE);
-                    registrationProfile.setOwner(username);
-                    registrationProfile.setTokenScope(MQTTEventAdapterConstants.TOKEN_SCOPE);
-                    if (!mqttBrokerConnectionConfiguration.isGlobalCredentailSet()) {
-                        registrationProfile.setClientName(MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
-                                                                  + mqttBrokerConnectionConfiguration.getAdapterName() +
-                                                                  "_" + tenantDomain);
-                        registrationProfile.setIsSaasApp(false);
-                    } else {
-                        registrationProfile.setClientName(MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
-                                                                  + mqttBrokerConnectionConfiguration.getAdapterName());
-                        registrationProfile.setIsSaasApp(true);
-                    }
-                    String jsonString = registrationProfile.toJSON();
-                    StringEntity requestEntity = new StringEntity(jsonString, ContentType.APPLICATION_JSON);
-                    postMethod.setEntity(requestEntity);
-                    String basicAuth = getBase64Encode(username, password);
-                    postMethod.setHeader(new BasicHeader(MQTTEventAdapterConstants.AUTHORIZATION_HEADER_NAME,
-                                                         MQTTEventAdapterConstants.AUTHORIZATION_HEADER_VALUE_PREFIX +
-                                                                 basicAuth));
-                    HttpResponse httpResponse = httpClient.execute(postMethod);
-                    if (httpResponse != null) {
-                        String response = MQTTUtil.getResponseString(httpResponse);
-                        try {
-                            if (response != null) {
-                                JSONParser jsonParser = new JSONParser();
-                                JSONObject jsonPayload = (JSONObject) jsonParser.parse(response);
-                                String clientId = (String) jsonPayload.get(MQTTEventAdapterConstants.CLIENT_ID);
-                                String clientSecret = (String) jsonPayload.get(MQTTEventAdapterConstants.CLIENT_SECRET);
-                                connectionOptions.setUserName(getToken(clientId, clientSecret));
-                            }
-                        } catch (ParseException e) {
-                            String msg = "error occurred while parsing generating token for the adapter";
-                            log.error(msg, e);
-                        }
-                    }
-                } catch (HttpHostConnectException e) {
-                    log.error("Keymanager is unreachable, Waiting....");
-                    return false;
-                } catch (MalformedURLException e) {
-                    log.error("Invalid dcrUrl : " + dcrUrlString);
-                    return false;
+                    KeyMgtService keyMgtService = new KeyMgtServiceImpl();
+                    String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
+                            + mqttBrokerConnectionConfiguration.getAdapterName();
+                    DCRResponse dcrResponse = keyMgtService.dynamicClientRegistration(applicationName, username,
+                            "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE);
+                    String accessToken = getToken(dcrResponse.getClientId(), dcrResponse.getClientSecret());
+                    connectionOptions.setUserName(accessToken.substring(0, 18));
+                    connectionOptions.setPassword(accessToken.substring(19).toCharArray());
+
+
                 } catch (JWTClientException | UserStoreException e) {
-                    log.error("Failed to create an oauth token with jwt grant type.", e);
+                    log.error("Failed to create an oauth token with client_credentials grant type.", e);
                     return false;
-                } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException | IOException e) {
-                    log.error("Failed to create a http connection.", e);
+                } catch (KeyMgtException e) {
+                    log.error("Failed to create an application.", e);
                     return false;
                 }
             }
@@ -249,7 +198,8 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         try {
-            String msgText = mqttMessage.toString();
+            String mqttMsgString =  mqttMessage.toString();
+            String msgText = mqttMsgString.substring(mqttMsgString.indexOf("{"), mqttMsgString.indexOf("}") +1);
             if (log.isDebugEnabled()) {
                 log.debug(msgText);
             }
@@ -267,10 +217,18 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
                 log.debug("Event received in MQTT Event Adapter - " + msgText);
             }
 
+
             if (contentValidator != null && contentTransformer != null) {
                 ContentInfo contentInfo;
                 Map<String, Object> dynamicProperties = new HashMap<>();
                 dynamicProperties.put(MQTTEventAdapterConstants.TOPIC, topic);
+                int deviceIdIndex = -1;
+                for (String topicStructurePart : topicStructure.split("/")) {
+                    deviceIdIndex++;
+                    if (topicStructurePart.contains("+")) {
+                        dynamicProperties.put(MQTTEventAdapterConstants.DEVICE_ID_INDEX, deviceIdIndex);
+                    }
+                }
                 Object transformedMessage = contentTransformer.transform(msgText, dynamicProperties);
                 contentInfo = contentValidator.validate(transformedMessage, dynamicProperties);
                 if (contentInfo != null && contentInfo.isValidContent()) {
@@ -326,21 +284,22 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
         PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantDomain, true);
         try {
             String scopes = mqttBrokerConnectionConfiguration.getBrokerScopes();
-            String username = mqttBrokerConnectionConfiguration.getUsername();
-            if (mqttBrokerConnectionConfiguration.isGlobalCredentailSet()) {
-                username = PrivilegedCarbonContext.getThreadLocalCarbonContext()
-                        .getUserRealm().getRealmConfiguration().getAdminUserName() + "@" + PrivilegedCarbonContext
-                        .getThreadLocalCarbonContext().getTenantDomain(true);
-            }
+            scopes += " perm:topic:sub:" + this.topic.replace("/",":");
+            scopes += " perm:topic:pub:" + this.topic.replace("/",":");
 
-            JWTClientManagerService jwtClientManagerService =
-                    InputAdapterServiceDataHolder.getJwtClientManagerService();
-            AccessTokenInfo accessTokenInfo = jwtClientManagerService.getJWTClient().getAccessToken(
-                    clientId, clientSecret, username, scopes);
-            return accessTokenInfo.getAccessToken();
+            TokenRequest tokenRequest = new TokenRequest(clientId, clientSecret,
+                    null, scopes.toString(), "client_credentials", null,
+                    null, null, null,  Integer.MAX_VALUE);
+            KeyMgtService keyMgtService = new KeyMgtServiceImpl();
+            TokenResponse tokenResponse = keyMgtService.generateAccessToken(tokenRequest);
+
+            return tokenResponse.getAccessToken();
+        } catch (KeyMgtException | BadRequestException e) {
+            log.error("Error while generating access token", e);
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
+        return null;
     }
 
     private String getBase64Encode(String key, String value) {

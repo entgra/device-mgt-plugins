@@ -25,7 +25,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class PropertyUtils {
-    private static final String TENANT_DOMAIN_PROPERTY = "\\$\\{tenant-domain\\}";
+    private static final String TENANT_DOMAIN_PROPERTY = "\\$\\{tenantDomain\\}";
+    private static final String DEVICE_TYPE_PROPERTY = "\\$\\{deviceType\\}";
+    private static final String DEVICE_ID_PROPERTY = "\\$\\{deviceId\\}";
 
     //This method is only used if the mb features are within DAS.
     static String replaceMqttProperty(String urlWithPlaceholders) throws InputEventAdapterException {
@@ -48,6 +50,12 @@ class PropertyUtils {
     public static String replaceTenantDomainProperty (String urlWithPlaceholders) {
         urlWithPlaceholders = urlWithPlaceholders.replaceAll(TENANT_DOMAIN_PROPERTY, PrivilegedCarbonContext
                 .getThreadLocalCarbonContext().getTenantDomain(true));
+        return urlWithPlaceholders;
+    }
+
+    public static String replacePlaceholders(String urlWithPlaceholders) {
+        urlWithPlaceholders = urlWithPlaceholders.replaceAll(TENANT_DOMAIN_PROPERTY, "+")
+                .replaceAll(DEVICE_TYPE_PROPERTY, "+").replaceAll(DEVICE_ID_PROPERTY, "+");
         return urlWithPlaceholders;
     }
 }
