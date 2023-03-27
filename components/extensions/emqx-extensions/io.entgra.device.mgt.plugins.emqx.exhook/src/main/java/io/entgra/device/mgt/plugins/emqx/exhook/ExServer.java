@@ -324,41 +324,62 @@ public class ExServer {
                 boolean isFound = false;
 
                 String tempScope = null;
-                if (request.getType().equals(ClientCheckAclRequest.AclReqType.SUBSCRIBE) ||
-                        request.getType().equals(ClientCheckAclRequest.AclReqType.PUBLISH)) {
+                String requestTopic = request.getTopic();
 
-                    String requestTopic = request.getTopic();
+                if (request.getType().equals(ClientCheckAclRequest.AclReqType.PUBLISH)) {
+                    requestTopic = requestTopic.replace("/", ":");
 
+                    String[] requestTopicParts = requestTopic.split(":");
+
+                    if (requestTopicParts.length >= 4 && "operation".equals(requestTopicParts[3])) {
+                        // publishing operation from iot server to emqx
+                        tempScope = "perm:topic:pub:" + requestTopicParts[0] + ":+:+:operation";
+                    } else {
+                        // publishing operation response from device to emqx
+                        // publishing events from device to emqx
+                        tempScope = "perm:topic:pub:" + requestTopic;
+                    }
+
+                    for (String scope : scopeList) {
+                        if (scope.startsWith(tempScope)) {
+                            isFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (request.getType().equals(ClientCheckAclRequest.AclReqType.SUBSCRIBE)) {
                     if (requestTopic.endsWith("/#")) {
                         requestTopic = requestTopic.substring(0, requestTopic.indexOf("/#"));
                     }
 
-                    // replace / with :
                     requestTopic = requestTopic.replace("/", ":");
+                    // subscribing for events from iotserver to emqx
+                    // subscribing for operation from device to emqx
+                    // subscribing for operation response from iotserver to emqx
+                    tempScope = "perm:topic:sub:" + requestTopic;
 
-                    if (request.getType().equals(ClientCheckAclRequest.AclReqType.SUBSCRIBE)) {
-                        tempScope = "perm:topic:sub:" + requestTopic;
-                    }
-                    if (request.getType().equals(ClientCheckAclRequest.AclReqType.PUBLISH)) {
-                        tempScope = "perm:topic:pub:" + requestTopic;
-                    }
-
-                    if (scopeList.contains(tempScope)) {
-                        isFound = true;
-                    }
-
-                    if (isFound) {
-                        ValuedResponse reply = ValuedResponse.newBuilder()
-                                .setBoolResult(true)
-                                .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
-                                .build();
-
-                        responseObserver.onNext(reply);
-                        responseObserver.onCompleted();
-                    } else {
-                        responseObserver.onError(new Exception("not authorized"));
+                    for (String scope : scopeList) {
+                        if (scope.startsWith(tempScope)) {
+                            isFound = true;
+                            break;
+                        }
                     }
                 }
+
+                if (isFound) {
+                    ValuedResponse reply = ValuedResponse.newBuilder()
+                            .setBoolResult(true)
+                            .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                            .build();
+
+                    responseObserver.onNext(reply);
+                    responseObserver.onCompleted();
+                } else {
+                    logger.error("not authorized");
+                    responseObserver.onError(new Exception("not authorized"));
+                }
+
             } else {
                 //default
                 ValuedResponse reply = ValuedResponse.newBuilder()
