@@ -285,7 +285,6 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
         try {
             String scopes = mqttBrokerConnectionConfiguration.getBrokerScopes();
             scopes += " perm:topic:sub:" + this.topic.replace("/",":");
-            scopes += " perm:topic:pub:" + this.topic.replace("/",":");
 
             TokenRequest tokenRequest = new TokenRequest(clientId, clientSecret,
                     null, scopes.toString(), "client_credentials", null,

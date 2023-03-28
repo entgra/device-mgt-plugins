@@ -73,6 +73,10 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.user.api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
+            <artifactId>org.wso2.carbon.apimgt.keymgt.extension</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -135,7 +139,10 @@
 							org.apache.http.message,
 							org.apache.commons.ssl,
 							org.wso2.carbon.identity.jwt.client.extension.*,
-							org.wso2.carbon.user.api
+							org.wso2.carbon.user.api,
+                            org.wso2.carbon.apimgt.keymgt.extension;version="[5.0,6)",
+                            org.wso2.carbon.apimgt.keymgt.extension.exception;version="[5.0,6)",
+                            org.wso2.carbon.apimgt.keymgt.extension.service;version="[5.0,6)"
                         </Import-Package>
                     </instructions>
                 </configuration>
