@@ -371,6 +371,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public void sendEnrolmentGuide(String enrolmentGuide) throws DeviceManagementException {
+
+    }
+
+    @Override
     public void sendRegistrationEmail(EmailMetaInfo emailMetaInfo)
             throws DeviceManagementException, ConfigurationManagementException {
 
