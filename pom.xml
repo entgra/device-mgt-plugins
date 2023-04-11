@@ -23,7 +23,7 @@
     <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
     <artifactId>carbon-device-mgt-plugins-parent</artifactId>
     <packaging>pom</packaging>
-    <version>6.0.14</version>
+    <version>6.0.15-SNAPSHOT</version>
     <name>WSO2 Carbon - Device Management Plugins Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Carbon - Device Management Plugins Parent</description>
