@@ -199,7 +199,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         try {
             String mqttMsgString =  mqttMessage.toString();
-            String msgText = mqttMsgString.substring(mqttMsgString.indexOf("{"), mqttMsgString.indexOf("}") +1);
+            String msgText = mqttMsgString.substring(mqttMsgString.indexOf("{"), mqttMsgString.lastIndexOf("}") + 1);
             if (log.isDebugEnabled()) {
                 log.debug(msgText);
             }
