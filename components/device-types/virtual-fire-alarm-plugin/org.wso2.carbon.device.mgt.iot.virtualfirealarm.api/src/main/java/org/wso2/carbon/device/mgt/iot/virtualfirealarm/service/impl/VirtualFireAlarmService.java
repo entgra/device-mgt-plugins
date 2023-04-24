@@ -54,7 +54,8 @@ import javax.ws.rs.core.Response;
                         name = "Enroll device",
                         description = "",
                         key = "perm:firealarm:enroll",
-                        permissions = {"/device-mgt/devices/enroll/firealarm"}
+                        permissions = {"/device-mgt/devices/enroll/firealarm"},
+                        roles = {"Internal/devicemgt-user"}
                 )
         }
 )

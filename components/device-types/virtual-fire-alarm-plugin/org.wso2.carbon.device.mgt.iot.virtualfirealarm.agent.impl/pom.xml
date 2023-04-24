@@ -23,8 +23,7 @@
 	<parent>
 		<artifactId>virtual-fire-alarm-plugin</artifactId>
 		<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-		<version>4.1.21-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+		<version>6.0.16-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.agent.impl</artifactId>

@@ -18,24 +18,24 @@
 
 package org.wso2.carbon.device.mgt.iot.virtualfirealarm.service.impl;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.analytics.dataservice.commons.SortByField;
-import org.wso2.carbon.analytics.dataservice.commons.SortType;
-import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
 import org.wso2.carbon.apimgt.application.extension.APIManagementProviderService;
 import org.wso2.carbon.apimgt.application.extension.dto.ApiApplicationKey;
 import org.wso2.carbon.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.authorization.DeviceAccessAuthorizationException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
 import org.wso2.carbon.device.mgt.common.group.mgt.DeviceGroupConstants;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
 import org.wso2.carbon.device.mgt.core.operation.mgt.ConfigOperation;
 import org.wso2.carbon.device.mgt.iot.virtualfirealarm.service.impl.constants.VirtualFireAlarmConstants;
+import org.wso2.carbon.device.mgt.iot.virtualfirealarm.service.impl.dao.DeviceEventsDAO;
+import org.wso2.carbon.device.mgt.iot.virtualfirealarm.service.impl.dao.DeviceEventsDAOImpl;
 import org.wso2.carbon.device.mgt.iot.virtualfirealarm.service.impl.dto.SensorRecord;
 import org.wso2.carbon.device.mgt.iot.virtualfirealarm.service.impl.util.APIUtil;
 import org.wso2.carbon.device.mgt.iot.virtualfirealarm.service.impl.util.ZipArchive;
@@ -49,23 +49,11 @@ import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
 import org.wso2.carbon.identity.jwt.client.extension.exception.JWTClientException;
 import org.wso2.carbon.user.api.UserStoreException;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
 
@@ -135,26 +123,16 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
     @Produces("application/json")
     public Response getVirtualFirealarmStats(@PathParam("deviceId") String deviceId, @QueryParam("from") long from,
                                              @QueryParam("to") long to) {
-        String fromDate = String.valueOf(from*1000); // converting time to ms
-        String toDate = String.valueOf(to*1000); // converting time to ms
-        String query = "meta_deviceId:" + deviceId + " AND meta_deviceType:" +
-                VirtualFireAlarmConstants.DEVICE_TYPE + " AND meta_time : [" + fromDate + " TO " + toDate + "]";
-        String sensorTableName = VirtualFireAlarmConstants.TEMPERATURE_EVENT_TABLE;
         try {
             if (!APIUtil.getDeviceAccessAuthorizationService().isUserAuthorized(
                     new DeviceIdentifier(deviceId, VirtualFireAlarmConstants.DEVICE_TYPE),
                     DeviceGroupConstants.Permissions.DEFAULT_STATS_MONITOR_PERMISSIONS)) {
                 return Response.status(Response.Status.UNAUTHORIZED.getStatusCode()).build();
             }
-            List<SortByField> sortByFields = new ArrayList<>();
-            SortByField sortByField = new SortByField("meta_time", SortType.ASC);
-            sortByFields.add(sortByField);
-            List<SensorRecord> sensorRecords = APIUtil.getAllEventsForDevice(sensorTableName, query, sortByFields);
-            return Response.status(Response.Status.OK.getStatusCode()).entity(sensorRecords).build();
-        } catch (AnalyticsException e) {
-            String errorMsg = "Error on retrieving stats on table " + sensorTableName + " with query " + query;
-            log.error(errorMsg);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).entity(errorMsg).build();
+            DeviceEventsDAO eventsDAO = new DeviceEventsDAOImpl();
+            SensorRecord sensorRecord = eventsDAO.getStats(deviceId, from, to);
+            return Response.status(Response.Status.OK.getStatusCode()).entity(sensorRecord).build();
+
         } catch (DeviceAccessAuthorizationException e) {
             log.error(e.getErrorMessage(), e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -247,6 +225,8 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
                 PrivilegedCarbonContext.startTenantFlow();
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantAdminDomainName);
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().setUsername(adminUsername);
+                PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId(true);
+
 
                 apiApplicationKey = apiManagementProviderService.generateAndRetrieveApplicationKeys(
                         VirtualFireAlarmConstants.DEVICE_TYPE, tags, KEY_TYPE, applicationUsername, true,
@@ -256,10 +236,21 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
             }
         }
         JWTClient jwtClient = APIUtil.getJWTClientManagerService().getJWTClient();
-        String scopes = " device_" + deviceId;
+
+        String deviceType = sketchType.replace(" ", "");
+        String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+        StringBuilder scopes = new StringBuilder("device:" + deviceType + ":" + deviceId);
+
+        // add scopes for event publishing
+        scopes.append(" perm:topic:pub:" + tenantDomain + ":" + deviceType + ":" + deviceId + ":temperature");
+
+        // add scopes for retrieve operation topic /tenantDomain/deviceType/deviceId/operation/#
+        scopes.append(" perm:topic:sub:" + tenantDomain + ":" + deviceType + ":" + deviceId + ":operation");
+
         AccessTokenInfo accessTokenInfo = jwtClient.getAccessToken(apiApplicationKey.getConsumerKey(),
-                                                                   apiApplicationKey.getConsumerSecret(), owner,
-                                                                   scopes);
+                apiApplicationKey.getConsumerSecret(), owner,
+                scopes.toString());
+
         String accessToken = accessTokenInfo.getAccessToken();
         String refreshToken = accessTokenInfo.getRefreshToken();
         XmppAccount newXmppAccount = new XmppAccount();

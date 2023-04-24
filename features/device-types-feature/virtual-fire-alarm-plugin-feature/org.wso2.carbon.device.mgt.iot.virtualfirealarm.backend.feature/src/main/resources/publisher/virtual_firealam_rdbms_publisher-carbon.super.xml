@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eventPublisher name="virtual_firealarm_rdbms_publisher-carbon.super" processing="enable"
+  statistics="disable" trace="disable" xmlns="http://wso2.org/carbon/eventpublisher">
+  <from streamName="iot.per.device.stream.virtualfirealarm" version="1.0.0"/>
+  <mapping customMapping="disable" type="map"/>
+    <to eventAdapterType="rdbms">
+        <property name="datasource.name">EVENT_DB</property>
+        <property name="table.name">table_virtualfirealarm_carbonsuper_rdbms_publisher</property>
+        <property name="execution.mode">insert</property>
+    </to>
+</eventPublisher>
+
+

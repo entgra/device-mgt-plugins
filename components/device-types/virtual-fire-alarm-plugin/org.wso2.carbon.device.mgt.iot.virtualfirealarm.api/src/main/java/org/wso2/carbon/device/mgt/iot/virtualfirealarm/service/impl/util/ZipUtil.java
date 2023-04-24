@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.wso2.carbon.apimgt.application.extension.constants.ApiApplicationConstants;
 import org.wso2.carbon.core.util.Utils;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfiguration;
@@ -72,7 +72,7 @@ public class ZipUtil {
         String iotServerIP;
 
         try {
-            iotServerIP = getServerUrl();
+            iotServerIP = "127.0.0.1"; //getServerUrl();
             String httpsServerEP = Utils.replaceSystemProperty(HTTPS_PROTOCOL_URL);
             String httpServerEP = Utils.replaceSystemProperty(HTTP_PROTOCOL_URL);
             String mqttEndpoint = Utils.replaceSystemProperty(DEFAULT_MQTT_ENDPOINT);

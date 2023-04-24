@@ -11,58 +11,23 @@ import java.util.Map;
 
 @XmlRootElement
 /**
- * This stores sensor event data for android sense.
+ * This stores sensor event data for virtual fire alarm sense.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SensorRecord {
 
-    @XmlElementWrapper(required = true, name = "values")
-    private Map<String, Object> values;
+    @XmlElementWrapper(required = true, name = "stats")
+    private Map<Long, Float> stats;
 
-    /** The id. */
-    @XmlElement(required = false, name = "id")
-    private String id;
-
-    /**
-     * Gets the values.
-     * @return the values
-     */
-    public Map<String, Object> getValues() {
-        return values;
+    public Map<Long, Float> getStats() {
+        return stats;
     }
 
-    /**
-     * Sets the values.
-     * @param values the values
-     */
-    public void setValues(Map<String, Object> values) {
-        this.values = values;
+    public void setStats(Map<Long, Float> stats) {
+        this.stats = stats;
     }
 
-    /**
-     * Sets the id.
-     * @param id the new id
-     */
-    public void setId(String id) {
-        this.id = id;
+    public SensorRecord(Map<Long, Float> stats) {
+        this.stats = stats;
     }
-
-    /**
-     * Gets the id.
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public String toString(){
-        List<String> valueList = new ArrayList<String>();
-        for (Map.Entry<String, Object> entry : values.entrySet()) {
-            valueList.add(entry.getKey() + ":" + entry.getValue());
-        }
-        return valueList.toString();
-
-    }
-
 }

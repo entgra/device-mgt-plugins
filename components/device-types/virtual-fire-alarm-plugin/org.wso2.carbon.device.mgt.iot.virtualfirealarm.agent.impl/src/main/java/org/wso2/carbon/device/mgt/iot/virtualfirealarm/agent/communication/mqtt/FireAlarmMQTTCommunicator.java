@@ -69,8 +69,9 @@ public class FireAlarmMQTTCommunicator extends MQTTTransportHandler {
         Runnable connector = new Runnable() {
             public void run() {
                 while (!isConnected()) {
-                    try {
-                        connectToQueue(agentManager.getAgentConfigs().getAuthToken(), DEFAULT_PASSWORD);
+                    try {                         // uudi formay 8-4-4-4-12
+                        connectToQueue(agentManager.getAgentConfigs().getAuthToken().substring(0, 18),
+                                agentManager.getAgentConfigs().getAuthToken().substring(19));
                         agentManager.updateAgentStatus("Connected to MQTT Queue");
                     } catch (TransportHandlerException e) {
                         log.warn(AgentConstants.LOG_APPENDER + "Connection to MQTT Broker at: " + mqttBrokerEndPoint +
@@ -137,6 +138,18 @@ public class FireAlarmMQTTCommunicator extends MQTTTransportHandler {
         String receivedMessage;
         String replyMessage;
         String securePayLoad;
+
+        if (message.toString().contains("BULB:ON")) {
+            boolean stateToSwitch = true;
+            agentManager.changeAlarmStatus(stateToSwitch);
+            log.info(AgentConstants.LOG_APPENDER + "Bulb was switched to state: 'ON'");
+            return;
+        } else if (message.toString().contains("BULB:OFF")) {
+            boolean stateToSwitch = false;
+            agentManager.changeAlarmStatus(stateToSwitch);
+            log.info(AgentConstants.LOG_APPENDER + "Bulb was switched to state: 'OFF'");
+            return;
+        }
 
         try {
             receivedMessage = AgentUtilOperations.extractMessageFromPayload(message.toString());
@@ -210,8 +223,8 @@ public class FireAlarmMQTTCommunicator extends MQTTTransportHandler {
                 int currentTemperature = agentManager.getTemperature();
                 String message = "{\"event\": {\"metaData\": {\"owner\": \"" + AgentManager
                         .getInstance().getAgentConfigs().getDeviceOwner() + "\",\"deviceId\": \"" + AgentManager
-                        .getInstance().getAgentConfigs().getDeviceId() + "\",\"time\": " +
-                        "0},\"payloadData\": { \"temperature\": " + currentTemperature + "} }}";
+                        .getInstance().getAgentConfigs().getDeviceId() + "\",\"time\": \"" +
+                        System.currentTimeMillis() + "\"},\"payloadData\": { \"temperature\": " + currentTemperature + "} }}";
 
                 try {
                     String payLoad = AgentUtilOperations.prepareSecurePayLoad(message);
