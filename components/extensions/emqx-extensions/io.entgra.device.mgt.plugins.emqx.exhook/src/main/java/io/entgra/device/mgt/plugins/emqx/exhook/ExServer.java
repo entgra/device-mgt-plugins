@@ -467,8 +467,8 @@ public class ExServer {
                 String deviceType = null;
                 String deviceId = null;
                 for (String scope : scopeArray) {
-                    if (scope.startsWith("device_")) {
-                        String[] scopeParts = scope.split("_");
+                    if (scope.startsWith("device:")) {
+                        String[] scopeParts = scope.split(":");
                         deviceType = scopeParts[1];
                         deviceId = scopeParts[2];
                         break;
