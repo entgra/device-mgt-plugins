@@ -125,13 +125,13 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            org.wso2.carbon.device.mgt.input.adapter.http.internal,
-                            org.wso2.carbon.device.mgt.input.adapter.http.internal.*
+                            io.entgra.device.mgt.plugins.input.adapter.http.internal,
+                            io.entgra.device.mgt.plugins.input.adapter.http.internal.*
                         </Private-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.input.adapter.http.internal,
-                            !org.wso2.carbon.device.mgt.input.adapter.http.internal.*,
-                            org.wso2.carbon.device.mgt.input.adapter.http.*
+                            !io.entgra.device.mgt.plugins.input.adapter.http.internal,
+                            !io.entgra.device.mgt.plugins.input.adapter.http.internal.*,
+                            io.entgra.device.mgt.plugins.input.adapter.http.*
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.event.input.adapter.core,
@@ -154,7 +154,7 @@
 							feign.auth,
 							feign.codec,
 							feign.gson,
-							org.wso2.carbon.device.mgt.input.adapter.extension,
+                            io.entgra.device.mgt.plugins.input.adapter.extension.*,
 							org.apache.axiom.util.base64,
 							org.apache.axis2.*,
 							org.apache.commons.httpclient.*,

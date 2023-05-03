@@ -101,13 +101,13 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            org.wso2.carbon.device.mgt.input.adapter.xmpp.internal,
-                            org.wso2.carbon.device.mgt.input.adapter.http.internal.*
+                            io.entgra.device.mgt.plugins.input.adapter.xmpp.internal,
+                            io.entgra.device.mgt.plugins.input.adapter.http.internal.*
                         </Private-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.input.adapter.xmpp.internal,
-                            !org.wso2.carbon.device.mgt.input.adapter.xmpp.internal.*,
-                            org.wso2.carbon.device.mgt.input.adapter.xmpp.*
+                            !io.entgra.device.mgt.plugins.input.adapter.xmpp.internal,
+                            !io.entgra.device.mgt.plugins.input.adapter.xmpp.internal.*,
+                            io.entgra.device.mgt.plugins.input.adapter.xmpp.*
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.event.input.adapter.core,
@@ -117,13 +117,13 @@
                             org.apache.log4j,
                             org.wso2.carbon.base,
                             org.wso2.carbon.core.util,
-			    org.apache.commons.logging,
-                           org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
-                           org.osgi.service.*;version="${imp.package.version.osgi.service}",
-			    org.wso2.carbon.context,
-			    org.wso2.carbon.core,
-			    org.wso2.carbon.device.mgt.input.adapter.extension,
-			    org.wso2.carbon.user.core.service
+			                org.apache.commons.logging,
+                            org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
+                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
+                            org.wso2.carbon.context,
+                            org.wso2.carbon.core,
+                            io.entgra.device.mgt.plugins.input.adapter.extension,
+                            org.wso2.carbon.user.core.service
                         </Import-Package>
                     </instructions>
                 </configuration>

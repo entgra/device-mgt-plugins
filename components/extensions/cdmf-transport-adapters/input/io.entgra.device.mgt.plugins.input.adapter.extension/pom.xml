@@ -49,33 +49,33 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Bundle-Name>${project.artifactId}</Bundle-Name>
-			<Private-Package>
-			    org.wso2.carbon.device.mgt.input.adapter.extension.internal,
-			    org.wso2.carbon.device.mgt.input.adapter.extension.internal.*
-			</Private-Package>
-                        <Export-Package>
-                            org.wso2.carbon.device.mgt.input.adapter.extension.*,
-			    !org.wso2.carbon.device.mgt.input.adapter.extension.internal,
-                        </Export-Package>
-			<Import-Package>
-                            org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
-                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
-			    com.jayway.jsonpath,
-			    org.apache.commons.logging,
-			    org.json.simple,
-			    org.json.simple.parser
-			</Import-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Name>${project.artifactId}</Bundle-Name>
+						<Private-Package>
+							io.entgra.device.mgt.plugins.input.adapter.extension.internal,
+							io.entgra.device.mgt.plugins.input.adapter.extension.internal.*
+						</Private-Package>
+						<Export-Package>
+							io.entgra.device.mgt.plugins.input.adapter.extension.*,
+							!io.entgra.device.mgt.plugins.input.adapter.extension.internal,
+						</Export-Package>
+						<Import-Package>
+							org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
+							org.osgi.service.*;version="${imp.package.version.osgi.service}",
+							com.jayway.jsonpath,
+							org.apache.commons.logging,
+							org.json.simple,
+							org.json.simple.parser
+						</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>

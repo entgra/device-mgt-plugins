@@ -97,22 +97,22 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Private-Package>
-							org.wso2.carbon.device.mgt.input.adapter.thrift.internal,
-							org.wso2.carbon.device.mgt.input.adapter.thrift.internal.*,
-						</Private-Package>
+                            io.entgra.device.mgt.plugins.input.adapter.thrift.internal,
+                            io.entgra.device.mgt.plugins.input.adapter.thrift.internal.*,
+                        </Private-Package>
 						<Export-Package>
-							!org.wso2.carbon.device.mgt.input.adapter.thrift.internal,
-							!org.wso2.carbon.device.mgt.input.adapter.thrift.internal.*,
-							org.wso2.carbon.device.mgt.input.adapter.thrift.*,
-						</Export-Package>
+                            !io.entgra.device.mgt.plugins.input.adapter.thrift.internal,
+                            !io.entgra.device.mgt.plugins.input.adapter.thrift.internal.*,
+							io.entgra.device.mgt.plugins.input.adapter.thrift.*,
+                        </Export-Package>
 						<Import-Package>
 							org.wso2.carbon.event.input.adapter.core,
 							org.wso2.carbon.event.input.adapter.core.*,
 							!javax.xml.namespace,
 							javax.xml.namespace; version=0.0.0,
 							org.apache.commons.logging,
-                                                       org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
-                                                       org.osgi.service.*;version="${imp.package.version.osgi.service}",
+							org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
+							org.osgi.service.*;version="${imp.package.version.osgi.service}",
 							org.wso2.carbon.context,
 							org.wso2.carbon.databridge.commons,
 							org.wso2.carbon.databridge.core,
