@@ -16,15 +16,15 @@
  *   under the License.
  *
  */
-package org.wso2.carbon.device.mgt.mqtt.notification.listener;
+package io.entgra.device.mgt.plugins.mqtt.notification.listener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.core.ServerStartupObserver;
 import org.wso2.carbon.device.mgt.core.config.DeviceConfigurationManager;
-import org.wso2.carbon.device.mgt.mqtt.notification.listener.internal.MqttNotificationDataHolder;
-import org.wso2.carbon.device.mgt.mqtt.notification.listener.util.MqttNotificationListener;
+import io.entgra.device.mgt.plugins.mqtt.notification.listener.internal.MqttNotificationDataHolder;
+import io.entgra.device.mgt.plugins.mqtt.notification.listener.util.MqttNotificationListener;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**

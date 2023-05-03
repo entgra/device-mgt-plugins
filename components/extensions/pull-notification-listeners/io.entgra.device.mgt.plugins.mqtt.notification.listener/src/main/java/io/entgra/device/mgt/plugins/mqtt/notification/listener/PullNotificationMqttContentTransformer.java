@@ -16,7 +16,7 @@
  *   under the License.
  *
  */
-package org.wso2.carbon.device.mgt.mqtt.notification.listener;
+package io.entgra.device.mgt.plugins.mqtt.notification.listener;
 
 import com.google.gson.Gson;
 import org.wso2.carbon.context.PrivilegedCarbonContext;

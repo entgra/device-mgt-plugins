@@ -16,7 +16,7 @@
  *   under the License.
  *
  */
-package org.wso2.carbon.device.mgt.mqtt.notification.listener.internal;
+package io.entgra.device.mgt.plugins.mqtt.notification.listener.internal;
 
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;

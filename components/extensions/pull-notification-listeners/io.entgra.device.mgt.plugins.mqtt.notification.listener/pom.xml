@@ -82,7 +82,7 @@
                         <Bundle-Version>${carbon.devicemgt.plugins.version}</Bundle-Version>
                         <Bundle-Description>MQTT Pull Notification Provider Bundle</Bundle-Description>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.mqtt.notification.listener.internal,
+                            !io.entgra.device.mgt.plugins.mqtt.notification.listener.internal,
                             org.wso2.carbon.device.mgt.mqtt.notification.listener.*
                         </Export-Package>
                         <Import-Package>
