@@ -33,7 +33,7 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>org.wso2.carbon.device.mgt.iot.virtualfirealarm.backend.feature</module>
+        <module>io.entgra.device.mgt.plugins.virtualfirealarm.backend.feature</module>
     </modules>
 
 </project>

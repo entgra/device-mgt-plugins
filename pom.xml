@@ -38,7 +38,6 @@
         <module>components/extensions</module>
         <module>components/mobile-plugins</module>
         <module>components/device-types</module>
-        <!--<module>components/test-coverage</module>-->
         <module>features/analytics-feature</module>
         <module>features/mobile-plugins-feature</module>
         <module>features/extensions-feature</module>

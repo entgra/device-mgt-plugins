@@ -33,12 +33,10 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>org.wso2.carbon.device.mgt.adapter.feature</module>
-        <!--<module>org.wso2.carbon.andes.extensions.device.mgt.mqtt.authorization.feature</module>-->
-        <!--<module>org.wso2.carbon.andes.extensions.device.mgt.api.feature</module>-->
-		<module>org.wso2.carbon.device.mgt.notification.listener.feature</module>
-        <module>org.wso2.extension.siddhi.device.feature</module>
-        <module>org.wso2.extension.siddhi.execution.json.feature</module>
+        <module>io.entgra.device.mgt.plugins.adapter.feature</module>
+		<module>io.entgra.device.mgt.plugins.notification.listener.feature</module>
+        <module>io.entgra.device.mgt.plugins.extension.siddhi.device.feature</module>
+        <module>io.entgra.device.mgt.plugins.extension.siddhi.execution.json.feature</module>
     </modules>
 
 </project>

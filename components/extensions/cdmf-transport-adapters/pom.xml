@@ -33,16 +33,16 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>input/org.wso2.carbon.device.mgt.input.adapter.extension</module>
-        <module>input/org.wso2.carbon.device.mgt.input.adapter.http</module>
-        <module>input/org.wso2.carbon.device.mgt.input.adapter.mqtt</module>
-        <module>input/org.wso2.carbon.device.mgt.input.adapter.xmpp</module>
-		<module>input/org.wso2.carbon.device.mgt.input.adapter.thrift</module>
-        <module>output/org.wso2.carbon.device.mgt.output.adapter.http</module>
-        <module>output/org.wso2.carbon.device.mgt.output.adapter.mqtt</module>
-        <module>output/org.wso2.carbon.device.mgt.output.adapter.xmpp</module>
-        <module>output/org.wso2.carbon.device.mgt.output.adapter.websocket</module>
-        <module>output/org.wso2.carbon.device.mgt.output.adapter.websocket.endpoint</module>
+        <module>input/io.entgra.device.mgt.plugins.input.adapter.extension</module>
+        <module>input/io.entgra.device.mgt.plugins.input.adapter.http</module>
+        <module>input/io.entgra.device.mgt.plugins.input.adapter.mqtt</module>
+        <module>input/io.entgra.device.mgt.plugins.input.adapter.xmpp</module>
+		<module>input/io.entgra.device.mgt.plugins.input.adapter.thrift</module>
+        <module>output/io.entgra.device.mgt.plugins.output.adapter.http</module>
+        <module>output/io.entgra.device.mgt.plugins.output.adapter.mqtt</module>
+        <module>output/io.entgra.device.mgt.plugins.output.adapter.xmpp</module>
+        <module>output/io.entgra.device.mgt.plugins.output.adapter.websocket</module>
+        <module>output/io.entgra.device.mgt.plugins.output.adapter.websocket.endpoint</module>
     </modules>
 
     <build>

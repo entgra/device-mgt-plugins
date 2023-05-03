@@ -33,7 +33,7 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>org.wso2.carbon.device.mgt.mqtt.notification.listener</module>
+        <module>io.entgra.device.mgt.plugins.mqtt.notification.listener</module>
     </modules>
 
     <build>
