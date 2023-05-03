@@ -27,7 +27,7 @@ import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
 /**
- * @scr.component name="org.wso2.carbon.device.mgt.mobile.android.impl.internal.AndroidDeviceManagementServiceComponent"
+ * @scr.component name="io.entgra.device.mgt.plugins.mobile.android.internal.AndroidDeviceManagementServiceComponent"
  * immediate="true"
  * @scr.reference name="org.wso2.carbon.ndatasource"
  * interface="org.wso2.carbon.ndatasource.core.DataSourceService"

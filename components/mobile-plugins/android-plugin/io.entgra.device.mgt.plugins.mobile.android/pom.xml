@@ -54,7 +54,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Bundle-Version>${carbon.devicemgt.plugins.version}</Bundle-Version>
                         <Bundle-Description>Device Management Mobile Android Impl Bundle</Bundle-Description>
-                        <Private-Package>org.wso2.carbon.device.mgt.mobile.android.internal</Private-Package>
+                        <Private-Package>io.entgra.device.mgt.plugins.mobile.android.internal</Private-Package>
                         <Import-Package>
                             org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
                             org.osgi.service.*;version="${imp.package.version.osgi.service}",
@@ -79,8 +79,8 @@
                             com.google.gson.*
                         </Import-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.mobile.android.internal,
-                            org.wso2.carbon.device.mgt.mobile.android.*
+                            !io.entgra.device.mgt.plugins.mobile.android.internal,
+                            io.entgra.device.mgt.plugins.mobile.android.*
                         </Export-Package>
                     </instructions>
                 </configuration>

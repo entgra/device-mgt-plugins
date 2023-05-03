@@ -73,8 +73,8 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.extension.siddhi.execution.json,
-                            org.wso2.extension.siddhi.execution.json.*
+                            io.entgra.device.mgt.plugins.extension.siddhi.execution.json,
+                            io.entgra.device.mgt.plugins.extension.siddhi.execution.json.*
                         </Export-Package>
                         <Import-Package>
                             org.json;version="${orbit.version.json.range}",
@@ -100,7 +100,7 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
-                    <destFile>../org.wso2.extension.siddhi.execution.json/target/coverage-reports/jacoco-unit.exec</destFile>
+                    <destFile>../io.entgra.device.mgt.plugins.extension.siddhi.execution.json/target/coverage-reports/jacoco-unit.exec</destFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -116,8 +116,8 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <dataFile>../org.wso2.extension.siddhi.execution.json/target/coverage-reports/jacoco-unit.exec</dataFile>
-                            <outputDirectory>../org.wso2.extension.siddhi.execution.json/target/coverage-reports/site</outputDirectory>
+                            <dataFile>../io.entgra.device.mgt.plugins.extension.siddhi.execution.json/target/coverage-reports/jacoco-unit.exec</dataFile>
+                            <outputDirectory>../io.entgra.device.mgt.plugins.extension.siddhi.execution.json/target/coverage-reports/site</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
