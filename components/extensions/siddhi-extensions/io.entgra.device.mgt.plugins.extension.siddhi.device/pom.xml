@@ -161,8 +161,8 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.extension.siddhi.device,
-                            org.wso2.extension.siddhi.device.*
+                            io.entgra.device.mgt.plugins.extension.siddhi.device,
+                            io.entgra.device.mgt.plugins.extension.siddhi.device.*
                         </Export-Package>
                         <Import-Package>
                             feign,
