@@ -52,8 +52,8 @@
 					<archive>
 						<manifest>
 							<mainClass>
-								org.wso2.carbon.device.mgt.iot.virtualfirealarm.agent.Bootstrap
-							</mainClass>
+                                io.entgra.device.mgt.plugins.virtualfirealarm.agent.Bootstrap
+                            </mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
