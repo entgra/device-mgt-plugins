@@ -43,8 +43,8 @@
 
     <bean id="swaggerWriter" class="io.swagger.jaxrs.listing.SwaggerSerializers" />
     <bean id="swaggerResource" class="io.swagger.jaxrs.listing.ApiListingResource" />
-    <bean id="GlobalExceptionMapper" class="org.wso2.carbon.mdm.services.android.exception.GlobalThrowableMapper"/>
-    <bean id="ValidationInterceptor" class="org.wso2.carbon.mdm.services.android.common.ValidationInterceptor"/>
+    <bean id="GlobalExceptionMapper" class="io.entgra.device.mgt.plugins.mobile.android.api.exception.GlobalThrowableMapper"/>
+    <bean id="ValidationInterceptor" class="io.entgra.device.mgt.plugins.mobile.android.api.common.ValidationInterceptor"/>
 
     <bean id="swaggerConfig" class="io.swagger.jaxrs.config.BeanConfig">
         <property name="resourcePackage" value="org.wso2.carbon.mdm.services.android.services"/>
@@ -59,12 +59,12 @@
         <property name="scan" value="true"/>
     </bean>
 
-    <bean id="deviceManagementService" class="org.wso2.carbon.mdm.services.android.services.impl.DeviceManagementServiceImpl"/>
-    <bean id="deviceManagementAdminService" class="org.wso2.carbon.mdm.services.android.services.impl.DeviceManagementAdminServiceImpl"/>
-    <bean id="eventReceiverService" class="org.wso2.carbon.mdm.services.android.services.impl.EventReceiverServiceImpl"/>
-    <bean id="deviceTypeConfigurationService" class="org.wso2.carbon.mdm.services.android.services.impl.DeviceTypeConfigurationServiceImpl"/>
-    <bean id="jsonProvider" class="org.wso2.carbon.mdm.services.android.common.GsonMessageBodyHandler"/>
-    <bean id="errorHandler" class="org.wso2.carbon.mdm.services.android.common.ErrorHandler"/>
+    <bean id="deviceManagementService" class="io.entgra.device.mgt.plugins.mobile.android.api.services.impl.DeviceManagementServiceImpl"/>
+    <bean id="deviceManagementAdminService" class="io.entgra.device.mgt.plugins.mobile.android.api.services.impl.DeviceManagementAdminServiceImpl"/>
+    <bean id="eventReceiverService" class="io.entgra.device.mgt.plugins.mobile.android.api.services.impl.EventReceiverServiceImpl"/>
+    <bean id="deviceTypeConfigurationService" class="io.entgra.device.mgt.plugins.mobile.android.api.services.impl.DeviceTypeConfigurationServiceImpl"/>
+    <bean id="jsonProvider" class="io.entgra.device.mgt.plugins.mobile.android.api.common.GsonMessageBodyHandler"/>
+    <bean id="errorHandler" class="io.entgra.device.mgt.plugins.mobile.android.api.common.ErrorHandler"/>
     <cxf:bus>
         <cxf:inInterceptors>
             <ref bean="ValidationInterceptor"/>

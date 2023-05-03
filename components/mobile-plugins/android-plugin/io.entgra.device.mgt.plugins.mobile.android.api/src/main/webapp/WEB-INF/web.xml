@@ -76,7 +76,7 @@
 
     <filter>
         <filter-name>ApiOriginFilter</filter-name>
-        <filter-class>org.wso2.carbon.mdm.services.android.util.ApiOriginFilter</filter-class>
+        <filter-class>io.entgra.device.mgt.plugins.mobile.android.api.util.ApiOriginFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>ApiOriginFilter</filter-name>

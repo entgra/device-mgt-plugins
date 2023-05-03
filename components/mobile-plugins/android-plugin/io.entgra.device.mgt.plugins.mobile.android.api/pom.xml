@@ -53,7 +53,7 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
-                    <destFile>../org.wso2.carbon.device.mgt.mobile.android.api/target/coverage-reports/jacoco-unit.exec</destFile>
+                    <destFile>../io.entgra.device.mgt.plugins.mobile.android.api/target/coverage-reports/jacoco-unit.exec</destFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -69,8 +69,8 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <dataFile>../org.wso2.carbon.device.mgt.mobile.android.api/target/coverage-reports/jacoco-unit.exec</dataFile>
-                            <outputDirectory>../org.wso2.carbon.device.mgt.mobile.android.api/target/coverage-reports/site</outputDirectory>
+                            <dataFile>../io.entgra.device.mgt.plugins.mobile.android.api/target/coverage-reports/jacoco-unit.exec</dataFile>
+                            <outputDirectory>../io.entgra.device.mgt.plugins.mobile.android.api/target/coverage-reports/site</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -122,7 +122,7 @@
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <configuration>
-                            <destFile>../org.wso2.carbon.device.mgt.mobile.android.api/target/coverage-reports/jacoco-unit.exec</destFile>
+                            <destFile>../io.entgra.device.mgt.plugins.mobile.android.api/target/coverage-reports/jacoco-unit.exec</destFile>
                         </configuration>
                         <executions>
                             <execution>
@@ -138,8 +138,8 @@
                                     <goal>report</goal>
                                 </goals>
                                 <configuration>
-                                    <dataFile>../org.wso2.carbon.device.mgt.mobile.android.api/target/coverage-reports/jacoco-unit.exec</dataFile>
-                                    <outputDirectory>../org.wso2.carbon.device.mgt.mobile.android.api/target/coverage-reports/site</outputDirectory>
+                                    <dataFile>../io.entgra.device.mgt.plugins.mobile.android.api/target/coverage-reports/jacoco-unit.exec</dataFile>
+                                    <outputDirectory>../io.entgra.device.mgt.plugins.mobile.android.api/target/coverage-reports/site</outputDirectory>
                                 </configuration>
                             </execution>
                         </executions>

@@ -42,7 +42,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.carbon.android.emulator.TryIt</mainClass>
+                            <mainClass>io.entgra.device.mgt.plugins.mobile.android.emulator.TryIt</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
