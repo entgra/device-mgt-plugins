@@ -18,13 +18,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-        <artifactId>extensions-feature</artifactId>
+        <groupId>io.entgra.device.mgt.plugins</groupId>
+        <artifactId>io.entgra.device.mgt.plugins.extensions-feature</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>org.wso2.extension.siddhi.execution.json.feature</artifactId>
+    <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.execution.json.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Siddhi Execution Extension - Json Feature</name>
     <url>http://wso2.org</url>
@@ -32,8 +32,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-            <artifactId>org.wso2.extension.siddhi.execution.json</artifactId>
+            <groupId>io.entgra.device.mgt.plugins</groupId>
+            <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.execution.json</artifactId>
         </dependency>
     </dependencies>
 
@@ -51,7 +51,7 @@
                             <goal>p2-feature-gen</goal>
                         </goals>
                         <configuration>
-                            <id>org.wso2.extension.siddhi.execution.json</id>
+                            <id>io.entgra.device.mgt.plugins.extension.siddhi.execution.json</id>
                             <propertiesFile>../../etc/feature.properties</propertiesFile>
                             <adviceFile>
                                 <properties>
@@ -61,7 +61,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon.devicemgt-plugins:org.wso2.extension.siddhi.execution.json:${carbon.devicemgt.plugins.version}
+                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.extension.siddhi.execution.json:${carbon.devicemgt.plugins.version}
                                 </bundleDef>
                             </bundles>
                         </configuration>

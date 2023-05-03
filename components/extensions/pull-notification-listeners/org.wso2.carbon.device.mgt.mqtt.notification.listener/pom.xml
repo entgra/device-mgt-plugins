@@ -20,15 +20,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
-		<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-		<artifactId>pull-notification-listeners</artifactId>
+		<groupId>io.entgra.device.mgt.plugins</groupId>
+		<artifactId>io.entgra.device.mgt.plugins.pull-notification-listeners</artifactId>
         <version>6.0.17-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 
 	<modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.device.mgt.mqtt.notification.listener</artifactId>
+    <artifactId>io.entgra.device.mgt.plugins.mqtt.notification.listener</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - MQTT Pull Notification Listener Implementation</name>
     <description>WSO2 Carbon - MQTT Pull Notification Lister Implementation</description>
@@ -56,8 +56,8 @@
 			<artifactId>org.eclipse.osgi.services</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-			<artifactId>org.wso2.carbon.device.mgt.input.adapter.extension</artifactId>
+			<groupId>io.entgra.device.mgt.plugins</groupId>
+			<artifactId>io.entgra.device.mgt.plugins.input.adapter.extension</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>

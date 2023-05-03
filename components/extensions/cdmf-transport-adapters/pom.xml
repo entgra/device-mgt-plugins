@@ -20,14 +20,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-        <artifactId>extensions</artifactId>
+        <groupId>io.entgra.device.mgt.plugins</groupId>
+        <artifactId>io.entgra.device.mgt.plugins.extensions</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>cdmf-transport-adapters</artifactId>
+    <artifactId>io.entgra.device.mgt.plugins.cdmf-transport-adapters</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - IoT Base Plugin</name>
     <url>http://wso2.org</url>

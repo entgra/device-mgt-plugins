@@ -20,14 +20,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-        <artifactId>cdmf-transport-adapters</artifactId>
+        <groupId>io.entgra.device.mgt.plugins</groupId>
+        <artifactId>io.entgra.device.mgt.plugins.cdmf-transport-adapters</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.device.mgt.output.adapter.websocket.endpoint</artifactId>
+    <artifactId>io.entgra.device.mgt.plugins.output.adapter.websocket.endpoint</artifactId>
     <packaging>war</packaging>
     <name>WSO2 - Webapp for UI Output Event Adapter</name>
     <url>http://wso2.org</url>
@@ -43,8 +43,8 @@
             <artifactId>tomcat-websocket-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.output.adapter.websocket</artifactId>
+            <groupId>io.entgra.device.mgt.plugins</groupId>
+            <artifactId>io.entgra.device.mgt.plugins.output.adapter.websocket</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

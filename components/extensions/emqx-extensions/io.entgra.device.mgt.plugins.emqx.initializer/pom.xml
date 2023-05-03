@@ -19,8 +19,8 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-        <artifactId>emqx-extensions</artifactId>
+        <groupId>io.entgra.device.mgt.plugins</groupId>
+        <artifactId>io.entgra.device.mgt.plugins.emqx-extensions</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -32,7 +32,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+            <groupId>io.entgra.device.mgt.plugins</groupId>
             <artifactId>io.entgra.device.mgt.plugins.emqx.exhook</artifactId>
             <classifier>jar-with-dependencies</classifier>
         </dependency>

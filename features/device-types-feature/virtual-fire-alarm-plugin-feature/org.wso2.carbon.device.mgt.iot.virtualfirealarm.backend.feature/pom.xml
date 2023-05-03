@@ -21,14 +21,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-		<artifactId>virtual-fire-alarm-plugin-feature</artifactId>
+		<groupId>io.entgra.device.mgt.plugins</groupId>
+		<artifactId>io.entgra.device.mgt.plugins.virtual-fire-alarm-plugin-feature</artifactId>
 		<version>6.0.17-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.backend.feature</artifactId>
+	<artifactId>io.entgra.device.mgt.plugins.virtualfirealarm.backend.feature</artifactId>
 	<packaging>pom</packaging>
 	<name>WSO2 Carbon - IoT Server VirtualFireAlarm Backend Feature</name>
 	<url>http://wso2.org</url>
@@ -41,8 +41,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-			<artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.api</artifactId>
+			<groupId>io.entgra.device.mgt.plugins</groupId>
+			<artifactId>io.entgra.device.mgt.plugins.virtualfirealarm.api</artifactId>
 			<version>${carbon.devicemgt.plugins.version}</version>
 			<type>war</type>
 		</dependency>
@@ -94,8 +94,8 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-									<artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.api
+									<groupId>io.entgra.device.mgt.plugins</groupId>
+									<artifactId>io.entgra.device.mgt.plugins.virtualfirealarm.api
 									</artifactId>
 									<type>war</type>
 									<overWrite>true</overWrite>
@@ -114,8 +114,8 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-									<artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.agent.impl
+									<groupId>io.entgra.device.mgt.plugins</groupId>
+									<artifactId>io.entgra.device.mgt.plugins.virtualfirealarm.agent.impl
 									</artifactId>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/maven-shared-archive-resources/agent/</outputDirectory>
@@ -139,7 +139,7 @@
 							<goal>p2-feature-gen</goal>
 						</goals>
 						<configuration>
-							<id>org.wso2.carbon.device.mgt.iot.virtualfirealarm.backend</id>
+							<id>io.entgra.device.mgt.plugins.virtualfirealarm.backend</id>
 							<propertiesFile>../../../features/etc/feature.properties</propertiesFile>
 							<adviceFile>
 								<properties>

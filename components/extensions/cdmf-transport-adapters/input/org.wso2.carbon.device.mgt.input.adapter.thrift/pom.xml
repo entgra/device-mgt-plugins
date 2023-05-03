@@ -19,14 +19,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-		<artifactId>cdmf-transport-adapters</artifactId>
+		<groupId>io.entgra.device.mgt.plugins</groupId>
+		<artifactId>io.entgra.device.mgt.plugins.cdmf-transport-adapters</artifactId>
 		<version>6.0.17-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>org.wso2.carbon.device.mgt.input.adapter.thrift</artifactId>
+	<artifactId>io.entgra.device.mgt.plugins.input.adapter.thrift</artifactId>
 	<packaging>bundle</packaging>
 	<name>WSO2 Carbon - Event Input Thrift Adapter Module</name>
 	<description>org.wso2.carbon.event.input.adapter.thrift provides the back-end

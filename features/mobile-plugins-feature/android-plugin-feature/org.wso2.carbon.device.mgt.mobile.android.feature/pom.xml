@@ -20,14 +20,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-        <artifactId>android-plugin-feature</artifactId>
+        <groupId>io.entgra.device.mgt.plugins</groupId>
+        <artifactId>io.entgra.device.mgt.plugins.android-plugin-feature</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.device.mgt.mobile.android.feature</artifactId>
+    <artifactId>io.entgra.device.mgt.plugins.mobile.android.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Android Device Management Feature</name>
     <url>http://wso2.org</url>
@@ -37,8 +37,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.mobile.android</artifactId>
+            <groupId>io.entgra.device.mgt.plugins</groupId>
+            <artifactId>io.entgra.device.mgt.plugins.mobile.android</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.orbit.com.h2database</groupId>
@@ -105,8 +105,8 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.mobile.android.ui
+                                    <groupId>io.entgra.device.mgt.plugins</groupId>
+                                    <artifactId>io.entgra.device.mgt.plugins.mobile.android.ui
                                     </artifactId>
                                     <version>${project.version}</version>
                                     <type>zip</type>
@@ -128,8 +128,8 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.mobile.android.api</artifactId>
+                                    <groupId>io.entgra.device.mgt.plugins</groupId>
+                                    <artifactId>io.entgra.device.mgt.plugins.mobile.android.api</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
                                     <overWrite>true</overWrite>
@@ -229,7 +229,7 @@
                             <goal>p2-feature-gen</goal>
                         </goals>
                         <configuration>
-                            <id>org.wso2.carbon.device.mgt.mobile.android</id>
+                            <id>io.entgra.device.mgt.plugins.mobile.android</id>
                             <propertiesFile>../../../../features/etc/feature.properties
                             </propertiesFile>
                             <adviceFile>
@@ -242,7 +242,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.android:${carbon.devicemgt.plugins.version}
+                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.mobile.android:${carbon.devicemgt.plugins.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>

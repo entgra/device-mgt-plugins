@@ -20,8 +20,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-    <artifactId>carbon-device-mgt-plugins-parent</artifactId>
+    <groupId>io.entgra.device.mgt.plugins</groupId>
+    <artifactId>io.entgra.device.mgt.plugins.parent</artifactId>
     <packaging>pom</packaging>
     <version>6.0.17-SNAPSHOT</version>
     <name>WSO2 Carbon - Device Management Plugins Parent</name>
@@ -389,118 +389,118 @@
 
             <!--IoT Server specific dependencies-->
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>health-check-api</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.extension.siddhi.device</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.device</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.extension.siddhi.execution.json</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.execution.json</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.output.adapter.http</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.output.adapter.http</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.output.adapter.mqtt</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.output.adapter.mqtt</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.input.adapter.thrift</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.input.adapter.thrift</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.output.adapter.xmpp</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.output.adapter.xmpp</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.input.adapter.extension</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.input.adapter.extension</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.input.adapter.http</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.input.adapter.http</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.input.adapter.mqtt</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.input.adapter.mqtt</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.input.adapter.xmpp</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.input.adapter.xmpp</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.iot.api</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
                 <type>war</type>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.output.adapter.websocket</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.output.adapter.websocket</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
 			<dependency>
-				<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-				<artifactId>org.wso2.carbon.device.mgt.mqtt.notification.listener</artifactId>
+				<groupId>io.entgra.device.mgt.plugins</groupId>
+				<artifactId>io.entgra.device.mgt.plugins.mqtt.notification.listener</artifactId>
 				<version>${carbon.devicemgt.plugins.version}</version>
 			</dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.extensions.remote.session</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
 
             <!--MDM dependencies-->
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.mobile</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.mobile.api</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.mobile.url.printer</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
 
             <!--Android dependencies-->
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.mobile.android</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.mobile.android</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.mobile.android.api</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.mobile.android.api</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.api</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.virtualfirealarm.api</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.virtualfirealarm.agent.impl</artifactId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.virtualfirealarm.agent.impl</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
 
@@ -1018,25 +1018,25 @@
                 <version>${andes.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>org.wso2.carbon.andes.extensions.device.mgt.mqtt.authorization</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>org.wso2.carbon.andes.extensions.device.mgt.api</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
 
             <!--EMQX Extensions -->
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>io.entgra.device.mgt.plugins.emqx.exhook</artifactId>
                 <classifier>jar-with-dependencies</classifier>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>io.entgra.device.mgt.plugins.emqx.initializer</artifactId>
                 <version>${carbon.devicemgt.plugins.version}</version>
             </dependency>
