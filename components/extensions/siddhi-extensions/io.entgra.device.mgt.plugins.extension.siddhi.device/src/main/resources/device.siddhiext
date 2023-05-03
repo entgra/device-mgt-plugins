@@ -16,11 +16,11 @@
 # under the License.
 #
 
-isInGroup=org.wso2.extension.siddhi.device.IsInGroupFunctionExecutor
-getDevicesOfUser=org.wso2.extension.siddhi.device.GetDevicesOfUserFunctionExecutor
-hasDevicesOfUser=org.wso2.extension.siddhi.device.HasDevicesOfUserFunctionExecutor
-getDevicesOfStatus=org.wso2.extension.siddhi.device.GetDevicesOfStatusFunctionExecutor
-hasDevicesOfStatus=org.wso2.extension.siddhi.device.HasDevicesOfStatusFunctionExecutor
-isEnrolled=org.wso2.extension.siddhi.device.IsEnrolledFunctionExecutor
-addNotification=org.wso2.extension.siddhi.device.AddNotificationFunctionProcessor
-addOperation=org.wso2.extension.siddhi.device.AddOperationFunctionProcessor
+isInGroup=io.entgra.device.mgt.plugins.extension.siddhi.device.IsInGroupFunctionExecutor
+getDevicesOfUser=io.entgra.device.mgt.plugins.extension.siddhi.device.GetDevicesOfUserFunctionExecutor
+hasDevicesOfUser=io.entgra.device.mgt.plugins.extension.siddhi.device.HasDevicesOfUserFunctionExecutor
+getDevicesOfStatus=io.entgra.device.mgt.plugins.extension.siddhi.device.GetDevicesOfStatusFunctionExecutor
+hasDevicesOfStatus=io.entgra.device.mgt.plugins.extension.siddhi.device.HasDevicesOfStatusFunctionExecutor
+isEnrolled=io.entgra.device.mgt.plugins.extension.siddhi.device.IsEnrolledFunctionExecutor
+addNotification=io.entgra.device.mgt.plugins.extension.siddhi.device.AddNotificationFunctionProcessor
+addOperation=io.entgra.device.mgt.plugins.extension.siddhi.device.AddOperationFunctionProcessor

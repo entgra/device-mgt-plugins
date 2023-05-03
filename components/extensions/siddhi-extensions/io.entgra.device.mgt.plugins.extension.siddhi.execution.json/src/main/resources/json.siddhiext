@@ -16,5 +16,5 @@
 # under the License.
 #
 
-getProperty=org.wso2.extension.siddhi.execution.json.GetPropertyFunctionExtension
-getArray=org.wso2.extension.siddhi.execution.json.GetArrayFunctionExtension
+getProperty=io.entgra.device.mgt.plugins.extension.siddhi.execution.json.GetPropertyFunctionExtension
+getArray=io.entgra.device.mgt.plugins.extension.siddhi.execution.json.GetArrayFunctionExtension

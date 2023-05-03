@@ -24,7 +24,7 @@
 
     <test name="Extension Unit Tests" preserve-order="true">
         <classes>
-            <class name="org.wso2.extension.siddhi.execution.json.ExtensionTestCase"/>
+            <class name="io.entgra.device.mgt.plugins.extension.siddhi.execution.json.ExtensionTestCase"/>
         </classes>
     </test>
 </suite>

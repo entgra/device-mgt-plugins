@@ -24,8 +24,8 @@
 
     <test name="Extension Unit Tests" preserve-order="true">
         <classes>
-            <class name="org.wso2.extension.siddhi.device.BaseDeviceManagementTest"/>
-            <class name="org.wso2.extension.siddhi.device.ExtensionTestCase"/>
+            <class name="io.entgra.device.mgt.plugins.extension.siddhi.device.BaseDeviceManagementTest"/>
+            <class name="io.entgra.device.mgt.plugins.extension.siddhi.device.ExtensionTestCase"/>
         </classes>
     </test>
 </suite>
