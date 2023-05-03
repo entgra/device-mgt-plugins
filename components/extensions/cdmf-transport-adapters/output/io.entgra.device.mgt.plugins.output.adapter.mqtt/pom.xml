@@ -106,12 +106,12 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            org.wso2.carbon.device.mgt.output.adapter.mqtt.internal,
-                            org.wso2.carbon.device.mgt.output.adapter.mqtt.internal.*
+                            io.entgra.device.mgt.plugins.output.adapter.mqtt.internal,
+                            io.entgra.device.mgt.plugins.output.adapter.mqtt.internal.*
                         </Private-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.output.adapter.mqtt.internal,
-                            !org.wso2.carbon.device.mgt.output.adapter.mqtt.internal.*,
+                            !io.entgra.device.mgt.plugins.output.adapter.mqtt.internal,
+                            !io.entgra.device.mgt.plugins.output.adapter.mqtt.internal.*,
                             org.wso2.carbon.device.mgt.output.adapter.mqtt.*,
                         </Export-Package>
                         <Import-Package>

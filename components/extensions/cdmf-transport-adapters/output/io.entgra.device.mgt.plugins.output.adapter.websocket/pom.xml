@@ -128,13 +128,13 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            org.wso2.carbon.device.mgt.output.adapter.websocket.internal,
-                            org.wso2.carbon.device.mgt.output.adapter.websocket.internal.*
+                            io.entgra.device.mgt.plugins.output.adapter.websocket.internal,
+                            io.entgra.device.mgt.plugins.output.adapter.websocket.internal.*
                         </Private-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.output.adapter.websocket.internal,
-                            !org.wso2.carbon.device.mgt.output.adapter.websocket.internal.*,
-                            org.wso2.carbon.device.mgt.output.adapter.websocket.*
+                            !io.entgra.device.mgt.plugins.output.adapter.websocket.internal,
+                            !io.entgra.device.mgt.plugins.output.adapter.websocket.internal.*,
+                            io.entgra.device.mgt.plugins.output.adapter.websocket.*
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.event.output.adapter.core.*,

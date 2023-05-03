@@ -93,12 +93,12 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            org.wso2.carbon.device.mgt.output.adapter.http.internal,
-                            org.wso2.carbon.device.mgt.output.adapter.http.internal.*
+                            io.entgra.device.mgt.plugins.output.adapter.http.internal,
+                            io.entgra.device.mgt.plugins.output.adapter.http.internal.*
                         </Private-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.output.adapter.http.internal,
-                            !org.wso2.carbon.device.mgt.output.adapter.http.internal.*,
+                            !io.entgra.device.mgt.plugins.output.adapter.http.internal,
+                            !io.entgra.device.mgt.plugins.output.adapter.http.internal.*,
                             org.wso2.carbon.device.mgt.output.adapter.http.*
                         </Export-Package>
                         <Import-Package>

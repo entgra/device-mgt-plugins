@@ -83,12 +83,12 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            org.wso2.carbon.device.mgt.output.adapter.xmpp.internal,
-                            org.wso2.carbon.device.mgt.output.adapter.xmpp.internal.*
+                            io.entgra.device.mgt.plugins.output.adapter.xmpp.internal,
+                            io.entgra.device.mgt.plugins.output.adapter.xmpp.internal.*
                         </Private-Package>
                         <Export-Package>
-                            !org.wso2.carbon.device.mgt.output.adapter.xmpp.internal,
-                            !org.wso2.carbon.device.mgt.output.adapter.xmpp.internal.*,
+                            !io.entgra.device.mgt.plugins.output.adapter.xmpp.internal,
+                            !io.entgra.device.mgt.plugins.output.adapter.xmpp.internal.*,
                             org.wso2.carbon.device.mgt.output.adapter.xmpp.*,
                         </Export-Package>
                         <Import-Package>
