@@ -93,7 +93,7 @@
                             org.wso2.carbon.device.mgt.core.service,
 							com.google.gson,
 							org.wso2.carbon.context,
-							org.wso2.carbon.device.mgt.input.adapter.extension,
+                            io.entgra.device.mgt.plugins.input.adapter.extension,
 							org.wso2.carbon.event.input.adapter.core,
 							org.wso2.carbon.event.input.adapter.core.exception,
 							org.wso2.carbon.user.api,

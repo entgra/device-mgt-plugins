@@ -24,7 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.core.ServerStartupObserver;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.device.mgt.input.adapter.extension.ContentTransformer;
+import io.entgra.device.mgt.plugins.input.adapter.extension.ContentTransformer;
 import io.entgra.device.mgt.plugins.mqtt.notification.listener.PullNotificationMqttContentTransformer;
 import io.entgra.device.mgt.plugins.mqtt.notification.listener.PullNotificationStartupListener;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
