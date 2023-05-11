@@ -79,7 +79,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Bundle-Version>${carbon.devicemgt.plugins.version}</Bundle-Version>
+                        <Bundle-Version>${io.entgra.device.mgt.plugins.version}</Bundle-Version>
                         <Bundle-Description>MQTT Pull Notification Provider Bundle</Bundle-Description>
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.mqtt.notification.listener.internal,

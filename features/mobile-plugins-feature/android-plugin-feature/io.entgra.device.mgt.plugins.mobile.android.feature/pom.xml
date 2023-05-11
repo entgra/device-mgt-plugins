@@ -242,7 +242,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.mobile.android:${carbon.devicemgt.plugins.version}
+                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.mobile.android:${io.entgra.device.mgt.plugins.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>
@@ -250,7 +250,7 @@
                                     org.wso2.carbon.core.server:${carbon.kernel.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.device.mgt.server:${carbon.devicemgt.version}
+                                    org.wso2.carbon.device.mgt.server:${io.entgra.device.mgt.core.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

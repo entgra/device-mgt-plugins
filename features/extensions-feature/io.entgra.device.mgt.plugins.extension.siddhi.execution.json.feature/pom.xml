@@ -61,7 +61,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.extension.siddhi.execution.json:${carbon.devicemgt.plugins.version}
+                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.extension.siddhi.execution.json:${io.entgra.device.mgt.plugins.version}
                                 </bundleDef>
                             </bundles>
                         </configuration>

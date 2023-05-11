@@ -72,7 +72,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    io.entgra.device.mgt.plugins:org.wso2.carbon.andes.extensions.device.mgt.mqtt.authorization:${carbon.devicemgt.plugins.version}
+                                    io.entgra.device.mgt.plugins:org.wso2.carbon.andes.extensions.device.mgt.mqtt.authorization:${io.entgra.device.mgt.plugins.version}
                                 </bundleDef>
                                 <bundleDef>
                                     io.github.openfeign:feign-core:${io.github.openfeign.version}

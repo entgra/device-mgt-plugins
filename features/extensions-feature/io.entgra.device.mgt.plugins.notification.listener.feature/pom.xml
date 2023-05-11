@@ -45,7 +45,7 @@
 							</adviceFile>
 							<bundles>
 								<bundleDef>
-									io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.mqtt.notification.listener:${carbon.devicemgt.plugins.version}
+									io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.mqtt.notification.listener:${io.entgra.device.mgt.plugins.version}
 								</bundleDef>
 							</bundles>
 						</configuration>

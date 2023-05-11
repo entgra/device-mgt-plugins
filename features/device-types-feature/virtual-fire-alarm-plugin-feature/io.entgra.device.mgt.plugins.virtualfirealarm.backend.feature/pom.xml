@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>io.entgra.device.mgt.plugins</groupId>
 			<artifactId>io.entgra.device.mgt.plugins.virtualfirealarm.api</artifactId>
-			<version>${carbon.devicemgt.plugins.version}</version>
+			<version>${io.entgra.device.mgt.plugins.version}</version>
 			<type>war</type>
 		</dependency>
 		<dependency>

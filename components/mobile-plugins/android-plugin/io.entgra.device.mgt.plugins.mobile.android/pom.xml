@@ -52,7 +52,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Bundle-Version>${carbon.devicemgt.plugins.version}</Bundle-Version>
+                        <Bundle-Version>${io.entgra.device.mgt.plugins.version}</Bundle-Version>
                         <Bundle-Description>Device Management Mobile Android Impl Bundle</Bundle-Description>
                         <Private-Package>io.entgra.device.mgt.plugins.mobile.android.internal</Private-Package>
                         <Import-Package>
