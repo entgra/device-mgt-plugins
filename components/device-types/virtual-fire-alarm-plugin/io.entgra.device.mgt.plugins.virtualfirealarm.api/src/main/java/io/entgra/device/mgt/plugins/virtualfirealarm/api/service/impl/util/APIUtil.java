@@ -2,12 +2,12 @@ package io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.apimgt.application.extension.APIManagementProviderService;
+import io.entgra.device.mgt.core.apimgt.application.extension.APIManagementProviderService;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.authorization.DeviceAccessAuthorizationService;
-import org.wso2.carbon.device.mgt.common.configuration.mgt.PlatformConfigurationManagementService;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService;
+import io.entgra.device.mgt.core.device.mgt.common.authorization.DeviceAccessAuthorizationService;
+import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.PlatformConfigurationManagementService;
+import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
+import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
 
 /**
  * This class provides utility functions used by REST-API.

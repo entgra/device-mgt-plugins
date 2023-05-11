@@ -47,9 +47,9 @@ import org.wso2.carbon.event.output.adapter.core.OutputEventAdapterConfiguration
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterException;
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterRuntimeException;
 import org.wso2.carbon.event.output.adapter.core.exception.TestConnectionNotSupportedException;
-import org.wso2.carbon.identity.jwt.client.extension.dto.AccessTokenInfo;
-import org.wso2.carbon.identity.jwt.client.extension.exception.JWTClientException;
-import org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService;
+import io.entgra.device.mgt.core.identity.jwt.client.extension.dto.AccessTokenInfo;
+import io.entgra.device.mgt.core.identity.jwt.client.extension.exception.JWTClientException;
+import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
 import org.wso2.carbon.user.api.UserStoreException;
 
 import java.io.IOException;

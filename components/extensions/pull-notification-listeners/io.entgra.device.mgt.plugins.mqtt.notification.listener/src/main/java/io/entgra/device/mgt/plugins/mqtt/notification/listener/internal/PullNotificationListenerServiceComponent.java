@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.core.ServerStartupObserver;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.plugins.input.adapter.extension.ContentTransformer;
 import io.entgra.device.mgt.plugins.mqtt.notification.listener.PullNotificationMqttContentTransformer;
 import io.entgra.device.mgt.plugins.mqtt.notification.listener.PullNotificationStartupListener;
@@ -32,7 +32,7 @@ import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
 /**
  * @scr.component name="io.entgra.device.mgt.plugins.mqtt.notification.listener.internal.PullNotificationListenerServiceComponent" immediate="true"
  * @scr.reference name="carbon.device.mgt.provider"
- * interface="org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService"
+ * interface="io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService"
  * cardinality="1..1"
  * policy="dynamic"
  * bind="setDeviceManagementProviderService"

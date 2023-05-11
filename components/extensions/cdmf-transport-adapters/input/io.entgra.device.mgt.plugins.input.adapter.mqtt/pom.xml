@@ -19,7 +19,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
-        <artifactId>io.entgra.device.mgt.plugins.cdmf-transport-adapters</artifactId>
+        <artifactId>cdmf-transport-adapters</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
@@ -77,12 +77,12 @@
             <artifactId>io.entgra.device.mgt.plugins.input.adapter.extension</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.identity.jwt.client.extension</artifactId>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.identity.jwt.client.extension</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.apimgt.keymgt.extension</artifactId>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.apimgt.keymgt.extension</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
@@ -141,7 +141,7 @@
                             org.apache.http.impl.client;version="${httpclient.version.range}",
                             org.json.simple.*,
                             com.jayway.jsonpath.*,
-                            org.wso2.carbon.identity.jwt.client.extension.*,
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.*,
                             javax.net.ssl,
                             org.apache.commons.codec.binary,
                             org.apache.commons.logging,
@@ -156,9 +156,9 @@
                             org.apache.axis2.context,
                             org.wso2.carbon.core.multitenancy.utils,
                             org.wso2.carbon.utils,
-                            org.wso2.carbon.apimgt.keymgt.extension;version="[5.0,6)",
-                            org.wso2.carbon.apimgt.keymgt.extension.exception;version="[5.0,6)",
-                            org.wso2.carbon.apimgt.keymgt.extension.service;version="[5.0,6)"
+                            io.entgra.device.mgt.core.apimgt.keymgt.extension;version="[5.0,6)",
+                            io.entgra.device.mgt.core.apimgt.keymgt.extension.exception;version="[5.0,6)",
+                            io.entgra.device.mgt.core.apimgt.keymgt.extension.service;version="[5.0,6)"
                         </Import-Package>
                     </instructions>
                 </configuration>

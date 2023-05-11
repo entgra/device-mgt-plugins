@@ -21,11 +21,11 @@ package io.entgra.device.mgt.plugins.mobile.android.api.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
-import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
-import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
+import io.entgra.device.mgt.core.device.mgt.common.notification.mgt.NotificationManagementService;
+import io.entgra.device.mgt.core.device.mgt.core.app.mgt.ApplicationManagementProviderService;
+import io.entgra.device.mgt.core.device.mgt.core.device.details.mgt.DeviceInformationManager;
+import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
+import io.entgra.device.mgt.core.policy.mgt.core.PolicyManagerService;
 
 /**
  * AndroidAPIUtil class provides utility functions used by Android REST-API classes.

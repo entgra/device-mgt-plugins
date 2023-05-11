@@ -20,10 +20,10 @@ package io.entgra.device.mgt.plugins.extension.siddhi.device;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.notification.mgt.Notification;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.notification.mgt.Notification;
+import io.entgra.device.mgt.core.device.mgt.common.notification.mgt.NotificationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.notification.mgt.NotificationManagementService;
 import io.entgra.device.mgt.plugins.extension.siddhi.device.utils.DeviceUtils;
 import org.wso2.siddhi.core.config.ExecutionPlanContext;
 import org.wso2.siddhi.core.exception.ExecutionPlanRuntimeException;

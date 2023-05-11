@@ -21,9 +21,9 @@ package io.entgra.device.mgt.plugins.mobile.android.api.services;
 import io.entgra.device.mgt.plugins.mobile.android.api.util.AndroidConstants;
 import io.swagger.annotations.*;
 
-import org.wso2.carbon.apimgt.annotations.api.Scope;
-import org.wso2.carbon.apimgt.annotations.api.Scopes;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import io.entgra.device.mgt.core.apimgt.annotations.Scope;
+import io.entgra.device.mgt.core.apimgt.annotations.Scopes;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
 import io.entgra.device.mgt.plugins.mobile.android.api.bean.wrapper.AndroidApplication;
 import io.entgra.device.mgt.plugins.mobile.android.api.bean.wrapper.AndroidDevice;
 

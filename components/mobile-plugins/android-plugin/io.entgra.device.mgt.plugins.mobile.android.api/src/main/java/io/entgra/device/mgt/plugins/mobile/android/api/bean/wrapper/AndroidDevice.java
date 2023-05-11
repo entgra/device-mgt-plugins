@@ -18,11 +18,11 @@
 package io.entgra.device.mgt.plugins.mobile.android.api.bean.wrapper;
 
 import io.swagger.annotations.ApiModelProperty;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
-import org.wso2.carbon.device.mgt.common.Feature;
-import org.wso2.carbon.device.mgt.common.app.mgt.Application;
-import org.wso2.carbon.device.mgt.common.device.details.DeviceInfo;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.Feature;
+import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
+import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceInfo;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

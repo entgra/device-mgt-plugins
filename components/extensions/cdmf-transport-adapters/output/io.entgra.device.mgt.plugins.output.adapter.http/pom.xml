@@ -19,7 +19,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
-        <artifactId>io.entgra.device.mgt.plugins.cdmf-transport-adapters</artifactId>
+        <artifactId>cdmf-transport-adapters</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
@@ -51,8 +51,8 @@
             <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.identity.jwt.client.extension</artifactId>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.identity.jwt.client.extension</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
@@ -125,7 +125,7 @@
                             org.apache.http.client.entity,
                             org.apache.http.message,
                             org.apache.commons.ssl,
-                            org.wso2.carbon.identity.jwt.client.extension.*,
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.*,
                             org.wso2.carbon.user.api,
                             javax.xml.namespace; version=0.0.0
                         </Import-Package>

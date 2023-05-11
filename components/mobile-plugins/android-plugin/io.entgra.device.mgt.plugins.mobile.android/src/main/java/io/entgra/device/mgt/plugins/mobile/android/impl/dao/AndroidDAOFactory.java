@@ -20,7 +20,7 @@ package io.entgra.device.mgt.plugins.mobile.android.impl.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceManagementConstants;
 import io.entgra.device.mgt.plugins.mobile.android.impl.dao.impl.AndroidDeviceDAOImpl;
 import io.entgra.device.mgt.plugins.mobile.android.impl.dao.impl.AndroidFeatureDAOImpl;
 

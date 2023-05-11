@@ -18,7 +18,7 @@
 
 package io.entgra.device.mgt.plugins.mobile.android.api.util;
 
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 
 import java.util.List;
 

@@ -20,8 +20,8 @@ package io.entgra.device.mgt.plugins.mqtt.notification.listener;
 
 import com.google.gson.Gson;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
 import io.entgra.device.mgt.plugins.input.adapter.extension.ContentTransformer;
 
 import java.util.Map;

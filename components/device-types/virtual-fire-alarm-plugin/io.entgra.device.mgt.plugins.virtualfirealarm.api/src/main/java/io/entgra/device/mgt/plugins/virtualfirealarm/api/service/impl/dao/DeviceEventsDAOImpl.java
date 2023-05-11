@@ -22,7 +22,7 @@ package io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl.dao;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl.dto.SensorRecord;
-import org.wso2.carbon.device.mgt.common.exceptions.*;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

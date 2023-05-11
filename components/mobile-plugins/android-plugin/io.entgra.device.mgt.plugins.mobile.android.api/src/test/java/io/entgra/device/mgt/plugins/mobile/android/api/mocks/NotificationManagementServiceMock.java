@@ -18,13 +18,13 @@
 
 package io.entgra.device.mgt.plugins.mobile.android.api.mocks;
 
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.PaginationRequest;
-import org.wso2.carbon.device.mgt.common.PaginationResult;
-import org.wso2.carbon.device.mgt.common.notification.mgt.Notification;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.PaginationRequest;
+import io.entgra.device.mgt.core.device.mgt.common.PaginationResult;
+import io.entgra.device.mgt.core.device.mgt.common.notification.mgt.Notification;
+import io.entgra.device.mgt.core.device.mgt.common.notification.mgt.NotificationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.notification.mgt.NotificationManagementService;
 
 import java.util.List;
 

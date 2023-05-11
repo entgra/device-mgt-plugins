@@ -28,26 +28,26 @@ import io.entgra.device.mgt.plugins.mobile.android.api.util.AndroidDeviceUtils;
 import io.entgra.device.mgt.plugins.mobile.android.api.util.Message;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.app.mgt.Application;
-import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
-import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
-import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementException;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
-import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
-import org.wso2.carbon.device.mgt.common.policy.mgt.monitor.PolicyComplianceException;
-import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
-import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
-import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceManagementConstants;
+import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
+import io.entgra.device.mgt.core.device.mgt.common.app.mgt.ApplicationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocation;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.InvalidDeviceException;
+import io.entgra.device.mgt.core.device.mgt.common.notification.mgt.NotificationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.OperationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.policy.mgt.monitor.PolicyComplianceException;
+import io.entgra.device.mgt.core.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
+import io.entgra.device.mgt.core.device.mgt.core.device.details.mgt.DeviceInformationManager;
+import io.entgra.device.mgt.core.device.mgt.core.operation.mgt.CommandOperation;
 import io.entgra.device.mgt.plugins.mobile.android.api.bean.ErrorResponse;
 import io.entgra.device.mgt.plugins.mobile.android.api.bean.wrapper.AndroidApplication;
 import io.entgra.device.mgt.plugins.mobile.android.api.bean.wrapper.AndroidDevice;
-import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
-import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
+import io.entgra.device.mgt.core.policy.mgt.common.PolicyManagementException;
+import io.entgra.device.mgt.core.policy.mgt.core.PolicyManagerService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -230,10 +230,10 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
         for (Operation operation : operations) {
             AndroidDeviceUtils.updateOperation(device, operation);
             if (OPERATION_ERROR_STATUS.equals(operation.getStatus().toString())) {
-                org.wso2.carbon.device.mgt.common.notification.mgt.Notification notification = new
-                        org.wso2.carbon.device.mgt.common.notification.mgt.Notification();
+                io.entgra.device.mgt.core.device.mgt.common.notification.mgt.Notification notification = new
+                        io.entgra.device.mgt.core.device.mgt.common.notification.mgt.Notification();
                 notification.setOperationId(operation.getId());
-                notification.setStatus(org.wso2.carbon.device.mgt.common.notification.mgt.Notification.
+                notification.setStatus(io.entgra.device.mgt.core.device.mgt.common.notification.mgt.Notification.
                         Status.NEW.toString());
                 notification.setDescription(operation.getCode() + " operation failed to execute on device " +
                         deviceName + " (ID: " + device.getDeviceIdentifier() + ")");

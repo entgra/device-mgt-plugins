@@ -20,7 +20,7 @@ package io.entgra.device.mgt.plugins.mobile.android.api.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
 import java.io.Serializable;
 
 @ApiModel(value = "Disenrollment",

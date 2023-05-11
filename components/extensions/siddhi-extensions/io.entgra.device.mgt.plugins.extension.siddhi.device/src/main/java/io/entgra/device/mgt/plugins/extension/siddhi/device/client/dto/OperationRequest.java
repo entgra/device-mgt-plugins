@@ -18,7 +18,7 @@
 
 package io.entgra.device.mgt.plugins.extension.siddhi.device.client.dto;
 
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
 
 import java.util.List;
 

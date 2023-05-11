@@ -19,8 +19,8 @@
 
 package io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl.dao;
 
-import org.wso2.carbon.device.mgt.common.exceptions.*;
-import org.wso2.carbon.device.mgt.core.dao.util.*;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.*;
+import io.entgra.device.mgt.core.device.mgt.core.dao.util.*;
 
 public class DeviceEventsDAOFactory {
 
@@ -107,7 +107,7 @@ public class DeviceEventsDAOFactory {
     public static void rollbackTransaction() {
         java.sql.Connection conn = currentConnection.get();
         if (conn == null) {
-            throw new org.wso2.carbon.device.mgt.common.exceptions.IllegalTransactionStateException("Database connection is not active. Hence, rollback is "
+            throw new io.entgra.device.mgt.core.device.mgt.common.exceptions.IllegalTransactionStateException("Database connection is not active. Hence, rollback is "
                     + "not attempted.");
         }
         try {

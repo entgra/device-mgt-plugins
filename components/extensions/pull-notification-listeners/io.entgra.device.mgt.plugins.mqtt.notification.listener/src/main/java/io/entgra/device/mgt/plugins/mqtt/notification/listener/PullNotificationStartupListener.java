@@ -22,7 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.core.ServerStartupObserver;
-import org.wso2.carbon.device.mgt.core.config.DeviceConfigurationManager;
+import io.entgra.device.mgt.core.device.mgt.core.config.DeviceConfigurationManager;
 import io.entgra.device.mgt.plugins.mqtt.notification.listener.internal.MqttNotificationDataHolder;
 import io.entgra.device.mgt.plugins.mqtt.notification.listener.util.MqttNotificationListener;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;

@@ -25,9 +25,9 @@ import io.entgra.device.mgt.plugins.mobile.android.impl.dao.MobileFeatureDAO;
 import io.entgra.device.mgt.plugins.mobile.android.impl.dto.MobileFeature;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Feature;
-import org.wso2.carbon.device.mgt.common.FeatureManager;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.Feature;
+import io.entgra.device.mgt.core.device.mgt.common.FeatureManager;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.plugins.mobile.android.impl.util.MobileDeviceManagementUtil;
 
 import java.util.ArrayList;

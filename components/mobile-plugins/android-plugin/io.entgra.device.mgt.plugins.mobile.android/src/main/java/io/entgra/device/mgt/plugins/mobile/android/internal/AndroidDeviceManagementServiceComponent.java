@@ -22,7 +22,7 @@ import io.entgra.device.mgt.plugins.mobile.android.impl.AndroidDeviceManagementS
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import io.entgra.device.mgt.core.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 

@@ -27,7 +27,7 @@ import io.entgra.device.mgt.plugins.mobile.android.impl.dto.MobileFeature;
 import io.entgra.device.mgt.plugins.mobile.android.impl.util.AndroidPluginConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceManagementConstants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

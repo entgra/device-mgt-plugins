@@ -19,10 +19,10 @@ package io.entgra.device.mgt.plugins.extension.siddhi.device.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.GroupPaginationRequest;
-import org.wso2.carbon.device.mgt.common.group.mgt.DeviceGroup;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.GroupPaginationRequest;
+import io.entgra.device.mgt.core.device.mgt.common.group.mgt.DeviceGroup;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

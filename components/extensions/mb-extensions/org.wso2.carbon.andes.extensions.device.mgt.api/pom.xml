@@ -174,13 +174,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.device.mgt.common</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.device.mgt.core</artifactId>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -198,8 +198,8 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.policy.mgt.core</artifactId>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -233,8 +233,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.certificate.mgt.core</artifactId>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.certificate.mgt.core</artifactId>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -289,8 +289,8 @@
             <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.apimgt.annotations</artifactId>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.apimgt.annotations</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

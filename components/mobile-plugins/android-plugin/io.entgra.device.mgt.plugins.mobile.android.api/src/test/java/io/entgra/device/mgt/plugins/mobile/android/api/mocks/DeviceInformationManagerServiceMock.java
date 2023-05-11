@@ -1,11 +1,11 @@
 package io.entgra.device.mgt.plugins.mobile.android.api.mocks;
 
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.device.details.DeviceInfo;
-import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
-import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
-import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceInfo;
+import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocation;
+import io.entgra.device.mgt.core.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
+import io.entgra.device.mgt.core.device.mgt.core.device.details.mgt.DeviceInformationManager;
 
 import java.util.List;
 

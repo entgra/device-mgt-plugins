@@ -19,7 +19,7 @@
 package io.entgra.device.mgt.plugins.mobile.android.impl.config;
 
 import org.w3c.dom.Document;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.plugins.mobile.android.impl.util.MobileDeviceManagementUtil;
 import org.wso2.carbon.utils.CarbonUtils;
 

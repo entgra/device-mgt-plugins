@@ -25,11 +25,11 @@ import io.entgra.device.mgt.plugins.mobile.android.api.exception.UnexpectedServe
 import io.entgra.device.mgt.plugins.mobile.android.api.services.EventReceiverService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
-import org.wso2.carbon.device.mgt.core.util.DeviceManagerUtil;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.core.util.DeviceManagerUtil;
 import io.entgra.device.mgt.plugins.mobile.android.api.bean.ErrorResponse;
 import io.entgra.device.mgt.plugins.mobile.android.api.bean.wrapper.EventBeanWrapper;
 

@@ -18,7 +18,7 @@
 
 package io.entgra.device.mgt.plugins.mobile.android.impl.util;
 
-import org.wso2.carbon.device.mgt.common.license.mgt.License;
+import io.entgra.device.mgt.core.device.mgt.common.license.mgt.License;
 import io.entgra.device.mgt.plugins.mobile.android.impl.AndroidDeviceManagementService;
 
 /**

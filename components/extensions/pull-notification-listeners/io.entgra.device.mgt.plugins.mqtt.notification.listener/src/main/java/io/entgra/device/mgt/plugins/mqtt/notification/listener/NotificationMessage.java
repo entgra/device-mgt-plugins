@@ -18,8 +18,8 @@
  */
 package io.entgra.device.mgt.plugins.mqtt.notification.listener;
 
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
 
 public class NotificationMessage {
 

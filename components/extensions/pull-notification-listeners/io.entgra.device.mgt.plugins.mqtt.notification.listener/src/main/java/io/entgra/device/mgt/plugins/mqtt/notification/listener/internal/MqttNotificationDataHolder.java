@@ -18,7 +18,7 @@
  */
 package io.entgra.device.mgt.plugins.mqtt.notification.listener.internal;
 
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
 
 public class MqttNotificationDataHolder {

@@ -32,9 +32,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ResponseHeader;
-import org.wso2.carbon.apimgt.annotations.api.Scope;
-import org.wso2.carbon.apimgt.annotations.api.Scopes;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
+import io.entgra.device.mgt.core.apimgt.annotations.Scope;
+import io.entgra.device.mgt.core.apimgt.annotations.Scopes;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Activity;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;

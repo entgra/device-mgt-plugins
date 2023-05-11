@@ -17,7 +17,7 @@ package io.entgra.device.mgt.plugins.input.adapter.mqtt;
 import org.apache.axis2.context.ConfigurationContext;
 import org.osgi.service.http.HttpService;
 import io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensionService;
-import org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService;
+import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
 
 /**

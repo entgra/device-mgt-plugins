@@ -21,13 +21,13 @@
 
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
-        <artifactId>io.entgra.device.mgt.plugins.mobile-plugins</artifactId>
+        <artifactId>mobile-plugins</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>io.entgra.device.mgt.plugins.android-plugin</artifactId>
+    <artifactId>android-plugin</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Mobile Plugins</name>
     <url>http://wso2.org</url>

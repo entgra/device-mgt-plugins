@@ -18,7 +18,7 @@
 
 package io.entgra.device.mgt.plugins.mobile.android.internal;
 
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import io.entgra.device.mgt.core.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
 /**

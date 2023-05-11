@@ -25,7 +25,7 @@ import org.osgi.service.http.HttpService;
 import io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensionService;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterFactory;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
-import org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService;
+import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
 /**
@@ -35,7 +35,7 @@ import org.wso2.carbon.utils.ConfigurationContextService;
  * policy="dynamic"
  * bind="setInputAdapterExtensionService"
  * unbind="unsetInputAdapterExtensionService"
- * @scr.reference name="jwt.client.service" interface="org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService"
+ * @scr.reference name="jwt.client.service" interface="io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService"
  * cardinality="1..1"
  * policy="dynamic"
  * bind="setJWTClientManagerService"

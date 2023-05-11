@@ -21,7 +21,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>io.entgra.device.mgt.plugins.virtual-fire-alarm-plugin</artifactId>
+		<artifactId>virtual-fire-alarm-plugin</artifactId>
 		<groupId>io.entgra.device.mgt.plugins</groupId>
 		<version>6.0.17-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>

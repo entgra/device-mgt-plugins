@@ -19,8 +19,8 @@ package io.entgra.device.mgt.plugins.mobile.android.api.bean.wrapper;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 
 import java.io.Serializable;
 

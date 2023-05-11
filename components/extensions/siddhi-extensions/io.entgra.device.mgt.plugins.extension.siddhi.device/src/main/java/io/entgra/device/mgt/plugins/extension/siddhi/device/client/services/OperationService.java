@@ -18,7 +18,7 @@
 
 package io.entgra.device.mgt.plugins.extension.siddhi.device.client.services;
 
-import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Activity;
 import io.entgra.device.mgt.plugins.extension.siddhi.device.client.dto.OperationRequest;
 
 import javax.ws.rs.Consumes;

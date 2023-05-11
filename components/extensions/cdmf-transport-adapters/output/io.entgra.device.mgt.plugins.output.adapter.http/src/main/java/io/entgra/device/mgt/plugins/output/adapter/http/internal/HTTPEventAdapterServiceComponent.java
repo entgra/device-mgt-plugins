@@ -22,11 +22,11 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
 import io.entgra.device.mgt.plugins.output.adapter.http.HTTPEventAdapterFactory;
 import org.wso2.carbon.event.output.adapter.core.OutputEventAdapterFactory;
-import org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService;
+import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
 
 /**
  * @scr.component component.name="output.Http.AdapterService.component" immediate="true"
- * @scr.reference name="jwt.client.service" interface="org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService"
+ * @scr.reference name="jwt.client.service" interface="io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService"
  * cardinality="1..1"
  * policy="dynamic"
  * bind="setJWTClientManagerService"

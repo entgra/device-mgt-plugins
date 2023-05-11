@@ -21,13 +21,13 @@
 
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
-        <artifactId>io.entgra.device.mgt.plugins.extensions</artifactId>
+        <artifactId>extensions</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>io.entgra.device.mgt.plugins.cdmf-transport-adapters</artifactId>
+    <artifactId>cdmf-transport-adapters</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - IoT Base Plugin</name>
     <url>http://wso2.org</url>

@@ -30,9 +30,9 @@ import org.testng.IObjectFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.ObjectFactory;
 import org.testng.annotations.Test;
-import org.wso2.carbon.device.mgt.common.exceptions.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.exceptions.InvalidDeviceException;
-import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.InvalidDeviceException;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.OperationManagementException;
 import io.entgra.device.mgt.plugins.mobile.android.api.mocks.DeviceManagementProviderServiceMock;
 import io.entgra.device.mgt.plugins.mobile.android.api.utils.TestUtils;
 

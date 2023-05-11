@@ -14,7 +14,7 @@
  */
 package io.entgra.device.mgt.plugins.output.adapter.mqtt.internal;
 
-import org.wso2.carbon.identity.jwt.client.extension.service.JWTClientManagerService;
+import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
 
 /**
  * common place to hold some OSGI service references.

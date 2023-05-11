@@ -20,7 +20,7 @@
 
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
-        <artifactId>io.entgra.device.mgt.plugins.cdmf-transport-adapters</artifactId>
+        <artifactId>cdmf-transport-adapters</artifactId>
         <version>6.0.17-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>

@@ -22,14 +22,14 @@ import io.entgra.device.mgt.plugins.mobile.android.api.bean.*;
 import io.entgra.device.mgt.plugins.mobile.android.api.bean.wrapper.*;
 import io.entgra.device.mgt.plugins.mobile.android.api.util.AndroidConstants;
 import io.entgra.device.mgt.plugins.mobile.android.api.util.AndroidDeviceUtils;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
-import org.wso2.carbon.device.mgt.common.app.mgt.Application;
-import org.wso2.carbon.device.mgt.common.device.details.DeviceInfo;
-import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceManagementConstants;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
+import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceInfo;
+import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocation;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Activity;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
 
 
 import java.util.ArrayList;

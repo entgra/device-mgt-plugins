@@ -20,7 +20,7 @@ package io.entgra.device.mgt.plugins.mobile.android.api.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
+import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
