@@ -111,7 +111,7 @@
                             <!--<importFeatures>-->
                                 <!--<importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}-->
                                 <!--</importFeatureDef>-->
-                                <!--<importFeatureDef>org.wso2.carbon.device.mgt.server:${io.entgra.device.mgt.core.version}-->
+                                <!--<importFeatureDef>io.entgra.device.mgt.core.device.mgt.server:${io.entgra.device.mgt.core.version}-->
                                 <!--</importFeatureDef>-->
                             <!--</importFeatures>-->
                         </configuration>
