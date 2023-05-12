@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.wso2.carbon.device.mgt.iot.agent.virtual.ui;
+package io.entgra.device.mgt.plugins.iot.agent.virtual.ui;
 
 /**
  *

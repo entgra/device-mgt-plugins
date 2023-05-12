@@ -29,7 +29,7 @@
 
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Device Mgt Output XMPP Adaptor Module</name>
-    <description>org.wso2.carbon.device.mgt.output.adapter.xmpp provides the back-end functionality of xmpp adaptor
+    <description>io.entgra.device.mgt.plugins.output.adapter.xmpp provides the back-end functionality of xmpp adaptor
     </description>
     <url>http://wso2.org</url>
 
@@ -89,7 +89,7 @@
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.output.adapter.xmpp.internal,
                             !io.entgra.device.mgt.plugins.output.adapter.xmpp.internal.*,
-                            org.wso2.carbon.device.mgt.output.adapter.xmpp.*,
+                            io.entgra.device.mgt.plugins.output.adapter.xmpp.*,
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.event.output.adapter.core,

@@ -86,7 +86,7 @@ public class AgentUtilOperations {
 
             if (path != null) {
                 log.info(AgentConstants.LOG_APPENDER + path);
-                rootPath = path.getPath().replace("wso2-firealarm-virtual-agent.jar!/deviceConfig.properties", "")
+                rootPath = path.getPath().replace("firealarm-virtual-agent.jar!/deviceConfig.properties", "")
                         .replace("jar:", "").replace("file:", "");
 
                 rootPath = URLDecoder.decode(rootPath, StandardCharsets.UTF_8.toString());

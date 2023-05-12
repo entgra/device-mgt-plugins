@@ -1,5 +1,5 @@
 {
-  "name": "org.wso2.iot.OperationResponseStream",
+  "name": "io.entgra.iot.OperationResponseStream",
   "version": "1.0.0",
   "nickName": "",
   "description": "IoT Server Operation Response Stream",

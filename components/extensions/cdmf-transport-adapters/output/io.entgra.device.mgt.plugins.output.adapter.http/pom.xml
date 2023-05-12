@@ -29,7 +29,7 @@
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Device Management Output HTTP adapter Module</name>
     <description>
-        org.wso2.carbon.device.mgt.output.adapter.http provides the back-end functionality of oauth http event adapter
+        io.entgra.device.mgt.plugins.output.adapter.http provides the back-end functionality of oauth http event adapter
     </description>
     <url>http://wso2.org</url>
 
@@ -99,7 +99,7 @@
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.output.adapter.http.internal,
                             !io.entgra.device.mgt.plugins.output.adapter.http.internal.*,
-                            org.wso2.carbon.device.mgt.output.adapter.http.*
+                            io.entgra.device.mgt.plugins.output.adapter.http.*
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.event.output.adapter.core,

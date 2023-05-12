@@ -28,7 +28,7 @@ import java.util.*;
 public class MQTTEventAdapterFactory extends InputEventAdapterFactory {
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle
-            ("org.wso2.carbon.device.mgt.input.adapter.mqtt.i18n.Resources", Locale.getDefault());
+            ("io.entgra.device.mgt.plugins.input.adapter.mqtt.i18n.Resources", Locale.getDefault());
 
     @Override
     public String getType() {

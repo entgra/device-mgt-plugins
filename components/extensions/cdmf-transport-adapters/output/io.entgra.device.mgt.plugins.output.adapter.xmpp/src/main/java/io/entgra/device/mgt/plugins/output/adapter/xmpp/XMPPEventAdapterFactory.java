@@ -27,7 +27,7 @@ import java.util.*;
  */
 public class XMPPEventAdapterFactory extends OutputEventAdapterFactory {
     private ResourceBundle resourceBundle =
-            ResourceBundle.getBundle("org.wso2.carbon.device.mgt.output.adapter.xmpp.i18n.Resources", Locale.getDefault());
+            ResourceBundle.getBundle("io.entgra.device.mgt.plugins.output.adapter.xmpp.i18n.Resources", Locale.getDefault());
 
     @Override
     public String getType() {

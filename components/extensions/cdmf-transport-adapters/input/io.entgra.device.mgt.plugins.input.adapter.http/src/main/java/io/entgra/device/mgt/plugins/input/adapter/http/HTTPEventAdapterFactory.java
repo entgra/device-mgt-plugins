@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
 public class HTTPEventAdapterFactory extends InputEventAdapterFactory {
 
 	private ResourceBundle resourceBundle =
-			ResourceBundle.getBundle("org.wso2.carbon.device.mgt.input.adapter.http.i18n.Resources", Locale.getDefault());
+			ResourceBundle.getBundle("io.entgra.device.mgt.plugins.input.adapter.http.i18n.Resources", Locale.getDefault());
 	private int httpPort;
 	private int httpsPort;
 

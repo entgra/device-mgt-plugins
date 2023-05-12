@@ -119,7 +119,7 @@
 									</artifactId>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/maven-shared-archive-resources/agent/</outputDirectory>
-									<destFileName>wso2-firealarm-virtual-agent.jar</destFileName>
+									<destFileName>firealarm-virtual-agent.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

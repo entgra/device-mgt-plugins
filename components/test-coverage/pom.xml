@@ -43,31 +43,31 @@
         <!-- cdmf-transport adapters-->
         <cdmf.adapters>${extensions}/cdmf-transport-adapters</cdmf.adapters>
         <input.extension>
-            ${basedir}/../${cdmf.adapters}/input/org.wso2.carbon.device.mgt.input.adapter.extension
+            ${basedir}/../${cdmf.adapters}/input/io.entgra.device.mgt.plugins.input.adapter.extension
         </input.extension>
         <input.http>
-            ${basedir}/../${cdmf.adapters}/input/org.wso2.carbon.device.mgt.input.adapter.http
+            ${basedir}/../${cdmf.adapters}/input/io.entgra.device.mgt.plugins.input.adapter.http
         </input.http>
         <input.mqtt>
-            ${basedir}/../${cdmf.adapters}/input/org.wso2.carbon.device.mgt.input.adapter.mqtt
+            ${basedir}/../${cdmf.adapters}/input/io.entgra.device.mgt.plugins.input.adapter.mqtt
         </input.mqtt>
         <input.thrift>
-            ${basedir}/../${cdmf.adapters}/input/org.wso2.carbon.device.mgt.input.adapter.thrift
+            ${basedir}/../${cdmf.adapters}/input/io.entgra.device.mgt.plugins.input.adapter.thrift
         </input.thrift>
         <input.xmpp>
-            ${basedir}/../${cdmf.adapters}/input/org.wso2.carbon.device.mgt.input.adapter.xmpp
+            ${basedir}/../${cdmf.adapters}/input/io.entgra.device.mgt.plugins.input.adapter.xmpp
         </input.xmpp>
         <output.mqtt>
-            ${basedir}/../${cdmf.adapters}/output/org.wso2.carbon.device.mgt.output.adapter.mqtt
+            ${basedir}/../${cdmf.adapters}/output/io.entgra.device.mgt.plugins.output.adapter.mqtt
         </output.mqtt>
         <output.websocket>
-            ${basedir}/../${cdmf.adapters}/output/org.wso2.carbon.device.mgt.output.adapter.websocket
+            ${basedir}/../${cdmf.adapters}/output/io.entgra.device.mgt.plugins.output.adapter.websocket
         </output.websocket>
         <output.websocket.endpoint>
-            ${basedir}/../${cdmf.adapters}/output/org.wso2.carbon.device.mgt.output.adapter.websocket.endpoint
+            ${basedir}/../${cdmf.adapters}/output/io.entgra.device.mgt.plugins.output.adapter.websocket.endpoint
         </output.websocket.endpoint>
         <output.xmpp>
-            ${basedir}/../${cdmf.adapters}/output/org.wso2.carbon.device.mgt.output.adapter.xmpp
+            ${basedir}/../${cdmf.adapters}/output/io.entgra.device.mgt.plugins.output.adapter.xmpp
         </output.xmpp>
 
         <mb.extensions>${extensions}/mb-extensions</mb.extensions>
@@ -77,14 +77,14 @@
         </mb.authorization>
 
         <pull.notification.listener>
-            ${basedir}/../${extensions}/pull-notification-listeners/org.wso2.carbon.device.mgt.mqtt.notification.listener
+            ${basedir}/../${extensions}/pull-notification-listeners/io.entgra.device.mgt.plugins.mqtt.notification.listener
         </pull.notification.listener>
 
         <!-- mobile-plugins component -->
         <mobile.plugins>mobile-plugins</mobile.plugins>
         <android.plugin>${mobile.plugins}/android-plugin</android.plugin>
-        <android.mobile>${basedir}/../${android.plugin}/org.wso2.carbon.device.mgt.mobile.android</android.mobile>
-        <android.api>${basedir}/../${android.plugin}/org.wso2.carbon.device.mgt.mobile.android.api</android.api>
+        <android.mobile>${basedir}/../${android.plugin}/io.entgra.device.mgt.plugins.mobile.android</android.mobile>
+        <android.api>${basedir}/../${android.plugin}/io.entgra.device.mgt.plugins.mobile.android.api</android.api>
     </properties>
 
     <build>
@@ -123,7 +123,7 @@
                                                 <group name="extensions">
                                                     <group name="cdmf-transport-adapters">
                                                         <group name="input">
-                                                            <group name="org.wso2.carbon.device.mgt.input.adapter.extension">
+                                                            <group name="io.entgra.device.mgt.plugins.input.adapter.extension">
                                                                 <classfiles>
                                                                     <fileset dir="${input.extension}/${target}/${classes}" />
                                                                 </classfiles>
@@ -131,7 +131,7 @@
                                                                     <fileset dir="${input.extension}/${source}" />
                                                                 </sourcefiles>
                                                             </group>
-                                                            <group name="org.wso2.carbon.device.mgt.input.adapter.http">
+                                                            <group name="io.entgra.device.mgt.plugins.input.adapter.http">
                                                                 <classfiles>
                                                                     <fileset dir="${input.http}/${target}/${classes}" />
                                                                 </classfiles>
@@ -139,7 +139,7 @@
                                                                     <fileset dir="${input.http}/${source}" />
                                                                 </sourcefiles>
                                                             </group>
-                                                            <group name="org.wso2.carbon.device.mgt.input.adapter.mqtt">
+                                                            <group name="io.entgra.device.mgt.plugins.input.adapter.mqtt">
                                                                 <classfiles>
                                                                     <fileset dir="${input.mqtt}/${target}/${classes}" />
                                                                 </classfiles>
@@ -147,7 +147,7 @@
                                                                     <fileset dir="${input.mqtt}/${source}" />
                                                                 </sourcefiles>
                                                             </group>
-                                                            <group name="org.wso2.carbon.device.mgt.input.adapter.thrift">
+                                                            <group name="io.entgra.device.mgt.plugins.input.adapter.thrift">
                                                                 <classfiles>
                                                                     <fileset dir="${input.thrift}/${target}/${classes}" />
                                                                 </classfiles>
@@ -158,7 +158,7 @@
                                                         </group>
 
                                                         <group name="output">
-                                                            <group name="org.wso2.carbon.device.mgt.output.adapter.mqtt">
+                                                            <group name="io.entgra.device.mgt.plugins.output.adapter.mqtt">
                                                                 <classfiles>
                                                                     <fileset dir="${output.mqtt}/${target}/${classes}" />
                                                                 </classfiles>
@@ -166,7 +166,7 @@
                                                                     <fileset dir="${output.mqtt}/${source}" />
                                                                 </sourcefiles>
                                                             </group>
-                                                            <group name="org.wso2.carbon.device.mgt.output.adapter.websocket">
+                                                            <group name="io.entgra.device.mgt.plugins.output.adapter.websocket">
                                                                 <classfiles>
                                                                     <fileset dir="${output.websocket}/${target}/${classes}" />
                                                                 </classfiles>
@@ -174,7 +174,7 @@
                                                                     <fileset dir="${output.websocket}/${source}" />
                                                                 </sourcefiles>
                                                             </group>
-                                                            <group name="org.wso2.carbon.device.mgt.output.adapter.websocket.endpoint">
+                                                            <group name="io.entgra.device.mgt.plugins.output.adapter.websocket.endpoint">
                                                                 <classfiles>
                                                                     <fileset dir="${output.websocket.endpoint}/${target}/${classes}" />
                                                                 </classfiles>
@@ -182,7 +182,7 @@
                                                                     <fileset dir="${output.websocket.endpoint}/${source}" />
                                                                 </sourcefiles>
                                                             </group>
-                                                            <group name="org.wso2.carbon.device.mgt.output.adapter.xmpp">
+                                                            <group name="io.entgra.device.mgt.plugins.output.adapter.xmpp">
                                                                 <classfiles>
                                                                     <fileset dir="${output.xmpp}/${target}/${classes}" />
                                                                 </classfiles>
@@ -221,7 +221,7 @@
                                                 </group>
                                                 <group name="mobile-plugins">
                                                     <group name="android-plugin">
-                                                        <group name="org.wso2.carbon.device.mgt.mobile.android">
+                                                        <group name="io.entgra.device.mgt.plugins.mobile.android">
                                                             <classfiles>
                                                                 <fileset dir="${android.mobile}/${target}/${classes}" />
                                                             </classfiles>
@@ -229,7 +229,7 @@
                                                                 <fileset dir="${android.mobile}/${source}" />
                                                             </sourcefiles>
                                                         </group>
-                                                        <group name="org.wso2.carbon.device.mgt.mobile.android.api">
+                                                        <group name="io.entgra.device.mgt.plugins.mobile.android.api">
                                                             <classfiles>
                                                                 <fileset dir="${android.api}/${target}/${classes}" />
                                                             </classfiles>

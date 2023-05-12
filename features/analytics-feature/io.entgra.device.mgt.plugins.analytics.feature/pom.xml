@@ -50,7 +50,7 @@
 <!--                            <artifactItems>-->
 <!--                                <artifactItem>-->
 <!--                                    <groupId>io.entgra.device.mgt.plugins</groupId>-->
-<!--                                    <artifactId>org.wso2.carbon.device.mgt.iot.analytics</artifactId>-->
+<!--                                    <artifactId>io.entgra.device.mgt.plugins.iot.analytics</artifactId>-->
 <!--                                    <version>${project.version}</version>-->
 <!--                                    <type>zip</type>-->
 <!--                                    <overWrite>true</overWrite>-->

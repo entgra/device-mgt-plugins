@@ -1,5 +1,5 @@
 {
-  "name": "org.wso2.iot.operation",
+  "name": "io.entgra.iot.operation",
   "version": "1.0.0",
   "nickName": "Operation Stream",
   "description": "Operation stream for Entgra IoT Devices",

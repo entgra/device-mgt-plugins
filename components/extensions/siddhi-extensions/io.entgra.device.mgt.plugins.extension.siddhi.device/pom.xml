@@ -185,7 +185,7 @@
                             org.wso2.siddhi.query.api.*,
                             io.entgra.device.mgt.core.device.mgt.core.*,
                             io.entgra.device.mgt.core.device.mgt.common.*,
-                            org.wso2.carbon.identity.jwt.client.*,
+                            io.entgra.device.mgt.core.identity.jwt.client.*,
                             org.apache.commons.logging,
                             org.wso2.carbon.context,
                             android.util;resolution:=optional,

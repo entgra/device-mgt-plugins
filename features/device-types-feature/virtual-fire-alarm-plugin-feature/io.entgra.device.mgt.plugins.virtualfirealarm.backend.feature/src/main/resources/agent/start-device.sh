@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "----------------------------------------------------------------"
-echo "|		WSO2 IOT Sample				"
+echo "|		Entgra IOT Sample				"
 echo "|	   Virtual RaspiAlarm			"
 echo "|	       ----------------				"
 echo "|    ....initializing startup-script	"
@@ -17,7 +17,7 @@ echo "----------------------------------------------------------------"
 #done
 #
 #while true; do
-#    read -p "Whats the time-interval (in seconds) between successive Data-Pushes to the WSO2-IoT-Server (ex: '60' indicates 1 minute) > " interval
+#    read -p "Whats the time-interval (in seconds) between successive Data-Pushes to the IoT-Server (ex: '60' indicates 1 minute) > " interval
 #
 #    if [ $interval -eq $interval 2>/dev/null ]
 #    then
@@ -31,7 +31,7 @@ echo "----------------------------------------------------------------"
 #done
 
 
-java -jar wso2-firealarm-virtual-agent.jar
+java -jar firealarm-virtual-agent.jar
 
 #while true; do
 #    read -p "Do you wish to run 'apt-get update' and continue? [Yes/No] " yn

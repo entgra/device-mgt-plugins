@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.wso2.carbon.device.mgt.iot.agent.virtual;
+package io.entgra.device.mgt.plugins.iot.agent.virtual;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.wso2.carbon.device.mgt.iot.agent.virtual.ui.AgentUI;
+import io.entgra.device.mgt.plugins.iot.agent.virtual.ui.AgentUI;
 
 /**
  *

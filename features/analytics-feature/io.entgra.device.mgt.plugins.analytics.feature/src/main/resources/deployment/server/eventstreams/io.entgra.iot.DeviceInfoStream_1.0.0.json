@@ -1,5 +1,5 @@
 {
-  "name": "org.wso2.iot.DeviceInfoStream",
+  "name": "io.entgra.iot.DeviceInfoStream",
   "version": "1.0.0",
   "nickName": "",
   "description": "IoT Server Device Info Stream",

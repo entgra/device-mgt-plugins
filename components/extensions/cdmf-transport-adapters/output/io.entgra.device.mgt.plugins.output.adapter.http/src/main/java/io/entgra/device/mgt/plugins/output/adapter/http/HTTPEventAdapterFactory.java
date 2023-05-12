@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
  */
 public class HTTPEventAdapterFactory extends OutputEventAdapterFactory {
     private ResourceBundle resourceBundle =
-            ResourceBundle.getBundle("org.wso2.carbon.device.mgt.output.adapter.http.i18n.Resources", Locale.getDefault());
+            ResourceBundle.getBundle("io.entgra.device.mgt.plugins.output.adapter.http.i18n.Resources", Locale.getDefault());
 
     @Override
     public String getType() {

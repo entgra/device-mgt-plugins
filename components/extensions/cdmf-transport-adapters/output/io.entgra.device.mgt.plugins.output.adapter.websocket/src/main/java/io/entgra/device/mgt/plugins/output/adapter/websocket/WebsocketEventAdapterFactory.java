@@ -43,7 +43,7 @@ import java.util.ResourceBundle;
  */
 public class WebsocketEventAdapterFactory extends OutputEventAdapterFactory {
 
-    private ResourceBundle resourceBundle = ResourceBundle.getBundle("org.wso2.carbon.device.mgt.output.adapter.websocket.i18n" +
+    private ResourceBundle resourceBundle = ResourceBundle.getBundle("io.entgra.device.mgt.plugins.output.adapter.websocket.i18n" +
             ".Resources", Locale.getDefault());
     private BundleContext bundleContext;
     private boolean isAuthInitialized = false;

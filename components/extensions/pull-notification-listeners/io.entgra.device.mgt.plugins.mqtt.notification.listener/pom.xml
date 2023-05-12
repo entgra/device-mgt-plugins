@@ -83,7 +83,7 @@
                         <Bundle-Description>MQTT Pull Notification Provider Bundle</Bundle-Description>
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.mqtt.notification.listener.internal,
-                            org.wso2.carbon.device.mgt.mqtt.notification.listener.*
+                            io.entgra.device.mgt.plugins.mqtt.notification.listener.*
                         </Export-Package>
                         <Import-Package>
                             org.osgi.framework.*;version="${imp.package.version.osgi.framework}",

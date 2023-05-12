@@ -28,7 +28,7 @@
 
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Device Mgt Output MQTT Adaptor Module</name>
-    <description>org.wso2.carbon.device.mgt.output.adapter.mqtt provides the back-end functionality of mqtt adaptor
+    <description>io.entgra.device.mgt.plugins.output.adapter.mqtt provides the back-end functionality of mqtt adaptor
     </description>
     <url>http://wso2.org</url>
 
@@ -112,7 +112,7 @@
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.output.adapter.mqtt.internal,
                             !io.entgra.device.mgt.plugins.output.adapter.mqtt.internal.*,
-                            org.wso2.carbon.device.mgt.output.adapter.mqtt.*,
+                            io.entgra.device.mgt.plugins.output.adapter.mqtt.*,
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.event.output.adapter.core,
