@@ -41,8 +41,11 @@
 					<encoding>UTF-8</encoding>
 					<source>${wso2.maven.compiler.source}</source>
 					<target>${wso2.maven.compiler.target}</target>
+					<compilerArgs>
+						<arg>--add-exports</arg><arg>java.base/sun.security.x509=ALL-UNNAMED</arg>
+					</compilerArgs>
 				</configuration>
-				<version>2.3.2</version>
+
 			</plugin>
 
 			<plugin>
@@ -84,7 +87,6 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 
 
@@ -92,45 +94,38 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-			<version>${jetty.version}</version>
 		</dependency>
 
 		<!--Dependency on MQTT Client Library-->
 		<dependency>
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-			<version>${paho.mqtt.version}</version>
 		</dependency>
 
 		<!--Dependencies on XMPP Client Library-->
 		<dependency>
 			<groupId>org.igniterealtime.smack.wso2</groupId>
 			<artifactId>smack</artifactId>
-			<version>${smack.wso2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.igniterealtime.smack.wso2</groupId>
 			<artifactId>smackx</artifactId>
-			<version>${smackx.wso2.version}</version>
 		</dependency>
 
 		<!--Dependency on BouncyCastle Library for SCEP-->
 		<dependency>
 			<groupId>org.bouncycastle.wso2</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
-			<version>${bcprov.wso2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle.wso2</groupId>
 			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>${bcpkix.wso2.version}</version>
 		</dependency>
 
 		<!--Dependency on WSO2 JSCEP Orbit-->
 		<dependency>
 			<groupId>com.google.code.jscep.wso2</groupId>
 			<artifactId>jscep</artifactId>
-			<version>${jscep.version}</version>
 		</dependency>
 
 		<dependency>
@@ -141,31 +136,26 @@
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>${commons-lang.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
-			<version>${common-logging.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>commons-io</groupId>
+			<groupId>commons-io.wso2</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>${commons.io}</version>
 		</dependency>
 
 		<!--Dependency on SLF4J - required by BouncyCastle-->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 
 		<dependency>
@@ -176,62 +166,61 @@
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
-			<version>1.10</version>
 		</dependency>
 
 
 	</dependencies>
 
 
-	<repositories>
-		<repository>
-			<id>wso2-nexus</id>
-			<name>WSO2 internal Repository</name>
-			<url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-				<checksumPolicy>ignore</checksumPolicy>
-			</releases>
-		</repository>
-		<repository>
-			<id>wso2-maven2-repository</id>
-			<url>http://dist.wso2.org/maven2</url>
-		</repository>
-	</repositories>
+<!--	<repositories>-->
+<!--		<repository>-->
+<!--			<id>wso2-nexus</id>-->
+<!--			<name>WSO2 internal Repository</name>-->
+<!--			<url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>-->
+<!--			<releases>-->
+<!--				<enabled>true</enabled>-->
+<!--				<updatePolicy>daily</updatePolicy>-->
+<!--				<checksumPolicy>ignore</checksumPolicy>-->
+<!--			</releases>-->
+<!--		</repository>-->
+<!--		<repository>-->
+<!--			<id>wso2-maven2-repository</id>-->
+<!--			<url>http://dist.wso2.org/maven2</url>-->
+<!--		</repository>-->
+<!--	</repositories>-->
 
-	<properties>
+<!--	<properties>-->
 
-		<!-- Java Version Compatibility -->
-		<wso2.maven.compiler.source>1.7</wso2.maven.compiler.source>
-		<wso2.maven.compiler.target>1.7</wso2.maven.compiler.target>
+<!--		&lt;!&ndash; Java Version Compatibility &ndash;&gt;-->
+<!--		<wso2.maven.compiler.source>17</wso2.maven.compiler.source>-->
+<!--		<wso2.maven.compiler.target>17</wso2.maven.compiler.target>-->
 
-		<!-- Jetty Server Version -->
-		<jetty.version>8.1.3.v20120416</jetty.version>
+<!--		&lt;!&ndash; Jetty Server Version &ndash;&gt;-->
+<!--		<jetty.version>8.1.3.v20120416</jetty.version>-->
 
-		<!-- MQTT Paho Version -->
-		<paho.mqtt.version>1.0.2</paho.mqtt.version>
+<!--		&lt;!&ndash; MQTT Paho Version &ndash;&gt;-->
+<!--		<paho.mqtt.version>1.0.2</paho.mqtt.version>-->
 
-		<!-- Jivesoftware XMPP Version -->
-		<smack.wso2.version>3.0.4.wso2v1</smack.wso2.version>
-		<smackx.wso2.version>3.0.4.wso2v1</smackx.wso2.version>
+<!--		&lt;!&ndash; Jivesoftware XMPP Version &ndash;&gt;-->
+<!--		<smack.wso2.version>3.0.4.wso2v1</smack.wso2.version>-->
+<!--		<smackx.wso2.version>3.0.4.wso2v1</smackx.wso2.version>-->
 
-		<!-- BouncyCastle Version -->
-		<bcprov.wso2.version>1.49.wso2v1</bcprov.wso2.version>
-		<bcpkix.wso2.version>1.49.wso2v1</bcpkix.wso2.version>
+<!--		&lt;!&ndash; BouncyCastle Version &ndash;&gt;-->
+<!--		<bcprov.wso2.version>1.49.wso2v1</bcprov.wso2.version>-->
+<!--		<bcpkix.wso2.version>1.49.wso2v1</bcpkix.wso2.version>-->
 
-		<!-- WSO2 JSCEP Orbit Version -->
-		<jscep.version>2.0.2.wso2v2</jscep.version>
+<!--		&lt;!&ndash; WSO2 JSCEP Orbit Version &ndash;&gt;-->
+<!--		<jscep.version>2.0.2.wso2v2</jscep.version>-->
 
-		<!-- Commons Libraries -->
-		<log4j.version>1.2.17</log4j.version>
-		<common-logging.version>1.2</common-logging.version>
-		<commons.io>2.4</commons.io>
-		<commons-codec.version>1.7</commons-codec.version>
-		<commons-lang.version>2.6</commons-lang.version>
+<!--		&lt;!&ndash; Commons Libraries &ndash;&gt;-->
+<!--		<log4j.version>1.2.17</log4j.version>-->
+<!--		<common-logging.version>1.2</common-logging.version>-->
+<!--		<commons.io>2.4</commons.io>-->
+<!--		<commons-codec.version>1.7</commons-codec.version>-->
+<!--		<commons-lang.version>2.6</commons-lang.version>-->
 
-		<!-- SLF4J Version -->
-		<slf4j.version>1.7.13</slf4j.version>
-	</properties>
+<!--		&lt;!&ndash; SLF4J Version &ndash;&gt;-->
+<!--		<slf4j.version>1.7.13</slf4j.version>-->
+<!--	</properties>-->
 
 </project>
