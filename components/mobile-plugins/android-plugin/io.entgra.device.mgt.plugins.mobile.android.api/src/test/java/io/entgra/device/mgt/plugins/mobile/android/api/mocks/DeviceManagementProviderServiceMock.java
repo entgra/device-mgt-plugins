@@ -41,6 +41,7 @@ import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceTransferRequest;
 import io.entgra.device.mgt.core.device.mgt.common.DynamicTaskContext;
 import io.entgra.device.mgt.core.device.mgt.common.StartupOperationConfig;
+import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
 import io.entgra.device.mgt.core.device.mgt.common.app.mgt.ApplicationManagementException;
 import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
 import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.ConfigurationEntry;
@@ -860,6 +861,26 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public Boolean sendDeviceNameChangedNotification(Device device) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public void saveApplicationIcon(String s, String s1, String s2, int i) throws DeviceManagementException {
+
+    }
+
+    @Override
+    public void updateApplicationIcon(String s, String s1, String s2, String s3) throws DeviceManagementException {
+
+    }
+
+    @Override
+    public void deleteApplicationIcon(String s) throws DeviceManagementException {
+
+    }
+
+    @Override
+    public List<Application> getInstalledApplicationsOnDevice(Device device, int i, int i1) throws DeviceManagementException {
         return null;
     }
 }
