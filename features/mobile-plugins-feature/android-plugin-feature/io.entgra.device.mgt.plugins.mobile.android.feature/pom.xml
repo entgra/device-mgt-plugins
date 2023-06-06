@@ -142,45 +142,6 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-dependency-plugin</artifactId>-->
-                <!--<version>2.10</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>unpack</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>unpack</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<artifactItems>-->
-                                <!--<artifactItem>-->
-                                    <!--<groupId>junit</groupId>-->
-                                    <!--<artifactId>junit</artifactId>-->
-                                    <!--<type>jar</type>-->
-                                    <!--<overWrite>false</overWrite>-->
-                                    <!--<outputDirectory>${project.build.directory}/alternateLocation</outputDirectory>-->
-                                    <!--<destFileName>optional-new-name.jar</destFileName>-->
-                                    <!--<includes>**/*.class,**/*.xml</includes>-->
-                                    <!--<excludes>**/*test.class</excludes>-->
-                                <!--</artifactItem>-->
-                            <!--</artifactItems>-->
-                            <!--<includes>**/*.java</includes>-->
-                            <!--<excludes>**/*.properties</excludes>-->
-                            <!--<outputDirectory>${project.build.directory}/wars</outputDirectory>-->
-                            <!--<overWriteReleases>false</overWriteReleases>-->
-                            <!--<overWriteSnapshots>true</overWriteSnapshots>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-
-            <!--<fileSet>-->
-                <!--<directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/uuf-template-app/</directory>-->
-                <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm-web-agent</outputDirectory>-->
-            <!--</fileSet>-->
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -219,7 +180,6 @@
             <plugin>
                 <groupId>org.wso2.maven</groupId>
                 <artifactId>carbon-p2-plugin</artifactId>
-                <version>${carbon.p2.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>p2-feature-generation</id>
@@ -245,9 +205,7 @@
                                 </bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>
-                                    org.wso2.carbon.core.server:${carbon.kernel.version}
-                                </importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
                                 <importFeatureDef>
                                     io.entgra.device.mgt.core.device.mgt.server:${io.entgra.device.mgt.core.version}
                                 </importFeatureDef>

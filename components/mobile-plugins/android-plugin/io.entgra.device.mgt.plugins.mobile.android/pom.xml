@@ -38,10 +38,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-scr-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -55,27 +55,44 @@
                         <Bundle-Description>Device Management Mobile Android Impl Bundle</Bundle-Description>
                         <Private-Package>io.entgra.device.mgt.plugins.mobile.android.internal</Private-Package>
                         <Import-Package>
-                            org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
-                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
-                            org.apache.commons.logging,
-                            javax.xml,
-                            javax.xml.stream,
-                            javax.xml.bind.*,
-                            javax.sql,
-                            javax.xml.parsers; version=0.0.0,
-                            org.w3c.dom,
+                            com.google.gson;version="[2.9,3)",
+                            io.entgra.device.mgt.core.device.mgt.common;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.app.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.configuration.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.exceptions;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.general;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.invitation.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.license.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.operation.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.policy.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.policy.mgt.monitor;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.pull.notification;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.push.notification;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.spi;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.type.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.extensions.license.mgt.registry;version="[5.0,6)",
+                            io.entgra.device.mgt.plugins.mobile.android.impl.config.datasource,
+                            io.entgra.device.mgt.plugins.mobile.android.impl.dao,
+                            io.entgra.device.mgt.plugins.mobile.android.impl.dao.impl,
+                            io.entgra.device.mgt.plugins.mobile.android.impl.dao.util,
+                            io.entgra.device.mgt.plugins.mobile.android.impl.dto,
                             javax.naming,
-                            org.wso2.carbon.context,
-                            org.wso2.carbon.utils.*,
-                            io.entgra.device.mgt.core.device.mgt.common.*,
-                            org.wso2.carbon.ndatasource.core,
-                            io.entgra.device.mgt.core.policy.mgt.common.*,
-                            org.wso2.carbon.registry.core,
-                            org.wso2.carbon.registry.core.session,
-                            org.wso2.carbon.registry.core.service,
-                            org.wso2.carbon.registry.api,
-                            io.entgra.device.mgt.core.device.mgt.extensions.license.mgt.registry,
-                            com.google.gson.*
+                            javax.sql,
+                            javax.xml.bind;version="[0.0,1)",
+                            javax.xml.bind.annotation;version="[0.0,1)",
+                            javax.xml.bind.annotation.adapters;version="[0.0,1)",
+                            javax.xml.parsers,
+                            javax.xml.stream;version="[1.0,2)",
+                            org.apache.commons.logging;version="[1.2,2)",
+                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
+                            org.w3c.dom,
+                            org.wso2.carbon.context;version="[4.8,5)",
+                            org.wso2.carbon.ndatasource.core;version="[4.8,5)",
+                            org.wso2.carbon.registry.api;version="[1.0,2)",
+                            org.wso2.carbon.registry.core;version="[1.0,2)",
+                            org.wso2.carbon.registry.core.service;version="[1.0,2)",
+                            org.wso2.carbon.registry.core.session;version="[1.0,2)",
+                            org.wso2.carbon.utils;version="[4.8,5)"
                         </Import-Package>
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.mobile.android.internal,
@@ -115,12 +132,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.eclipse.osgi</groupId>
-            <artifactId>org.eclipse.osgi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.osgi</groupId>
-            <artifactId>org.eclipse.osgi.services</artifactId>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>

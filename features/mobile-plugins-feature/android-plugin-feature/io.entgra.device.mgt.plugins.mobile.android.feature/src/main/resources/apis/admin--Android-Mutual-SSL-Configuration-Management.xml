@@ -33,6 +33,6 @@
       </outSequence>
    </resource>
    <handlers>
-      <handler class="org.wso2.carbon.apimgt.handlers.AuthenticationHandler"/>
+      <handler class="org.wso2.carbon.apimgt.gateway.handlers.security.APIAuthenticationHandler"/>
    </handlers>
 </api>

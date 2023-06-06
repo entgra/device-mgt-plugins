@@ -25,28 +25,16 @@ import org.osgi.service.component.ComponentContext;
 import io.entgra.device.mgt.core.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.registry.core.service.RegistryService;
+import org.osgi.service.component.annotations.*;
 
-/**
- * @scr.component name="io.entgra.device.mgt.plugins.mobile.android.internal.AndroidDeviceManagementServiceComponent"
- * immediate="true"
- * @scr.reference name="org.wso2.carbon.ndatasource"
- * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setDataSourceService"
- * unbind="unsetDataSourceService"
- * @scr.reference name="registry.service"
- * interface="org.wso2.carbon.registry.core.service.RegistryService" cardinality="0..1"
- * policy="dynamic" bind="setRegistryService" unbind="unsetRegistryService"
- * <p>
- * Adding reference to API Manager Configuration service is an unavoidable hack to get rid of NPEs thrown while
- * initializing APIMgtDAOs attempting to register APIs programmatically. APIMgtDAO needs to be proper cleaned up
- * to avoid as an ideal fix
- */
+@Component(
+        name = "io.entgra.device.mgt.plugins.mobile.android.internal.AndroidDeviceManagementServiceComponent",
+        immediate = true)
 public class AndroidDeviceManagementServiceComponent {
 
     private static final Log log = LogFactory.getLog(AndroidDeviceManagementServiceComponent.class);
 
+    @Activate
     protected void activate(ComponentContext ctx) {
 
         if (log.isDebugEnabled()) {
@@ -64,6 +52,7 @@ public class AndroidDeviceManagementServiceComponent {
         }
     }
 
+    @Deactivate
     protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
             log.debug("De-activating Android Mobile Device Management Service Component");
@@ -78,6 +67,12 @@ public class AndroidDeviceManagementServiceComponent {
         }
     }
 
+    @Reference(
+            name = "datasource.service",
+            service = org.wso2.carbon.ndatasource.core.DataSourceService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetDataSourceService")
     protected void setDataSourceService(DataSourceService dataSourceService) {
         /* This is to avoid mobile device management component getting initialized before the underlying datasources
         are registered */
@@ -90,6 +85,12 @@ public class AndroidDeviceManagementServiceComponent {
         //do nothing
     }
 
+    @Reference(
+            name = "registry.service",
+            service = org.wso2.carbon.registry.core.service.RegistryService.class,
+            cardinality = ReferenceCardinality.OPTIONAL,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRegistryService")
     protected void setRegistryService(RegistryService registryService) {
         if (log.isDebugEnabled()) {
             log.debug("RegistryService acquired");

@@ -1189,6 +1189,11 @@
                 <artifactId>httpasyncclient</artifactId>
                 <version>4.1</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+                <version>${apache.felix.scr.ds.annotations.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1389,6 +1394,8 @@
         <grpc.version>1.51.0</grpc.version>
         <tomcat-annotations-api>6.0.53</tomcat-annotations-api>
         <commons-lang-wso2>2.6.0.wso2v1</commons-lang-wso2>
+        <apache.felix.scr.ds.annotations.version>1.2.4</apache.felix.scr.ds.annotations.version>
+
     </properties>
 
     <scm>
@@ -1427,8 +1434,8 @@
                 <version>3.8.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -1453,6 +1460,11 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.4.0</version>
             </plugin>
+            <plugin>
+                <groupId>org.wso2.maven</groupId>
+                <artifactId>carbon-p2-plugin</artifactId>
+                <version>${carbon.p2.plugin.version}</version>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -1472,7 +1484,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>5.1.1</version>
+                    <version>3.2.0</version>
                     <extensions>true</extensions>
                     <configuration>
                         <obrRepository>NONE</obrRepository>
