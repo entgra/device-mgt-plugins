@@ -30,7 +30,7 @@
     <artifactId>iot-analytics</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - IoT Analytics Scripts</name>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <modules>
 <!--        <module>org.wso2.carbon.iot.geo.dashboard</module>-->

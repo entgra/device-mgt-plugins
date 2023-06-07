@@ -23,19 +23,15 @@ import org.osgi.service.component.ComponentContext;
 import io.entgra.device.mgt.plugins.output.adapter.http.HTTPEventAdapterFactory;
 import org.wso2.carbon.event.output.adapter.core.OutputEventAdapterFactory;
 import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
+import org.osgi.service.component.annotations.*;
 
-/**
- * @scr.component component.name="output.Http.AdapterService.component" immediate="true"
- * @scr.reference name="jwt.client.service" interface="io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setJWTClientManagerService"
- * unbind="unsetJWTClientManagerService"
- */
+@Component(
+        name = "io.entgra.device.mgt.plugins.output.adapter.http.internal.HTTPEventAdapterServiceComponent",
+        immediate = true)
 public class HTTPEventAdapterServiceComponent {
 
     private static final Log log = LogFactory.getLog(HTTPEventAdapterServiceComponent.class);
-
+    @Activate
     protected void activate(ComponentContext context) {
         try {
             HTTPEventAdapterFactory httpEventAdaptorFactory = new HTTPEventAdapterFactory();
@@ -49,6 +45,12 @@ public class HTTPEventAdapterServiceComponent {
         }
     }
 
+    @Reference(
+            name = "jwt.client.manager.service",
+            service = io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetJWTClientManagerService")
     protected void setJWTClientManagerService(JWTClientManagerService jwtClientManagerService) {
         OutputAdapterServiceDataHolder.setJwtClientManagerService(jwtClientManagerService);
     }

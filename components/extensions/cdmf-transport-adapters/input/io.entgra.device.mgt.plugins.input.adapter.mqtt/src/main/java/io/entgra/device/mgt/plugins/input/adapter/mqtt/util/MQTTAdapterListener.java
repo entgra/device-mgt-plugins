@@ -35,7 +35,7 @@ import org.wso2.carbon.core.multitenancy.utils.TenantAxisUtils;
 import io.entgra.device.mgt.plugins.input.adapter.extension.ContentInfo;
 import io.entgra.device.mgt.plugins.input.adapter.extension.ContentTransformer;
 import io.entgra.device.mgt.plugins.input.adapter.extension.ContentValidator;
-import io.entgra.device.mgt.plugins.input.adapter.mqtt.InputAdapterServiceDataHolder;
+import io.entgra.device.mgt.plugins.input.adapter.mqtt.internal.InputAdapterServiceDataHolder;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterConfiguration;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterListener;
 import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterRuntimeException;

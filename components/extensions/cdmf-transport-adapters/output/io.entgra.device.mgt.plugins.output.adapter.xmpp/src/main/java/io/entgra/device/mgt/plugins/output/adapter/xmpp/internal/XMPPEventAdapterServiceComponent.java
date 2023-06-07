@@ -22,11 +22,11 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
 import io.entgra.device.mgt.plugins.output.adapter.xmpp.XMPPEventAdapterFactory;
 import org.wso2.carbon.event.output.adapter.core.OutputEventAdapterFactory;
+import org.osgi.service.component.annotations.*;
 
-
-/**
- * @scr.component component.name="output.XMPP.AdapterService.component" immediate="true"
- */
+@Component(
+        name = "io.entgra.device.mgt.plugins.output.adapter.xmpp.internal.XMPPEventAdapterServiceComponent",
+        immediate = true)
 public class XMPPEventAdapterServiceComponent {
 
     private static final Log log = LogFactory.getLog(XMPPEventAdapterServiceComponent.class);
@@ -35,6 +35,7 @@ public class XMPPEventAdapterServiceComponent {
      * Deployment of the XMPP event adapter service will be done.
      * @param context bundle context where service is registered
      */
+    @Activate
     protected void activate(ComponentContext context) {
         try {
             OutputEventAdapterFactory xmppEventAdapterFactory = new XMPPEventAdapterFactory();

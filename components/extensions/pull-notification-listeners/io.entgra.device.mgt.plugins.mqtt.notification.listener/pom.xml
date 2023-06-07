@@ -32,9 +32,14 @@
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - MQTT Pull Notification Listener Implementation</name>
     <description>WSO2 Carbon - MQTT Pull Notification Lister Implementation</description>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>io.entgra.device.mgt.core</groupId>
             <artifactId>io.entgra.device.mgt.core.device.mgt.common</artifactId>
@@ -48,14 +53,6 @@
             <artifactId>org.wso2.carbon.event.input.adapter.core</artifactId>
         </dependency>
 		<dependency>
-			<groupId>org.eclipse.osgi</groupId>
-			<artifactId>org.eclipse.osgi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.osgi</groupId>
-			<artifactId>org.eclipse.osgi.services</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>io.entgra.device.mgt.plugins</groupId>
 			<artifactId>io.entgra.device.mgt.plugins.input.adapter.extension</artifactId>
 		</dependency>
@@ -68,8 +65,12 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-scr-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -86,21 +87,23 @@
                             io.entgra.device.mgt.plugins.mqtt.notification.listener.*
                         </Export-Package>
                         <Import-Package>
+                            com.google.gson;version="[2.9,3)",
+                            io.entgra.device.mgt.core.device.mgt.common;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.exceptions;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.operation.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.pull.notification;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.core.config;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.core.config.pull.notification;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.core.service;version="[5.0,6)",
+                            io.entgra.device.mgt.plugins.input.adapter.extension;version="[6.0,7)",
+                            org.apache.commons.logging;version="[1.2,2)",
                             org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
                             org.osgi.service.*;version="${imp.package.version.osgi.service}",
-                            org.apache.commons.logging,
-                            io.entgra.device.mgt.core.device.mgt.common.*,
-                            io.entgra.device.mgt.core.device.mgt.core.service,
-							com.google.gson,
-							org.wso2.carbon.context,
-                            io.entgra.device.mgt.plugins.input.adapter.extension,
-							org.wso2.carbon.event.input.adapter.core,
-							org.wso2.carbon.event.input.adapter.core.exception,
-							org.wso2.carbon.user.api,
-							org.wso2.carbon.core,
-							io.entgra.device.mgt.core.device.mgt.core.config,
-							io.entgra.device.mgt.core.device.mgt.core.config.pull.notification,
-							org.wso2.carbon.utils.multitenancy
+                            org.wso2.carbon.context;version="[4.8,5)",
+                            org.wso2.carbon.core;version="[4.8,5)",
+                            org.wso2.carbon.event.input.adapter.core;version="[5.3,6)",
+                            org.wso2.carbon.event.input.adapter.core.exception;version="[5.3,6)",
+                            org.wso2.carbon.user.api;version="[1.0,2)"
                         </Import-Package>
                     </instructions>
                 </configuration>

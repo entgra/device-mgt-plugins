@@ -24,14 +24,15 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.core.ServerShutdownHandler;
 import org.wso2.carbon.core.ServerStartupObserver;
+import org.osgi.service.component.annotations.*;
 
-/**
- * @scr.component name="io.entgra.device.mgt.plugins.emqx.initializer.internal.EmqxExhookServiceComponent"
- * immediate="true"
- */
+@Component(
+        name = "io.entgra.device.mgt.plugins.emqx.initializer.internal.EmqxExhookServiceComponent",
+        immediate = true)
 public class EmqxExhookServiceComponent {
     private static final Log log = LogFactory.getLog(EmqxExhookServiceComponent.class);
 
+    @Activate
     protected void activate(ComponentContext ctx) {
         try {
 
@@ -50,6 +51,7 @@ public class EmqxExhookServiceComponent {
 
     }
 
+    @Deactivate
     protected void deactivate(ComponentContext ctx) {
         try {
             if (log.isDebugEnabled()) {

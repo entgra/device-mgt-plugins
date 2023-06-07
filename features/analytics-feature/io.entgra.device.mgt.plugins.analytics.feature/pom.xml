@@ -31,63 +31,11 @@
     <artifactId>io.entgra.device.mgt.plugins.analytics.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - IoT Server Analytics Feature</name>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
     <description>This feature contains the Analytics Script for the IoT Server</description>
 
     <build>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-dependency-plugin</artifactId>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>unpack</id>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>unpack</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <artifactItems>-->
-<!--                                <artifactItem>-->
-<!--                                    <groupId>io.entgra.device.mgt.plugins</groupId>-->
-<!--                                    <artifactId>io.entgra.device.mgt.plugins.iot.analytics</artifactId>-->
-<!--                                    <version>${project.version}</version>-->
-<!--                                    <type>zip</type>-->
-<!--                                    <overWrite>true</overWrite>-->
-<!--                                    <outputDirectory>-->
-<!--                                        ${project.build.directory}/maven-shared-archive-resources/carbonapps-->
-<!--                                    </outputDirectory>-->
-<!--                                    <includes>**/*</includes>-->
-<!--                                </artifactItem>-->
-<!--                            </artifactItems>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-<!--            <plugin>-->
-<!--                <artifactId>maven-resources-plugin</artifactId>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>copy-resources</id>-->
-<!--                        <phase>generate-resources</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>copy-resources</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <outputDirectory>src/main/resources</outputDirectory>-->
-<!--                            <resources>-->
-<!--                                <resource>-->
-<!--                                    <directory>resources</directory>-->
-<!--                                    <includes>-->
-<!--                                        <include>build.properties</include>-->
-<!--                                        <include>p2.inf</include>-->
-<!--                                    </includes>-->
-<!--                                </resource>-->
-<!--                            </resources>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
             <plugin>
                 <groupId>org.wso2.maven</groupId>
                 <artifactId>carbon-p2-plugin</artifactId>

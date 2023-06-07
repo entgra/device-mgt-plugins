@@ -30,7 +30,7 @@
 	<packaging>war</packaging>
 	<name>WSO2 Carbon - IoT Server VirtualFireAlarm API</name>
 	<description>WSO2 Carbon - Virtual FireAlarm Service Management API Implementation</description>
-	<url>http://wso2.org</url>
+	<url>http://entgra.io</url>
 
 
 
@@ -209,11 +209,6 @@
 			<artifactId>io.entgra.device.mgt.core.apimgt.application.extension</artifactId>
 			<scope>provided</scope>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.wso2.carbon.analytics</groupId>-->
-<!--			<artifactId>org.wso2.carbon.analytics.api</artifactId>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>io.entgra.device.mgt.core</groupId>
 			<artifactId>io.entgra.device.mgt.core.device.mgt.extensions</artifactId>
@@ -299,14 +294,11 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<source>${wso2.maven.compiler.source}</source>
-					<target>${wso2.maven.compiler.target}</target>
-				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<warName>virtual_firealarm</warName>

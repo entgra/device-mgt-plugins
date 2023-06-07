@@ -28,13 +28,18 @@
     <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.device</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Siddhi Execution Extension - Device management Core functionality as Siddhi extension</name>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <properties>
         <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>io.entgra.device.mgt.core</groupId>
             <artifactId>io.entgra.device.mgt.core.device.mgt.core</artifactId>
@@ -148,8 +153,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${wso2.maven.compiler.source}</source>
-                    <target>${wso2.maven.compiler.target}</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -165,35 +170,71 @@
                             io.entgra.device.mgt.plugins.extension.siddhi.device.*
                         </Export-Package>
                         <Import-Package>
-                            feign,
-                            feign.codec,
-                            feign.auth,
-                            feign.gson,
-                            feign.slf4j,
+<!--                            android.net.http,-->
+<!--                            android.net.ssl,-->
+<!--                            android.os,-->
+<!--                            android.security,-->
+<!--                            android.util,-->
+                            feign;version="[11.0,12)",
+                            feign.auth;version="[11.0,12)",
+                            feign.codec;version="[11.0,12)",
+                            feign.gson;version="[11.0,12)",
+                            feign.slf4j;version="[11.0,12)",
+                            io.entgra.device.mgt.core.device.mgt.common;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.exceptions;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.group.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.notification.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common.operation.mgt;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.core.service;version="[5.0,6)",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension;version="[5.0,6)",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.dto;version="[5.0,6)",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="[5.0,6)",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="[5.0,6)",
+                            io.entgra.device.mgt.plugins.extension.siddhi.device.client.configs,
+                            io.entgra.device.mgt.plugins.extension.siddhi.device.client.dto,
+                            io.entgra.device.mgt.plugins.extension.siddhi.device.client.exception,
+                            javax.annotation;version="[1.0,2)",
+                            javax.crypto,javax.crypto.spec,
+                            javax.net,
                             javax.net.ssl,
-                            javax.xml,
-                            javax.xml.bind,
-                            javax.xml.bind.annotation,
-                            javax.xml.parsers;resolution:=optional,
-                            org.apache.commons.lang,
+                            javax.security.auth.x500,javax.xml.bind;version="[0.0,1)",
+                            javax.xml.bind.annotation;version="[0.0,1)",
+                            javax.xml.parsers,
+<!--                            kotlin;resolution:=optional,-->
+<!--                            kotlin.*;resolution:=optional,-->
+<!--                            kotlin,-->
+<!--                            kotlin.annotation,-->
+<!--                            kotlin.collections,-->
+<!--                            kotlin.comparisons,-->
+<!--                            kotlin.io,-->
+<!--                            kotlin.jvm,-->
+<!--                            kotlin.jvm.functions,-->
+<!--                            kotlin.jvm.internal,-->
+<!--                            kotlin.jvm.internal.markers,-->
+<!--                            kotlin.ranges,-->
+<!--                            kotlin.reflect,-->
+<!--                            kotlin.sequences,-->
+<!--                            kotlin.text,-->
+                            org.apache.commons.lang;version="[2.6,3)",
+                            org.apache.commons.logging;version="[1.2,2)",
+<!--                            org.bouncycastle.jsse;version="[1.70,2)",-->
+<!--                            org.bouncycastle.jsse.provider;version="[1.70,2)",-->
+<!--                            org.conscrypt,-->
+                            org.json;version="[3.0,4)",
+<!--                            org.openjsse.javax.net.ssl,-->
+<!--                            org.openjsse.net.ssl,-->
                             org.w3c.dom,
-                            org.wso2.carbon.base,
-                            org.wso2.carbon.utils,
-                            org.wso2.carbon.user.api,
-                            org.json;version="${orbit.version.json.range}",
-                            org.wso2.siddhi.core.*,
-                            org.wso2.siddhi.query.api.*,
-                            io.entgra.device.mgt.core.device.mgt.core.*,
-                            io.entgra.device.mgt.core.device.mgt.common.*,
-                            io.entgra.device.mgt.core.identity.jwt.client.*,
-                            org.apache.commons.logging,
-                            org.wso2.carbon.context,
-                            android.util;resolution:=optional,
-                            javax.annotation;resolution:=optional,
-                            javax.net;resolution:=optional,
-                            javax.security.auth.x500;resolution:=optional,
-                            javax.crypto;resolution:=optional,
-                            javax.crypto.spec;resolution:=optional
+                            org.wso2.carbon.base;version="[1.0,2)",
+                            org.wso2.carbon.context;version="[4.8,5)",
+                            org.wso2.carbon.user.api;version="[1.0,2)",
+                            org.wso2.carbon.utils;version="[4.8,5)",
+                            org.wso2.siddhi.core.config;version="[3.2,4)",
+                            org.wso2.siddhi.core.exception;version="[3.2,4)",
+                            org.wso2.siddhi.core.executor;version="[3.2,4)",
+                            org.wso2.siddhi.core.executor.function;version="[3.2,4)",
+                            org.wso2.siddhi.core.query.processor.stream.function;version="[3.2,4)",
+                            org.wso2.siddhi.query.api.definition;version="[3.2,4)",
+                            org.wso2.siddhi.query.api.exception;version="[3.2,4)"
                         </Import-Package>
                         <Embed-Dependency>
                             jsr311-api,

@@ -21,34 +21,23 @@ import io.entgra.device.mgt.plugins.input.adapter.http.HTTPEventAdapterFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.http.HttpService;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterFactory;
 import org.wso2.carbon.user.core.service.RealmService;
 import io.entgra.device.mgt.plugins.input.adapter.extension.*;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.*;
 
-/**
- * @scr.component name="input.iot.http.AdapterService.component" immediate="true"
- * @scr.reference name="user.realmservice.default"
- * interface="org.wso2.carbon.user.core.service.RealmService" cardinality="1..1"
- * policy="dynamic"
- * bind="setRealmService"
- * unbind="unsetRealmService"
- * @scr.reference name="http.service" interface="org.osgi.service.http.HttpService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setHttpService"
- * unbind="unsetHttpService"
- * @scr.reference name="input.extension.service" interface="io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensionService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setInputAdapterExtensionService"
- * unbind="unsetInputAdapterExtensionService"
- */
+@Component(
+		name = "io.entgra.device.mgt.plugins.input.adapter.http.internal.InputAdapterServiceComponent",
+		immediate = true)
 public class InputAdapterServiceComponent {
 
 	private static final Log log = LogFactory.getLog(
 			InputAdapterServiceComponent.class);
 
+	@Activate
 	protected void activate(ComponentContext context) {
 		try {
 			InputEventAdapterFactory httpEventEventAdapterFactory = new HTTPEventAdapterFactory();
@@ -62,6 +51,12 @@ public class InputAdapterServiceComponent {
 		}
 	}
 
+	@Reference(
+			name = "realm.service",
+			service = org.wso2.carbon.user.core.service.RealmService.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.DYNAMIC,
+			unbind = "unsetRealmService")
 	protected void setRealmService(RealmService realmService) {
 		InputAdapterServiceDataHolder.registerRealmService(realmService);
 	}
@@ -70,6 +65,12 @@ public class InputAdapterServiceComponent {
 		InputAdapterServiceDataHolder.registerRealmService(null);
 	}
 
+	@Reference(
+			name = "http.service",
+			service = org.osgi.service.http.HttpService.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.DYNAMIC,
+			unbind = "unsetHttpService")
 	protected void setHttpService(HttpService httpService) {
 		InputAdapterServiceDataHolder.registerHTTPService(httpService);
 	}
@@ -78,6 +79,12 @@ public class InputAdapterServiceComponent {
 		InputAdapterServiceDataHolder.registerHTTPService(null);
 	}
 
+	@Reference(
+			name = "input.adaptor.extension.service",
+			service = io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensionService.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.DYNAMIC,
+			unbind = "unsetInputAdapterExtensionService")
     protected void setInputAdapterExtensionService(InputAdapterExtensionService inputAdapterExtensionService) {
         InputAdapterServiceDataHolder.setInputAdapterExtensionService(inputAdapterExtensionService);
     }

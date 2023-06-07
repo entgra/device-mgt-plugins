@@ -29,27 +29,18 @@ import io.entgra.device.mgt.plugins.input.adapter.extension.transformer.MQTTCont
 import io.entgra.device.mgt.plugins.input.adapter.extension.validator.DefaultContentValidator;
 import io.entgra.device.mgt.plugins.input.adapter.extension.validator.HTTPContentValidator;
 import io.entgra.device.mgt.plugins.input.adapter.extension.validator.MQTTContentValidator;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.*;
 
-/**
- * @scr.component name="input.adapter.extension.adapterService.component" immediate="true"
- * @scr.reference name="InputAdapterServiceComponent.content.validator.service"
- * interface="io.entgra.device.mgt.plugins.input.adapter.extension.ContentValidator"
- * cardinality="0..n"
- * policy="dynamic"
- * bind="setContentValidator"
- * unbind="unsetContentValidator"
- * @scr.reference name="InputAdapterServiceComponent.transformer.service"
- * interface="io.entgra.device.mgt.plugins.input.adapter.extension.ContentTransformer"
- * cardinality="0..n"
- * policy="dynamic"
- * bind="setContentTransformer"
- * unbind="unsetContentTransformer"
- */
+@Component(
+        name = "io.entgra.device.mgt.plugins.input.adapter.extension.internal.InputAdapterServiceComponent",
+        immediate = true)
 public class InputAdapterServiceComponent {
 
 	private static final Log log = LogFactory.getLog(
 			InputAdapterServiceComponent.class);
 
+    @Activate
 	protected void activate(ComponentContext context) {
 		try {
 			if (log.isDebugEnabled()) {
@@ -69,6 +60,12 @@ public class InputAdapterServiceComponent {
         }
     }
 
+    @Reference(
+            name = "content.validator.extension",
+            service = io.entgra.device.mgt.plugins.input.adapter.extension.ContentValidator.class,
+            cardinality = ReferenceCardinality.MULTIPLE,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetContentValidator")
     protected void setContentValidator(ContentValidator contentValidator) {
         if (log.isDebugEnabled()) {
             log.debug("Setting ContentValidator Service");
@@ -82,6 +79,12 @@ public class InputAdapterServiceComponent {
         }
     }
 
+    @Reference(
+            name = "content.transformer.extension",
+            service = io.entgra.device.mgt.plugins.input.adapter.extension.ContentTransformer.class,
+            cardinality = ReferenceCardinality.MULTIPLE,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetContentTransformer")
     protected void setContentTransformer(ContentTransformer contentTransformer) {
         if (log.isDebugEnabled()) {
             log.debug("Setting contentTransformer Service");

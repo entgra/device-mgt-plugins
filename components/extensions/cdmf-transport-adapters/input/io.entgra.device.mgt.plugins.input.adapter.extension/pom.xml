@@ -29,26 +29,22 @@
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Device Mgt Input Adaptor Extensions Module</name>
     <description>Provides the back-end functionality of Input adaptor</description>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <build>
         <plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-scr-plugin</artifactId>
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>generate-scr-descriptor</id>-->
-<!--						<goals>-->
-<!--							<goal>scr</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--				</executions>-->
-			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -66,12 +62,16 @@
 							!io.entgra.device.mgt.plugins.input.adapter.extension.internal,
 						</Export-Package>
 						<Import-Package>
-							org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
-							org.osgi.service.*;version="${imp.package.version.osgi.service}",
-							com.jayway.jsonpath,
-							org.apache.commons.logging,
+							com.jayway.jsonpath;version="[0.9,1)",
+							io.entgra.device.mgt.plugins.input.adapter.extension,
+							io.entgra.device.mgt.plugins.input.adapter.extension.internal,
+							io.entgra.device.mgt.plugins.input.adapter.extension.transformer,
+							io.entgra.device.mgt.plugins.input.adapter.extension.validator,
+							org.apache.commons.logging;version="[1.2,2)",
 							org.json.simple,
-							org.json.simple.parser
+							org.json.simple.parser,
+							org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
+							org.osgi.service.*;version="${imp.package.version.osgi.service}"
 						</Import-Package>
 					</instructions>
 				</configuration>
@@ -107,6 +107,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.ops4j.pax.logging</groupId>
 			<artifactId>pax-logging-api</artifactId>
 		</dependency>
@@ -117,14 +122,6 @@
 		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.osgi</groupId>
-			<artifactId>org.eclipse.osgi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.osgi</groupId>
-			<artifactId>org.eclipse.osgi.services</artifactId>
 		</dependency>
 	</dependencies>
 </project>

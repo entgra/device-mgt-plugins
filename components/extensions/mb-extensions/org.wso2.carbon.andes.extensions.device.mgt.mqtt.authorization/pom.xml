@@ -31,7 +31,7 @@
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Component - MQTT - Authorization Manager</name>
     <description>MQTT authorization manager based on Carbon device manager</description>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <dependencies>
         <dependency>

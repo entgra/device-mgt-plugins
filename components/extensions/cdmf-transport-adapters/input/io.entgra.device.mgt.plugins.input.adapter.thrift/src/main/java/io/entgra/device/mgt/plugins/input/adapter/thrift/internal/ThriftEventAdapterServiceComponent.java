@@ -34,19 +34,11 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.osgi.service.component.annotations.*;
 
-/**
- * @scr.component name="input.iot.thrift.AdapterService.component" immediate="true"
- * @scr.reference name="agentserverservice.service"
- * interface="org.wso2.carbon.databridge.core.DataBridgeSubscriberService" cardinality="1..1"
- * policy="dynamic" bind="setDataBridgeSubscriberService" unbind="unSetDataBridgeSubscriberService"
- * @scr.reference name="config.context.service"
- * interface="org.wso2.carbon.utils.ConfigurationContextService"
- * cardinality="1..1" policy="dynamic" bind="setConfigurationContextService"
- * unbind="unsetConfigurationContextService"
- */
-
-
+@Component(
+        name = "io.entgra.device.mgt.plugins.input.adapter.thrift.internal.ThriftEventAdapterServiceComponent",
+        immediate = true)
 public class ThriftEventAdapterServiceComponent {
 
     private static final Log log = LogFactory.getLog(ThriftEventAdapterServiceComponent.class);
@@ -58,6 +50,7 @@ public class ThriftEventAdapterServiceComponent {
      */
 
 
+    @Activate
     protected void activate(ComponentContext context) {
 
         try {
@@ -71,6 +64,12 @@ public class ThriftEventAdapterServiceComponent {
         }
     }
 
+    @Reference(
+            name = "data.bridge.subscriber..service",
+            service = org.wso2.carbon.databridge.core.DataBridgeSubscriberService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unSetDataBridgeSubscriberService")
     protected void setDataBridgeSubscriberService(
             DataBridgeSubscriberService dataBridgeSubscriberService) {
         if (ThriftEventAdapterServiceHolder.getDataBridgeSubscriberService() == null) {
@@ -122,7 +121,12 @@ public class ThriftEventAdapterServiceComponent {
             DataBridgeSubscriberService dataBridgeSubscriberService) {
 
     }
-
+    @Reference(
+            name = "configuration.context.service",
+            service = org.wso2.carbon.utils.ConfigurationContextService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetConfigurationContextService")
     protected void setConfigurationContextService(ConfigurationContextService contextService) {
         ConfigurationContext serverConfigContext = contextService.getServerConfigContext();
         ThriftEventAdapterServiceHolder.setConfigurationContext(serverConfigContext);

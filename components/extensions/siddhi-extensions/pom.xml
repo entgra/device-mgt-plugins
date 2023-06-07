@@ -30,30 +30,11 @@
     <artifactId>siddhi-extensions</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Siddhi Extension</name>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <modules>
         <module>io.entgra.device.mgt.plugins.extension.siddhi.device</module>
         <module>io.entgra.device.mgt.plugins.extension.siddhi.execution.json</module>
     </modules>
 
-<!--    <build>-->
-<!--        <pluginManagement>-->
-<!--            <plugins>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.felix</groupId>-->
-<!--                    <artifactId>maven-scr-plugin</artifactId>-->
-<!--                    <version>1.7.2</version>-->
-<!--                    <executions>-->
-<!--                        <execution>-->
-<!--                            <id>generate-scr-scrdescriptor</id>-->
-<!--                            <goals>-->
-<!--                                <goal>scr</goal>-->
-<!--                            </goals>-->
-<!--                        </execution>-->
-<!--                    </executions>-->
-<!--                </plugin>-->
-<!--            </plugins>-->
-<!--        </pluginManagement>-->
-<!--    </build>-->
 </project>

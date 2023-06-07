@@ -28,9 +28,14 @@
     <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.execution.json</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Siddhi Execution Extension - Json</name>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.wso2.siddhi</groupId>
             <artifactId>siddhi-core</artifactId>
@@ -60,8 +65,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${wso2.maven.compiler.source}</source>
-                    <target>${wso2.maven.compiler.target}</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -77,9 +82,13 @@
                             io.entgra.device.mgt.plugins.extension.siddhi.execution.json.*
                         </Export-Package>
                         <Import-Package>
-                            org.json;version="${orbit.version.json.range}",
-                            org.wso2.siddhi.core.*,
-                            org.wso2.siddhi.query.api.*,
+                            org.json;version="[3.0,4)",
+                            org.wso2.siddhi.core.config;version="[3.2,4)",
+                            org.wso2.siddhi.core.exception;version="[3.2,4)",
+                            org.wso2.siddhi.core.executor;version="[3.2,4)",
+                            org.wso2.siddhi.core.executor.function;version="[3.2,4)",
+                            org.wso2.siddhi.query.api.definition;version="[3.2,4)",
+                            org.wso2.siddhi.query.api.exception;version="[3.2,4)"
                         </Import-Package>
                     </instructions>
                 </configuration>

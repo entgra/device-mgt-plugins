@@ -29,25 +29,16 @@ import io.entgra.device.mgt.plugins.mqtt.notification.listener.PullNotificationM
 import io.entgra.device.mgt.plugins.mqtt.notification.listener.PullNotificationStartupListener;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
 
-/**
- * @scr.component name="io.entgra.device.mgt.plugins.mqtt.notification.listener.internal.PullNotificationListenerServiceComponent" immediate="true"
- * @scr.reference name="carbon.device.mgt.provider"
- * interface="io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setDeviceManagementProviderService"
- * unbind="unsetDeviceManagementProviderService"
- * @scr.reference name="event.input.adapter.service"
- * interface="org.wso2.carbon.event.input.adapter.core.InputEventAdapterService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setInputEventAdapterService"
- * unbind="unsetInputEventAdapterService"
- */
+import org.osgi.service.component.annotations.*;
+
+@Component(
+        name = "io.entgra.device.mgt.plugins.mqtt.notification.listener.internal.PullNotificationListenerServiceComponent",
+        immediate = true)
 public class PullNotificationListenerServiceComponent {
 
     private static final Log log = LogFactory.getLog(PullNotificationListenerServiceComponent.class);
 
+    @Activate
     @SuppressWarnings("unused")
     protected void activate(ComponentContext componentContext) {
         try {
@@ -69,6 +60,12 @@ public class PullNotificationListenerServiceComponent {
         //Do nothing
     }
 
+    @Reference(
+            name = "device.mgt.provider.service",
+            service = io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetDeviceManagementProviderService")
     protected void setDeviceManagementProviderService(DeviceManagementProviderService deviceManagementProviderService) {
         MqttNotificationDataHolder.getInstance().setDeviceManagementProviderService(deviceManagementProviderService);
     }
@@ -77,6 +74,12 @@ public class PullNotificationListenerServiceComponent {
         MqttNotificationDataHolder.getInstance().setDeviceManagementProviderService(deviceManagementProviderService);
     }
 
+    @Reference(
+            name = "input.event.adaptor.service",
+            service = org.wso2.carbon.event.input.adapter.core.InputEventAdapterService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetInputEventAdapterService")
     protected void setInputEventAdapterService(InputEventAdapterService inputEventAdapterService) {
         MqttNotificationDataHolder.getInstance().setInputEventAdapterService(inputEventAdapterService);
     }

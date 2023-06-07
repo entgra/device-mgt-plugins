@@ -31,7 +31,7 @@
     <artifactId>org.wso2.carbon.andes.extensions.device.mgt.mqtt.authorization.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - MQTT Authorization Feature</name>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
     <description>This feature contains the bundles required for mqtt authorization</description>
 
     <dependencies>

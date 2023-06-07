@@ -32,6 +32,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>io.entgra.device.mgt.plugins</groupId>
             <artifactId>io.entgra.device.mgt.plugins.emqx.exhook</artifactId>
             <classifier>jar-with-dependencies</classifier>
@@ -59,21 +64,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${wso2.maven.compiler.source}</source>
-                    <target>${wso2.maven.compiler.target}</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-scr-plugin</artifactId>
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>generate-scr-scrdescriptor</id>-->
-<!--                        <goals>-->
-<!--                            <goal>scr</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -88,11 +81,11 @@
                         <Private-Package>io.entgra.device.mgt.plugins.emqx.initializer.internal</Private-Package>
                         <Import-Package>
                             io.entgra.device.mgt.plugins.emqx.exhook,
-                            io.entgra.device.mgt.plugins.emqx.initializer;resolution:=optional,
-                            org.apache.commons.logging,
-                            org.wso2.carbon.core,
+                            io.entgra.device.mgt.plugins.emqx.initializer,
+                            org.apache.commons.logging;version="[1.2 ,2)",
                             org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
                             org.osgi.service.*;version="${imp.package.version.osgi.service}",
+                            org.wso2.carbon.core;version="[4.8,5)"
                         </Import-Package>
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.emqx.initializer.internal,
