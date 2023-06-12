@@ -173,18 +173,18 @@
                                 <bundleDef>
                                     io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.extension:${io.entgra.device.mgt.plugins.version}
                                 </bundleDef>
-                                <bundleDef>
-                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.mqtt:${io.entgra.device.mgt.plugins.version}
-                                </bundleDef>
+<!--                                <bundleDef>-->
+<!--                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.mqtt:${io.entgra.device.mgt.plugins.version}-->
+<!--                                </bundleDef>-->
 								<bundleDef>
 									io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.thrift:${io.entgra.device.mgt.plugins.version}
 								</bundleDef>
 								<bundleDef>
 									org.wso2.carbon.analytics-common:org.wso2.carbon.event.input.adapter.wso2event:${carbon.analytics.common.version}
 								</bundleDef>
-                                <bundleDef>
-                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.xmpp:${io.entgra.device.mgt.plugins.version}
-                                </bundleDef>
+<!--                                <bundleDef>-->
+<!--                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.xmpp:${io.entgra.device.mgt.plugins.version}-->
+<!--                                </bundleDef>-->
                                 <bundleDef>
                                     io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.output.adapter.websocket:${io.entgra.device.mgt.plugins.version}
                                 </bundleDef>
