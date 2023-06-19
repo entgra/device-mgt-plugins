@@ -136,7 +136,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
                     String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
                             + mqttBrokerConnectionConfiguration.getAdapterName();
                     DCRResponse dcrResponse = keyMgtService.dynamicClientRegistration(applicationName, username,
-                            "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE);
+                            "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE, password);
                     String accessToken = getToken(dcrResponse.getClientId(), dcrResponse.getClientSecret());
                     connectionOptions.setUserName(accessToken.substring(0, 18));
                     connectionOptions.setPassword(accessToken.substring(19).toCharArray());
