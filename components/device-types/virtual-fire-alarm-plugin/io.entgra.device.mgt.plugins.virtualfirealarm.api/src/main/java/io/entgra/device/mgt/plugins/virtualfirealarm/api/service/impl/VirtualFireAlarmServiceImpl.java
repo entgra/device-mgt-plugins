@@ -230,7 +230,7 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
 
                 apiApplicationKey = apiManagementProviderService.generateAndRetrieveApplicationKeys(
                         VirtualFireAlarmConstants.DEVICE_TYPE, tags, KEY_TYPE, applicationUsername, true,
-                        VirtualFireAlarmConstants.APIM_APPLICATION_TOKEN_VALIDITY_PERIOD);
+                        VirtualFireAlarmConstants.APIM_APPLICATION_TOKEN_VALIDITY_PERIOD, null);
             } finally {
                 PrivilegedCarbonContext.endTenantFlow();
             }
