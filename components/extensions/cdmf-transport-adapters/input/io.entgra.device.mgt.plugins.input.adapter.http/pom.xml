@@ -164,7 +164,6 @@
                             org.apache.log4j;version="[1.2,2)",
                             org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
                             org.osgi.service.*;version="${imp.package.version.osgi.service}",
-                            org.osgi.service.http;version="[1.2,2)",
                             org.wso2.carbon.base;version="[1.0,2)",
                             org.wso2.carbon.context;version="[4.8,5)",
                             org.wso2.carbon.core.util;version="[4.8,5)",
