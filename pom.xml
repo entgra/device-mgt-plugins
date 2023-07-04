@@ -1086,7 +1086,7 @@
         <tomcat-annotations-api>6.0.53</tomcat-annotations-api>
         <commons-lang-wso2>2.6.0.wso2v1</commons-lang-wso2>
         <apache.felix.scr.ds.annotations.version>1.2.4</apache.felix.scr.ds.annotations.version>
-
+        <maven.surefire.plugin.version>2.22.0</maven.surefire.plugin.version>
     </properties>
 
     <scm>
@@ -1169,6 +1169,17 @@
                         <!--<instructions>
                           <_include>-osgi.bnd</_include>
                         </instructions>-->
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                    <configuration>
+                        <systemPropertyVariables>
+                            <jacoco-agent.destfile>${basedir}/target/coverage-reports/jacoco-ut.exec
+                            </jacoco-agent.destfile>
+                        </systemPropertyVariables>
                     </configuration>
                 </plugin>
                 <plugin>
