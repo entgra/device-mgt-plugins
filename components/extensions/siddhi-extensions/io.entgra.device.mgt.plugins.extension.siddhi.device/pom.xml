@@ -32,10 +32,6 @@
     <name>WSO2 Siddhi Execution Extension - Device management Core functionality as Siddhi extension</name>
     <url>http://entgra.io</url>
 
-    <properties>
-        <skipTests>true</skipTests>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.felix</groupId>
@@ -252,12 +248,19 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <argLine>
+                        --add-opens=java.xml/jdk.xml.internal=ALL-UNNAMED
+                        --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED
+                    </argLine>
                     <systemPropertyVariables>
                         <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>org.ops4j.pax.logging</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
                 </configuration>
             </plugin>
             <plugin>
