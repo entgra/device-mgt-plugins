@@ -25,6 +25,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.testng.PowerMockObjectFactory;
+import org.powermock.modules.testng.PowerMockTestCase;
 import org.testng.Assert;
 import org.testng.IObjectFactory;
 import org.testng.annotations.BeforeClass;
@@ -40,7 +41,7 @@ import javax.ws.rs.core.Response;
 
 @PowerMockIgnore({"javax.ws.rs.*", "org.apache.log4j.*"})
 @PrepareForTest(AndroidAPIUtils.class)
-public class DeviceManagementAdminServiceTests {
+public class DeviceManagementAdminServiceTests extends PowerMockTestCase {
 
     private DeviceManagementAdminServiceImpl deviceManagementAdminService;
 

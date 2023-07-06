@@ -306,7 +306,7 @@
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
+            <artifactId>powermock-api-mockito2</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -349,8 +349,4 @@
             <artifactId>jackson-core-asl</artifactId>
         </dependency>
     </dependencies>
-
-    <properties>
-        <maven.test.skip>true</maven.test.skip>
-    </properties>
 </project>

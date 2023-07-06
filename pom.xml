@@ -865,7 +865,7 @@
             </dependency>
             <dependency>
                 <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito</artifactId>
+                <artifactId>powermock-api-mockito2</artifactId>
                 <version>${powermock.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -1071,7 +1071,7 @@
         <ant.contrib.version>1.0b3</ant.contrib.version>
         <commons.dbcp.version>1.4.0.wso2v1</commons.dbcp.version>
         <javassist.version>3.12.1.GA</javassist.version>
-        <powermock.version>1.7.4</powermock.version>
+        <powermock.version>2.0.2</powermock.version>
 
         <squareup.okhttp3.version>4.6.0</squareup.okhttp3.version>
         <okio.version>1.13.0</okio.version>
