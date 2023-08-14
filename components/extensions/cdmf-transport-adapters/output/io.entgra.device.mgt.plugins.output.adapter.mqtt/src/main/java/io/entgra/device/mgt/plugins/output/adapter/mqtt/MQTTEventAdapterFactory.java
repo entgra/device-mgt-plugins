@@ -94,12 +94,18 @@ public class MQTTEventAdapterFactory extends OutputEventAdapterFactory {
         qos.setOptions(new String[]{"0", "1", "2"});
         qos.setDefaultValue("2");
 
+        // set topic
+        Property topicProperty = new Property(MQTTEventAdapterConstants.ADAPTER_MESSAGE_TOPIC);
+        topicProperty.setDisplayName(resourceBundle.getString(MQTTEventAdapterConstants.ADAPTER_MESSAGE_TOPIC));
+        topicProperty.setRequired(false);
+
         staticPropertyList.add(brokerUrl);
         staticPropertyList.add(userName);
         staticPropertyList.add(scopes);
         staticPropertyList.add(clearSession);
         staticPropertyList.add(qos);
         staticPropertyList.add(password);
+        staticPropertyList.add(topicProperty);
         return staticPropertyList;
     }
 

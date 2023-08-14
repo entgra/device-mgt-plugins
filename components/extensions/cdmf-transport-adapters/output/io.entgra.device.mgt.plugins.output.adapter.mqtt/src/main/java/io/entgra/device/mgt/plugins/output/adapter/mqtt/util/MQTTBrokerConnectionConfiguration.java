@@ -17,8 +17,8 @@
 */
 package io.entgra.device.mgt.plugins.output.adapter.mqtt.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.wso2.carbon.event.output.adapter.core.OutputEventAdapterConfiguration;
-import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterException;
 
 import java.util.Map;
 
@@ -35,6 +35,8 @@ public class MQTTBrokerConnectionConfiguration {
     private int keepAlive;
     private boolean globalCredentailSet;
     private int qos;
+
+    private String topic;
 
     public String getTokenUrl() {
         return tokenUrl;
@@ -79,6 +81,11 @@ public class MQTTBrokerConnectionConfiguration {
     public int getQos() {
         return qos;
     }
+
+    public String getTopic() {
+        return topic;
+    }
+
     public MQTTBrokerConnectionConfiguration(OutputEventAdapterConfiguration eventAdapterConfiguration,
                                              Map<String, String> globalProperties) {
         adapterName = eventAdapterConfiguration.getName();
@@ -123,7 +130,10 @@ public class MQTTBrokerConnectionConfiguration {
             this.qos = Integer.parseInt(qosVal);
         }
 
-
+        String topic = eventAdapterConfiguration.getStaticProperties().get(MQTTEventAdapterConstants.ADAPTER_MESSAGE_TOPIC);
+        if (!StringUtils.isEmpty(topic)) {
+            this.topic = topic;
+        }
     }
 
 }
