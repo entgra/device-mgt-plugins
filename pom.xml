@@ -23,7 +23,7 @@
     <groupId>io.entgra.device.mgt.plugins</groupId>
     <artifactId>io.entgra.device.mgt.plugins.parent</artifactId>
     <packaging>pom</packaging>
-    <version>6.0.20-SNAPSHOT</version>
+    <version>6.0.21-SNAPSHOT</version>
     <name>WSO2 Carbon - Device Management Plugins Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Carbon - Device Management Plugins Parent</description>
@@ -1166,11 +1166,11 @@
     <properties>
 
         <!-- Carbon Device Management -->
-        <io.entgra.device.mgt.core.version>5.0.29-SNAPSHOT</io.entgra.device.mgt.core.version>
+        <io.entgra.device.mgt.core.version>5.0.29</io.entgra.device.mgt.core.version>
         <io.entgra.device.mgt.core.version.range>[5.0.0, 6.0.0)</io.entgra.device.mgt.core.version.range>
 
         <!-- Carbon Device Management Plugins -->
-        <io.entgra.device.mgt.plugins.version>6.0.20-SNAPSHOT</io.entgra.device.mgt.plugins.version>
+        <io.entgra.device.mgt.plugins.version>6.0.21-SNAPSHOT</io.entgra.device.mgt.plugins.version>
 
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.0</android.agent.version>
