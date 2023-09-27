@@ -70,7 +70,7 @@ public class OAuthRequestInterceptor implements RequestInterceptor {
     private static final String APPLICATION_NAME = "websocket-app";
     private static final String PASSWORD_GRANT_TYPE = "password";
     private static final String REFRESH_GRANT_TYPE = "refresh_token";
-    private static final String REQUIRED_SCOPE = "perm:authorization:verify";
+    private static final String REQUIRED_SCOPE = "dm:authorization:verify";
     private ApiApplicationRegistrationService apiApplicationRegistrationService;
     private TokenIssuerService tokenIssuerService;
     private ApiApplicationKey apiApplicationKey;

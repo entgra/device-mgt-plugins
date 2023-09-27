@@ -71,182 +71,182 @@ import java.util.List;
                 @Scope(
                         name = "Lock Device",
                         description = "Hard lock own device",
-                        key = "perm:android:lock-devices",
+                        key = "and:ops:lock-devices",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/lock"}
                 ),
                 @Scope(
                         name = "Unlock Device",
                         description = "Unlock permanently locked device",
-                        key = "perm:android:unlock-devices",
+                        key = "and:ops:unlock-devices",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/unlock"}
                 ),
                 @Scope(
                         name = "Get Location",
                         description = "Request device location coordinates",
-                        key = "perm:android:location",
+                        key = "and:ops:location",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/location"}
                 ),
                 @Scope(
                         name = "Clear Password",
                         description = "Clear the password on Android devices",
-                        key = "perm:android:clear-password",
+                        key = "and:ops:clear-password",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/clear-password"}
                 ),
                 @Scope(
                         name = "Control Camera",
                         description = "Enabling or Disabling the Camera on Android Devices",
-                        key = "perm:android:control-camera",
+                        key = "and:ops:control-camera",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/camera"}
                 ),
                 @Scope(
                         name = "Get Info",
                         description = "Requesting device information from Android Devices",
-                        key = "perm:android:info",
+                        key = "and:ops:device-info",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/info"}
                 ),
                 @Scope(
                         name = "Get Logs",
                         description = "Requesting Logcat Details from Android Devices",
-                        key = "perm:android:logcat",
+                        key = "and:ops:logcat",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/logcat"}
                 ),
                 @Scope(
                         name = "Enterprise Wipe",
                         description = "Enterprise Wiping Android Devices",
-                        key = "perm:android:enterprise-wipe",
+                        key = "and:ops:enterprise-wipe",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/enterprise-wipe"}
                 ),
                 @Scope(
                         name = "Factory Reset",
                         description = "Factory Resetting Android Devices",
-                        key = "perm:android:wipe",
+                        key = "and:ops:wipe",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/wipe"}
                 ),
                 @Scope(
                         name = "Get Installed Applications",
                         description = "Get list of installed applications",
-                        key = "perm:android:applications",
+                        key = "and:ops:app-list",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/applications"}
                 ),
                 @Scope(
                         name = "Ring Device",
                         description = "Ring Android devices",
-                        key = "perm:android:ring",
+                        key = "and:ops:ring",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/ring"}
                 ),
                 @Scope(
                         name = "Reboot Device",
                         description = "Reboot Android devices",
-                        key = "perm:android:reboot",
+                        key = "and:ops:reboot",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/reboot"}
                 ),
                 @Scope(
                         name = "Mute Device",
                         description = "Mute Android devices",
-                        key = "perm:android:mute",
+                        key = "and:ops:mute",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/mute"}
                 ),
                 @Scope(
                         name = "Install Applications",
                         description = "Installing an Application on Android Devices",
-                        key = "perm:android:install-application",
+                        key = "and:ops:install-app",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/install-app"}
                 ),
                 @Scope(
                         name = "Update Applications",
                         description = "Updating an Application on Android Devices",
-                        key = "perm:android:update-application",
+                        key = "and:ops:update-app",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/update-app"}
                 ),
                 @Scope(
                         name = "Uninstall Applications",
                         description = "Uninstalling an Application on Android Devices",
-                        key = "perm:android:uninstall-application",
+                        key = "and:ops:uninstall-app",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/uninstall-app"}
                 ),
                 @Scope(
                         name = "Blacklist Applications",
                         description = "Blacklisting applications on Android Devices",
-                        key = "perm:android:blacklist-applications",
+                        key = "and:ops:blacklist-app",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/blacklist-app"}
                 ),
                 @Scope(
                         name = "Upgrade Firmware",
                         description = "Upgrading Firmware of Android Devices",
-                        key = "perm:android:upgrade-firmware",
+                        key = "and:ops:upgrade-firmware",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/upgrade"}
                 ),
                 @Scope(
                         name = "Configure VPN",
                         description = "Configure VPN on Android Device",
-                        key = "perm:android:configure-vpn",
+                        key = "and:ops:configure-vpn",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/vpn"}
                 ),
                 @Scope(
                         name = "Send Notification",
                         description = "Sending a notification to Android Device",
-                        key = "perm:android:send-notification",
+                        key = "and:ops:send-notif",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/send-notification"}
                 ),
                 @Scope(
                         name = "Configure Wi-Fi",
                         description = "Configure Wi-Fi on Android Device",
-                        key = "perm:android:configure-wifi",
+                        key = "and:ops:configure-wifi",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/wifi"}
                 ),
                 @Scope(
                         name = "Encrypt Storage",
                         description = "Encrypting storage on Android Device",
-                        key = "perm:android:encrypt-storage",
+                        key = "and:ops:encrypt-storage",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/encrypt"}
                 ),
                 @Scope(
                         name = "Change Password",
                         description = "Changing the lock code of an Android Device",
-                        key = "perm:android:change-lock-code",
+                        key = "and:ops:change-lock-code",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/change-lock-code"}
                 ),
                 @Scope(
                         name = "Password Policy",
                         description = "Set password policy of an Android Device",
-                        key = "perm:android:set-password-policy",
+                        key = "and:ops:password-policy",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/password-policy"}
                 ),
                 @Scope(
                         name = "Add Web clip",
                         description = "Setting a Web Clip on Android Devices",
-                        key = "perm:android:set-webclip",
+                        key = "and:ops:set-webclip",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/webclip"}
                 ),
                 @Scope(
                         name = "File Transfer",
                         description = "Transferring a file to android devices",
-                        key = "perm:android:file-transfer",
+                        key = "and:ops:file-transfer",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/file-transfer"}
                 )
@@ -266,7 +266,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:file-transfer")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:file-transfer")
                     })
             }
     )
@@ -327,7 +327,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:lock-devices")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:lock-devices")
                     })
             }
     )
@@ -390,7 +390,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:unlock-devices")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:unlock-devices")
                     })
             }
     )
@@ -453,7 +453,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:location")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:location")
                     })
             }
     )
@@ -512,7 +512,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:clear-password")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:clear-password")
                     })
             }
     )
@@ -570,7 +570,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:control-camera")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:control-camera")
                     })
             })
     @ApiResponses(value = {
@@ -635,7 +635,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:info")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:device-info")
                     })
             }
     )
@@ -698,7 +698,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:logcat")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:logcat")
                     })
             }
     )
@@ -760,7 +760,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:enterprise-wipe")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:enterprise-wipe")
                     })
             }
     )
@@ -820,7 +820,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:wipe")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:wipe")
                     })
             }
     )
@@ -884,7 +884,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:applications")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:app-list")
                     })
             }
     )
@@ -944,7 +944,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:ring")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:ring")
                     })
             }
     )
@@ -1004,7 +1004,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:reboot")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:reboot")
                     })
             }
     )
@@ -1064,7 +1064,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:mute")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:mute")
                     })
             }
     )
@@ -1126,7 +1126,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:install-application")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:install-app")
                     })
             }
     )
@@ -1191,7 +1191,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:update-application")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:update-app")
                     })
             }
     )
@@ -1253,7 +1253,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:uninstall-application")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:uninstall-app")
                     })
             }
     )
@@ -1319,7 +1319,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:blacklist-applications")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:blacklist-app")
                     })
             }
     )
@@ -1381,7 +1381,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:upgrade-firmware")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:upgrade-firmware")
                     })
             }
     )
@@ -1445,7 +1445,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:configure-vpn")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:configure-vpn")
                     })
             }
     )
@@ -1505,7 +1505,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:send-notification")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:send-notif")
                     })
             }
     )
@@ -1566,7 +1566,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:configure-wifi")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:configure-wifi")
                     })
             }
     )
@@ -1628,7 +1628,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:encrypt-storage")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:encrypt-storage")
                     })
             }
     )
@@ -1690,7 +1690,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:change-lock-code")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:change-lock-code")
                     })
             }
     )
@@ -1752,7 +1752,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:set-password-policy")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:password-policy")
                     })
             }
     )
@@ -1812,7 +1812,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:set-webclip")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:set-webclip")
                     })
             }
     )
