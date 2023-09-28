@@ -67,7 +67,7 @@ import javax.ws.rs.core.Response;
                 @Scope(
                         name = "Enroll Device",
                         description = "Register an Android device",
-                        key = "and:conf:devices:enroll",
+                        key = "and:devices:enroll",
                         roles = {"Internal/devicemgt-user"},
                         permissions = {"/device-mgt/devices/enroll/android"}
                 ),
@@ -208,7 +208,7 @@ public interface DeviceTypeConfigurationService {
             tags = "Android Configuration Management",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:conf:devices:enroll")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:devices:enroll")
                     })
             }
     )
