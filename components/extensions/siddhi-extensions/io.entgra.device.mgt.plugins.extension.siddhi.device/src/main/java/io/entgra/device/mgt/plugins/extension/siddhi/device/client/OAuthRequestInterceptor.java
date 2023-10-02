@@ -50,7 +50,7 @@ import io.entgra.device.mgt.plugins.extension.siddhi.device.utils.DeviceUtils;
 public class OAuthRequestInterceptor implements RequestInterceptor {
 
     private static final String APPLICATION_NAME = "siddhi_extension_client";
-    private static final String REQUIRED_SCOPES = "perm:devices:operations";
+    private static final String REQUIRED_SCOPES = "dm:devices:ops:view";
     private static final String[] API_TAGS = {"device_management"};
     private DCRService dcrService;
     private static OAuthApplication oAuthApplication;

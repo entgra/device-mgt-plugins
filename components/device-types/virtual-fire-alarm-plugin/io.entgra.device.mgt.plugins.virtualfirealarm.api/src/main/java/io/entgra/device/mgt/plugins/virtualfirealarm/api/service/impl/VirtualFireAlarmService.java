@@ -53,7 +53,7 @@ import javax.ws.rs.core.Response;
                 @Scope(
                         name = "Enroll device",
                         description = "",
-                        key = "perm:firealarm:enroll",
+                        key = "dm:firealarm:enroll",
                         permissions = {"/device-mgt/devices/enroll/firealarm"},
                         roles = {"Internal/devicemgt-user"}
                 )
@@ -83,7 +83,7 @@ public interface VirtualFireAlarmService {
             tags = "virtual_firealarm",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = SCOPE, value = "perm:firealarm:enroll")
+                            @ExtensionProperty(name = SCOPE, value = "dm:firealarm:enroll")
                     })
             }
     )
@@ -104,7 +104,7 @@ public interface VirtualFireAlarmService {
             tags = "virtual_firealarm",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = SCOPE, value = "perm:firealarm:enroll")
+                            @ExtensionProperty(name = SCOPE, value = "dm:firealarm:enroll")
                     })
             }
     )
@@ -125,7 +125,7 @@ public interface VirtualFireAlarmService {
             tags = "virtual_firealarm",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = SCOPE, value = "perm:firealarm:enroll")
+                            @ExtensionProperty(name = SCOPE, value = "dm:firealarm:enroll")
                     })
             }
     )

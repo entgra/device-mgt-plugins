@@ -70,14 +70,14 @@ import java.util.List;
                 @Scope(
                         name = "Enroll Device",
                         description = "Register an Android device",
-                        key = "perm:android:enroll",
+                        key = "and:devices:enroll",
                         roles = {"Internal/devicemgt-user"},
                         permissions = {"/device-mgt/devices/enroll/android"}
                 ),
                 @Scope(
                         name = "Un-enroll Device",
                         description = "Unregister an Android device",
-                        key = "perm:android:disenroll",
+                        key = "and:devices:disenroll",
                         roles = {"Internal/devicemgt-user"},
                         permissions = {"/device-mgt/devices/disenroll/android"}
                 )
@@ -96,7 +96,7 @@ public interface DeviceManagementService {
             tags = "Android Device Management",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:enroll")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:devices:enroll")
                     })
             }
     )
@@ -161,7 +161,7 @@ public interface DeviceManagementService {
             tags = "Android Device Management",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:enroll")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:devices:enroll")
                     })
             }
     )
@@ -222,7 +222,7 @@ public interface DeviceManagementService {
             tags = "Android Device Management",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:enroll")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:devices:enroll")
                     })
             }
     )
@@ -284,7 +284,7 @@ public interface DeviceManagementService {
             tags = "Android Device Management",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:enroll")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:devices:enroll")
                     })
             }
     )
@@ -339,7 +339,7 @@ public interface DeviceManagementService {
             tags = "Android Device Management",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:enroll")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:devices:enroll")
                     })
             }
     )
@@ -392,7 +392,7 @@ public interface DeviceManagementService {
             tags = "Android Device Management",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:enroll")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:devices:enroll")
                     })
             }
     )
@@ -448,7 +448,7 @@ public interface DeviceManagementService {
             tags = "Android Device Management",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "perm:android:disenroll")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:devices:disenroll")
                     })
             }
     )
