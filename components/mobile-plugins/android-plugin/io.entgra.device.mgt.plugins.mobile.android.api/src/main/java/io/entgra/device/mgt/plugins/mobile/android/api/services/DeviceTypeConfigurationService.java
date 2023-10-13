@@ -76,14 +76,14 @@ import javax.ws.rs.core.Response;
                         description = "Getting Android Platform Configurations",
                         key = "and:conf:view",
                         roles = {"Internal/devicemgt-user"},
-                        permissions = {"/device-mgt/devices/enroll/android"}
+                        permissions = {"/device-mgt/platform-configurations/android/view"}
                 ),
                 @Scope(
                         name = "Manage Configurations",
                         description = "Updating Android Platform Configurations",
                         key = "and:conf:manage",
                         roles = {"Internal/devicemgt-user"},
-                        permissions = {"/device-mgt/platform-configurations/manage"}
+                        permissions = {"/device-mgt/platform-configurations/android/manage"}
                 )
         }
 )
