@@ -64,7 +64,7 @@ import javax.ws.rs.core.Response;
                 @Scope(
                         name = "Getting Details of Topics",
                         description = "Getting Details of Topics",
-                        key = "perm:admin:topics:view",
+                        key = "dm:admin:topics:view",
                         permissions = {"/device-mgt/topics/view"}
                 )
         }
@@ -82,7 +82,7 @@ public interface MQTTManagementAdminService {
             tags = "MQTT Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = Constants.SCOPE, value = "perm:admin:topics:view")
+                            @ExtensionProperty(name = Constants.SCOPE, value = "dm:admin:topics:view")
                     })
             }
     )
