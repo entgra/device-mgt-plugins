@@ -67,6 +67,7 @@ import io.entgra.device.mgt.core.device.mgt.common.geo.service.GeoQuery;
 import io.entgra.device.mgt.core.device.mgt.common.invitation.mgt.DeviceEnrollmentInvitationDetails;
 import io.entgra.device.mgt.core.device.mgt.common.license.mgt.License;
 import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Activity;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.DeviceActivity;
 import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
 import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.OperationManagementException;
 import io.entgra.device.mgt.core.device.mgt.common.policy.mgt.PolicyMonitoringManager;
@@ -847,6 +848,16 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public int getActivitiesCount(ActivityPaginationRequest activityPaginationRequest)
             throws OperationManagementException {
+        return 0;
+    }
+
+    @Override
+    public List<DeviceActivity> getDeviceActivities(ActivityPaginationRequest activityPaginationRequest) throws OperationManagementException {
+        return null;
+    }
+
+    @Override
+    public int getDeviceActivitiesCount(ActivityPaginationRequest activityPaginationRequest) throws OperationManagementException {
         return 0;
     }
 
