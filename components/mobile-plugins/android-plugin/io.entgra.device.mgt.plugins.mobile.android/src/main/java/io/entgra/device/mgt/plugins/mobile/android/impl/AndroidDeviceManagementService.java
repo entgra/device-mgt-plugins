@@ -38,6 +38,7 @@ import io.entgra.device.mgt.core.device.mgt.common.policy.mgt.PolicyMonitoringMa
 import io.entgra.device.mgt.core.device.mgt.common.pull.notification.PullNotificationSubscriber;
 import io.entgra.device.mgt.core.device.mgt.common.push.notification.PushNotificationConfig;
 import io.entgra.device.mgt.core.device.mgt.common.spi.DeviceManagementService;
+import io.entgra.device.mgt.core.device.mgt.common.type.mgt.DeviceTypeMetaDefinition;
 import io.entgra.device.mgt.core.device.mgt.common.type.mgt.DeviceTypePlatformDetails;
 import io.entgra.device.mgt.plugins.mobile.android.internal.AndroidDeviceManagementDataHolder;
 
@@ -156,6 +157,11 @@ public class AndroidDeviceManagementService implements DeviceManagementService {
 
     @Override
     public License getLicenseConfig() { return null; }
+
+    @Override
+    public DeviceTypeMetaDefinition getDeviceTypeMetaDefinition() {
+        return null;
+    }
 
     private String getConfigProperty(List<ConfigurationEntry> configs, String propertyName) {
         for (ConfigurationEntry entry : configs) {
