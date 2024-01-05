@@ -876,7 +876,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public void saveApplicationIcon(String s, String s1, String s2, int i) throws DeviceManagementException {
+    public void saveApplicationIcon(String s, String s1, String s2) throws DeviceManagementException {
 
     }
 
@@ -892,6 +892,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public List<Application> getInstalledApplicationsOnDevice(Device device, int i, int i1) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<Application> getInstalledApplicationsOnDevice(Device device) throws DeviceManagementException {
         return null;
     }
 }
