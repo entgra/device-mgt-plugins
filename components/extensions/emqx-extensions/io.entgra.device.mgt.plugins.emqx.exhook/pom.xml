@@ -21,7 +21,7 @@
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
         <artifactId>emqx-extensions</artifactId>
-        <version>6.0.20-SNAPSHOT</version>
+        <version>6.0.22-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -72,6 +72,11 @@
         <dependency>
             <groupId>io.entgra.device.mgt.core</groupId>
             <artifactId>io.entgra.device.mgt.core.device.mgt.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-api</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -23,6 +23,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.GeneratedMessageV3;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.core.config.DeviceConfigurationManager;
+import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
+import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -34,15 +40,8 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import io.entgra.device.mgt.core.device.mgt.core.config.DeviceConfigurationManager;
-import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
-import io.entgra.device.mgt.core.device.mgt.core.internal.DeviceManagementDataHolder;
-import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
-import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
-import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -110,7 +109,7 @@ public class ExServer {
 
 
         public void DEBUG(String fn, Object req) {
-            System.out.printf(fn + ", request: " + req);
+            logger.debug(fn + ", request: " + req);
         }
 
         @Override
@@ -493,8 +492,7 @@ public class ExServer {
 
         @Override
         public void onMessagePublish(MessagePublishRequest request, StreamObserver<ValuedResponse> responseObserver) {
-            DEBUG("onMessagePublish", request);
-
+            logger.info("onMessagePublish");
             ByteString bstr = ByteString.copyFromUtf8("hardcode payload by exhook-svr-java :)");
 
             Message nmsg = Message.newBuilder()
@@ -538,7 +536,7 @@ public class ExServer {
 
         @Override
         public void onMessageDelivered(MessageDeliveredRequest request, StreamObserver<EmptySuccess> responseObserver) {
-            DEBUG("onMessageDelivered", request);
+            logger.info("onMessageDelivered");
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -554,10 +552,11 @@ public class ExServer {
 
         @Override
         public void onMessageDropped(MessageDroppedRequest request, StreamObserver<EmptySuccess> responseObserver) {
-            DEBUG("onMessageDropped", request);
+            logger.info("onMessageDropped ---------------------------------------------------------------");
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
+
         }
 
 
