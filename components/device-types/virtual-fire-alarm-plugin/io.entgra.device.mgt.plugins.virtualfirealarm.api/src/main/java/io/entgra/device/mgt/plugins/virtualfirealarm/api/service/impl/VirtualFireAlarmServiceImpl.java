@@ -221,6 +221,7 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
                             .getTenantDomain();
             APIManagementProviderService apiManagementProviderService = APIUtil.getAPIManagementProviderService();
             String[] tags = {VirtualFireAlarmConstants.DEVICE_TYPE};
+            ArrayList<String> supportedGrantTypes = new ArrayList<>();
             try {
                 PrivilegedCarbonContext.startTenantFlow();
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantAdminDomainName);
@@ -230,7 +231,8 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
 
                 apiApplicationKey = apiManagementProviderService.generateAndRetrieveApplicationKeys(
                         VirtualFireAlarmConstants.DEVICE_TYPE, tags, KEY_TYPE, applicationUsername, true,
-                        VirtualFireAlarmConstants.APIM_APPLICATION_TOKEN_VALIDITY_PERIOD, null);
+                        VirtualFireAlarmConstants.APIM_APPLICATION_TOKEN_VALIDITY_PERIOD, null, null,
+                        supportedGrantTypes, null, false);
             } finally {
                 PrivilegedCarbonContext.endTenantFlow();
             }

@@ -43,7 +43,9 @@ import io.entgra.device.mgt.core.identity.jwt.client.extension.exception.JWTClie
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MQTTAdapterListener implements MqttCallback, Runnable {
@@ -129,6 +131,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
             String password = this.mqttBrokerConnectionConfiguration.getPassword();
             String dcrUrlString = this.mqttBrokerConnectionConfiguration.getDcrUrl();
             String scopes = this.mqttBrokerConnectionConfiguration.getBrokerScopes();
+            List<String> supportedGrantTypes = new ArrayList<>();
             //getJWT Client Parameters.
             if (dcrUrlString != null && !dcrUrlString.isEmpty()) {
                 try {
@@ -136,7 +139,8 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
                     String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
                             + mqttBrokerConnectionConfiguration.getAdapterName();
                     DCRResponse dcrResponse = keyMgtService.dynamicClientRegistration(applicationName, username,
-                            "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE, password);
+                            "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE, password,
+                            supportedGrantTypes, dcrUrlString);
                     String accessToken = getToken(dcrResponse.getClientId(), dcrResponse.getClientSecret());
                     connectionOptions.setUserName(accessToken.substring(0, 18));
                     connectionOptions.setPassword(accessToken.substring(19).toCharArray());
