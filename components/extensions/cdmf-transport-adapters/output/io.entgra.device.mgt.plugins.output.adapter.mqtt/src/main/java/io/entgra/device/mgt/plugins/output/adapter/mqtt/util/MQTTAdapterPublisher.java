@@ -41,6 +41,9 @@ import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterExc
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterRuntimeException;
 import org.wso2.carbon.user.api.UserStoreException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * MQTT publisher related configuration initialization and publishing capabilties are implemented here.
  */
@@ -142,6 +145,7 @@ public class MQTTAdapterPublisher {
         String username = this.mqttBrokerConnectionConfiguration.getUsername();
         String password = this.mqttBrokerConnectionConfiguration.getPassword();
         String dcrUrlString = this.mqttBrokerConnectionConfiguration.getDcrUrl();
+        List<String> supportedGrantTypes = new ArrayList<>();
 
         if (dcrUrlString != null && !dcrUrlString.isEmpty()) {
             PrivilegedCarbonContext.startTenantFlow();
@@ -151,7 +155,8 @@ public class MQTTAdapterPublisher {
                 String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
                         + mqttBrokerConnectionConfiguration.getAdapterName();
                 DCRResponse dcrResponse = keyMgtService.dynamicClientRegistration(applicationName, username,
-                        "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE, password);
+                        "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE, password,
+                        supportedGrantTypes, dcrUrlString);
                 return getToken(dcrResponse.getClientId(), dcrResponse.getClientSecret());
 //                connectionOptions.setUserName(accessToken.substring(0, 18));
 //                connectionOptions.setPassword(accessToken.substring(19).toCharArray());
