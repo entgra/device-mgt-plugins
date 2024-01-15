@@ -1166,7 +1166,7 @@
     <properties>
 
         <!-- Carbon Device Management -->
-        <io.entgra.device.mgt.core.version>5.0.37</io.entgra.device.mgt.core.version>
+        <io.entgra.device.mgt.core.version>5.0.38-SNAPSHOT</io.entgra.device.mgt.core.version>
         <io.entgra.device.mgt.core.version.range>[5.0.0, 6.0.0)</io.entgra.device.mgt.core.version.range>
 
         <!-- Carbon Device Management Plugins -->
