@@ -882,4 +882,14 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     public List<Application> getInstalledApplicationsOnDevice(Device device) throws DeviceManagementException {
         return null;
     }
+
+    @Override
+    public List<Device> getEnrolledDevicesSince(Date date) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<Device> getEnrolledDevicesPriorTo(Date date) throws DeviceManagementException {
+        return null;
+    }
 }
