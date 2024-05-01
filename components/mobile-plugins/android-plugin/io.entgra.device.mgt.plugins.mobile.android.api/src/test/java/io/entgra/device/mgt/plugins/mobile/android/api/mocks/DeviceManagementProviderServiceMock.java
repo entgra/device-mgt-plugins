@@ -892,4 +892,9 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     public List<Device> getEnrolledDevicesPriorTo(Date date) throws DeviceManagementException {
         return null;
     }
+
+    @Override
+    public void deleteDeviceDataByTenantDomain(String s) throws DeviceManagementException {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 }
