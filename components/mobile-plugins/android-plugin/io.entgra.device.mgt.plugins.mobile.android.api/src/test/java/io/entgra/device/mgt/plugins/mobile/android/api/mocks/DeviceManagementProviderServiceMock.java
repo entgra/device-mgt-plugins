@@ -414,6 +414,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public boolean recordDeviceUpdate(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override
     public boolean modifyEnrollment(Device device) throws DeviceManagementException {
         return TestUtils.getDeviceId().equals(device.getDeviceIdentifier());
     }
