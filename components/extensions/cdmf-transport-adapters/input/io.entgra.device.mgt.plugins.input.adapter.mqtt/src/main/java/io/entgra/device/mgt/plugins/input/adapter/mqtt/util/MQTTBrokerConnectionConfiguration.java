@@ -32,6 +32,7 @@ public class MQTTBrokerConnectionConfiguration {
     private String brokerScopes = null;
     private boolean cleanSession = true;
     private int keepAlive;
+    private int qos;
     private String brokerUrl;
     private String dcrUrl;
     private String contentValidatorType;
@@ -83,6 +84,14 @@ public class MQTTBrokerConnectionConfiguration {
         return adapterName;
     }
 
+    public int getQos() {
+        return qos;
+    }
+
+    public void setQos(int qos) {
+        this.qos = qos;
+    }
+
     public MQTTBrokerConnectionConfiguration(InputEventAdapterConfiguration eventAdapterConfiguration,
                                              Map<String, String> globalProperties) throws InputEventAdapterException {
 
@@ -131,6 +140,15 @@ public class MQTTBrokerConnectionConfiguration {
         } else {
             keepAlive = MQTTEventAdapterConstants.ADAPTER_CONF_DEFAULT_KEEP_ALIVE;
         }
+
+        String qosVal = globalProperties.get(MQTTEventAdapterConstants.ADAPTER_MESSAGE_QOS);
+        if (qosVal != null && !qosVal.isEmpty()) {
+            this.qos = Integer.parseInt(qosVal);
+        } else {
+            qosVal = eventAdapterConfiguration.getProperties().get(MQTTEventAdapterConstants.ADAPTER_MESSAGE_QOS);
+            this.qos = Integer.parseInt(qosVal);
+        }
+
         this.contentTransformerType = eventAdapterConfiguration.getProperties()
                 .get(MQTTEventAdapterConstants.ADAPTER_CONF_CONTENT_TRANSFORMER_TYPE);
     }

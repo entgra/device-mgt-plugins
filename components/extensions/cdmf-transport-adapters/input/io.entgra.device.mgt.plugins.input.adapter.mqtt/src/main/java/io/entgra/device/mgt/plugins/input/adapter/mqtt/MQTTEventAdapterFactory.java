@@ -124,6 +124,15 @@ public class MQTTEventAdapterFactory extends InputEventAdapterFactory {
         clientId.setHint(resourceBundle.getString(MQTTEventAdapterConstants.ADAPTER_CONF_CLIENTID_HINT));
         propertyList.add(clientId);
 
+        // set qos
+        Property qosProperty = new Property(MQTTEventAdapterConstants.ADAPTER_MESSAGE_QOS);
+        qosProperty.setDisplayName(resourceBundle.getString(MQTTEventAdapterConstants.ADAPTER_MESSAGE_QOS));
+        qosProperty.setRequired(false);
+        qosProperty.setOptions(new String[]{"0", "1", "2"});
+        qosProperty.setDefaultValue("0");
+
+        propertyList.add(qosProperty);
+
         return propertyList;
     }
 

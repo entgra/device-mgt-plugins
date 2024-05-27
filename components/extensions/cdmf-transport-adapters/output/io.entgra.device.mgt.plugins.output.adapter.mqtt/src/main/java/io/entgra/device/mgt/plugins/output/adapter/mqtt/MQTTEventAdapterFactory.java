@@ -92,7 +92,7 @@ public class MQTTEventAdapterFactory extends OutputEventAdapterFactory {
         qos.setDisplayName(resourceBundle.getString(MQTTEventAdapterConstants.ADAPTER_MESSAGE_QOS));
         qos.setRequired(false);
         qos.setOptions(new String[]{"0", "1", "2"});
-        qos.setDefaultValue("2");
+        qos.setDefaultValue("0");
 
         // set topic
         Property topicProperty = new Property(MQTTEventAdapterConstants.ADAPTER_MESSAGE_TOPIC);
