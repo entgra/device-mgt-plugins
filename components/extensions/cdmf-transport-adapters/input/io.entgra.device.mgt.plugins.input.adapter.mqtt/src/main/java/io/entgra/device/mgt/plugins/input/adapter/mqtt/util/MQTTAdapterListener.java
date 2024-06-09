@@ -58,6 +58,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
 
     private MQTTBrokerConnectionConfiguration mqttBrokerConnectionConfiguration;
     private String topic;
+    private int qos;
     private String topicStructure;
     private String tenantDomain;
     private volatile boolean connectionSucceeded = false;
@@ -81,6 +82,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
         int keepAlive = mqttBrokerConnectionConfiguration.getKeepAlive();
         this.topicStructure = new String(topic);
         this.topic = PropertyUtils.replacePlaceholders(topic);
+        this.qos = mqttBrokerConnectionConfiguration.getQos();
         this.eventAdapterListener = inputEventAdapterListener;
         this.tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
 
@@ -162,7 +164,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
             return false;
         }
         try {
-            mqttClient.subscribe(topic);
+            mqttClient.subscribe(topic, qos);
             log.info("mqtt receiver subscribed to topic: " + topic);
         } catch (MqttException e) {
             log.error("Failed to subscribe to topic: " + topic + ", Retrying.....");
