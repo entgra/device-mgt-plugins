@@ -18,33 +18,13 @@
 
 package io.entgra.device.mgt.plugins.mobile.android.api.mocks;
 
-import io.entgra.device.mgt.core.device.mgt.common.ActivityPaginationRequest;
-import io.entgra.device.mgt.core.device.mgt.common.Device;
-import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
-import io.entgra.device.mgt.core.device.mgt.common.DeviceTransferRequest;
-import io.entgra.device.mgt.core.device.mgt.common.DynamicTaskContext;
-import io.entgra.device.mgt.core.device.mgt.common.StartupOperationConfig;
+import io.entgra.device.mgt.core.device.mgt.common.*;
 import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
 import io.entgra.device.mgt.core.device.mgt.common.app.mgt.ApplicationManagementException;
-import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
-import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.ConfigurationEntry;
-import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.DeviceConfiguration;
+import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.*;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceData;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocationHistorySnapshot;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
-import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
-import io.entgra.device.mgt.core.device.mgt.common.FeatureManager;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceNotFoundException;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceTypeNotFoundException;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.InvalidDeviceException;
-import io.entgra.device.mgt.core.device.mgt.common.MonitoringOperation;
-import io.entgra.device.mgt.core.device.mgt.common.OperationMonitoringTaskConfig;
-import io.entgra.device.mgt.core.device.mgt.common.PaginationRequest;
-import io.entgra.device.mgt.core.device.mgt.common.PaginationResult;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.UnauthorizedDeviceAccessException;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.UserNotFoundException;
-import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.ConfigurationManagementException;
-import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.PlatformConfiguration;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.*;
 import io.entgra.device.mgt.core.device.mgt.common.geo.service.GeoCluster;
 import io.entgra.device.mgt.core.device.mgt.common.geo.service.GeoQuery;
 import io.entgra.device.mgt.core.device.mgt.common.invitation.mgt.DeviceEnrollmentInvitationDetails;
@@ -63,7 +43,6 @@ import io.entgra.device.mgt.core.device.mgt.core.dto.DeviceTypeVersion;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.core.device.mgt.core.service.EmailMetaInfo;
 import io.entgra.device.mgt.plugins.mobile.android.api.utils.TestUtils;
-
 import org.apache.commons.collections.map.SingletonMap;
 
 import java.sql.Timestamp;
@@ -394,6 +373,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public void addLicense(String s, License license) throws DeviceManagementException {
 
+    }
+
+    @Override
+    public boolean recordDeviceUpdate(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+        return false;
     }
 
     @Override
