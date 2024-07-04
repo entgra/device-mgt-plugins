@@ -38,14 +38,19 @@ import io.entgra.device.mgt.core.device.mgt.common.pull.notification.PullNotific
 import io.entgra.device.mgt.core.device.mgt.common.push.notification.NotificationStrategy;
 import io.entgra.device.mgt.core.device.mgt.common.spi.DeviceManagementService;
 import io.entgra.device.mgt.core.device.mgt.common.type.mgt.DeviceStatus;
+import io.entgra.device.mgt.core.device.mgt.core.dao.DeviceManagementDAOException;
+import io.entgra.device.mgt.core.device.mgt.core.dto.DeviceDetailsDTO;
 import io.entgra.device.mgt.core.device.mgt.core.dto.DeviceType;
 import io.entgra.device.mgt.core.device.mgt.core.dto.DeviceTypeVersion;
+import io.entgra.device.mgt.core.device.mgt.core.dto.OperationDTO;
+import io.entgra.device.mgt.core.device.mgt.core.dto.OwnerWithDeviceDTO;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.core.device.mgt.core.service.EmailMetaInfo;
 import io.entgra.device.mgt.plugins.mobile.android.api.utils.TestUtils;
 import org.apache.commons.collections.map.SingletonMap;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -880,5 +885,25 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public void deleteDeviceDataByTenantDomain(String s) throws DeviceManagementException {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s) throws DeviceManagementDAOException {
+        return null;
+    }
+
+    @Override
+    public OwnerWithDeviceDTO getOwnerWithDeviceByDeviceId(int i) throws DeviceManagementDAOException {
+        return null;
+    }
+
+    @Override
+    public List<DeviceDetailsDTO> getDevicesByTenantId(int i) throws DeviceManagementDAOException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public OperationDTO getOperationDetailsById(int i) throws OperationManagementException {
+        return null;
     }
 }
