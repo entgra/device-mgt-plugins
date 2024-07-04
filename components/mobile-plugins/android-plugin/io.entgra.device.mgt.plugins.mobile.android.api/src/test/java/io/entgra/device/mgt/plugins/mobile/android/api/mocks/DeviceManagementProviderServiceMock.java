@@ -906,4 +906,9 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     public OperationDTO getOperationDetailsById(int i) throws OperationManagementException {
         return null;
     }
+
+    @Override
+    public PaginationResult getDevicesNotInGroup(PaginationRequest paginationRequest, boolean b) throws DeviceManagementException {
+        return null;
+    }
 }
