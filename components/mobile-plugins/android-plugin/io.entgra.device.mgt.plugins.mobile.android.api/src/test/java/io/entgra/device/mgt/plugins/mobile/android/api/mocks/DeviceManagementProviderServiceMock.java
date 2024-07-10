@@ -48,6 +48,7 @@ import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.Configurati
 import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.DeviceConfiguration;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceData;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocationHistorySnapshot;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.ConflictException;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.FeatureManager;
@@ -942,6 +943,18 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public OperationDTO getOperationDetailsById(int i) throws OperationManagementException {
+        return null;
+    }
+
+    @Override
+    public PaginationResult getDevicesNotInGroup(PaginationRequest request, boolean requireDeviceInfo)
+            throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public Device updateDeviceName(Device device, String deviceType, String deviceId)
+            throws DeviceManagementException, DeviceNotFoundException, ConflictException {
         return null;
     }
 }
