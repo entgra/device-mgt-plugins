@@ -18,13 +18,32 @@
 
 package io.entgra.device.mgt.plugins.mobile.android.api.mocks;
 
-import io.entgra.device.mgt.core.device.mgt.common.*;
+import io.entgra.device.mgt.core.device.mgt.common.ActivityPaginationRequest;
+import io.entgra.device.mgt.core.device.mgt.common.Device;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceTransferRequest;
+import io.entgra.device.mgt.core.device.mgt.common.DynamicTaskContext;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.FeatureManager;
+import io.entgra.device.mgt.core.device.mgt.common.MonitoringOperation;
+import io.entgra.device.mgt.core.device.mgt.common.OperationMonitoringTaskConfig;
+import io.entgra.device.mgt.core.device.mgt.common.PaginationRequest;
+import io.entgra.device.mgt.core.device.mgt.common.PaginationResult;
+import io.entgra.device.mgt.core.device.mgt.common.StartupOperationConfig;
 import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
 import io.entgra.device.mgt.core.device.mgt.common.app.mgt.ApplicationManagementException;
 import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.*;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceData;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocationHistorySnapshot;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.*;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.ConflictException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceNotFoundException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceTypeNotFoundException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.InvalidDeviceException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.UnauthorizedDeviceAccessException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.UserNotFoundException;
+import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.ConfigurationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.PlatformConfiguration;
 import io.entgra.device.mgt.core.device.mgt.common.geo.service.GeoCluster;
 import io.entgra.device.mgt.core.device.mgt.common.geo.service.GeoQuery;
 import io.entgra.device.mgt.core.device.mgt.common.invitation.mgt.DeviceEnrollmentInvitationDetails;
@@ -50,7 +69,6 @@ import io.entgra.device.mgt.plugins.mobile.android.api.utils.TestUtils;
 import org.apache.commons.collections.map.SingletonMap;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -888,18 +906,18 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s) throws DeviceManagementDAOException {
+    public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s, int i, String s1, String s2, String s3) throws DeviceManagementDAOException {
         return null;
     }
 
     @Override
-    public OwnerWithDeviceDTO getOwnerWithDeviceByDeviceId(int i) throws DeviceManagementDAOException {
+    public OwnerWithDeviceDTO getOwnerWithDeviceByDeviceId(int i, String s, String s1, String s2) throws DeviceManagementDAOException {
         return null;
     }
 
     @Override
-    public List<DeviceDetailsDTO> getDevicesByTenantId(int i) throws DeviceManagementDAOException {
-        return Collections.emptyList();
+    public List<DeviceDetailsDTO> getDevicesByTenantId(int i, int i1, String s, String s1) throws DeviceManagementDAOException {
+        return null;
     }
 
     @Override
@@ -908,7 +926,14 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public PaginationResult getDevicesNotInGroup(PaginationRequest paginationRequest, boolean b) throws DeviceManagementException {
+    public PaginationResult getDevicesNotInGroup(PaginationRequest request, boolean requireDeviceInfo)
+            throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public Device updateDeviceName(Device device, String deviceType, String deviceId)
+            throws DeviceManagementException, DeviceNotFoundException, ConflictException {
         return null;
     }
 }
