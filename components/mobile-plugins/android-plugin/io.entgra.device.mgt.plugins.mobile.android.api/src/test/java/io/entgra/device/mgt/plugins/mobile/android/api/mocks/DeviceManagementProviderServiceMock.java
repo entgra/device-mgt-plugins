@@ -927,16 +927,31 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s, int i, String s1, String s2, String s3) throws DeviceManagementDAOException {
+        return null;
+    }
+
+    @Override
+    public OwnerWithDeviceDTO getOwnerWithDeviceByDeviceId(int i, String s, String s1, String s2) throws DeviceManagementDAOException {
+        return null;
+    }
+
+    @Override
+    public List<DeviceDetailsDTO> getDevicesByTenantId(int i, int i1, String s, String s1) throws DeviceManagementDAOException {
+        return Collections.emptyList();
+    }
+
+
     public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s) throws DeviceManagementDAOException {
         return null;
     }
 
-    @Override
+
     public OwnerWithDeviceDTO getOwnerWithDeviceByDeviceId(int i) throws DeviceManagementDAOException {
         return null;
     }
 
-    @Override
+
     public List<DeviceDetailsDTO> getDevicesByTenantId(int i) throws DeviceManagementDAOException {
         return Collections.emptyList();
     }
