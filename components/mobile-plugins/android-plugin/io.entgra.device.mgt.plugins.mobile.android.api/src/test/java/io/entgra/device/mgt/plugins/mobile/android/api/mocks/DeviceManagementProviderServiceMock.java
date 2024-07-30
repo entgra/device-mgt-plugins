@@ -69,6 +69,7 @@ import io.entgra.device.mgt.plugins.mobile.android.api.utils.TestUtils;
 import org.apache.commons.collections.map.SingletonMap;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -917,8 +918,9 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public List<DeviceDetailsDTO> getDevicesByTenantId(int i, int i1, String s, String s1) throws DeviceManagementDAOException {
-        return null;
+        return Collections.emptyList();
     }
+
 
     @Override
     public OperationDTO getOperationDetailsById(int i) throws OperationManagementException {
@@ -934,6 +936,36 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public Device updateDeviceName(Device device, String deviceType, String deviceId)
             throws DeviceManagementException, DeviceNotFoundException, ConflictException {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getDevicesNotInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getDevicesInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public int getDeviceCountNotInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
+    public List<Device> getDevicesByDeviceIds(PaginationRequest paginationRequest, List<Integer> list) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public int getDeviceCountByDeviceIds(PaginationRequest paginationRequest, List<Integer> list) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
+    public List<Integer> getDeviceIdsByStatus(List<String> list) throws DeviceManagementException {
         return null;
     }
 }
