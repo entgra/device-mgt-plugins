@@ -902,9 +902,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public void deleteDeviceDataByTenantDomain(String s) throws DeviceManagementException {
-        throw new UnsupportedOperationException("Not implemented");
-    }
+    public void deleteDeviceDataByTenantId(int i) throws DeviceManagementException {}
 
     @Override
     public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s, int i, String s1, String s2, String s3) throws DeviceManagementDAOException {
