@@ -1,20 +1,20 @@
 /*
-* Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-* WSO2 Inc. licenses this file to you under the Apache License,
-* Version 2.0 (the "License"); you may not use this file except
-* in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied. See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 package io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl;
 
@@ -221,6 +221,7 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
                             .getTenantDomain();
             APIManagementProviderService apiManagementProviderService = APIUtil.getAPIManagementProviderService();
             String[] tags = {VirtualFireAlarmConstants.DEVICE_TYPE};
+            ArrayList<String> supportedGrantTypes = new ArrayList<>();
             try {
                 PrivilegedCarbonContext.startTenantFlow();
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantAdminDomainName);
@@ -230,7 +231,8 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
 
                 apiApplicationKey = apiManagementProviderService.generateAndRetrieveApplicationKeys(
                         VirtualFireAlarmConstants.DEVICE_TYPE, tags, KEY_TYPE, applicationUsername, true,
-                        VirtualFireAlarmConstants.APIM_APPLICATION_TOKEN_VALIDITY_PERIOD);
+                        VirtualFireAlarmConstants.APIM_APPLICATION_TOKEN_VALIDITY_PERIOD, null, null,
+                        supportedGrantTypes, null, false);
             } finally {
                 PrivilegedCarbonContext.endTenantFlow();
             }

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
   ~
-  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
   ~ in compliance with the License.
-  ~ you may obtain a copy of the License at
+  ~ You may obtain a copy of the License at
   ~
-  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~    http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing,
   ~ software distributed under the License is distributed on an
   ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  ~ KIND, either express or implied.  See the License for the
+  ~ KIND, either express or implied. See the License for the
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
@@ -32,22 +32,26 @@
         <SchedulerTaskEnabled>true</SchedulerTaskEnabled>
         <PushNotificationProviders>
             <Provider>io.entgra.device.mgt.core.device.mgt.extensions.push.notification.provider.fcm.FCMBasedPushNotificationProvider</Provider>
-            <!--<Provider>io.entgra.device.mgt.plugins.mobile.impl.ios.apns.APNSBasedPushNotificationProvider</Provider>-->
             <Provider>io.entgra.device.mgt.core.device.mgt.extensions.push.notification.provider.mqtt.MQTTBasedPushNotificationProvider</Provider>
-			<Provider>io.entgra.device.mgt.core.device.mgt.extensions.push.notification.provider.http.HTTPBasedPushNotificationProvider</Provider>
+            <Provider>io.entgra.device.mgt.core.device.mgt.extensions.push.notification.provider.http.HTTPBasedPushNotificationProvider</Provider>
             <Provider>io.entgra.device.mgt.core.device.mgt.extensions.push.notification.provider.xmpp.XMPPBasedPushNotificationProvider</Provider>
         </PushNotificationProviders>
     </PushNotificationConfiguration>
-	<PullNotificationConfiguration>
-		<Enabled>false</Enabled>
-	</PullNotificationConfiguration>
+    <PullNotificationConfiguration>
+        <Enabled>false</Enabled>
+    </PullNotificationConfiguration>
     <IdentityConfiguration>
         <ServerUrl>https://localhost:9443</ServerUrl>
-        <AdminUsername>admin</AdminUsername>
-        <AdminPassword>admin</AdminPassword>
+        <AdminUsername>${admin.username}</AdminUsername>
+        <AdminPassword>${admin.username}</AdminPassword>
     </IdentityConfiguration>
+    <KeyManagerConfiguration>
+        <ServerUrl>https://localhost:9443</ServerUrl>
+        <AdminUsername>${admin.username}</AdminUsername>
+        <AdminPassword>${admin.username}</AdminPassword>
+    </KeyManagerConfiguration>
     <PolicyConfiguration>
-        <MonitoringClass>org.wso2.carbon.policy.mgt</MonitoringClass>
+        <MonitoringClass>io.entgra.device.mgt.core.policy.mgt</MonitoringClass>
         <MonitoringEnable>true</MonitoringEnable>
         <MonitoringFrequency>60000</MonitoringFrequency>
         <MaxRetries>5</MaxRetries>
@@ -57,6 +61,7 @@
         <!--Simple ->  Simple policy evaluation point-->
         <!--Merged ->  Merged policy evaluation point -->
         <PolicyEvaluationPoint>Simple</PolicyEvaluationPoint>
+        <CacheEnable>true</CacheEnable>
     </PolicyConfiguration>
     <!-- Default Page size configuration for paginated DM APIs-->
     <PaginationConfiguration>
@@ -66,6 +71,7 @@
         <ActivityListPageSize>20</ActivityListPageSize>
         <OperationListPageSize>20</OperationListPageSize>
         <TopicListPageSize>20</TopicListPageSize>
+        <MetadataListPageSize>20</MetadataListPageSize>
     </PaginationConfiguration>
     <!--This specifies whether to enable the DeviceStatus Task in this node. In clustered setup only master node
      should  have to run this task.-->
@@ -76,21 +82,134 @@
     device caching for upto configured expiry-time in seconds. In clustered setup all worker nodes can enable the
     device-cache to improve performance. -->
     <DeviceCacheConfiguration>
-        <Enable>false</Enable>
+        <Enable>true</Enable>
         <ExpiryTime>600</ExpiryTime>
         <!--This configuration specifies the number of cache entries in device cache. default capacity is 10000 entries.
         This can be configured to higher number if cache eviction happens due to large number of devices in the
         server environment-->
         <Capacity>10000</Capacity>
     </DeviceCacheConfiguration>
+    <GeoFenceCacheConfiguration>
+        <Enable>true</Enable>
+        <ExpiryTime>600</ExpiryTime>
+        <Capacity>10000</Capacity>
+    </GeoFenceCacheConfiguration>
+    <BillingCacheConfiguration>
+        <Enable>true</Enable>
+        <ExpiryTime>600</ExpiryTime>
+        <Capacity>10000</Capacity>
+    </BillingCacheConfiguration>
+    <EventOperationTaskConfiguration>
+        <Enable>true</Enable>
+    </EventOperationTaskConfiguration>
     <CertificateCacheConfiguration>
-        <Enable>false</Enable>
+        <Enable>true</Enable>
         <ExpiryTime>86400</ExpiryTime>
     </CertificateCacheConfiguration>
+    <ArchivalConfiguration>
+        <DataSourceConfiguration>
+            <JndiLookupDefinition>
+                <Name>jdbc/DM_ARCHIVAL_DS</Name>
+            </JndiLookupDefinition>
+        </DataSourceConfiguration>
+        <ArchivalTask>
+            <Enabled>false</Enabled>
+            <ArchivePendingOperations>false</ArchivePendingOperations>
+            <DBConfig>
+                <SourceDB>DM_DB</SourceDB>
+                <DestinationDB>ARCHIVAL_DB</DestinationDB>
+            </DBConfig>
+            <TaskClass>io.entgra.device.mgt.core.device.mgt.core.task.impl.ArchivalTask</TaskClass>
+            <!-- Cron expression to run the task at specified time -->
+            <CronExpression>0 0 0 1/1 * ? *</CronExpression>
+            <!-- How many days of data should we keep in transactional tables? Must be in number of days -->
+            <RetentionPeriod>30</RetentionPeriod>
+            <ExecutionBatchSize>1000</ExecutionBatchSize>
+            <PurgingTask>
+                <Enabled>false</Enabled>
+                <TaskClass>io.entgra.device.mgt.core.device.mgt.core.task.impl.ArchivedDataDeletionTask</TaskClass>
+                <!-- Cron expression to run the task at specified time -->
+                <CronExpression>0 0 3 1/1 * ? *</CronExpression>
+                <!-- After this number of days, data will be permanently deleted from archival tables.
+                Data retention period must be in number of DAYS -->
+                <RetentionPeriod>365</RetentionPeriod>
+            </PurgingTask>
+        </ArchivalTask>
+    </ArchivalConfiguration>
     <GeoLocationConfiguration>
-        <isEnabled>false</isEnabled>
-        <PublishLocationOperationResponse>false</PublishLocationOperationResponse>
+        <Enabled>false</Enabled>
     </GeoLocationConfiguration>
+    <OperationAnalyticsConfiguration>
+        <PublishLocationResponse>false</PublishLocationResponse>
+        <PublishDeviceInfoResponse>false</PublishDeviceInfoResponse>
+        <PublishOperationResponse>
+            <Enabled>false</Enabled>
+            <Operations>
+                <!-- Publish specific operation responses -->
+                <!--
+                    <Operation>BATTERY_LEVEL</Operation>
+                    <Operation>CHECK_LOCK_STATUS</Operation>
+                -->
+                <!-- use wildcard '*' to publish all responses -->
+                <Operation>*</Operation>
+            </Operations>
+        </PublishOperationResponse>
+    </OperationAnalyticsConfiguration>
+    <!--This configuration used to configure the options for remote device control feature -->
+    <RemoteSessionConfiguration>
+        <Enabled>true</Enabled>
+        <RemoteSessionServerUrl>ws://localhost:9763</RemoteSessionServerUrl>
+        <MaximumHTTPConnectionPerHost>2</MaximumHTTPConnectionPerHost>
+        <MaximumTotalHTTPConnections>100</MaximumTotalHTTPConnections>
+        <MaximumMessagesPerSecond>20</MaximumMessagesPerSecond>
+        <SessionIdleTimeOut>15</SessionIdleTimeOut>
+        <MaximumMessageBufferSize>640</MaximumMessageBufferSize>
+    </RemoteSessionConfiguration>
     <DefaultGroupsConfiguration>BYOD,COPE</DefaultGroupsConfiguration>
+    <EnrolmentNotificationConfiguration>
+        <Enabled>false</Enabled>
+        <NotifyThroughExtension>false</NotifyThroughExtension>
+        <ExtensionClass>io.entgra.device.mgt.core.device.mgt.common.enrollment.notification.EnrollmentNotifier</ExtensionClass>
+        <NotifyingInternalHost>http://localhost:8280</NotifyingInternalHost>
+    </EnrolmentNotificationConfiguration>
+    <DefaultRoles>
+        <Enabled>false</Enabled>
+        <Roles>
+            <Role>
+                <Name>test_role</Name>
+                <Permissions>
+                    <Permission>/permission/admin/Login</Permission>
+                </Permissions>
+            </Role>
+        </Roles>
+    </DefaultRoles>
+    <MetaDataConfiguration>
+        <WhiteLabelConfiguration>
+            <FooterText>
+                &lt;a href='https://entgra.io' target='_blank'&gt;
+                Entgra
+                &lt;/a&gt;
+                IoT Server 5.2.0 |  &#169; 2023
+                , All Rights Reserved.
+            </FooterText>
+            <AppTitle>Entgra</AppTitle>
+            <WhiteLabelImages>
+                <StoragePath>repository/resources/whitelabel</StoragePath>
+                <DefaultFaviconName>favicon.png</DefaultFaviconName>
+                <DefaultLogoName>logo.png</DefaultLogoName>
+                <DefaultLogoIconName>icon.png</DefaultLogoIconName>
+                <DefaultImagesLocation>default</DefaultImagesLocation>
+            </WhiteLabelImages>
+        </WhiteLabelConfiguration>
+    </MetaDataConfiguration>
+
+    <OperationTimeoutConfigurations>
+        <OperationTimeouts>
+        </OperationTimeouts>
+    </OperationTimeoutConfigurations>
+    <EnrollmentGuideConfiguration>
+        <Enable>false</Enable>
+        <Mail>Replace with mail</Mail>
+    </EnrollmentGuideConfiguration>
 </DeviceMgtConfiguration>
 

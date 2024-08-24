@@ -1,20 +1,20 @@
 /*
-*  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-*  WSO2 Inc. licenses this file to you under the Apache License,
-*  Version 2.0 (the "License"); you may not use this file except
-*  in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package io.entgra.device.mgt.plugins.output.adapter.mqtt.util;
 
 import io.entgra.device.mgt.core.apimgt.keymgt.extension.DCRResponse;
@@ -40,6 +40,9 @@ import org.wso2.carbon.event.output.adapter.core.exception.ConnectionUnavailable
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterException;
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterRuntimeException;
 import org.wso2.carbon.user.api.UserStoreException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MQTT publisher related configuration initialization and publishing capabilties are implemented here.
@@ -142,6 +145,7 @@ public class MQTTAdapterPublisher {
         String username = this.mqttBrokerConnectionConfiguration.getUsername();
         String password = this.mqttBrokerConnectionConfiguration.getPassword();
         String dcrUrlString = this.mqttBrokerConnectionConfiguration.getDcrUrl();
+        List<String> supportedGrantTypes = new ArrayList<>();
 
         if (dcrUrlString != null && !dcrUrlString.isEmpty()) {
             PrivilegedCarbonContext.startTenantFlow();
@@ -151,7 +155,8 @@ public class MQTTAdapterPublisher {
                 String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
                         + mqttBrokerConnectionConfiguration.getAdapterName();
                 DCRResponse dcrResponse = keyMgtService.dynamicClientRegistration(applicationName, username,
-                        "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE);
+                        "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE, password,
+                        supportedGrantTypes, dcrUrlString);
                 return getToken(dcrResponse.getClientId(), dcrResponse.getClientSecret());
 //                connectionOptions.setUserName(accessToken.substring(0, 18));
 //                connectionOptions.setPassword(accessToken.substring(19).toCharArray());

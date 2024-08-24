@@ -1,12 +1,12 @@
 /*
- * Copyright (c)  2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,10 +18,6 @@
 
 package io.entgra.device.mgt.plugins.extension.siddhi.device;
 
-import org.apache.log4j.Logger;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 import io.entgra.device.mgt.core.device.mgt.common.Device;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
@@ -38,6 +34,14 @@ import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProvide
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderServiceImpl;
 import io.entgra.device.mgt.core.device.mgt.core.service.GroupManagementProviderService;
 import io.entgra.device.mgt.core.device.mgt.core.service.GroupManagementProviderServiceImpl;
+import io.entgra.device.mgt.plugins.extension.siddhi.device.util.SiddhiTestHelper;
+import io.entgra.device.mgt.plugins.extension.siddhi.device.util.TestDataHolder;
+import io.entgra.device.mgt.plugins.extension.siddhi.device.util.TestDeviceManagementService;
+import io.entgra.device.mgt.plugins.extension.siddhi.device.utils.DeviceUtils;
+import org.apache.log4j.Logger;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.wso2.carbon.registry.core.config.RegistryContext;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.registry.core.internal.RegistryDataHolder;
@@ -46,10 +50,6 @@ import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.util.SiddhiTestHelper;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.util.TestDataHolder;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.util.TestDeviceManagementService;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.utils.DeviceUtils;
 import org.wso2.siddhi.core.ExecutionPlanRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;

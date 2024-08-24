@@ -1,36 +1,19 @@
 /*
- * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */
-/*
- *  Copyright (c) 2020, Entgra (pvt) Ltd. (http://entgra.io) All Rights Reserved.
- *
- *  Entgra (pvt) Ltd. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
  */
 
 package io.entgra.device.mgt.plugins.mobile.android.api.mocks;
@@ -40,25 +23,23 @@ import io.entgra.device.mgt.core.device.mgt.common.Device;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceTransferRequest;
 import io.entgra.device.mgt.core.device.mgt.common.DynamicTaskContext;
-import io.entgra.device.mgt.core.device.mgt.common.StartupOperationConfig;
-import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
-import io.entgra.device.mgt.core.device.mgt.common.app.mgt.ApplicationManagementException;
-import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.AmbiguousConfigurationException;
-import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.ConfigurationEntry;
-import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.DeviceConfiguration;
-import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceData;
-import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocationHistorySnapshot;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.ConflictException;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.FeatureManager;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceNotFoundException;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceTypeNotFoundException;
-import io.entgra.device.mgt.core.device.mgt.common.exceptions.InvalidDeviceException;
 import io.entgra.device.mgt.core.device.mgt.common.MonitoringOperation;
 import io.entgra.device.mgt.core.device.mgt.common.OperationMonitoringTaskConfig;
 import io.entgra.device.mgt.core.device.mgt.common.PaginationRequest;
 import io.entgra.device.mgt.core.device.mgt.common.PaginationResult;
+import io.entgra.device.mgt.core.device.mgt.common.StartupOperationConfig;
+import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
+import io.entgra.device.mgt.core.device.mgt.common.app.mgt.ApplicationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.*;
+import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceData;
+import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocationHistorySnapshot;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.ConflictException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceNotFoundException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceTypeNotFoundException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.InvalidDeviceException;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.UnauthorizedDeviceAccessException;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.UserNotFoundException;
 import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.ConfigurationManagementException;
@@ -85,7 +66,6 @@ import io.entgra.device.mgt.core.device.mgt.core.dto.OwnerWithDeviceDTO;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.core.device.mgt.core.service.EmailMetaInfo;
 import io.entgra.device.mgt.plugins.mobile.android.api.utils.TestUtils;
-
 import org.apache.commons.collections.map.SingletonMap;
 
 import java.sql.Timestamp;
@@ -922,9 +902,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public void deleteDeviceDataByTenantDomain(String s) throws DeviceManagementException {
-        throw new UnsupportedOperationException("Not implemented");
-    }
+    public void deleteDeviceDataByTenantId(int i) throws DeviceManagementException {}
 
     @Override
     public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s, int i, String s1, String s2, String s3) throws DeviceManagementDAOException {
@@ -942,20 +920,6 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
 
-    public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s) throws DeviceManagementDAOException {
-        return null;
-    }
-
-
-    public OwnerWithDeviceDTO getOwnerWithDeviceByDeviceId(int i) throws DeviceManagementDAOException {
-        return null;
-    }
-
-
-    public List<DeviceDetailsDTO> getDevicesByTenantId(int i) throws DeviceManagementDAOException {
-        return Collections.emptyList();
-    }
-
     @Override
     public OperationDTO getOperationDetailsById(int i) throws OperationManagementException {
         return null;
@@ -970,6 +934,36 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public Device updateDeviceName(Device device, String deviceType, String deviceId)
             throws DeviceManagementException, DeviceNotFoundException, ConflictException {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getDevicesNotInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getDevicesInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public int getDeviceCountNotInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
+    public List<Device> getDevicesByDeviceIds(PaginationRequest paginationRequest, List<Integer> list) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public int getDeviceCountByDeviceIds(PaginationRequest paginationRequest, List<Integer> list) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
+    public List<Integer> getDeviceIdsByStatus(List<String> list) throws DeviceManagementException {
         return null;
     }
 }

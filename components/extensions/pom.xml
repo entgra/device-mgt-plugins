@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
   ~
-  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
   ~ in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~    http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing,
   ~ software distributed under the License is distributed on an
@@ -30,33 +30,13 @@
     <artifactId>extensions</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Mobile Plugins Extensions</name>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <modules>
         <module>cdmf-transport-adapters</module>
-        <!--<module>mb-extensions</module>-->
 		<module>pull-notification-listeners</module>
         <module>emqx-extensions</module>
         <module>siddhi-extensions</module>
     </modules>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-scr-plugin</artifactId>
-                    <version>${maven.scr.version}</version>
-                    <executions>
-                        <execution>
-                            <id>generate-scr-scrdescriptor</id>
-                            <goals>
-                                <goal>scr</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
   ~
-  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
   ~ in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~    http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing,
   ~ software distributed under the License is distributed on an
   ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  ~ KIND, either express or implied.  See the License for the
+  ~ KIND, either express or implied. See the License for the
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
@@ -29,9 +29,14 @@
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Device Mgt Input Adaptor Module - MQTT</name>
     <description>Provides the back-end functionality of Input adaptor</description>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>commons-codec.wso2</groupId>
             <artifactId>commons-codec</artifactId>
@@ -41,8 +46,8 @@
             <artifactId>org.wso2.carbon.event.input.adapter.core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.logging</artifactId>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
@@ -93,16 +98,12 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-scr-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-scr-descriptor</id>
-                        <goals>
-                            <goal>scr</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -126,39 +127,35 @@
                             io.entgra.device.mgt.plugins.input.adapter.mqtt.*
                         </Export-Package>
                         <Import-Package>
-                            org.wso2.carbon.event.input.adapter.core,
-                            org.wso2.carbon.event.input.adapter.core.*,
-                            javax.xml.namespace; version=0.0.0,
-                            org.eclipse.paho.client.mqttv3.*,
-                            org.apache.http;version="${httpclient.version.range}",
-                            org.apache.http.message;version="${httpclient.version.range}",
-                            org.apache.http.client;version="${httpclient.version.range}",
-                            org.apache.http.impl;version="${httpclient.version.range}",
-                            org.apache.http.conn.*;version="${httpclient.version.range}",
-                            org.apache.http.util;version="${httpclient.version.range}",
-                            org.apache.http.client.entity;version="${httpclient.version.range}",
-                            org.apache.http.client.methods;version="${httpclient.version.range}",
-                            org.apache.http.impl.client;version="${httpclient.version.range}",
-                            org.json.simple.*,
-                            com.jayway.jsonpath.*,
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.*,
-                            javax.net.ssl,
-                            org.apache.commons.codec.binary,
-                            org.apache.commons.logging,
-                            org.apache.http.entity,
-                            org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
-                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
-                            org.wso2.carbon.context,
-                            org.wso2.carbon.core,
-                            io.entgra.device.mgt.plugins.input.adapter.extension,
-                            org.wso2.carbon.user.api,
-                            org.wso2.carbon.utils.multitenancy,
-                            org.apache.axis2.context,
-                            org.wso2.carbon.core.multitenancy.utils,
-                            org.wso2.carbon.utils,
                             io.entgra.device.mgt.core.apimgt.keymgt.extension;version="[5.0,6)",
                             io.entgra.device.mgt.core.apimgt.keymgt.extension.exception;version="[5.0,6)",
-                            io.entgra.device.mgt.core.apimgt.keymgt.extension.service;version="[5.0,6)"
+                            io.entgra.device.mgt.core.apimgt.keymgt.extension.service;version="[5.0,6)",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="[5.0,6)",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="[5.0,6)",
+                            io.entgra.device.mgt.plugins.input.adapter.extension;version="[6.0,7)",
+                            io.entgra.device.mgt.plugins.input.adapter.mqtt,
+                            io.entgra.device.mgt.plugins.input.adapter.mqtt.util,
+                            javax.net.ssl,
+                            org.apache.axis2.context;version="[1.6,2)",
+                            org.apache.commons.codec.binary;version="[1.4,2)",
+                            org.apache.commons.logging;version="[1.2,2)",
+                            org.apache.http;version="[4.4,5)",
+                            org.apache.http.client;version="[4.3,5)",
+                            org.apache.http.conn.socket;version="[4.3,5)",o
+                            rg.apache.http.conn.ssl;version="[4.3,5)",
+                            org.apache.http.impl.client;version="[4.3,5)",
+                            org.apache.http.util;version="[4.4,5)",
+                            org.eclipse.paho.client.mqttv3;version="[1.0,2)",
+                            org.eclipse.paho.client.mqttv3.persist;version="[1.0,2)",
+                            org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
+                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
+                            org.wso2.carbon.context;version="[4.8,5)",
+                            org.wso2.carbon.core;version="[4.8,5)",
+                            org.wso2.carbon.core.multitenancy.utils;version="[4.8,5)",
+                            org.wso2.carbon.event.input.adapter.core;version="[5.3,6)",
+                            org.wso2.carbon.event.input.adapter.core.exception;version="[5.3,6)",
+                            org.wso2.carbon.user.api;version="[1.0,2)",
+                            org.wso2.carbon.utils;version="[4.8,5)"
                         </Import-Package>
                     </instructions>
                 </configuration>

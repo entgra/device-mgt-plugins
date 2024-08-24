@@ -1,20 +1,20 @@
 /*
-*  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-*  WSO2 Inc. licenses this file to you under the Apache License,
-*  Version 2.0 (the "License"); you may not use this file except
-*  in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package io.entgra.device.mgt.plugins.input.adapter.mqtt.util;
 
 import org.apache.commons.codec.binary.Base64;
@@ -35,7 +35,7 @@ import org.wso2.carbon.core.multitenancy.utils.TenantAxisUtils;
 import io.entgra.device.mgt.plugins.input.adapter.extension.ContentInfo;
 import io.entgra.device.mgt.plugins.input.adapter.extension.ContentTransformer;
 import io.entgra.device.mgt.plugins.input.adapter.extension.ContentValidator;
-import io.entgra.device.mgt.plugins.input.adapter.mqtt.InputAdapterServiceDataHolder;
+import io.entgra.device.mgt.plugins.input.adapter.mqtt.internal.InputAdapterServiceDataHolder;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterConfiguration;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterListener;
 import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterRuntimeException;
@@ -43,7 +43,9 @@ import io.entgra.device.mgt.core.identity.jwt.client.extension.exception.JWTClie
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MQTTAdapterListener implements MqttCallback, Runnable {
@@ -131,6 +133,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
             String password = this.mqttBrokerConnectionConfiguration.getPassword();
             String dcrUrlString = this.mqttBrokerConnectionConfiguration.getDcrUrl();
             String scopes = this.mqttBrokerConnectionConfiguration.getBrokerScopes();
+            List<String> supportedGrantTypes = new ArrayList<>();
             //getJWT Client Parameters.
             if (dcrUrlString != null && !dcrUrlString.isEmpty()) {
                 try {
@@ -138,7 +141,8 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
                     String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
                             + mqttBrokerConnectionConfiguration.getAdapterName();
                     DCRResponse dcrResponse = keyMgtService.dynamicClientRegistration(applicationName, username,
-                            "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE);
+                            "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE, password,
+                            supportedGrantTypes, dcrUrlString);
                     String accessToken = getToken(dcrResponse.getClientId(), dcrResponse.getClientSecret());
                     connectionOptions.setUserName(accessToken.substring(0, 18));
                     connectionOptions.setPassword(accessToken.substring(19).toCharArray());

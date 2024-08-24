@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,23 +18,13 @@
 
 package io.entgra.device.mgt.plugins.extension.siddhi.device;
 
-import feign.Feign;
-import feign.Logger;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
-import feign.jaxrs.JAXRSContract;
-import feign.okhttp.OkHttpClient;
-import feign.slf4j.Slf4jLogger;
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Activity;
+import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
+import io.entgra.device.mgt.plugins.extension.siddhi.device.utils.DeviceUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
-import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Activity;
-import io.entgra.device.mgt.core.device.mgt.common.operation.mgt.Operation;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.client.OAuthRequestInterceptor;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.client.configs.SiddhiExtensionConfigReader;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.client.dto.OperationRequest;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.client.services.OperationService;
-import io.entgra.device.mgt.plugins.extension.siddhi.device.utils.ClientUtils;
 import org.wso2.siddhi.core.config.ExecutionPlanContext;
 import org.wso2.siddhi.core.exception.ExecutionPlanRuntimeException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
@@ -53,17 +43,6 @@ public class AddOperationFunctionProcessor extends StreamFunctionProcessor {
     private static final Log log = LogFactory.getLog(AddOperationFunctionProcessor.class);
     private static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
     private static final String DEVICE_MGT_BASE_CONTEXT = "/api/device-mgt/v1.0";
-    private OperationService operationService;
-
-    public AddOperationFunctionProcessor() {
-        operationService = Feign.builder().client(new OkHttpClient(ClientUtils.getSSLClient()))
-                .logger(new Slf4jLogger())
-                .logLevel(Logger.Level.FULL).requestInterceptor(new OAuthRequestInterceptor())
-                .contract(new JAXRSContract()).encoder(new GsonEncoder()).decoder(new GsonDecoder())
-                .target(OperationService.class, ClientUtils.replaceProperties(
-                        SiddhiExtensionConfigReader.getInstance().getConfig().getGatewayEndpoint() +
-                                DEVICE_MGT_BASE_CONTEXT));
-    }
 
     /**
      * The init method of the StreamProcessor, this method will be called before other methods
@@ -138,9 +117,9 @@ public class AddOperationFunctionProcessor extends StreamFunctionProcessor {
 
         JSONArray deviceIds = new JSONArray((String) data[0]);
         String deviceType = (String) data[1];
-        List<String> deviceIdentifiers = new ArrayList<>();
+        List<DeviceIdentifier> deviceIdentifiers = new ArrayList<>();
         for (int i = 0; i < deviceIds.length(); i++) {
-            deviceIdentifiers.add(deviceIds.getString(i));
+            deviceIdentifiers.add(new DeviceIdentifier(deviceIds.getString(i), deviceType));
         }
 
         Operation operation = new Operation();
@@ -154,11 +133,8 @@ public class AddOperationFunctionProcessor extends StreamFunctionProcessor {
         String date = new SimpleDateFormat(DATE_FORMAT_NOW).format(new Date());
         operation.setCreatedTimeStamp(date);
 
-        OperationRequest operationRequest = new OperationRequest();
-        operationRequest.setDeviceIdentifiers(deviceIdentifiers);
-        operationRequest.setOperation(operation);
         try {
-            Activity activity = operationService.addOperation(deviceType, operationRequest);
+            Activity activity = DeviceUtils.getDeviceManagementProviderService().addOperation(deviceType, operation, deviceIdentifiers);
             return new Object[]{activity.getActivityId()};
         } catch (Exception e) {
             log.error("Error occurred while adding the operation " + operation.toString(), e);

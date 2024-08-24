@@ -1,20 +1,19 @@
 /*
- *   Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- *   WSO2 Inc. licenses this file to you under the Apache License,
- *   Version 2.0 (the "License"); you may not use this file except
- *   in compliance with the License.
- *   You may obtain a copy of the License at
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing,
- *   software distributed under the License is distributed on an
- *   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *   KIND, either express or implied.  See the License for the
- *   specific language governing permissions and limitations
- *   under the License.
- *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package io.entgra.device.mgt.plugins.mqtt.notification.listener.internal;
 
@@ -29,25 +28,16 @@ import io.entgra.device.mgt.plugins.mqtt.notification.listener.PullNotificationM
 import io.entgra.device.mgt.plugins.mqtt.notification.listener.PullNotificationStartupListener;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
 
-/**
- * @scr.component name="io.entgra.device.mgt.plugins.mqtt.notification.listener.internal.PullNotificationListenerServiceComponent" immediate="true"
- * @scr.reference name="carbon.device.mgt.provider"
- * interface="io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setDeviceManagementProviderService"
- * unbind="unsetDeviceManagementProviderService"
- * @scr.reference name="event.input.adapter.service"
- * interface="org.wso2.carbon.event.input.adapter.core.InputEventAdapterService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setInputEventAdapterService"
- * unbind="unsetInputEventAdapterService"
- */
+import org.osgi.service.component.annotations.*;
+
+@Component(
+        name = "io.entgra.device.mgt.plugins.mqtt.notification.listener.internal.PullNotificationListenerServiceComponent",
+        immediate = true)
 public class PullNotificationListenerServiceComponent {
 
     private static final Log log = LogFactory.getLog(PullNotificationListenerServiceComponent.class);
 
+    @Activate
     @SuppressWarnings("unused")
     protected void activate(ComponentContext componentContext) {
         try {
@@ -69,6 +59,12 @@ public class PullNotificationListenerServiceComponent {
         //Do nothing
     }
 
+    @Reference(
+            name = "device.mgt.provider.service",
+            service = io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetDeviceManagementProviderService")
     protected void setDeviceManagementProviderService(DeviceManagementProviderService deviceManagementProviderService) {
         MqttNotificationDataHolder.getInstance().setDeviceManagementProviderService(deviceManagementProviderService);
     }
@@ -77,6 +73,12 @@ public class PullNotificationListenerServiceComponent {
         MqttNotificationDataHolder.getInstance().setDeviceManagementProviderService(deviceManagementProviderService);
     }
 
+    @Reference(
+            name = "input.event.adaptor.service",
+            service = org.wso2.carbon.event.input.adapter.core.InputEventAdapterService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetInputEventAdapterService")
     protected void setInputEventAdapterService(InputEventAdapterService inputEventAdapterService) {
         MqttNotificationDataHolder.getInstance().setInputEventAdapterService(inputEventAdapterService);
     }

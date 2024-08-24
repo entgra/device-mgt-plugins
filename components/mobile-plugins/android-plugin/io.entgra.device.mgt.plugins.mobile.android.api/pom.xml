@@ -1,12 +1,12 @@
 <!--
-  ~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
   ~
-  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
   ~ in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~    http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing,
   ~ software distributed under the License is distributed on an
@@ -34,16 +34,12 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-                <version>2.3.2</version>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
                     <packagingExcludes>WEB-INF/lib/*cxf*.jar</packagingExcludes>
                     <warName>api#device-mgt#android#v1.0</warName>
@@ -79,12 +75,19 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <argLine>
+                        --add-opens=java.xml/jdk.xml.internal=ALL-UNNAMED
+                        --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED
+                    </argLine>
                     <systemPropertyVariables>
                         <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>org.ops4j.pax.logging</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
                 </configuration>
             </plugin>
         </plugins>
@@ -99,7 +102,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.7</version>
                         <executions>
                             <execution>
                                 <phase>compile</phase>
@@ -156,7 +158,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.2.1</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -205,8 +206,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.logging</artifactId>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -305,7 +306,7 @@
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
+            <artifactId>powermock-api-mockito2</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

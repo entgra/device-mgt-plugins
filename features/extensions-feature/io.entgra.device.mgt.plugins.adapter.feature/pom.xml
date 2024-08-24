@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  ~ Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
   ~
-  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
   ~ in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~    http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing,
   ~ software distributed under the License is distributed on an
@@ -31,7 +31,7 @@
     <artifactId>io.entgra.device.mgt.plugins.adapter.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Device Management Adapters Feature</name>
-    <url>http://wso2.org</url>
+    <url>http://entgra.io</url>
     <description>This feature contains the adapter bundles required for IoT Server</description>
 
     <dependencies>
@@ -176,12 +176,12 @@
                                 <bundleDef>
                                     io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.mqtt:${io.entgra.device.mgt.plugins.version}
                                 </bundleDef>
-								<bundleDef>
-									io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.thrift:${io.entgra.device.mgt.plugins.version}
-								</bundleDef>
-								<bundleDef>
-									org.wso2.carbon.analytics-common:org.wso2.carbon.event.input.adapter.wso2event:${carbon.analytics.common.version}
-								</bundleDef>
+                                <bundleDef>
+                                    io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.thrift:${io.entgra.device.mgt.plugins.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.event.input.adapter.wso2event:${carbon.analytics.common.version}
+                                </bundleDef>
                                 <bundleDef>
                                     io.entgra.device.mgt.plugins:io.entgra.device.mgt.plugins.input.adapter.xmpp:${io.entgra.device.mgt.plugins.version}
                                 </bundleDef>
@@ -204,15 +204,15 @@
                                 <bundleDef>
                                     com.jayway.jsonpath:json-path
                                 </bundleDef>
-								<bundleDef>
-									io.github.openfeign:feign-core:${io.github.openfeign.version}
-								</bundleDef>
-								<bundleDef>
-									io.github.openfeign:feign-slf4j:${io.github.openfeign.version}
-								</bundleDef>
-								<bundleDef>
-									io.github.openfeign:feign-gson:${io.github.openfeign.version}
-								</bundleDef>
+                                <bundleDef>
+                                    io.github.openfeign:feign-core:${io.github.openfeign.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    io.github.openfeign:feign-slf4j:${io.github.openfeign.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    io.github.openfeign:feign-gson:${io.github.openfeign.version}
+                                </bundleDef>
                             </bundles>
                         </configuration>
                     </execution>

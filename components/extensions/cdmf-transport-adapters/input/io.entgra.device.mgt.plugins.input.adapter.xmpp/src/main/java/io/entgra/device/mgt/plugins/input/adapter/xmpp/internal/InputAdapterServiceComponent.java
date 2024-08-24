@@ -1,20 +1,20 @@
 /*
-*  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-*  WSO2 Inc. licenses this file to you under the Apache License,
-*  Version 2.0 (the "License"); you may not use this file except
-*  in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ *
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package io.entgra.device.mgt.plugins.input.adapter.xmpp.internal;
 
 import org.apache.commons.logging.Log;
@@ -25,22 +25,15 @@ import io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensio
 import io.entgra.device.mgt.plugins.input.adapter.xmpp.XMPPEventAdapterFactory;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterFactory;
 import org.wso2.carbon.user.core.service.RealmService;
+import org.osgi.service.component.annotations.*;
 
-/**
- * @scr.component name="input.iot.xmpp.AdapterService.component" immediate="true"
- * @scr.reference name="user.realmservice.default"
- * interface="org.wso2.carbon.user.core.service.RealmService" cardinality="1..1"
- * policy="dynamic" bind="setRealmService" unbind="unsetRealmService"
- * @scr.reference name="input.extension.service" interface="io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensionService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setInputAdapterExtensionService"
- * unbind="unsetInputAdapterExtensionService"
- */
+@Component(
+		name = "io.entgra.device.mgt.plugins.input.adapter.xmpp.internal.InputAdapterServiceComponent",
+		immediate = true)
 public class InputAdapterServiceComponent {
 
 	private static final Log log = LogFactory.getLog(InputAdapterServiceComponent.class);
-
+	@Activate
 	protected void activate(ComponentContext context) {
 		try {
 			InputEventAdapterFactory xmppEventEventAdapterFactory = new XMPPEventAdapterFactory();
@@ -54,6 +47,12 @@ public class InputAdapterServiceComponent {
 		}
 	}
 
+	@Reference(
+			name = "realm.service",
+			service = org.wso2.carbon.user.core.service.RealmService.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.DYNAMIC,
+			unbind = "unsetRealmService")
 	protected void setRealmService(RealmService realmService) {
 		InputAdapterServiceDataHolder.registerRealmService(realmService);
 	}
@@ -62,6 +61,12 @@ public class InputAdapterServiceComponent {
 		InputAdapterServiceDataHolder.registerRealmService(null);
 	}
 
+	@Reference(
+			name = "http.service",
+			service = org.osgi.service.http.HttpService.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.DYNAMIC,
+			unbind = "unsetHttpService")
 	protected void setHttpService(HttpService httpService) {
 		InputAdapterServiceDataHolder.registerHTTPService(httpService);
 	}
@@ -70,6 +75,12 @@ public class InputAdapterServiceComponent {
 		InputAdapterServiceDataHolder.registerHTTPService(null);
 	}
 
+	@Reference(
+			name = "input.adaptor.extension.service",
+			service = io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensionService.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.DYNAMIC,
+			unbind = "unsetInputAdapterExtensionService")
     protected void setInputAdapterExtensionService(InputAdapterExtensionService inputAdapterExtensionService) {
         InputAdapterServiceDataHolder.setInputAdapterExtensionService(inputAdapterExtensionService);
     }
