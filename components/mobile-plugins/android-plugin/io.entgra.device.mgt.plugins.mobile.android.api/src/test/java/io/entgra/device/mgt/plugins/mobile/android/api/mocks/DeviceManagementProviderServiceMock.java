@@ -48,6 +48,7 @@ import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.Configurati
 import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.DeviceConfiguration;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceData;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocationHistorySnapshot;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.ConflictException;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.FeatureManager;
@@ -926,22 +927,62 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s) throws DeviceManagementDAOException {
+    public OwnerWithDeviceDTO getOwnersWithDeviceIds(String s, int i, String s1, String s2, String s3) throws DeviceManagementDAOException {
         return null;
     }
 
     @Override
-    public OwnerWithDeviceDTO getOwnerWithDeviceByDeviceId(int i) throws DeviceManagementDAOException {
+    public OwnerWithDeviceDTO getOwnerWithDeviceByDeviceId(int i, String s, String s1, String s2) throws DeviceManagementDAOException {
         return null;
     }
 
     @Override
-    public List<DeviceDetailsDTO> getDevicesByTenantId(int i) throws DeviceManagementDAOException {
+    public List<DeviceDetailsDTO> getDevicesByTenantId(int i, int i1, String s, String s1) throws DeviceManagementDAOException {
         return Collections.emptyList();
     }
 
     @Override
     public OperationDTO getOperationDetailsById(int i) throws OperationManagementException {
         return null;
+    }
+
+    @Override
+    public PaginationResult getDevicesNotInGroup(PaginationRequest paginationRequest, boolean b) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public Device updateDeviceName(Device device, String s, String s1) throws DeviceManagementException, DeviceNotFoundException, ConflictException {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getDevicesNotInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Integer> getDevicesInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public int getDeviceCountNotInGivenIdList(List<Integer> list) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
+    public List<Device> getDevicesByDeviceIds(PaginationRequest paginationRequest, List<Integer> list) throws DeviceManagementException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public int getDeviceCountByDeviceIds(PaginationRequest paginationRequest, List<Integer> list) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
+    public List<Integer> getDeviceIdsByStatus(List<String> list) throws DeviceManagementException {
+        return Collections.emptyList();
     }
 }
