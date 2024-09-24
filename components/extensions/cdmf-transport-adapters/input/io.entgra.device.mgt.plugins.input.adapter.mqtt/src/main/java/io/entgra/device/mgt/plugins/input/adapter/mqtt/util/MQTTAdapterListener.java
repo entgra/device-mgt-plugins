@@ -243,6 +243,8 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
             } else {
                 inputEventAdapterListener.onEvent(msgText);
             }
+        } catch (Exception ex) {
+          log.error("Error in message arrive : ", ex);
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
         }
