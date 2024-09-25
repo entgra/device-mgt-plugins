@@ -21,7 +21,7 @@
             "and:ops:mute",
             "and:ops:change-lock-code",
             "and:ops:blacklist-app",
-            "and:ops:password-policy",
+            "and:ops:pwd-policy",
             "and:ops:encrypt-storage",
             "and:ops:clear-password",
             "and:ops:enterprise-wipe",

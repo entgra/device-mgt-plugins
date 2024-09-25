@@ -231,7 +231,7 @@ import java.util.List;
                 @Scope(
                         name = "Password Policy",
                         description = "Set password policy of an Android Device",
-                        key = "and:ops:password-policy",
+                        key = "and:ops:pwd-policy",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/password-policy"}
                 ),
@@ -1751,7 +1751,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:password-policy")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:pwd-policy")
                     })
             }
     )
