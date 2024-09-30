@@ -91,7 +91,7 @@ import java.util.List;
                 @Scope(
                         name = "Clear Password",
                         description = "Clear the password on Android devices",
-                        key = "and:ops:clear-password",
+                        key = "and:ops:clear-pwd",
                         roles = {"Internal/devicemgt-admin"},
                         permissions = {"/device-mgt/devices/owning-device/operations/android/clear-password"}
                 ),
@@ -511,7 +511,7 @@ public interface DeviceManagementAdminService {
             tags = "Android Device Management Administrative Service",
             extensions = {
                     @Extension(properties = {
-                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:clear-password")
+                            @ExtensionProperty(name = AndroidConstants.SCOPE, value = "and:ops:clear-pwd")
                     })
             }
     )
