@@ -23,7 +23,7 @@
             "and:ops:blacklist-app",
             "and:ops:pwd-policy",
             "and:ops:encrypt-storage",
-            "and:ops:clear-password",
+            "and:ops:clear-pwd",
             "and:ops:enterprise-wipe",
             "and:ops:device-info",
             "and:conf:view",
