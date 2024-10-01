@@ -974,10 +974,6 @@
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.0</android.agent.version>
 
-        <!-- Java Version Compatibility -->
-        <wso2.maven.compiler.source>17</wso2.maven.compiler.source>
-        <wso2.maven.compiler.target>17</wso2.maven.compiler.target>
-
         <!--Carbon kernel versions-->
         <carbon.kernel.version>4.8.1</carbon.kernel.version>
         <pax.logging.api.version>1.11.2</pax.logging.api.version>
