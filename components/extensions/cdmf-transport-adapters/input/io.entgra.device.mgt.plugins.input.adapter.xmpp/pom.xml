@@ -103,7 +103,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
                             io.entgra.device.mgt.plugins.input.adapter.xmpp.internal,
-                            io.entgra.device.mgt.plugins.input.adapter.http.internal.*
+                            io.entgra.device.mgt.plugins.input.adapter.xmpp.internal.*
                         </Private-Package>
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.input.adapter.xmpp.internal,
@@ -111,8 +111,7 @@
                             io.entgra.device.mgt.plugins.input.adapter.xmpp.*
                         </Export-Package>
                         <Import-Package>
-                            io.entgra.device.mgt.plugins.input.adapter.extension;version="[6.0,7)",
-                            io.entgra.device.mgt.plugins.input.adapter.xmpp,
+                            io.entgra.device.mgt.plugins.input.adapter.extension;version="${io.entgra.device.mgt.plugins.version.range}",
                             org.apache.commons.logging;version="[1.2,2)",
                             org.jivesoftware.smack,
                             org.jivesoftware.smack.filter,

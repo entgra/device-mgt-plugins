@@ -970,6 +970,7 @@
 
         <!-- Carbon Device Management Plugins -->
         <io.entgra.device.mgt.plugins.version>7.0.0-SNAPSHOT</io.entgra.device.mgt.plugins.version>
+        <io.entgra.device.mgt.plugins.version.range>[7.0.0, 8.0.0)</io.entgra.device.mgt.plugins.version.range>
 
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.0</android.agent.version>

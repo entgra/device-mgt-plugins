@@ -103,10 +103,10 @@
                             io.entgra.device.mgt.plugins.output.adapter.http.*
                         </Export-Package>
                         <Import-Package>
-                            io.entgra.device.mgt.core.identity.jwt.client.extension;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.dto;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="[5.0,6)",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.dto;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.plugins.output.adapter.http.util,
                             javax.net.ssl,
                             org.apache.commons.httpclient;version="[3.1,4)",

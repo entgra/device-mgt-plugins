@@ -143,7 +143,7 @@
                             feign.codec;version="[11.0,12)",
                             feign.gson;version="[11.0,12)",
                             feign.slf4j;version="[11.0,12)",
-                            io.entgra.device.mgt.plugins.input.adapter.extension;version="[6.0,7)",
+                            io.entgra.device.mgt.plugins.input.adapter.extension;version="${io.entgra.device.mgt.plugins.version.range}",
                             io.entgra.device.mgt.plugins.input.adapter.http.oauth.exception,
                             io.entgra.device.mgt.plugins.input.adapter.http.util,
                             javax.net.ssl,

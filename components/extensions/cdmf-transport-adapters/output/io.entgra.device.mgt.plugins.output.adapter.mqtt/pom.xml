@@ -116,11 +116,11 @@
                             io.entgra.device.mgt.plugins.output.adapter.mqtt.*,
                         </Export-Package>
                         <Import-Package>
-                            io.entgra.device.mgt.core.apimgt.keymgt.extension;version="[5.0,6)",
-                            io.entgra.device.mgt.core.apimgt.keymgt.extension.exception;version="[5.0,6)",
-                            io.entgra.device.mgt.core.apimgt.keymgt.extension.service;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="[5.0,6)",
+                            io.entgra.device.mgt.core.apimgt.keymgt.extension;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.apimgt.keymgt.extension.exception;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.apimgt.keymgt.extension.service;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.plugins.output.adapter.mqtt,
                             io.entgra.device.mgt.plugins.output.adapter.mqtt.util,
                             javax.net.ssl,
