@@ -21,14 +21,14 @@
 	<parent>
 		<groupId>io.entgra.device.mgt.plugins</groupId>
 		<artifactId>cdmf-transport-adapters</artifactId>
-		<version>6.1.1-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>io.entgra.device.mgt.plugins.input.adapter.thrift</artifactId>
 	<packaging>bundle</packaging>
-	<name>WSO2 Carbon - Event Input Thrift Adapter Module</name>
+	<name>Entgra Device Management Plugins - Event Input Thrift Adapter Module</name>
 	<description>org.wso2.carbon.event.input.adapter.thrift provides the back-end
 		functionality of input wso2event adapter
 	</description>

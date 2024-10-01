@@ -20,14 +20,14 @@
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
         <artifactId>cdmf-transport-adapters</artifactId>
-        <version>6.1.1-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>io.entgra.device.mgt.plugins.output.adapter.mqtt</artifactId>
 
     <packaging>bundle</packaging>
-    <name>WSO2 Carbon - Device Mgt Output MQTT Adaptor Module</name>
+    <name>Entgra Device Management Plugins - Device Mgt Output MQTT Adaptor Module</name>
     <description>io.entgra.device.mgt.plugins.output.adapter.mqtt provides the back-end functionality of mqtt adaptor
     </description>
     <url>http://entgra.io</url>

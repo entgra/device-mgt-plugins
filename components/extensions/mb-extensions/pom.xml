@@ -29,7 +29,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>mb-extensions</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Carbon - MB Extension</name>
+    <name>Entgra Device Management Plugins - MB Extension</name>
     <url>http://entgra.io</url>
 
     <modules>
