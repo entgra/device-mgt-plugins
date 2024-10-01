@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>io.entgra.device.mgt.plugins.emqx.initializer</artifactId>
     <packaging>bundle</packaging>
-    <name>EMQX Extensions - Extension Hook Initializer</name>
+    <name>Entgra Device Management Plugins - EMQX Extension Hook Initializer</name>
 
     <dependencies>
         <dependency>

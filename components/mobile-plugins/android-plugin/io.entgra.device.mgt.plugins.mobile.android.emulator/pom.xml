@@ -27,8 +27,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>io.entgra.device.mgt.plugins.mobile.android.emulator</artifactId>
-    <name>AndroidTryIt Emulator</name>
-    <description>Android Virtual Device</description>
+    <name>Entgra Device Management Plugins - AndroidTryIt Emulator</name>
+    <description>Entgra Device Management Plugins - Android Virtual Device</description>
 
     <build>
         <finalName>EmulatorJava</finalName>

@@ -28,7 +28,7 @@
 
     <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.device.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Siddhi Execution Extension - Device Group Feature</name>
+    <name>Entgra Device Management Plugins - Siddhi Extensions - Device Group Feature</name>
     <url>http://entgra.io</url>
     <description>This feature contains Siddhi extension feature for device groups</description>
 

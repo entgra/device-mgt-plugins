@@ -29,7 +29,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>emqx-extensions</artifactId>
     <packaging>pom</packaging>
-    <name>EMQX Extensions</name>
+    <name>Entgra Device Management Plugins - EMQX Extensions</name>
 
     <modules>
        <module>io.entgra.device.mgt.plugins.emqx.exhook</module>

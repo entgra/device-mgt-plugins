@@ -28,7 +28,7 @@
 
     <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.execution.json.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Siddhi Execution Extension - Json Feature</name>
+    <name>Entgra Device Management Plugins - Siddhi Extensions - Json Feature</name>
     <url>http://entgra.io</url>
     <description>This feature contains Siddhi extension feature for changing a json string to individual properties.</description>
 

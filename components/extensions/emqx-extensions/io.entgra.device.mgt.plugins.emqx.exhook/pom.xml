@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>io.entgra.device.mgt.plugins.emqx.exhook</artifactId>
     <packaging>jar</packaging>
-    <name>EMQX Extensions - Extension Hook</name>
+    <name>Entgra Device Management Plugins - EMQX Extension Hook</name>
 
 
     <dependencies>
