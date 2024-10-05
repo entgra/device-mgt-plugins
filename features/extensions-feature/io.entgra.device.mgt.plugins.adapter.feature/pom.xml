@@ -23,14 +23,14 @@
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
         <artifactId>extensions-feature</artifactId>
-        <version>6.1.1-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>io.entgra.device.mgt.plugins.adapter.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Carbon - Device Management Adapters Feature</name>
+    <name>Entgra Device Management Plugins - Device Management Adapters Feature</name>
     <url>http://entgra.io</url>
     <description>This feature contains the adapter bundles required for IoT Server</description>
 

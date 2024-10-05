@@ -23,13 +23,13 @@
 	<parent>
 		<artifactId>virtual-fire-alarm-plugin</artifactId>
 		<groupId>io.entgra.device.mgt.plugins</groupId>
-		<version>6.1.1-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>io.entgra.device.mgt.plugins.virtualfirealarm.agent.impl</artifactId>
-	<name>WSO2 Carbon - IoT Server VirtualFireAlarm Agent</name>
-	<description>WSO2 Carbon - VirtualFireAlarm Device Agent Implementation</description>
+	<name>Entgra Device Management Plugins - IoT Server VirtualFireAlarm Agent</name>
+	<description>Entgra Device Management Plugins - VirtualFireAlarm Device Agent Implementation</description>
 	<url>http://entgra.io</url>
 
 	<build>

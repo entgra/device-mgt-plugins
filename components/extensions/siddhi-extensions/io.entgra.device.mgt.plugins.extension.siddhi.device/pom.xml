@@ -17,19 +17,20 @@
   ~ under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
         <artifactId>siddhi-extensions</artifactId>
-        <version>6.1.1-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>io.entgra.device.mgt.plugins.extension.siddhi.device</artifactId>
     <packaging>bundle</packaging>
-    <name>WSO2 Siddhi Execution Extension - Device management Core functionality as Siddhi extension</name>
+    <name>Entgra Device Management Plugins - Siddhi Extensions - Device management Core</name>
     <url>http://entgra.io</url>
 
     <dependencies>
@@ -168,26 +169,21 @@
                             io.entgra.device.mgt.plugins.extension.siddhi.device.*
                         </Export-Package>
                         <Import-Package>
-<!--                            android.net.http,-->
-<!--                            android.net.ssl,-->
-<!--                            android.os,-->
-<!--                            android.security,-->
-<!--                            android.util,-->
                             feign;version="[11.0,12)",
                             feign.auth;version="[11.0,12)",
                             feign.codec;version="[11.0,12)",
                             feign.gson;version="[11.0,12)",
                             feign.slf4j;version="[11.0,12)",
-                            io.entgra.device.mgt.core.device.mgt.common;version="[5.0,6)",
-                            io.entgra.device.mgt.core.device.mgt.common.exceptions;version="[5.0,6)",
-                            io.entgra.device.mgt.core.device.mgt.common.group.mgt;version="[5.0,6)",
-                            io.entgra.device.mgt.core.device.mgt.common.notification.mgt;version="[5.0,6)",
-                            io.entgra.device.mgt.core.device.mgt.common.operation.mgt;version="[5.0,6)",
-                            io.entgra.device.mgt.core.device.mgt.core.service;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.dto;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="[5.0,6)",
-                            io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="[5.0,6)",
+                            io.entgra.device.mgt.core.device.mgt.common;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.common.exceptions;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.common.group.mgt;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.common.notification.mgt;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.common.operation.mgt;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.core.service;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.dto;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.plugins.extension.siddhi.device.client.configs,
                             io.entgra.device.mgt.plugins.extension.siddhi.device.client.dto,
                             io.entgra.device.mgt.plugins.extension.siddhi.device.client.exception,
@@ -198,29 +194,9 @@
                             javax.security.auth.x500,javax.xml.bind;version="[0.0,1)",
                             javax.xml.bind.annotation;version="[0.0,1)",
                             javax.xml.parsers,
-<!--                            kotlin;resolution:=optional,-->
-<!--                            kotlin.*;resolution:=optional,-->
-<!--                            kotlin,-->
-<!--                            kotlin.annotation,-->
-<!--                            kotlin.collections,-->
-<!--                            kotlin.comparisons,-->
-<!--                            kotlin.io,-->
-<!--                            kotlin.jvm,-->
-<!--                            kotlin.jvm.functions,-->
-<!--                            kotlin.jvm.internal,-->
-<!--                            kotlin.jvm.internal.markers,-->
-<!--                            kotlin.ranges,-->
-<!--                            kotlin.reflect,-->
-<!--                            kotlin.sequences,-->
-<!--                            kotlin.text,-->
                             org.apache.commons.lang;version="[2.6,3)",
                             org.apache.commons.logging;version="[1.2,2)",
-<!--                            org.bouncycastle.jsse;version="[1.70,2)",-->
-<!--                            org.bouncycastle.jsse.provider;version="[1.70,2)",-->
-<!--                            org.conscrypt,-->
                             org.json;version="[3.0,4)",
-<!--                            org.openjsse.javax.net.ssl,-->
-<!--                            org.openjsse.net.ssl,-->
                             org.w3c.dom,
                             org.wso2.carbon.base;version="[1.0,2)",
                             org.wso2.carbon.context;version="[4.8,5)",

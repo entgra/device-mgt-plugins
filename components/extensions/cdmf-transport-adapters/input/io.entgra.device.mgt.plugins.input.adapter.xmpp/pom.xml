@@ -20,14 +20,14 @@
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
         <artifactId>cdmf-transport-adapters</artifactId>
-        <version>6.1.1-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>io.entgra.device.mgt.plugins.input.adapter.xmpp</artifactId>
     <packaging>bundle</packaging>
-    <name>WSO2 Carbon - Device Mgt Input Adaptor Module - XMPP</name>
+    <name>Entgra Device Management Plugins - Device Mgt Input Adaptor Module - XMPP</name>
     <description>Provides the back-end functionality of Input adaptor</description>
     <url>http://entgra.io</url>
 
@@ -103,7 +103,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
                             io.entgra.device.mgt.plugins.input.adapter.xmpp.internal,
-                            io.entgra.device.mgt.plugins.input.adapter.http.internal.*
+                            io.entgra.device.mgt.plugins.input.adapter.xmpp.internal.*
                         </Private-Package>
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.input.adapter.xmpp.internal,
@@ -111,8 +111,7 @@
                             io.entgra.device.mgt.plugins.input.adapter.xmpp.*
                         </Export-Package>
                         <Import-Package>
-                            io.entgra.device.mgt.plugins.input.adapter.extension;version="[6.0,7)",
-                            io.entgra.device.mgt.plugins.input.adapter.xmpp,
+                            io.entgra.device.mgt.plugins.input.adapter.extension;version="${io.entgra.device.mgt.plugins.version.range}",
                             org.apache.commons.logging;version="[1.2,2)",
                             org.jivesoftware.smack,
                             org.jivesoftware.smack.filter,

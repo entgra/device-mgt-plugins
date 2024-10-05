@@ -21,14 +21,14 @@
     <parent>
         <groupId>io.entgra.device.mgt.plugins</groupId>
         <artifactId>emqx-extensions</artifactId>
-        <version>6.1.1-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>io.entgra.device.mgt.plugins.emqx.initializer</artifactId>
     <packaging>bundle</packaging>
-    <name>EMQX Extensions - Extension Hook Initializer</name>
+    <name>Entgra Device Management Plugins - EMQX Extension Hook Initializer</name>
 
     <dependencies>
         <dependency>

@@ -17,16 +17,17 @@
   ~ under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.entgra.device.mgt.plugins</groupId>
-    <artifactId>io.entgra.device.mgt.plugins.parent</artifactId>
+    <artifactId>device-mgt-plugins</artifactId>
     <packaging>pom</packaging>
-    <version>6.1.1-SNAPSHOT</version>
-    <name>WSO2 Carbon - Device Management Plugins Parent</name>
+    <version>7.0.0-SNAPSHOT</version>
+    <name>Entgra Device Management Plugins - Parent</name>
     <url>http://entgra.io</url>
-    <description>WSO2 Carbon - Device Management Plugins Parent</description>
+    <description>Entgra Device Management Plugins - Parent</description>
 
     <parent>
         <groupId>org.wso2</groupId>
@@ -430,11 +431,11 @@
                 <artifactId>io.entgra.device.mgt.plugins.output.adapter.websocket</artifactId>
                 <version>${io.entgra.device.mgt.plugins.version}</version>
             </dependency>
-			<dependency>
-				<groupId>io.entgra.device.mgt.plugins</groupId>
-				<artifactId>io.entgra.device.mgt.plugins.mqtt.notification.listener</artifactId>
-				<version>${io.entgra.device.mgt.plugins.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>io.entgra.device.mgt.plugins</groupId>
+                <artifactId>io.entgra.device.mgt.plugins.mqtt.notification.listener</artifactId>
+                <version>${io.entgra.device.mgt.plugins.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.entgra.device.mgt.plugins</groupId>
                 <artifactId>io.entgra.device.mgt.core.device.mgt.extensions.remote.session</artifactId>
@@ -845,11 +846,11 @@
                 <artifactId>feign-gson</artifactId>
                 <version>${io.github.openfeign.version}</version>
             </dependency>
-			<dependency>
-				<groupId>io.github.openfeign</groupId>
-				<artifactId>feign-slf4j</artifactId>
-				<version>${io.github.openfeign.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-slf4j</artifactId>
+                <version>${io.github.openfeign.version}</version>
+            </dependency>
 
             <!-- dependencies for siddhi extension -->
             <dependency>
@@ -964,18 +965,15 @@
     <properties>
 
         <!-- Carbon Device Management -->
-        <io.entgra.device.mgt.core.version>5.2.4-SNAPSHOT</io.entgra.device.mgt.core.version>
-        <io.entgra.device.mgt.core.version.range>[5.0.0, 6.0.0)</io.entgra.device.mgt.core.version.range>
+        <io.entgra.device.mgt.core.version>6.0.0-SNAPSHOT</io.entgra.device.mgt.core.version>
+        <io.entgra.device.mgt.core.version.range>[6.0.0, 7.0.0)</io.entgra.device.mgt.core.version.range>
 
         <!-- Carbon Device Management Plugins -->
-        <io.entgra.device.mgt.plugins.version>6.1.1-SNAPSHOT</io.entgra.device.mgt.plugins.version>
+        <io.entgra.device.mgt.plugins.version>7.0.0-SNAPSHOT</io.entgra.device.mgt.plugins.version>
+        <io.entgra.device.mgt.plugins.version.range>[7.0.0, 8.0.0)</io.entgra.device.mgt.plugins.version.range>
 
         <!-- Android Agent Artifact Version-->
         <android.agent.version>4.0.0</android.agent.version>
-
-        <!-- Java Version Compatibility -->
-        <wso2.maven.compiler.source>17</wso2.maven.compiler.source>
-        <wso2.maven.compiler.target>17</wso2.maven.compiler.target>
 
         <!--Carbon kernel versions-->
         <carbon.kernel.version>4.8.1</carbon.kernel.version>
@@ -1102,7 +1100,8 @@
 
     <scm>
         <url>https://repository.entgra.net/community/device-mgt-plugins.git</url>
-        <developerConnection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git</developerConnection>
+        <developerConnection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git
+        </developerConnection>
         <connection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git</connection>
         <tag>v6.0.14</tag>
     </scm>
