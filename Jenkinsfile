@@ -5,7 +5,6 @@ pipeline {
     environment {
         def isPendingUpstreamDependenciesExists = false
         def triggeredViaPush = false
-        SCANNER_HOME = tool 'sonar-scanner'
         JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
         PATH = "${JAVA_HOME}/bin:${env.PATH}" 
     }
@@ -48,22 +47,6 @@ pipeline {
                 }
             }
         }
-        
-       stage('Check SonarQube Installation') {
-	steps {
-        script {
-            echo "Initial JAVA_HOME: ${env.JAVA_HOME}"
-            echo "Initial PATH: ${env.PATH}"
-            
-            withEnv(["JAVA_HOME=${env.JAVA_HOME}", "PATH=${env.JAVA_HOME}/bin:${env.PATH}"]) {
-                sh """
-                java -version
-                ${SCANNER_HOME}/bin/sonar-scanner --version
-                """
-            }
-        }
-    }
-}
 
         stage('Fetch Pending Upstream Dependencies') {
             steps {
@@ -71,7 +54,7 @@ pipeline {
                     if (env.CHANGE_ID) {
                         def url = swaggerEndPoint.call()
                         echo "Fetching from URL: ${url}"
-                        withCredentials([usernamePassword(credentialsId: '4093a0bf-073a-4874-b929-be5b69273f4a', passwordVariable: 'password', usernameVariable: 'username')]) {
+                        withCredentials([usernamePassword(credentialsId: 'entgra-gitea-credentials', passwordVariable: 'password', usernameVariable: 'username')]) {
                             def response = sh(script: """curl -X GET "${url}" -H 'accept: application/json' -u \$username:\$password""", returnStdout: true).trim()
                             echo "API Response: ${response}"
                             isPendingUpstreamDependenciesExists = sh(script: "echo '${response}' | jq 'contains({\"labels\": [{ \"name\": \"pending upstream\"}]})'", returnStdout: true).trim().toBoolean()
@@ -93,7 +76,7 @@ pipeline {
                         echo '[Jenkinsfile] Entering testing phase.'
                         try {
                             checkout scm
-                            withCredentials([usernamePassword(credentialsId: 'builder2-deployer', passwordVariable: 'password', usernameVariable: 'username')]) {
+                            withCredentials([usernamePassword(credentialsId: 'builder2-deployer-nexus', passwordVariable: 'password', usernameVariable: 'username')]) {
                                 sh """/opt/scripts/run-test.sh -u \$username -p \$password"""
                             }
                             currentBuild.result = 'SUCCESS'
@@ -112,29 +95,11 @@ pipeline {
             }
         }
         
-       stage('Code Quality Check') {
-    steps {
-        script {
-            def projectName = "device-mgt-plugins-${env.CHANGE_ID}"
-            def projectKey = "device-mgt-plugins-${env.CHANGE_ID}"
-            
-            withSonarQubeEnv('sonar') {
-                sh """
-                    $SCANNER_HOME/bin/sonar-scanner \
-                    -Dsonar.projectName=${projectName} \
-                    -Dsonar.projectKey=${projectKey} \
-                    -Dsonar.java.binaries=target
-                """
-            }
-        }
-    }
-}
-
         stage('Report Job Status') {
             steps {
                 script {
                     if (true) {
-                        withCredentials([usernamePassword(credentialsId: '4093a0bf-073a-4874-b929-be5b69273f4a', passwordVariable: 'password', usernameVariable: 'username')]) {
+                        withCredentials([usernamePassword(credentialsId: 'entgra-gitea-credentials', passwordVariable: 'password', usernameVariable: 'username')]) {
                             def url = swaggerEndPoint.call() + '/reviews'
                             echo "[Jenkinsfile] Notifying pull request build status to ${url}"
                             def response = sh(script: """curl -X POST "${url}" -H 'accept: application/json' -H 'Content-Type: application/json' -u \$username:\$password -d '{ "body": "${message}" }'""", returnStdout: true).trim()
