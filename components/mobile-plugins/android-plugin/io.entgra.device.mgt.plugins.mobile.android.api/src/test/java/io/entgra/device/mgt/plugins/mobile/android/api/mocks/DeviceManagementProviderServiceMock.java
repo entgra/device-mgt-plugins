@@ -882,7 +882,7 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public List<Application> getInstalledApplicationsOnDevice(Device device, int i, int i1) throws DeviceManagementException {
+    public List<Application> getInstalledApplicationsOnDevice(Device device, int i, int i1, int i3) throws DeviceManagementException {
         return null;
     }
 
