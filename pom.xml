@@ -1099,13 +1099,11 @@
     </properties>
 
     <scm>
-        <url>https://repository.entgra.net/community/device-mgt-plugins.git</url>
-        <developerConnection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git
-        </developerConnection>
-        <connection>scm:git:https://repository.entgra.net/community/device-mgt-plugins.git</connection>
+        <url>https://github.com/entgra/device-mgt-plugins.git</url>
+        <developerConnection>scm:git:https://github.com/entgra/device-mgt-plugins.git</developerConnection>
+        <connection>scm:git:https://github.com/entgra/device-mgt-plugins.git</connection>
         <tag>v6.0.14</tag>
     </scm>
-
 
     <build>
         <extensions>
