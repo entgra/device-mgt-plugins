@@ -965,7 +965,7 @@
     <properties>
 
         <!-- Carbon Device Management -->
-        <io.entgra.device.mgt.core.version>6.0.2</io.entgra.device.mgt.core.version>
+        <io.entgra.device.mgt.core.version>6.0.0-SNAPSHOT</io.entgra.device.mgt.core.version>
         <io.entgra.device.mgt.core.version.range>[6.0.0, 7.0.0)</io.entgra.device.mgt.core.version.range>
 
         <!-- Carbon Device Management Plugins -->
@@ -973,7 +973,7 @@
         <io.entgra.device.mgt.plugins.version.range>[7.0.0, 8.0.0)</io.entgra.device.mgt.plugins.version.range>
 
         <!-- Android Agent Artifact Version-->
-        <android.agent.version>4.05.00.16</android.agent.version>
+        <android.agent.version>4.0.0</android.agent.version>
 
         <!--Carbon kernel versions-->
         <carbon.kernel.version>4.8.1</carbon.kernel.version>
