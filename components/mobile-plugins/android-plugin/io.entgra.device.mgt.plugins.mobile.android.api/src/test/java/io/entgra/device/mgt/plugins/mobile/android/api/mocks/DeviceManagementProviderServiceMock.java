@@ -915,11 +915,10 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
-    public List<DeviceDetailsDTO> getDevicesByTenantId(int i, int i1, String s, String s1) throws DeviceManagementDAOException {
+    public List<DeviceDetailsDTO> getDevicesByTenantId(int i, int i1, String s, String s1) throws DeviceManagementException {
         return Collections.emptyList();
     }
-
-
+    
     @Override
     public OperationDTO getOperationDetailsById(int i) throws OperationManagementException {
         return null;
