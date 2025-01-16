@@ -23,7 +23,7 @@
     <groupId>io.entgra.device.mgt.plugins</groupId>
     <artifactId>device-mgt-plugins</artifactId>
     <packaging>pom</packaging>
-    <version>7.0.2</version>
+    <version>7.0.3-SNAPSHOT</version>
     <name>Entgra Device Management Plugins - Parent</name>
     <url>http://entgra.io</url>
     <description>Entgra Device Management Plugins - Parent</description>
@@ -968,7 +968,7 @@
         <io.entgra.device.mgt.core.version.range>[6.0.0, 7.0.0)</io.entgra.device.mgt.core.version.range>
 
         <!-- Carbon Device Management Plugins -->
-        <io.entgra.device.mgt.plugins.version>7.0.2</io.entgra.device.mgt.plugins.version>
+        <io.entgra.device.mgt.plugins.version>7.0.3-SNAPSHOT</io.entgra.device.mgt.plugins.version>
         <io.entgra.device.mgt.plugins.version.range>[7.0.0, 8.0.0)</io.entgra.device.mgt.plugins.version.range>
 
         <!-- Android Agent Artifact Version-->
@@ -1101,7 +1101,7 @@
         <url>https://github.com/entgra/device-mgt-plugins.git</url>
         <developerConnection>scm:git:https://github.com/entgra/device-mgt-plugins.git</developerConnection>
         <connection>scm:git:https://github.com/entgra/device-mgt-plugins.git</connection>
-        <tag>v7.0.2</tag>
+        <tag>v6.0.14</tag>
     </scm>
 
     <build>
