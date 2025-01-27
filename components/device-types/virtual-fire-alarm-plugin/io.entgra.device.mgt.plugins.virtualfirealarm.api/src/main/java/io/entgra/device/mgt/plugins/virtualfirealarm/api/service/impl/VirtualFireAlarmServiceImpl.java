@@ -18,10 +18,15 @@
 
 package io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl;
 
+import io.entgra.device.mgt.core.apimgt.application.extension.bean.ApiApplicationKey;
+import io.entgra.device.mgt.core.apimgt.application.extension.bean.ApiApplicationProfile;
+import io.entgra.device.mgt.core.apimgt.application.extension.bean.Token;
+import io.entgra.device.mgt.core.apimgt.application.extension.bean.TokenCreationProfile;
+import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.BadRequestException;
+import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.UnexpectedResponseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import io.entgra.device.mgt.core.apimgt.application.extension.APIManagementProviderService;
-import io.entgra.device.mgt.core.apimgt.application.extension.dto.ApiApplicationKey;
 import io.entgra.device.mgt.core.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import io.entgra.device.mgt.core.device.mgt.common.Device;
@@ -44,9 +49,6 @@ import io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl.xmpp.Virtu
 import io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl.xmpp.XmppAccount;
 import io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl.xmpp.XmppConfig;
 import io.entgra.device.mgt.plugins.virtualfirealarm.api.service.impl.xmpp.XmppServerClient;
-import io.entgra.device.mgt.core.identity.jwt.client.extension.JWTClient;
-import io.entgra.device.mgt.core.identity.jwt.client.extension.dto.AccessTokenInfo;
-import io.entgra.device.mgt.core.identity.jwt.client.extension.exception.JWTClientException;
 import org.wso2.carbon.user.api.UserStoreException;
 
 import javax.ws.rs.*;
@@ -159,9 +161,6 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
         } catch (DeviceManagementException ex) {
             log.error(ex.getMessage(), ex);
             return Response.status(500).entity(ex.getMessage()).build();
-        } catch (JWTClientException ex) {
-            log.error(ex.getMessage(), ex);
-            return Response.status(500).entity(ex.getMessage()).build();
         } catch (APIManagerException ex) {
             log.error(ex.getMessage(), ex);
             return Response.status(500).entity(ex.getMessage()).build();
@@ -201,8 +200,8 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
     }
 
     private ZipArchive createDownloadFile(String owner, String deviceName, String sketchType)
-            throws DeviceManagementException, APIManagerException, JWTClientException,
-                   UserStoreException, VirtualFirealarmXMPPException {
+            throws DeviceManagementException, APIManagerException, UserStoreException, VirtualFirealarmXMPPException {
+        APIManagementProviderService apiManagementProviderService = APIUtil.getAPIManagementProviderService();
         //create new device id
         String deviceId = shortUUID();
         boolean status = register(deviceId, deviceName);
@@ -219,25 +218,42 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
                     PrivilegedCarbonContext.getThreadLocalCarbonContext().getUserRealm().getRealmConfiguration()
                             .getAdminUserName() + "@" + PrivilegedCarbonContext.getThreadLocalCarbonContext()
                             .getTenantDomain();
-            APIManagementProviderService apiManagementProviderService = APIUtil.getAPIManagementProviderService();
             String[] tags = {VirtualFireAlarmConstants.DEVICE_TYPE};
-            ArrayList<String> supportedGrantTypes = new ArrayList<>();
             try {
                 PrivilegedCarbonContext.startTenantFlow();
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantAdminDomainName);
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().setUsername(adminUsername);
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId(true);
 
-
-                apiApplicationKey = apiManagementProviderService.generateAndRetrieveApplicationKeys(
-                        VirtualFireAlarmConstants.DEVICE_TYPE, tags, KEY_TYPE, applicationUsername, true,
-                        VirtualFireAlarmConstants.APIM_APPLICATION_TOKEN_VALIDITY_PERIOD, null, null,
-                        supportedGrantTypes, null, false);
+                ApiApplicationProfile apiApplicationProfile = new ApiApplicationProfile();
+                apiApplicationProfile.setApplicationName(VirtualFireAlarmConstants.DEVICE_TYPE);
+                apiApplicationProfile.setTags(tags);
+                apiApplicationProfile.setOwner(applicationUsername);
+                apiApplicationProfile.setGrantTypes("client_credentials password refresh_token access_token");
+                apiApplicationKey = apiManagementProviderService.registerApiApplication(apiApplicationProfile);
+            } catch (BadRequestException e) {
+                String msg = "Encountered an invalid api application registration profile";
+                log.error(msg, e);
+                throw new DeviceManagementException(msg, e);
+            } catch (UnexpectedResponseException e) {
+                String msg = "Encountered an unexpected response for api application registration request";
+                log.error(msg, e);
+                throw new DeviceManagementException(msg, e);
             } finally {
                 PrivilegedCarbonContext.endTenantFlow();
             }
         }
-        JWTClient jwtClient = APIUtil.getJWTClientManagerService().getJWTClient();
+
+        if (apiApplicationKey == null) {
+            String msg = "Null received for the registered application";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+
+        TokenCreationProfile tokenCreationProfile = new TokenCreationProfile();
+        tokenCreationProfile.setBasicAuthUsername(apiApplicationKey.getClientId());
+        tokenCreationProfile.setBasicAuthPassword(apiApplicationKey.getClientSecret());
+        tokenCreationProfile.setUsername(owner);
 
         String deviceType = sketchType.replace(" ", "");
         String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
@@ -248,13 +264,25 @@ public class VirtualFireAlarmServiceImpl implements VirtualFireAlarmService {
 
         // add scopes for retrieve operation topic /tenantDomain/deviceType/deviceId/operation/#
         scopes.append(" perm:topic:sub:" + tenantDomain + ":" + deviceType + ":" + deviceId + ":operation");
+        tokenCreationProfile.setScope(scopes.toString());
 
-        AccessTokenInfo accessTokenInfo = jwtClient.getAccessToken(apiApplicationKey.getConsumerKey(),
-                apiApplicationKey.getConsumerSecret(), owner,
-                scopes.toString());
+        Token token;
+        try {
+         token = apiManagementProviderService.getCustomToken(tokenCreationProfile);
+        } catch (APIManagerException e) {
+            String msg = "Failed to retrieve token from the custom JWT token issuer";
+            log.error(msg, e);
+            throw new DeviceManagementException(msg, e);
+        }
 
-        String accessToken = accessTokenInfo.getAccessToken();
-        String refreshToken = accessTokenInfo.getRefreshToken();
+        if (token == null) {
+            String msg = "Null received for the requested custom token creation request";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+
+        String accessToken = token.getAccessToken();
+        String refreshToken = token.getRefreshToken();
         XmppAccount newXmppAccount = new XmppAccount();
         newXmppAccount.setAccountName(deviceId);
         newXmppAccount.setUsername(deviceId);
