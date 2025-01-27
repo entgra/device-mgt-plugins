@@ -57,6 +57,7 @@ import io.entgra.device.mgt.core.device.mgt.common.pull.notification.PullNotific
 import io.entgra.device.mgt.core.device.mgt.common.push.notification.NotificationStrategy;
 import io.entgra.device.mgt.core.device.mgt.common.spi.DeviceManagementService;
 import io.entgra.device.mgt.core.device.mgt.common.type.mgt.DeviceStatus;
+import io.entgra.device.mgt.core.device.mgt.core.cache.DeviceCacheKey;
 import io.entgra.device.mgt.core.device.mgt.core.dao.DeviceManagementDAOException;
 import io.entgra.device.mgt.core.device.mgt.core.dto.DeviceDetailsDTO;
 import io.entgra.device.mgt.core.device.mgt.core.dto.DeviceType;
@@ -665,6 +666,14 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public PolicyMonitoringManager getPolicyMonitoringManager(String s) {
         return null;
+    }
+
+    @Override
+    public void removeDeviceFromCache(DeviceIdentifier deviceIdentifier) {
+    }
+
+    @Override
+    public void removeDevicesFromCache(List<DeviceCacheKey> list) {
     }
 
     @Override
