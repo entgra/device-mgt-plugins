@@ -17,21 +17,27 @@
  */
 package io.entgra.device.mgt.plugins.output.adapter.mqtt.internal;
 
-import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
+import io.entgra.device.mgt.core.apimgt.application.extension.APIManagementProviderService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * common place to hold some OSGI service references.
  */
 public final class OutputAdapterServiceDataHolder {
+    private static final Log log = LogFactory.getLog(OutputAdapterServiceDataHolder.class);
+    private static APIManagementProviderService apiManagementProviderService;
 
-    private static JWTClientManagerService jwtClientManagerService;
-
-    public static JWTClientManagerService getJwtClientManagerService() {
-        return jwtClientManagerService;
+    public static APIManagementProviderService getApiManagementProviderService() {
+        if (apiManagementProviderService == null) {
+            String msg = "API management provider service is not properly initialized";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return apiManagementProviderService;
     }
 
-    public static void setJwtClientManagerService(
-            JWTClientManagerService jwtClientManagerService) {
-        OutputAdapterServiceDataHolder.jwtClientManagerService = jwtClientManagerService;
+    public static void setApiManagementProviderService(APIManagementProviderService apiManagementProviderService) {
+        OutputAdapterServiceDataHolder.apiManagementProviderService = apiManagementProviderService;
     }
 }
