@@ -17,7 +17,7 @@
  */
 package io.entgra.device.mgt.plugins.input.adapter.mqtt.internal;
 
-import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
+import io.entgra.device.mgt.core.apimgt.application.extension.APIManagementProviderService;
 import io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensionService;
 import io.entgra.device.mgt.plugins.input.adapter.mqtt.MQTTEventAdapterFactory;
 import org.apache.axis2.context.ConfigurationContext;
@@ -80,19 +80,6 @@ public class InputAdapterServiceComponent {
     }
 
 	@Reference(
-			name = "jwt.client.manager.service",
-			service = io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService.class,
-			cardinality = ReferenceCardinality.MANDATORY,
-			policy = ReferencePolicy.DYNAMIC,
-			unbind = "unsetJWTClientManagerService")
-    protected void setJWTClientManagerService(JWTClientManagerService jwtClientManagerService) {
-        InputAdapterServiceDataHolder.setJwtClientManagerService(jwtClientManagerService);
-    }
-
-    protected void unsetJWTClientManagerService(JWTClientManagerService jwtClientManagerService) {
-        InputAdapterServiceDataHolder.setJwtClientManagerService(null);
-    }
-	@Reference(
 			name = "input.event.adaptor.service",
 			service = org.wso2.carbon.event.input.adapter.core.InputEventAdapterService.class,
 			cardinality = ReferenceCardinality.MANDATORY,
@@ -119,6 +106,26 @@ public class InputAdapterServiceComponent {
 
 	protected void unsetConfigurationContextService(ConfigurationContextService contextService) {
 		InputAdapterServiceDataHolder.setMainServerConfigContext(null);
+	}
+
+	@Reference(
+			name = "api.mgt.provider.extension",
+			service = io.entgra.device.mgt.core.apimgt.application.extension.APIManagementProviderService.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.DYNAMIC,
+			unbind = "unsetApiManagementProviderService")
+	protected void setApiManagementProviderService(APIManagementProviderService apiManagementProviderService) {
+		if (log.isDebugEnabled()) {
+			log.info("API management provider service is initializing");
+		}
+		InputAdapterServiceDataHolder.setApiManagementProviderService(apiManagementProviderService);
+	}
+
+	protected void unsetApiManagementProviderService(APIManagementProviderService apiManagementProviderService) {
+		if (log.isDebugEnabled()) {
+			log.info("API management provider service is uninitialized");
+		}
+		InputAdapterServiceDataHolder.setApiManagementProviderService(null);
 	}
 
 }

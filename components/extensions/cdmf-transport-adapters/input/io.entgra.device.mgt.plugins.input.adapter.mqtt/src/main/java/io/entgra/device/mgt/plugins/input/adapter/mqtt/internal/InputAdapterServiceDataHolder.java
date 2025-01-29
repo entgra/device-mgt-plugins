@@ -17,10 +17,12 @@
  */
 package io.entgra.device.mgt.plugins.input.adapter.mqtt.internal;
 
+import io.entgra.device.mgt.core.apimgt.application.extension.APIManagementProviderService;
 import org.apache.axis2.context.ConfigurationContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osgi.service.http.HttpService;
 import io.entgra.device.mgt.plugins.input.adapter.extension.InputAdapterExtensionService;
-import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
 
 /**
@@ -28,11 +30,12 @@ import org.wso2.carbon.event.input.adapter.core.InputEventAdapterService;
  */
 public final class InputAdapterServiceDataHolder {
 
+    private static final Log log = LogFactory.getLog(InputAdapterServiceDataHolder.class);
 	private static HttpService httpService;
     private static InputAdapterExtensionService inputAdapterExtensionService;
-    private static JWTClientManagerService jwtClientManagerService;
     private static InputEventAdapterService inputEventAdapterService;
     private static ConfigurationContext mainServerConfigContext;
+    private static APIManagementProviderService apiManagementProviderService;
 
 	private InputAdapterServiceDataHolder() {
 	}
@@ -54,15 +57,6 @@ public final class InputAdapterServiceDataHolder {
         return inputAdapterExtensionService;
     }
 
-    public static JWTClientManagerService getJwtClientManagerService() {
-        return jwtClientManagerService;
-    }
-
-    public static void setJwtClientManagerService(
-            JWTClientManagerService jwtClientManagerService) {
-        InputAdapterServiceDataHolder.jwtClientManagerService = jwtClientManagerService;
-    }
-
     public static InputEventAdapterService getInputEventAdapterService() {
         return inputEventAdapterService;
     }
@@ -77,5 +71,18 @@ public final class InputAdapterServiceDataHolder {
 
     public static void setMainServerConfigContext(ConfigurationContext mainServerConfigContext) {
         InputAdapterServiceDataHolder.mainServerConfigContext = mainServerConfigContext;
+    }
+
+    public static APIManagementProviderService getApiManagementProviderService() {
+        if (apiManagementProviderService == null) {
+            String msg = "API management provider service is not properly initialized";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return apiManagementProviderService;
+    }
+
+    public static void setApiManagementProviderService(APIManagementProviderService apiManagementProviderService) {
+        InputAdapterServiceDataHolder.apiManagementProviderService = apiManagementProviderService;
     }
 }

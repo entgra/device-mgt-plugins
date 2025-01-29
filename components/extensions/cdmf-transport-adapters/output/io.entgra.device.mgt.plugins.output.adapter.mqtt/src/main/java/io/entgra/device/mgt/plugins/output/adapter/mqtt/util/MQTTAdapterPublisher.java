@@ -17,15 +17,15 @@
  */
 package io.entgra.device.mgt.plugins.output.adapter.mqtt.util;
 
-import io.entgra.device.mgt.core.apimgt.keymgt.extension.DCRResponse;
-import io.entgra.device.mgt.core.apimgt.keymgt.extension.TokenRequest;
-import io.entgra.device.mgt.core.apimgt.keymgt.extension.TokenResponse;
-import io.entgra.device.mgt.core.apimgt.keymgt.extension.exception.BadRequestException;
-import io.entgra.device.mgt.core.apimgt.keymgt.extension.exception.KeyMgtException;
-import io.entgra.device.mgt.core.apimgt.keymgt.extension.service.KeyMgtService;
-import io.entgra.device.mgt.core.apimgt.keymgt.extension.service.KeyMgtServiceImpl;
-import io.entgra.device.mgt.core.identity.jwt.client.extension.exception.JWTClientException;
-import org.apache.commons.lang3.StringUtils;
+import io.entgra.device.mgt.core.apimgt.application.extension.bean.ApiApplicationKey;
+import io.entgra.device.mgt.core.apimgt.application.extension.bean.ApiApplicationProfile;
+import io.entgra.device.mgt.core.apimgt.application.extension.bean.Token;
+import io.entgra.device.mgt.core.apimgt.application.extension.bean.TokenCreationProfile;
+import io.entgra.device.mgt.core.apimgt.application.extension.exception.APIManagerException;
+import io.entgra.device.mgt.plugins.output.adapter.mqtt.internal.OutputAdapterServiceDataHolder;
+import org.apache.commons.lang.StringUtils;
+import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.BadRequestException;
+import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.UnexpectedResponseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.ssl.Base64;
@@ -34,15 +34,10 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
-import org.jetbrains.annotations.NotNull;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.event.output.adapter.core.exception.ConnectionUnavailableException;
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterException;
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterRuntimeException;
-import org.wso2.carbon.user.api.UserStoreException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * MQTT publisher related configuration initialization and publishing capabilties are implemented here.
@@ -142,32 +137,43 @@ public class MQTTAdapterPublisher {
     }
 
     private String getToken() {
-        String username = this.mqttBrokerConnectionConfiguration.getUsername();
-        String password = this.mqttBrokerConnectionConfiguration.getPassword();
         String dcrUrlString = this.mqttBrokerConnectionConfiguration.getDcrUrl();
-        List<String> supportedGrantTypes = new ArrayList<>();
+        final String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
+                        + mqttBrokerConnectionConfiguration.getAdapterName();
 
         if (dcrUrlString != null && !dcrUrlString.isEmpty()) {
             PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantDomain, true);
             try {
-                KeyMgtService keyMgtService = new KeyMgtServiceImpl();
-                String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
-                        + mqttBrokerConnectionConfiguration.getAdapterName();
-                DCRResponse dcrResponse = keyMgtService.dynamicClientRegistration(applicationName, username,
-                        "client_credentials", null, new String[]{"device_management"}, false, Integer.MAX_VALUE, password,
-                        supportedGrantTypes, dcrUrlString);
-                return getToken(dcrResponse.getClientId(), dcrResponse.getClientSecret());
-//                connectionOptions.setUserName(accessToken.substring(0, 18));
-//                connectionOptions.setPassword(accessToken.substring(19).toCharArray());
+                ApiApplicationProfile apiApplicationProfile = new ApiApplicationProfile();
+                apiApplicationProfile.setTokenType(ApiApplicationProfile.TOKEN_TYPE.JWT);
+                apiApplicationProfile.setGrantTypes("client_credentials password refresh_token authorization_code");
+                apiApplicationProfile.setTags(new String[]{"device_management"});
+                apiApplicationProfile.setCallbackUrl(dcrUrlString);
+                apiApplicationProfile.setApplicationName(applicationName);
+                ApiApplicationKey apiApplicationKey =
+                        OutputAdapterServiceDataHolder.getApiManagementProviderService().registerApiApplication(apiApplicationProfile);
 
+                if (apiApplicationKey == null) {
+                    String msg = "Null received for the created api application : [ " + applicationName + " ]";
+                    log.error(msg);
+                    throw new IllegalStateException(msg);
+                }
 
-            } catch (JWTClientException | UserStoreException e) {
-                log.error("Failed to create an oauth token with client_credentials grant type.", e);
-                throw new OutputEventAdapterRuntimeException("Failed to create an oauth token with client_credentials grant type.", e);
-            } catch (KeyMgtException e) {
-                log.error("Failed to create an application.", e);
-                throw new OutputEventAdapterRuntimeException("Failed to create an application.", e);
+                return getToken(apiApplicationKey.getClientId(), apiApplicationKey.getClientSecret());
+
+            } catch (APIManagerException e) {
+                String msg = "Failed to create an oauth token with client_credentials grant type.";
+                log.error(msg, e);
+                throw new OutputEventAdapterRuntimeException(msg, e);
+            } catch (BadRequestException e) {
+                String msg = "Application profile contains invalid attributes";
+                log.error(msg, e);
+                throw new OutputEventAdapterRuntimeException(msg, e);
+            } catch (UnexpectedResponseException e) {
+                String msg = "Unexpected error encountered while registering api application";
+                log.error(msg, e);
+                throw new OutputEventAdapterRuntimeException(msg, e);
             } finally {
                 PrivilegedCarbonContext.endTenantFlow();
             }
@@ -176,32 +182,33 @@ public class MQTTAdapterPublisher {
     }
 
     private String getToken(String clientId, String clientSecret)
-            throws UserStoreException, JWTClientException {
+            throws APIManagerException {
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantDomain, true);
         try {
-            TokenRequest tokenRequest = getTokenRequest(clientId, clientSecret);
-            KeyMgtService keyMgtService = new KeyMgtServiceImpl();
-            TokenResponse tokenResponse = keyMgtService.generateAccessToken(tokenRequest);
+            String scopes = mqttBrokerConnectionConfiguration.getScopes();
+            scopes += " perm:topic:pub:" + tenantDomain + ":+:+:operation";
 
-            return tokenResponse.getAccessToken();
-        } catch (KeyMgtException | BadRequestException e) {
-            log.error("Error while generating access token", e);
+            if (!StringUtils.isEmpty(mqttBrokerConnectionConfiguration.getTopic())) {
+                scopes += " perm:topic:pub:" + mqttBrokerConnectionConfiguration.getTopic().replace("/",":");
+            }
+
+            TokenCreationProfile tokenCreationProfile = new TokenCreationProfile();
+            tokenCreationProfile.setGrantType("client_credentials");
+            tokenCreationProfile.setBasicAuthUsername(clientId);
+            tokenCreationProfile.setBasicAuthPassword(clientSecret);
+            tokenCreationProfile.setScope(scopes);
+            Token token =
+                    OutputAdapterServiceDataHolder.getApiManagementProviderService().getToken(tokenCreationProfile);
+            if (token == null) {
+                String msg = "Null received for the token request. Failed to start listening process";
+                log.error(msg);
+                throw new IllegalStateException(msg);
+            }
+            return token.getAccessToken();
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
         }
-        return null;
-    }
-
-    @NotNull
-    private TokenRequest getTokenRequest(String clientId, String clientSecret) {
-        String scopes = mqttBrokerConnectionConfiguration.getScopes();
-        scopes += " perm:topic:pub:" + tenantDomain + ":+:+:operation";
-
-        if (!StringUtils.isEmpty(mqttBrokerConnectionConfiguration.getTopic())) {
-            scopes += " perm:topic:pub:" + mqttBrokerConnectionConfiguration.getTopic().replace("/",":");
-        }
-
-        TokenRequest tokenRequest = new TokenRequest(clientId, clientSecret,
-                null, scopes.toString(), "client_credentials", null,
-                null, null, null,  Integer.MAX_VALUE);
-        return tokenRequest;
     }
 
     private String getBase64Encode(String key, String value) {

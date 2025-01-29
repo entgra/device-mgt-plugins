@@ -17,7 +17,7 @@
  */
 package io.entgra.device.mgt.plugins.output.adapter.mqtt.util;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.wso2.carbon.event.output.adapter.core.OutputEventAdapterConfiguration;
 
 import java.util.Map;

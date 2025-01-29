@@ -17,12 +17,12 @@
  */
 package io.entgra.device.mgt.plugins.output.adapter.mqtt.internal;
 
+import io.entgra.device.mgt.core.apimgt.application.extension.APIManagementProviderService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
 import io.entgra.device.mgt.plugins.output.adapter.mqtt.MQTTEventAdapterFactory;
 import org.wso2.carbon.event.output.adapter.core.OutputEventAdapterFactory;
-import io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService;
 import org.osgi.service.component.annotations.*;
 
 @Component(
@@ -51,17 +51,23 @@ public class MQTTEventAdapterServiceComponent {
     }
 
     @Reference(
-            name = "jwt.client.manager.service",
-            service = io.entgra.device.mgt.core.identity.jwt.client.extension.service.JWTClientManagerService.class,
+            name = "api.mgt.provider.extension",
+            service = io.entgra.device.mgt.core.apimgt.application.extension.APIManagementProviderService.class,
             cardinality = ReferenceCardinality.MANDATORY,
             policy = ReferencePolicy.DYNAMIC,
-            unbind = "unsetJWTClientManagerService")
-    protected void setJWTClientManagerService(JWTClientManagerService jwtClientManagerService) {
-        OutputAdapterServiceDataHolder.setJwtClientManagerService(jwtClientManagerService);
+            unbind = "unsetApiManagementProviderService")
+    protected void setApiManagementProviderService(APIManagementProviderService apiManagementProviderService) {
+        if (log.isDebugEnabled()) {
+            log.info("API management provider service is initializing");
+        }
+        OutputAdapterServiceDataHolder.setApiManagementProviderService(apiManagementProviderService);
     }
 
-    protected void unsetJWTClientManagerService(JWTClientManagerService jwtClientManagerService) {
-        OutputAdapterServiceDataHolder.setJwtClientManagerService(null);
+    protected void unsetApiManagementProviderService(APIManagementProviderService apiManagementProviderService) {
+        if (log.isDebugEnabled()) {
+            log.info("API management provider service is uninitialized");
+        }
+        OutputAdapterServiceDataHolder.setApiManagementProviderService(null);
     }
 
 }
