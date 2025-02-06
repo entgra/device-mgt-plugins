@@ -128,6 +128,11 @@ public class TestDeviceManager implements DeviceManager {
         return false;
     }
 
+    @Override
+    public boolean removeDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+        return true;
+    }
+
     @java.lang.Override
     public void deleteDevices(java.util.List<java.lang.String> list) throws DeviceManagementException {
 
