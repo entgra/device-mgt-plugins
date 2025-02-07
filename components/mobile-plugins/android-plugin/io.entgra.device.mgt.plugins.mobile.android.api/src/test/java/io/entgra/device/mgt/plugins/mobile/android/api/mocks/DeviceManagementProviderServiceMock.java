@@ -426,6 +426,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public boolean removeDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override
     public boolean deleteDevices(List<String> list) throws DeviceManagementException, InvalidDeviceException {
         return false;
     }
@@ -872,6 +877,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public Boolean sendDeviceNameChangedNotification(Device device) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public Activity sendPolicyRevokeOperation(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
         return null;
     }
 
