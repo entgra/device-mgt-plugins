@@ -23,7 +23,7 @@
     <parent>
         <artifactId>android-plugin</artifactId>
         <groupId>io.entgra.device.mgt.plugins</groupId>
-        <version>8.0.5-SNAPSHOT</version>
+        <version>8.0.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
