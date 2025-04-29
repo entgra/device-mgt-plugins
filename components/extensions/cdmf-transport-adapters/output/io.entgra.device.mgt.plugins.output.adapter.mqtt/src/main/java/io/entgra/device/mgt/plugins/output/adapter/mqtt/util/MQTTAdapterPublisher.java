@@ -78,7 +78,7 @@ public class MQTTAdapterPublisher {
             if (mqttBrokerConnectionConfiguration.getUsername() != null) {
                 String accessToken = getToken();
                 connectionOptions.setUserName(accessToken.substring(0, 18));
-                connectionOptions.setPassword(accessToken.substring(19).toCharArray());
+                connectionOptions.setPassword(accessToken.substring(18).toCharArray());
             }
             // Construct an MQTT blocking mode client
             mqttClient = new MqttClient(mqttBrokerConnectionConfiguration.getBrokerUrl(), clientId, dataStore);
@@ -146,7 +146,7 @@ public class MQTTAdapterPublisher {
             PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantDomain, true);
             try {
                 ApiApplicationProfile apiApplicationProfile = new ApiApplicationProfile();
-                apiApplicationProfile.setTokenType(ApiApplicationProfile.TOKEN_TYPE.JWT);
+                apiApplicationProfile.setTokenType(ApiApplicationProfile.TOKEN_TYPE.DEFAULT);
                 apiApplicationProfile.setGrantTypes("client_credentials password refresh_token authorization_code");
                 apiApplicationProfile.setTags(new String[]{"device_management"});
                 apiApplicationProfile.setCallbackUrl(dcrUrlString);
