@@ -71,9 +71,11 @@ public class MQTTContentTransformer implements ContentTransformer {
             throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = new JSONObject();
+        JSONObject payloadData = (JSONObject) parser.parse(msg);
+        payloadData.put("ts", System.currentTimeMillis());
         jsonObject.put("deviceId", deviceIdFromTopic);
         JSONObject eventObject = new JSONObject();
-        eventObject.put("payloadData", parser.parse(msg));
+        eventObject.put("payloadData", payloadData);
         eventObject.put("metaData", jsonObject);
         JSONObject event = new JSONObject();
         event.put("event", eventObject);
