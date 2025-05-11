@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ * Copyright (c) 2018 - 2025, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
  * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -18,6 +18,7 @@
 
 package io.entgra.device.mgt.plugins.emqx.exhook;
 
+import io.entgra.device.mgt.core.device.mgt.core.internal.DeviceManagementDataHolder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
@@ -26,10 +27,25 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.wso2.carbon.user.api.RealmConfiguration;
+import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.core.config.RealmConfigXMLProcessor;
+import org.wso2.carbon.utils.CarbonUtils;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.security.*;
 import java.security.cert.CertificateException;
@@ -56,6 +72,11 @@ public class HandlerUtil {
     private static final String SSLV3 = "SSLv3";
 
     private static final Log log = LogFactory.getLog(HandlerUtil.class);
+
+    public static final String CDM_CONFIG_FILE_NAME = "cdm-config.xml";
+
+    private static final String CDM_CONFIG_PATH = CarbonUtils.getCarbonConfigDirPath() + File.separator +
+            CDM_CONFIG_FILE_NAME;
 
     /***
      *
@@ -275,6 +296,84 @@ public class HandlerUtil {
             }
             return responseBuilder.toString();
         }
+    }
+
+    public static KeyManagerConfigurations extractKeyManagerConfig() throws JAXBException,
+            ParserConfigurationException, IOException, SAXException {
+        File xmlFile = new File(CDM_CONFIG_PATH);
+        // Step 1: Parse the whole XML document
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(xmlFile);
+
+        // Step 2: Find the <KeyManagerConfiguration> node
+        Node keyManagerNode = doc.getElementsByTagName("KeyManagerConfiguration").item(0);
+
+        if (keyManagerNode == null) {
+            throw new RuntimeException("KeyManagerConfiguration element not found in XML");
+        }
+
+        // Step 3: Unmarshall only that node into KeyManagerConfigurations class
+        JAXBContext context = JAXBContext.newInstance(KeyManagerConfigurations.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        // Important: Wrap node into a JAXBElement because we are unmarshalling part of a document
+        JAXBElement<KeyManagerConfigurations> je = unmarshaller.unmarshal(keyManagerNode, KeyManagerConfigurations.class);
+
+        // Step 4: Return the Java object
+        return je.getValue();
+    }
+
+    public static String replaceSystemProperty(String text) {
+
+        int indexOfStartingChars = -1;
+        int indexOfClosingBrace;
+
+        // The following condition deals with properties.
+        // Properties are specified as ${system.property},
+        // and are assumed to be System properties
+        while (indexOfStartingChars < text.indexOf("${")
+                && (indexOfStartingChars = text.indexOf("${")) != -1
+                && (indexOfClosingBrace = text.indexOf('}')) != -1) { // Is a
+            // property
+            // used?
+            String sysProp = text.substring(indexOfStartingChars + 2,
+                    indexOfClosingBrace);
+            String propValue = System.getProperty(sysProp);
+
+            if (propValue == null) {
+                if ("carbon.context".equals(sysProp)) {
+                    propValue = DeviceManagementDataHolder.getInstance().getConfigurationContextService()
+                            .getServerConfigContext().getContextRoot();
+                } else if ("admin.username".equals(sysProp) || "admin.password".equals(sysProp)) {
+                    try {
+                        RealmConfiguration realmConfig =
+                                new RealmConfigXMLProcessor().buildRealmConfigurationFromFile();
+                        if ("admin.username".equals(sysProp)) {
+                            propValue = realmConfig.getAdminUserName();
+                        } else {
+                            propValue = realmConfig.getAdminPassword();
+                        }
+                    } catch (UserStoreException e) {
+                        // Can't throw an exception because the server is
+                        // starting and can't be halted.
+                        log.error("Unable to build the Realm Configuration", e);
+                        return null;
+                    }
+                }
+            }
+            //Derive original text value with resolved system property value
+            if (propValue != null) {
+                text = text.substring(0, indexOfStartingChars) + propValue
+                        + text.substring(indexOfClosingBrace + 1);
+            }
+            if ("carbon.home".equals(sysProp) && propValue != null
+                    && ".".equals(propValue)) {
+                text = new File(".").getAbsolutePath() + File.separator + text;
+            }
+        }
+        return text;
     }
 
 }

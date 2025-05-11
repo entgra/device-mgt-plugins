@@ -132,7 +132,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
                     final String applicationName = MQTTEventAdapterConstants.APPLICATION_NAME_PREFIX
                             + mqttBrokerConnectionConfiguration.getAdapterName();
                     ApiApplicationProfile apiApplicationProfile = new ApiApplicationProfile();
-                    apiApplicationProfile.setTokenType(ApiApplicationProfile.TOKEN_TYPE.JWT);
+                    apiApplicationProfile.setTokenType(ApiApplicationProfile.TOKEN_TYPE.DEFAULT);
                     apiApplicationProfile.setGrantTypes("client_credentials password refresh_token authorization_code");
                     apiApplicationProfile.setTags(new String[]{"device_management"});
                     apiApplicationProfile.setCallbackUrl(dcrUrlString);
@@ -148,7 +148,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
 
                     String accessToken = getToken(apiApplicationKey.getClientId(), apiApplicationKey.getClientSecret());
                     connectionOptions.setUserName(accessToken.substring(0, 18));
-                    connectionOptions.setPassword(accessToken.substring(19).toCharArray());
+                    connectionOptions.setPassword(accessToken.substring(18).toCharArray());
                 } catch (APIManagerException e) {
                     log.error("Failed to create an oauth token with client_credentials grant type.", e);
                     return false;

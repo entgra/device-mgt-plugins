@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ * Copyright (c) 2018 - 2025, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
  * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -26,8 +26,6 @@ import com.google.protobuf.GeneratedMessageV3;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
-import io.entgra.device.mgt.core.device.mgt.core.config.DeviceConfigurationManager;
-import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -47,12 +45,22 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerUtil.extractKeyManagerConfig;
+
 public class ExServer {
     private static final Log logger = LogFactory.getLog(ExServer.class.getName());
 
     private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
     private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
     private Server server;
+    private static KeyManagerConfigurations keyManagerConfigurations;
+
+    private static synchronized KeyManagerConfigurations getKeyManagerConfig() throws Exception {
+        if (keyManagerConfigurations == null) {
+            keyManagerConfigurations = extractKeyManagerConfig();
+        }
+        return keyManagerConfigurations;
+    }
 
     public ExServer() {
     }
@@ -106,8 +114,6 @@ public class ExServer {
     }
 
     static class HookProviderImpl extends HookProviderGrpc.HookProviderImplBase {
-
-
 
         public void DEBUG(String fn, Object req) {
             logger.debug(fn + ", request: " + req);
@@ -233,16 +239,19 @@ public class ExServer {
 
                 DEBUG("on access token passes", request);
                 try {
-                    String accessToken = request.getClientinfo().getUsername() + "-" + request.getClientinfo().getPassword();
-                    KeyManagerConfigurations keyManagerConfig = DeviceConfigurationManager.getInstance()
-                            .getDeviceManagementConfig().getKeyManagerConfigurations();
-
+                    String accessToken = request.getClientinfo().getUsername() + request.getClientinfo().getPassword();
+                    KeyManagerConfigurations kmConfig = null;
+                    try {
+                        kmConfig = getKeyManagerConfig();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     HttpPost tokenEndpoint = new HttpPost(
-                            keyManagerConfig.getServerUrl() + HandlerConstants.INTROSPECT_ENDPOINT);
+                            kmConfig.getServerUrl() + HandlerConstants.INTROSPECT_ENDPOINT);
                     tokenEndpoint.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.toString());
                     tokenEndpoint.setHeader(HttpHeaders.AUTHORIZATION, HandlerConstants.BASIC + Base64.getEncoder()
-                            .encodeToString((keyManagerConfig.getAdminUsername() + HandlerConstants.COLON
-                                    + keyManagerConfig.getAdminPassword()).getBytes()));
+                            .encodeToString((kmConfig.getAdminUsername() + HandlerConstants.COLON
+                                    + kmConfig.getAdminPassword()).getBytes()));
                     StringEntity tokenEPPayload = new StringEntity("token=" + accessToken,
                             ContentType.APPLICATION_FORM_URLENCODED);
                     tokenEndpoint.setEntity(tokenEPPayload);
@@ -484,7 +493,7 @@ public class ExServer {
                     try {
                         PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain("carbon.super");
                         PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(-1234);
-                        DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();;
+                        DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();
                         deviceManagementProviderService.changeDeviceStatus(new DeviceIdentifier(deviceId, deviceType), EnrolmentInfo.Status.UNREACHABLE);
                     } catch (DeviceManagementException e) {
                         logger.error("onSessionTerminated: Error while setting device status");
@@ -565,9 +574,5 @@ public class ExServer {
             responseObserver.onCompleted();
 
         }
-
-
     }
-
-
 }
