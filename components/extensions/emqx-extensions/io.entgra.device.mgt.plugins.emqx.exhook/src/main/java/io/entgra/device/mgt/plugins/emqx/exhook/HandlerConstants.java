@@ -25,4 +25,5 @@ public class HandlerConstants {
     public static final String TOKEN_IS_EXPIRED = "ACCESS_TOKEN_IS_EXPIRED";
     public static final String COLON = ":";
     public static final int INTERNAL_ERROR_CODE = 500;
+    public static final int MIN_TOKEN_LENGTH = 36;
 }
