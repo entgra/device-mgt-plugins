@@ -358,11 +358,9 @@ public class ExServer {
                 ClientCheckAclRequest.AclReqType aclType = request.getType();
                 //todo: check token validity
                 String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
-                if (StringUtils.isEmpty(accessToken) ||
-                        !((!StringUtils.isEmpty(username) && accessToken.startsWith(username)) ||
-                                (!StringUtils.isEmpty(password) && accessToken.startsWith(password)))) {
+                if (StringUtils.isEmpty(accessToken)) {
                     throw Status.PERMISSION_DENIED
-                            .withDescription("Access token missing or does not match username or password")
+                            .withDescription("Access token not found for clientId: " + request.getClientinfo().getClientid())
                             .asRuntimeException();
                 }
 
