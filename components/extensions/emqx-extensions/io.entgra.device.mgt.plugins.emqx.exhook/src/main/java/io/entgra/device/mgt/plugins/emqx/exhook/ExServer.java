@@ -240,6 +240,10 @@ public class ExServer {
             String clientId = request.getClientinfo().getClientid();
 
             try {
+                if (StringUtils.isEmpty(clientId)) {
+                    throw new ExServerException("Client ID is missing in the request");
+                }
+
                 if (StringUtils.isEmpty(username) && StringUtils.isEmpty(password)) {
                     throw Status.INVALID_ARGUMENT.
                             withDescription("Username and password are both empty.Either username, password or both must be provided").
@@ -266,26 +270,21 @@ public class ExServer {
                 }
 
                 for (String tokenCandidate : possibleTokens) {
-                    try {
-                        tryAuthenticateWithToken(tokenCandidate, responseObserver, clientId);
-                        return; // success
-                    } catch (IOException e) {
-                        logger.warn("Failed token attempt with: " + tokenCandidate);
-                        // Try next candidate
-                    }
+                    tryAuthenticateWithToken(tokenCandidate, responseObserver, clientId);
+                    return; // success
                 }
 
                 // All attempts failed
                 throw Status.UNAUTHENTICATED.withDescription("Invalid or expired token").asRuntimeException();
             } catch (StatusRuntimeException e) {
                 respondGrpcError(responseObserver, e, "gRPC status error during client authentication");
-            } catch (Exception e) {
+            } catch (ExServerException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error in onClientAuthenticate");
             }
         }
 
         private void tryAuthenticateWithToken(String token, StreamObserver<ValuedResponse> responseObserver,
-                                              String clientId) throws IOException {
+                                              String clientId) throws ExServerException {
             try {
                 KeyManagerConfigurations keyManagerConfig = DeviceConfigurationManager.getInstance()
                         .getDeviceManagementConfig().getKeyManagerConfigurations();
@@ -332,7 +331,7 @@ public class ExServer {
                 responseObserver.onCompleted();
             } catch (StatusRuntimeException e) {
                 respondGrpcError(responseObserver, e, "gRPC status error");  // proper gRPC status error
-            } catch (Exception e) {
+            } catch (IOException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error during authentication");
             }
         }
@@ -347,16 +346,13 @@ public class ExServer {
                 republished/deviceType
              */
             try {
-                String username = request.getClientinfo().getUsername();
-                String password = request.getClientinfo().getPassword();
-                String topic = request.getTopic();
-                if (StringUtils.isEmpty(username) && StringUtils.isEmpty(password)) {
-                    throw Status.INVALID_ARGUMENT
-                            .withDescription("Username and password are both empty. Either username, password or both must be provided")
-                            .asRuntimeException();
-                }
-                ClientCheckAclRequest.AclReqType aclType = request.getType();
                 //todo: check token validity
+                String clientId = request.getClientinfo().getClientid();
+                if (StringUtils.isEmpty(clientId)) {
+                    throw new ExServerException("Client ID is missing in the request");
+                }
+                String topic = request.getTopic();
+                ClientCheckAclRequest.AclReqType aclType = request.getType();
                 String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
                 if (StringUtils.isEmpty(accessToken)) {
                     throw Status.PERMISSION_DENIED
@@ -400,7 +396,7 @@ public class ExServer {
 
                 boolean isAuthorized = scopeList.stream().anyMatch(scope -> scope.startsWith(tempScope));
                 if (!isAuthorized) {
-                    logger.warn("ACL denied: user=" + username + ", topic=" + topic + ", requiredScope=" + tempScope);
+                    logger.warn("topic=" + topic + ", requiredScope=" + tempScope);
                     throw Status.PERMISSION_DENIED.withDescription("User not authorized for requested topic").asRuntimeException();
                 }
 
@@ -414,7 +410,7 @@ public class ExServer {
                 responseObserver.onCompleted();
             } catch (StatusRuntimeException e) {
                 respondGrpcError(responseObserver, e, "ACL check failed: " + e.getStatus().getDescription());
-            } catch (Exception e) {
+            } catch (ExServerException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error during ACL check");
             }
         }
