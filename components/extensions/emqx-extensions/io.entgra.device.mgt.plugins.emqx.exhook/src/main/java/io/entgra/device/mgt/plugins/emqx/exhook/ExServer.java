@@ -26,6 +26,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
+import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -52,78 +53,65 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKEN_LENGTH;
-import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerUtil.extractKeyManagerConfig;
 
-public class ExServer {
-    private static final Log logger = LogFactory.getLog(ExServer.class.getName());
+    public class ExServer {
+        private static final Log logger = LogFactory.getLog(ExServer.class.getName());
 
-    private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
-    private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
-    private Server server;
-    private static KeyManagerConfigurations keyManagerConfigurations;
-
-    private static synchronized KeyManagerConfigurations getKeyManagerConfig() throws Exception {
-        if (keyManagerConfigurations == null) {
-            keyManagerConfigurations = extractKeyManagerConfig();
+        private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
+        private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
+        private Server server;
+        private final ExServerUtilityService utilityService;
+        public ExServer(ExServerUtilityService utilityService) {
+            this.utilityService = utilityService;
         }
-        return keyManagerConfigurations;
-    }
 
-    public ExServer() {
-    }
+        public void start() throws IOException {
+            /* The port on which the server should run */
+            int port = 9000;
 
-    public void start() throws IOException {
-        /* The port on which the server should run */
-        int port = 9000;
-
-        server = ServerBuilder.forPort(port)
-                .addService(new HookProviderImpl())
-                .build()
-                .start();
-        logger.info("Server started, listening on " + port);
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                // Use stderr here since the logger may have been reset by its JVM shutdown hook.
-                System.err.println("*** shutting down gRPC server since JVM is shutting down");
-                try {
-                    ExServer.this.stop();
-                } catch (InterruptedException e) {
-                    e.printStackTrace(System.err);
+            server = ServerBuilder.forPort(port)
+                    .addService(new HookProviderImpl(utilityService))
+                    .build()
+                    .start();
+            logger.info("Server started, listening on " + port);
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    // Use stderr here since the logger may have been reset by its JVM shutdown hook.
+                    System.err.println("*** shutting down gRPC server since JVM is shutting down");
+                    try {
+                        ExServer.this.stop();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace(System.err);
+                    }
+                    System.err.println("*** server shut down");
                 }
-                System.err.println("*** server shut down");
+            });
+        }
+
+        public void stop() throws InterruptedException {
+            if (server != null) {
+                server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
             }
-        });
-    }
-
-    public void stop() throws InterruptedException {
-        if (server != null) {
-            server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
         }
-    }
 
-    /**
-     * Await termination on the main thread since the grpc library uses daemon threads.
-     */
-    public void blockUntilShutdown() throws InterruptedException {
-        if (server != null) {
-            server.awaitTermination();
+        /**
+         * Await termination on the main thread since the grpc library uses daemon threads.
+         */
+        public void blockUntilShutdown() throws InterruptedException {
+            if (server != null) {
+                server.awaitTermination();
+            }
         }
-    }
-
-    /**
-     * Main launches the server from the command line.
-     */
-    public static void main(String[] args) throws IOException, InterruptedException {
-        final ExServer server = new ExServer();
-        server.start();
-        server.blockUntilShutdown();
-    }
 
     static class HookProviderImpl extends HookProviderGrpc.HookProviderImplBase {
 
         public void DEBUG(String fn, Object req) {
             logger.debug(fn + ", request: " + req);
+        }
+        private final ExServerUtilityService utilityService;
+        public HookProviderImpl(ExServerUtilityService utilityService) {
+            this.utilityService = utilityService;
         }
 
         @Override
@@ -287,13 +275,30 @@ public class ExServer {
                 respondGrpcError(responseObserver, e, "gRPC status error during client authentication");
             } catch (ExServerException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error in onClientAuthenticate");
+            } catch (RuntimeException e) {
+                respondGrpcError(responseObserver, e, "Unexpected error in onClientAuthenticate");
             }
         }
 
+        /**
+         * Attempts to authenticate a client using the provided OAuth token by
+         * introspecting it against the configured Key Manager server.
+         *
+         * <p>This method sends a token introspection HTTP POST request to the
+         * Key Manager's introspection endpoint. If the token is valid and active,
+         * it updates the internal access and scope maps and responds with a
+         * successful gRPC response. Otherwise, it responds with an appropriate
+         * gRPC error status.</p>
+         *
+         * @param token the OAuth token to authenticate
+         * @param responseObserver the gRPC stream observer to send the response or error
+         * @param clientId the client identifier associated with the token
+         * @throws IOException if an I/O error occurs while sending the introspection request
+         */
         private void tryAuthenticateWithToken(String token, StreamObserver<ValuedResponse> responseObserver,
                                               String clientId) throws ExServerException {
             try {
-                KeyManagerConfigurations kmConfig = getKeyManagerConfig();
+                KeyManagerConfigurations kmConfig = utilityService.getKeyManagerConfigurations();
                 HttpPost tokenEndpoint = new HttpPost(kmConfig.getServerUrl() + HandlerConstants.INTROSPECT_ENDPOINT);
                 tokenEndpoint.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.toString());
                 tokenEndpoint.setHeader(HttpHeaders.AUTHORIZATION, HandlerConstants.BASIC +
@@ -338,7 +343,7 @@ public class ExServer {
             } catch (StatusRuntimeException e) {
                 respondGrpcError(responseObserver, e, "gRPC status error");  // proper gRPC status error
             } catch (IOException e) {
-                respondGrpcError(responseObserver, e, "Unexpected error during authentication");
+                respondGrpcError(responseObserver, e, "IO error during authentication");
             }
         }
 
@@ -531,6 +536,7 @@ public class ExServer {
                     .setFrom(request.getMessage().getFrom())
                     .setTopic(request.getMessage().getTopic())
                     .setPayload(((GeneratedMessageV3) request).toByteString()).build();
+            //.setPayload(request.getMessage().getPayload())  //  clean, expected by MQTT clients
 
 
             ValuedResponse reply = ValuedResponse.newBuilder()
@@ -589,6 +595,18 @@ public class ExServer {
 
         }
 
+        /**
+         * Handles and responds to gRPC errors by logging the error and sending
+         * an appropriate error status to the provided gRPC response observer.
+         *
+         * <p>If the throwable is already a {@link StatusRuntimeException}, it is
+         * sent directly to the observer. Otherwise, an INTERNAL status with the
+         * provided message and cause is created and sent.</p>
+         *
+         * @param observer the gRPC response observer to send the error to
+         * @param e the throwable representing the error
+         * @param msg a descriptive message to log and include in the gRPC error response
+         */
         private void respondGrpcError(StreamObserver<?> observer, Throwable e, String msg) {
             if (e instanceof StatusRuntimeException) {
                 logger.error(msg, e);
