@@ -39,6 +39,8 @@ import org.wso2.carbon.event.output.adapter.core.exception.ConnectionUnavailable
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterException;
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterRuntimeException;
 
+import static io.entgra.device.mgt.plugins.output.adapter.mqtt.util.MQTTEventAdapterConstants.TOKEN_SPLIT_INDEX;
+
 /**
  * MQTT publisher related configuration initialization and publishing capabilties are implemented here.
  */
@@ -77,8 +79,8 @@ public class MQTTAdapterPublisher {
             connectionOptions.setKeepAliveInterval(keepAlive);
             if (mqttBrokerConnectionConfiguration.getUsername() != null) {
                 String accessToken = getToken();
-                connectionOptions.setUserName(accessToken.substring(0, 18));
-                connectionOptions.setPassword(accessToken.substring(18).toCharArray());
+                connectionOptions.setUserName(accessToken.substring(0, TOKEN_SPLIT_INDEX));
+                connectionOptions.setPassword(accessToken.substring(TOKEN_SPLIT_INDEX).toCharArray());
             }
             // Construct an MQTT blocking mode client
             mqttClient = new MqttClient(mqttBrokerConnectionConfiguration.getBrokerUrl(), clientId, dataStore);
