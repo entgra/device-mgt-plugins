@@ -1016,7 +1016,7 @@
         <commons-io-wso2.version>2.4.0.wso2v1</commons-io-wso2.version>
 
         <commons.lang.version>2.4</commons.lang.version>
-
+        <commons.logging.version.range>[1.2,2)</commons.logging.version.range>
 
         <orbit.version.commons-httpclient>3.1.0.wso2v2</orbit.version.commons-httpclient>
         <commons-codec.version.wso2>1.4.0.wso2v1</commons-codec.version.wso2>
