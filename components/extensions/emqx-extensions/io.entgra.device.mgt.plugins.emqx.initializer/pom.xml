@@ -51,6 +51,16 @@
             <artifactId>pax-logging-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.device.mgt.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.device.mgt.common</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <extensions>
@@ -72,12 +82,16 @@
                         <Bundle-Description>io.entgra.device.mgt.plugins.emqx.initializer</Bundle-Description>
                         <Private-Package>io.entgra.device.mgt.plugins.emqx.initializer.internal</Private-Package>
                         <Import-Package>
+                            io.entgra.device.mgt.core.device.mgt.core.config;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.core.config.keymanager;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.core.service;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.plugins.emqx.exhook,
                             io.entgra.device.mgt.plugins.emqx.initializer,
-                            org.apache.commons.logging;version="[1.2 ,2)",
-                            org.osgi.framework.*;version="${imp.package.version.osgi.framework}",
-                            org.osgi.service.*;version="${imp.package.version.osgi.service}",
-                            org.wso2.carbon.core;version="[4.8,5)"
+                            org.apache.commons.logging;version="${commons.logging.version.range}",
+                            org.osgi.framework;version="${imp.package.version.osgi.framework}",
+                            org.osgi.service.component;version="${imp.package.version.osgi.service}",
+                            org.wso2.carbon.context;version="${carbon.kernel.version}",
+                            org.wso2.carbon.core;version="${carbon.kernel.version}"
                         </Import-Package>
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.emqx.initializer.internal,

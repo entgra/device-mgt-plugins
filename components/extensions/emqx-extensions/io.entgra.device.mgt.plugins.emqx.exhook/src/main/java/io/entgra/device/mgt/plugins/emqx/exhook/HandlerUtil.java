@@ -30,8 +30,16 @@ import org.apache.http.impl.client.HttpClients;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-import java.io.*;
-import java.security.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 public class HandlerUtil {
@@ -56,7 +64,6 @@ public class HandlerUtil {
     private static final String SSLV3 = "SSLv3";
 
     private static final Log log = LogFactory.getLog(HandlerUtil.class);
-
     /***
      *
      * @param httpRequest - httpMethod e.g:- HttpPost, HttpGet
@@ -276,5 +283,4 @@ public class HandlerUtil {
             return responseBuilder.toString();
         }
     }
-
 }

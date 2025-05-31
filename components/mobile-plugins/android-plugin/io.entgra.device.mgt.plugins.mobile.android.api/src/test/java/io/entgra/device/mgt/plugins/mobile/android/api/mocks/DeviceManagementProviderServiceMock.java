@@ -58,6 +58,7 @@ import io.entgra.device.mgt.core.device.mgt.common.push.notification.Notificatio
 import io.entgra.device.mgt.core.device.mgt.common.spi.DeviceManagementService;
 import io.entgra.device.mgt.core.device.mgt.common.type.mgt.DeviceStatus;
 import io.entgra.device.mgt.core.device.mgt.core.cache.DeviceCacheKey;
+import io.entgra.device.mgt.core.device.mgt.core.config.DeviceManagementConfig;
 import io.entgra.device.mgt.core.device.mgt.core.dao.DeviceManagementDAOException;
 import io.entgra.device.mgt.core.device.mgt.core.dto.DeviceDetailsDTO;
 import io.entgra.device.mgt.core.device.mgt.core.dto.DeviceType;
@@ -982,6 +983,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public List<Integer> getDeviceIdsByStatus(List<String> list) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public DeviceManagementConfig getDeviceManagementConfig() {
         return null;
     }
 }

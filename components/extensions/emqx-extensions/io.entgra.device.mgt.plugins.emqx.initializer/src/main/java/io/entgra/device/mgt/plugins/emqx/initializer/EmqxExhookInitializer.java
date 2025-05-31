@@ -18,9 +18,12 @@
 package io.entgra.device.mgt.plugins.emqx.initializer;
 
 
+import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.plugins.emqx.exhook.ExServer;
+import io.entgra.device.mgt.plugins.emqx.exhook.ExServerUtilityService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.core.ServerShutdownHandler;
 import org.wso2.carbon.core.ServerStartupObserver;
 
@@ -31,6 +34,17 @@ public class EmqxExhookInitializer implements ServerShutdownHandler, ServerStart
 
     private static final Log log = LogFactory.getLog(EmqxExhookInitializer.class);
 
+    public static DeviceManagementProviderService getDeviceManagementService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        DeviceManagementProviderService deviceManagementProviderService =
+                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        if (deviceManagementProviderService == null) {
+            String msg = "DeviceImpl Management provider service has not initialized.";
+            log.error(msg);
+        }
+        return deviceManagementProviderService;
+    }
+
     @Override
     public void completingServerStartup() {
 
@@ -40,9 +54,12 @@ public class EmqxExhookInitializer implements ServerShutdownHandler, ServerStart
     public void completedServerStartup() {
         log.info("completedServerStartup() ");
         Runnable r = new Runnable() {
+            DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();
+
             @Override
             public void run() {
-                exServer = new ExServer();
+                ExServerUtilityService utilityService = new ExServerUtilityServiceImpl(deviceManagementProviderService);
+                exServer = new ExServer(utilityService);
                 try {
                     exServer.start();
                     exServer.blockUntilShutdown();

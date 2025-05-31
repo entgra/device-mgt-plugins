@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ * Copyright (c) 2018 - 2025, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
  * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,15 +15,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package io.entgra.device.mgt.plugins.emqx.exhook;
 
-public class HandlerConstants {
-    public static final String INTROSPECT_ENDPOINT = "/oauth2/introspect";
-    public static final String BASIC = "Basic ";
-    public static final String EXECUTOR_EXCEPTION_PREFIX = "ExecutorException-";
-    public static final String TOKEN_IS_EXPIRED = "ACCESS_TOKEN_IS_EXPIRED";
-    public static final String COLON = ":";
-    public static final int INTERNAL_ERROR_CODE = 500;
-    public static final int MIN_TOKEN_LENGTH = 36;
+import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
+
+public interface ExServerUtilityService {
+
+    KeyManagerConfigurations getKeyManagerConfigurations();
 }
