@@ -245,31 +245,21 @@ import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKE
                             asRuntimeException();
                 }
 
-                //token order to try for introspection is set for optimize usage as per the mqtt specs [MQTT-3.1.2-18] to [MQTT-3.1.2-22]
-                List<String> possibleTokens = new ArrayList<>();
-                if (!StringUtils.isEmpty(username) && username.length() >= MIN_TOKEN_LENGTH) {
-                    possibleTokens.add(username);
+                if (StringUtils.isNotEmpty(username) && StringUtils.isEmpty(password)) {
+                    tryAuthenticateWithToken(username, responseObserver, clientId);
+                    return;
                 }
-                if (!StringUtils.isEmpty(password) && password.length() >= MIN_TOKEN_LENGTH) {
-                    possibleTokens.add(password);
-                }
-                if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
-                    String combined = username + password;
-                    if (combined.length() >= MIN_TOKEN_LENGTH) {
-                        possibleTokens.add(combined);
+
+                //only opaque tokens with 36 characters or a JWT token of more than 36 characters is introspected.
+                if (StringUtils.isNotEmpty(username)) {
+                    if (StringUtils.isNotEmpty(password) && password.length() >= MIN_TOKEN_LENGTH) {
+                        tryAuthenticateWithToken(password, responseObserver, clientId);
+                        return;
                     }
+                    tryAuthenticateWithToken((username + password), responseObserver, clientId);
+                    return;
                 }
 
-                if (possibleTokens.isEmpty()) {
-                    throw Status.INVALID_ARGUMENT.withDescription("Token does not meet minimum length requirement").asRuntimeException();
-                }
-
-                for (String tokenCandidate : possibleTokens) {
-                    tryAuthenticateWithToken(tokenCandidate, responseObserver, clientId);
-                    return; // success
-                }
-
-                // All attempts failed
                 throw Status.UNAUTHENTICATED.withDescription("Invalid or expired token").asRuntimeException();
             } catch (StatusRuntimeException e) {
                 respondGrpcError(responseObserver, e, "gRPC status error during client authentication");
