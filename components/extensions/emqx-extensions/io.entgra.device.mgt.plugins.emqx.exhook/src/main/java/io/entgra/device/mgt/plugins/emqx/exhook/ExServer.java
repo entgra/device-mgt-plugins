@@ -44,7 +44,6 @@ import org.apache.http.entity.StringEntity;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -54,62 +53,65 @@ import java.util.concurrent.TimeUnit;
 
 import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKEN_LENGTH;
 
-    public class ExServer {
-        private static final Log logger = LogFactory.getLog(ExServer.class.getName());
+public class ExServer {
+    private static final Log logger = LogFactory.getLog(ExServer.class.getName());
 
-        private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
-        private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
-        private Server server;
-        private final ExServerUtilityService utilityService;
-        public ExServer(ExServerUtilityService utilityService) {
-            this.utilityService = utilityService;
-        }
+    private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
+    private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
+    private Server server;
+    private final ExServerUtilityService utilityService;
 
-        public void start() throws IOException {
-            /* The port on which the server should run */
-            int port = 9000;
+    public ExServer(ExServerUtilityService utilityService) {
+        this.utilityService = utilityService;
+    }
 
-            server = ServerBuilder.forPort(port)
-                    .addService(new HookProviderImpl(utilityService))
-                    .build()
-                    .start();
-            logger.info("Server started, listening on " + port);
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    // Use stderr here since the logger may have been reset by its JVM shutdown hook.
-                    System.err.println("*** shutting down gRPC server since JVM is shutting down");
-                    try {
-                        ExServer.this.stop();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace(System.err);
-                    }
-                    System.err.println("*** server shut down");
+    public void start() throws IOException {
+        /* The port on which the server should run */
+        int port = 9000;
+
+        server = ServerBuilder.forPort(port)
+                .addService(new HookProviderImpl(utilityService))
+                .build()
+                .start();
+        logger.info("Server started, listening on " + port);
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                // Use stderr here since the logger may have been reset by its JVM shutdown hook.
+                System.err.println("*** shutting down gRPC server since JVM is shutting down");
+                try {
+                    ExServer.this.stop();
+                } catch (InterruptedException e) {
+                    e.printStackTrace(System.err);
                 }
-            });
-        }
-
-        public void stop() throws InterruptedException {
-            if (server != null) {
-                server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
+                System.err.println("*** server shut down");
             }
-        }
+        });
+    }
 
-        /**
-         * Await termination on the main thread since the grpc library uses daemon threads.
-         */
-        public void blockUntilShutdown() throws InterruptedException {
-            if (server != null) {
-                server.awaitTermination();
-            }
+    public void stop() throws InterruptedException {
+        if (server != null) {
+            server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
         }
+    }
+
+    /**
+     * Await termination on the main thread since the grpc library uses daemon threads.
+     */
+    public void blockUntilShutdown() throws InterruptedException {
+        if (server != null) {
+            server.awaitTermination();
+        }
+    }
 
     static class HookProviderImpl extends HookProviderGrpc.HookProviderImplBase {
 
         public void DEBUG(String fn, Object req) {
             logger.debug(fn + ", request: " + req);
         }
+
         private final ExServerUtilityService utilityService;
+
         public HookProviderImpl(ExServerUtilityService utilityService) {
             this.utilityService = utilityService;
         }
@@ -236,7 +238,9 @@ import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKE
 
             try {
                 if (StringUtils.isEmpty(clientId)) {
-                    throw new ExServerException("Client ID is missing in the request");
+                    throw Status.INVALID_ARGUMENT
+                            .withDescription("Client ID is missing in the request")
+                            .asRuntimeException();
                 }
 
                 if (StringUtils.isEmpty(username) && StringUtils.isEmpty(password)) {
@@ -263,8 +267,6 @@ import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKE
                 throw Status.UNAUTHENTICATED.withDescription("Invalid or expired token").asRuntimeException();
             } catch (StatusRuntimeException e) {
                 respondGrpcError(responseObserver, e, "gRPC status error during client authentication");
-            } catch (ExServerException e) {
-                respondGrpcError(responseObserver, e, "Unexpected error in onClientAuthenticate");
             } catch (RuntimeException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error in onClientAuthenticate");
             }
@@ -280,13 +282,13 @@ import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKE
          * successful gRPC response. Otherwise, it responds with an appropriate
          * gRPC error status.</p>
          *
-         * @param token the OAuth token to authenticate
+         * @param token            the OAuth token to authenticate
          * @param responseObserver the gRPC stream observer to send the response or error
-         * @param clientId the client identifier associated with the token
+         * @param clientId         the client identifier associated with the token
          * @throws IOException if an I/O error occurs while sending the introspection request
          */
         private void tryAuthenticateWithToken(String token, StreamObserver<ValuedResponse> responseObserver,
-                                              String clientId) throws ExServerException {
+                                              String clientId) {
             try {
                 KeyManagerConfigurations kmConfig = utilityService.getKeyManagerConfigurations();
                 HttpPost tokenEndpoint = new HttpPost(kmConfig.getServerUrl() + HandlerConstants.INTROSPECT_ENDPOINT);
@@ -350,7 +352,9 @@ import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKE
                 //todo: check token validity
                 String clientId = request.getClientinfo().getClientid();
                 if (StringUtils.isEmpty(clientId)) {
-                    throw new ExServerException("Client ID is missing in the request");
+                    throw Status.INVALID_ARGUMENT
+                            .withDescription("Client ID is missing in the request")
+                            .asRuntimeException();
                 }
                 String topic = request.getTopic();
                 ClientCheckAclRequest.AclReqType aclType = request.getType();
@@ -411,7 +415,7 @@ import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKE
                 responseObserver.onCompleted();
             } catch (StatusRuntimeException e) {
                 respondGrpcError(responseObserver, e, "ACL check failed: " + e.getStatus().getDescription());
-            } catch (ExServerException e) {
+            } catch (RuntimeException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error during ACL check");
             }
         }
@@ -594,8 +598,8 @@ import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKE
          * provided message and cause is created and sent.</p>
          *
          * @param observer the gRPC response observer to send the error to
-         * @param e the throwable representing the error
-         * @param msg a descriptive message to log and include in the gRPC error response
+         * @param e        the throwable representing the error
+         * @param msg      a descriptive message to log and include in the gRPC error response
          */
         private void respondGrpcError(StreamObserver<?> observer, Throwable e, String msg) {
             if (e instanceof StatusRuntimeException) {
