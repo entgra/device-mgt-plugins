@@ -73,4 +73,6 @@ public final class MQTTEventAdapterConstants {
     public static final String PASSWORD_GRANT_TYPE_SCOPES = "scopes";
     public static final String ACCESS_TOKEN_GRANT_TYPE_PARAM_NAME = "access_token";
     public static final String GRANT_TYPE_PARAM_NAME = "grant_type";
+    public static final int TOKEN_SPLIT_INDEX = 18;
+
 }

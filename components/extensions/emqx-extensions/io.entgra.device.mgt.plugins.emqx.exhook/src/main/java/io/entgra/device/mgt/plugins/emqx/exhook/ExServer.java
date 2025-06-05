@@ -26,11 +26,12 @@ import com.google.protobuf.GeneratedMessageV3;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
-import io.entgra.device.mgt.core.device.mgt.core.config.DeviceConfigurationManager;
 import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -43,9 +44,14 @@ import org.apache.http.entity.StringEntity;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+
+import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKEN_LENGTH;
 
 public class ExServer {
     private static final Log logger = LogFactory.getLog(ExServer.class.getName());
@@ -53,8 +59,10 @@ public class ExServer {
     private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
     private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
     private Server server;
+    private final ExServerUtilityService utilityService;
 
-    public ExServer() {
+    public ExServer(ExServerUtilityService utilityService) {
+        this.utilityService = utilityService;
     }
 
     public void start() throws IOException {
@@ -62,7 +70,7 @@ public class ExServer {
         int port = 9000;
 
         server = ServerBuilder.forPort(port)
-                .addService(new HookProviderImpl())
+                .addService(new HookProviderImpl(utilityService))
                 .build()
                 .start();
         logger.info("Server started, listening on " + port);
@@ -96,21 +104,16 @@ public class ExServer {
         }
     }
 
-    /**
-     * Main launches the server from the command line.
-     */
-    public static void main(String[] args) throws IOException, InterruptedException {
-        final ExServer server = new ExServer();
-        server.start();
-        server.blockUntilShutdown();
-    }
-
     static class HookProviderImpl extends HookProviderGrpc.HookProviderImplBase {
-
-
 
         public void DEBUG(String fn, Object req) {
             logger.debug(fn + ", request: " + req);
+        }
+
+        private final ExServerUtilityService utilityService;
+
+        public HookProviderImpl(ExServerUtilityService utilityService) {
+            this.utilityService = utilityService;
         }
 
         @Override
@@ -172,6 +175,7 @@ public class ExServer {
             }
             return deviceManagementProviderService;
         }
+
         @Override
         public void onClientConnack(ClientConnackRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onClientConnack", request);
@@ -228,77 +232,110 @@ public class ExServer {
         public void onClientAuthenticate(ClientAuthenticateRequest request, StreamObserver<ValuedResponse> responseObserver) {
             DEBUG("onClientAuthenticate", request);
 
-            if (!StringUtils.isEmpty(request.getClientinfo().getUsername()) &&
-                    !StringUtils.isEmpty(request.getClientinfo().getPassword())) {
+            String username = request.getClientinfo().getUsername();
+            String password = request.getClientinfo().getPassword();
+            String clientId = request.getClientinfo().getClientid();
 
-                DEBUG("on access token passes", request);
-                try {
-                    String accessToken = request.getClientinfo().getUsername() + "-" + request.getClientinfo().getPassword();
-                    KeyManagerConfigurations keyManagerConfig = DeviceConfigurationManager.getInstance()
-                            .getDeviceManagementConfig().getKeyManagerConfigurations();
+            try {
+                if (StringUtils.isEmpty(clientId)) {
+                    throw Status.INVALID_ARGUMENT
+                            .withDescription("Client ID is missing in the request")
+                            .asRuntimeException();
+                }
 
-                    HttpPost tokenEndpoint = new HttpPost(
-                            keyManagerConfig.getServerUrl() + HandlerConstants.INTROSPECT_ENDPOINT);
-                    tokenEndpoint.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.toString());
-                    tokenEndpoint.setHeader(HttpHeaders.AUTHORIZATION, HandlerConstants.BASIC + Base64.getEncoder()
-                            .encodeToString((keyManagerConfig.getAdminUsername() + HandlerConstants.COLON
-                                    + keyManagerConfig.getAdminPassword()).getBytes()));
-                    StringEntity tokenEPPayload = new StringEntity("token=" + accessToken,
-                            ContentType.APPLICATION_FORM_URLENCODED);
-                    tokenEndpoint.setEntity(tokenEPPayload);
-                    ProxyResponse tokenStatus = HandlerUtil.execute(tokenEndpoint);
+                if (StringUtils.isEmpty(username) && StringUtils.isEmpty(password)) {
+                    throw Status.INVALID_ARGUMENT.
+                            withDescription("Username and password are both empty.Either username, password or both must be provided").
+                            asRuntimeException();
+                }
 
-                    if (tokenStatus.getExecutorResponse().contains(HandlerConstants.EXECUTOR_EXCEPTION_PREFIX)) {
-                        if (tokenStatus.getCode() == HttpStatus.SC_UNAUTHORIZED) {
-                            // return with error
-                            logger.error("Unauthorized");
-                            responseObserver.onError(new Exception("unauthorized"));
-                            return;
-                        } else {
-                            // return with error
-                            logger.error("error occurred while checking access token");
-                            responseObserver.onError(new Exception("error occurred while checking access token"));
-                            return;
-                        }
-                    }
+                if (StringUtils.isNotEmpty(username) && StringUtils.isEmpty(password)) {
+                    tryAuthenticateWithToken(username, responseObserver, clientId);
+                    return;
+                }
 
-                    String tokenData = tokenStatus.getData();
-                    if (tokenData == null) {
-                        // return with error
-                        logger.error("invalid token data is received");
-                        responseObserver.onError(new Exception("invalid token data is received"));
+                //only opaque tokens with 36 characters or a JWT token of more than 36 characters is introspected.
+                if (StringUtils.isNotEmpty(username)) {
+                    if (StringUtils.isNotEmpty(password) && password.length() >= MIN_TOKEN_LENGTH) {
+                        tryAuthenticateWithToken(password, responseObserver, clientId);
                         return;
                     }
-                    JsonParser jsonParser = new JsonParser();
-                    JsonElement jTokenResult = jsonParser.parse(tokenData);
-                    if (jTokenResult.isJsonObject()) {
-                        JsonObject jTokenResultAsJsonObject = jTokenResult.getAsJsonObject();
-                        if (!jTokenResultAsJsonObject.get("active").getAsBoolean()) {
-                            logger.error("access token is expired");
-                            responseObserver.onError(new Exception("access token is expired"));
-                            return;
-                        }
-                        // success
-                        accessTokenMap.put(request.getClientinfo().getClientid(), accessToken);
-                        authorizedScopeMap.put(accessToken, jTokenResultAsJsonObject.get("scope").getAsString());
-                        logger.info("authenticated");
-                        ValuedResponse reply = ValuedResponse.newBuilder()
-                                .setBoolResult(true)
-                                .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
-                                .build();
-                        responseObserver.onNext(reply);
-                        responseObserver.onCompleted();
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    tryAuthenticateWithToken((username + password), responseObserver, clientId);
+                    return;
                 }
-//            } else {
-//                ValuedResponse reply = ValuedResponse.newBuilder()
-//                        .setBoolResult(true)
-//                        .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
-//                        .build();
-//                responseObserver.onNext(reply);
-//                responseObserver.onCompleted();
+
+                throw Status.UNAUTHENTICATED.withDescription("Invalid or expired token").asRuntimeException();
+            } catch (StatusRuntimeException e) {
+                respondGrpcError(responseObserver, e, "gRPC status error during client authentication");
+            } catch (RuntimeException e) {
+                respondGrpcError(responseObserver, e, "Unexpected error in onClientAuthenticate");
+            }
+        }
+
+        /**
+         * Attempts to authenticate a client using the provided OAuth token by
+         * introspecting it against the configured Key Manager server.
+         *
+         * <p>This method sends a token introspection HTTP POST request to the
+         * Key Manager's introspection endpoint. If the token is valid and active,
+         * it updates the internal access and scope maps and responds with a
+         * successful gRPC response. Otherwise, it responds with an appropriate
+         * gRPC error status.</p>
+         *
+         * @param token            the OAuth token to authenticate
+         * @param responseObserver the gRPC stream observer to send the response or error
+         * @param clientId         the client identifier associated with the token
+         * @throws IOException if an I/O error occurs while sending the introspection request
+         */
+        private void tryAuthenticateWithToken(String token, StreamObserver<ValuedResponse> responseObserver,
+                                              String clientId) {
+            try {
+                KeyManagerConfigurations kmConfig = utilityService.getKeyManagerConfigurations();
+                HttpPost tokenEndpoint = new HttpPost(kmConfig.getServerUrl() + HandlerConstants.INTROSPECT_ENDPOINT);
+                tokenEndpoint.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.toString());
+                tokenEndpoint.setHeader(HttpHeaders.AUTHORIZATION, HandlerConstants.BASIC +
+                        Base64.getEncoder().encodeToString((kmConfig.getAdminUsername() + HandlerConstants.COLON +
+                                kmConfig.getAdminPassword()).getBytes()));
+                tokenEndpoint.setEntity(new StringEntity("token=" + token, ContentType.APPLICATION_FORM_URLENCODED));
+
+                ProxyResponse tokenStatus = HandlerUtil.execute(tokenEndpoint);
+
+                if (tokenStatus.getExecutorResponse().contains(HandlerConstants.EXECUTOR_EXCEPTION_PREFIX)) {
+                    Status status = (tokenStatus.getCode() == HttpStatus.SC_UNAUTHORIZED)
+                            ? Status.UNAUTHENTICATED
+                            : Status.INTERNAL;
+                    throw status.withDescription("Token introspection failed").asRuntimeException();
+                }
+
+                String tokenData = tokenStatus.getData();
+                if (tokenData == null) {
+                    throw Status.INTERNAL.withDescription("Token introspection response is empty").asRuntimeException();
+                }
+
+                JsonElement parsed = JsonParser.parseString(tokenData);
+                if (!parsed.isJsonObject()) {
+                    throw Status.INTERNAL.withDescription("Invalid token data format").asRuntimeException();
+                }
+
+                JsonObject tokenJson = parsed.getAsJsonObject();
+                if (!tokenJson.get("active").getAsBoolean()) {
+                    throw Status.UNAUTHENTICATED.withDescription("Token is inactive or expired").asRuntimeException();
+                }
+
+                // Token is valid
+                accessTokenMap.put(clientId, token);
+                authorizedScopeMap.put(token, tokenJson.get("scope").getAsString());
+
+                ValuedResponse reply = ValuedResponse.newBuilder()
+                        .setBoolResult(true)
+                        .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                        .build();
+                responseObserver.onNext(reply);
+                responseObserver.onCompleted();
+            } catch (StatusRuntimeException e) {
+                respondGrpcError(responseObserver, e, "gRPC status error");  // proper gRPC status error
+            } catch (IOException e) {
+                respondGrpcError(responseObserver, e, "IO error during authentication");
             }
         }
 
@@ -311,83 +348,64 @@ public class ExServer {
                 data/carbonsuper/deviceType/deviceId
                 republished/deviceType
              */
-            if (!StringUtils.isEmpty(request.getClientinfo().getUsername()) &&
-                    StringUtils.isEmpty(request.getClientinfo().getPassword())) {
+            try {
                 //todo: check token validity
-                String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
-                if (StringUtils.isEmpty(accessToken) || !accessToken.startsWith(request.getClientinfo().getUsername())) {
-                    logger.info("Valid access token not found");
-                    responseObserver.onError(new Exception("not authorized"));
-                    return;
+                String clientId = request.getClientinfo().getClientid();
+                if (StringUtils.isEmpty(clientId)) {
+                    throw Status.INVALID_ARGUMENT
+                            .withDescription("Client ID is missing in the request")
+                            .asRuntimeException();
+                }
+                String topic = request.getTopic();
+                ClientCheckAclRequest.AclReqType aclType = request.getType();
+                String accessToken = accessTokenMap.get(clientId);
+                if (StringUtils.isEmpty(accessToken)) {
+                    throw Status.PERMISSION_DENIED
+                            .withDescription("Access token not found for clientId: " + clientId)
+                            .asRuntimeException();
                 }
 
                 String authorizedScopeList = authorizedScopeMap.get(accessToken);
-                boolean isFound = false;
-                if (!StringUtils.isEmpty(authorizedScopeList)) {
-                    String[] scopeArray = authorizedScopeList.split(" ");
-                    List<String> scopeList = Arrays.asList(scopeArray);
-
-
-                    String tempScope = null;
-                    String requestTopic = request.getTopic();
-
-                    if (request.getType().equals(ClientCheckAclRequest.AclReqType.PUBLISH)) {
-                        requestTopic = requestTopic.replace("/", ":");
-
-                        String[] requestTopicParts = requestTopic.split(":");
-
-                        if (requestTopicParts.length >= 4 && "operation".equals(requestTopicParts[3])) {
+                if (StringUtils.isEmpty(authorizedScopeList)) {
+                    throw Status.PERMISSION_DENIED
+                            .withDescription("No authorized scopes found for token")
+                            .asRuntimeException();
+                }
+                List<String> scopeList = Arrays.asList(authorizedScopeList.split(" "));
+                String tempScope;
+                switch (aclType) {
+                    case PUBLISH:
+                        String publishTopic = topic.replace("/", ":");
+                        String[] topicParts = publishTopic.split(":");
+                        if (topicParts.length >= 4 && "operation".equals(topicParts[3])) {
                             // publishing operation from iot server to emqx
-                            tempScope = "perm:topic:pub:" + requestTopicParts[0] + ":+:+:operation";
+                            tempScope = "perm:topic:pub:" + topicParts[0] + ":+:+:operation";
                         } else {
                             // publishing operation response from device to emqx
                             // publishing events from device to emqx
-                            tempScope = "perm:topic:pub:" + requestTopic;
+                            tempScope = "perm:topic:pub:" + publishTopic;
                         }
-
-                        for (String scope : scopeList) {
-                            if (scope.startsWith(tempScope)) {
-                                isFound = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (request.getType().equals(ClientCheckAclRequest.AclReqType.SUBSCRIBE)) {
-                        if (requestTopic.endsWith("/#")) {
-                            requestTopic = requestTopic.substring(0, requestTopic.indexOf("/#"));
-                        }
-
-                        requestTopic = requestTopic.replace("/", ":");
+                        break;
+                    case SUBSCRIBE:
                         // subscribing for events from iotserver to emqx
                         // subscribing for operation from device to emqx
                         // subscribing for operation response from iotserver to emqx
-                        tempScope = "perm:topic:sub:" + requestTopic;
-
-                        for (String scope : scopeList) {
-                            if (scope.startsWith(tempScope)) {
-                                isFound = true;
-                                break;
-                            }
-                        }
-                    }
+                        tempScope = "perm:topic:sub:" + (topic.endsWith("/#") ? topic.substring(0, topic.indexOf("/#")) : topic)
+                                .replace("/", ":");
+                        break;
+                    default:
+                        throw Status.INVALID_ARGUMENT
+                                .withDescription("Unsupported ACL request type")
+                                .asRuntimeException();
                 }
 
-                if (isFound) {
-                    ValuedResponse reply = ValuedResponse.newBuilder()
-                            .setBoolResult(true)
-                            .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
-                            .build();
-
-                    responseObserver.onNext(reply);
-                    responseObserver.onCompleted();
-                } else {
-                    logger.error("not authorized");
-                    responseObserver.onError(new Exception("not authorized"));
+                boolean isAuthorized = scopeList.stream().anyMatch(scope -> scope.startsWith(tempScope));
+                if (!isAuthorized) {
+                    logger.warn("topic=" + topic + ", requiredScope=" + tempScope);
+                    throw Status.PERMISSION_DENIED.withDescription("User not authorized for requested topic").asRuntimeException();
                 }
 
-            } else {
-                //default
+                // Authorized by default or passed scope check
                 ValuedResponse reply = ValuedResponse.newBuilder()
                         .setBoolResult(true)
                         .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
@@ -395,6 +413,10 @@ public class ExServer {
 
                 responseObserver.onNext(reply);
                 responseObserver.onCompleted();
+            } catch (StatusRuntimeException e) {
+                respondGrpcError(responseObserver, e, "ACL check failed: " + e.getStatus().getDescription());
+            } catch (RuntimeException e) {
+                respondGrpcError(responseObserver, e, "Unexpected error during ACL check");
             }
         }
 
@@ -484,7 +506,7 @@ public class ExServer {
                     try {
                         PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain("carbon.super");
                         PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(-1234);
-                        DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();;
+                        DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();
                         deviceManagementProviderService.changeDeviceStatus(new DeviceIdentifier(deviceId, deviceType), EnrolmentInfo.Status.UNREACHABLE);
                     } catch (DeviceManagementException e) {
                         logger.error("onSessionTerminated: Error while setting device status");
@@ -503,16 +525,17 @@ public class ExServer {
             ByteString bstr = ByteString.copyFromUtf8("hardcode payload by exhook-svr-java :)");
 
             Message nmsg = Message.newBuilder()
-                                  .setId     (request.getMessage().getId())
-                                  .setNode   (request.getMessage().getNode())
-                                  .setFrom   (request.getMessage().getFrom())
-                                  .setTopic  (request.getMessage().getTopic())
-                                  .setPayload(((GeneratedMessageV3) request).toByteString()).build();
+                    .setId(request.getMessage().getId())
+                    .setNode(request.getMessage().getNode())
+                    .setFrom(request.getMessage().getFrom())
+                    .setTopic(request.getMessage().getTopic())
+                    .setPayload(((GeneratedMessageV3) request).toByteString()).build();
+            //.setPayload(request.getMessage().getPayload())  //  clean, expected by MQTT clients
 
 
             ValuedResponse reply = ValuedResponse.newBuilder()
-                                                 .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
-                                                 .setMessage(nmsg).build();
+                    .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                    .setMessage(nmsg).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }
@@ -566,8 +589,27 @@ public class ExServer {
 
         }
 
-
+        /**
+         * Handles and responds to gRPC errors by logging the error and sending
+         * an appropriate error status to the provided gRPC response observer.
+         *
+         * <p>If the throwable is already a {@link StatusRuntimeException}, it is
+         * sent directly to the observer. Otherwise, an INTERNAL status with the
+         * provided message and cause is created and sent.</p>
+         *
+         * @param observer the gRPC response observer to send the error to
+         * @param e        the throwable representing the error
+         * @param msg      a descriptive message to log and include in the gRPC error response
+         */
+        private void respondGrpcError(StreamObserver<?> observer, Throwable e, String msg) {
+            if (e instanceof StatusRuntimeException) {
+                logger.error(msg, e);
+                observer.onError(e);
+            } else {
+                logger.error(msg, e);
+                observer.onError(Status.INTERNAL.withDescription(msg).withCause(e).asRuntimeException());
+            }
+        }
     }
-
 
 }

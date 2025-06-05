@@ -17,6 +17,7 @@
  */
 package io.entgra.device.mgt.plugins.emqx.initializer.internal;
 
+import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.plugins.emqx.initializer.EmqxExhookInitializer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,6 +60,26 @@ public class EmqxExhookServiceComponent {
             }
         } catch (Throwable e) {
             log.error("Error occurred while de-activating EmqxExhookServiceComponent", e);
+        }
+    }
+
+    @Reference(
+            name = "device.mgt.provider.service",
+            service = io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetDeviceManagementServiceProviderService")
+    protected void setDeviceManagementServiceProviderService(DeviceManagementProviderService deviceManagementProviderService) {
+        EmqxExhookDataHolder.getInstance().setDeviceManagementProviderService(deviceManagementProviderService);
+        if (log.isDebugEnabled()) {
+            log.debug("Device management provider service is set successfully");
+        }
+    }
+
+    protected void unsetDeviceManagementServiceProviderService(DeviceManagementProviderService deviceManagementProviderService) {
+        EmqxExhookDataHolder.getInstance().setDeviceManagementProviderService(null);
+        if (log.isDebugEnabled()) {
+            log.debug("Device management provider service is unset successfully");
         }
     }
 }

@@ -69,5 +69,6 @@ public class MQTTEventAdapterConstants {
     public static final String PAYLOAD = "payload";
     public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String AUTHORIZATION_HEADER_VALUE_PREFIX = "Basic ";
+    public static final int TOKEN_SPLIT_INDEX = 18;
 
 }

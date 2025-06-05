@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ * Copyright (c) 2018 - 2025, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
  * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,23 +15,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.entgra.device.mgt.plugins.emqx.initializer.internal;
+package io.entgra.device.mgt.plugins.emqx.initializer;
 
+import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
+import io.entgra.device.mgt.plugins.emqx.exhook.ExServerUtilityService;
 
-public class EmqxExhookDataHolder {
+public class ExServerUtilityServiceImpl implements ExServerUtilityService {
 
-    private static final EmqxExhookDataHolder thisInstance = new EmqxExhookDataHolder();
-    private DeviceManagementProviderService deviceManagementProviderService;
-    public static EmqxExhookDataHolder getInstance() {
-        return thisInstance;
-    }
+    private final DeviceManagementProviderService deviceManagementProviderService;
 
-    public DeviceManagementProviderService getDeviceManagementProviderService() {
-        return deviceManagementProviderService;
-    }
-
-    public void setDeviceManagementProviderService(DeviceManagementProviderService deviceManagementProviderService) {
+    public ExServerUtilityServiceImpl(DeviceManagementProviderService deviceManagementProviderService) {
         this.deviceManagementProviderService = deviceManagementProviderService;
+    }
+    @Override
+    public KeyManagerConfigurations getKeyManagerConfigurations() {
+        return deviceManagementProviderService.getDeviceManagementConfig().getKeyManagerConfigurations();
     }
 }
