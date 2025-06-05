@@ -358,10 +358,10 @@ public class ExServer {
                 }
                 String topic = request.getTopic();
                 ClientCheckAclRequest.AclReqType aclType = request.getType();
-                String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
+                String accessToken = accessTokenMap.get(clientId);
                 if (StringUtils.isEmpty(accessToken)) {
                     throw Status.PERMISSION_DENIED
-                            .withDescription("Access token not found for clientId: " + request.getClientinfo().getClientid())
+                            .withDescription("Access token not found for clientId: " + clientId)
                             .asRuntimeException();
                 }
 
