@@ -529,8 +529,7 @@ public class ExServer {
                     .setNode(request.getMessage().getNode())
                     .setFrom(request.getMessage().getFrom())
                     .setTopic(request.getMessage().getTopic())
-                    .setPayload(((GeneratedMessageV3) request).toByteString()).build();
-            //.setPayload(request.getMessage().getPayload())  //  clean, expected by MQTT clients
+                    .setPayload(request.getMessage().getPayload()).build();
 
 
             ValuedResponse reply = ValuedResponse.newBuilder()
