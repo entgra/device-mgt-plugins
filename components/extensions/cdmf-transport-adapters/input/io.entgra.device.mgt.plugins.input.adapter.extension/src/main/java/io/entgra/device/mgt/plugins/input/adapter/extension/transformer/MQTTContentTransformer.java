@@ -36,6 +36,12 @@ public class MQTTContentTransformer implements ContentTransformer {
     private static final String TOPIC = "topic";
     private static final String DEVICE_ID_INDEX = "deviceIdIndex";
     private static String JSON_ARRAY_START_CHAR = "[";
+    private static final String KEY_DEVICE_ID = "deviceId";
+    private static final String KEY_TIMESTAMP = "ts";
+    private static final String KEY_PAYLOAD_DATA = "payloadData";
+    private static final String KEY_META_DATA = "metaData";
+    private static final String KEY_EVENT = "event";
+
 
     private static final Log log = LogFactory.getLog(MQTTContentTransformer.class);
 
@@ -70,15 +76,15 @@ public class MQTTContentTransformer implements ContentTransformer {
     private String processSingleEvent(String msg, String deviceIdFromTopic, String deviceIdJsonPath)
             throws ParseException {
         JSONParser parser = new JSONParser();
-        JSONObject jsonObject = new JSONObject();
+        JSONObject metaData = new JSONObject();
         JSONObject payloadData = (JSONObject) parser.parse(msg);
-        payloadData.put("ts", System.currentTimeMillis());
-        jsonObject.put("deviceId", deviceIdFromTopic);
+        metaData.put(KEY_DEVICE_ID, deviceIdFromTopic);
+        metaData.put(KEY_TIMESTAMP, System.currentTimeMillis());
         JSONObject eventObject = new JSONObject();
-        eventObject.put("payloadData", payloadData);
-        eventObject.put("metaData", jsonObject);
+        eventObject.put(KEY_PAYLOAD_DATA, payloadData);
+        eventObject.put(KEY_META_DATA, metaData);
         JSONObject event = new JSONObject();
-        event.put("event", eventObject);
+        event.put(KEY_EVENT, eventObject);
         return event.toJSONString();
     }
 
