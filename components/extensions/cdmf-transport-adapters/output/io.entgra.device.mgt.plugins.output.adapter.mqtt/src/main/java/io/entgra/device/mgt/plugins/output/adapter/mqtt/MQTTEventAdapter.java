@@ -17,6 +17,7 @@
  */
 package io.entgra.device.mgt.plugins.output.adapter.mqtt;
 
+import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
@@ -159,6 +160,17 @@ public class MQTTEventAdapter implements OutputEventAdapter {
         return false;
     }
 
+    public static String convertToJsonString(Object message) {
+        // If the message is a Map (like LinkedTreeMap or TreeMap)
+        if (message instanceof Map) {
+            // Convert the LinkedTreeMap to a JSON string using Gson
+            Gson gson = new Gson();
+            return gson.toJson(message);  // Convert Map or TreeMap to JSON
+        }
+        // If it's a simple string or other type, return it as-is
+        return message.toString();  // Return the message directly as a string
+    }
+
     class MQTTSender implements Runnable {
 
         String topic;
@@ -179,7 +191,9 @@ public class MQTTEventAdapter implements OutputEventAdapter {
                         }
                     }
                 }
-                mqttAdapterPublisher.publish(mqttBrokerConnectionConfiguration.getQos(), message.toString(), topic);
+                // Convert and publish the message
+                String formattedMessage = convertToJsonString(message);
+                mqttAdapterPublisher.publish(mqttBrokerConnectionConfiguration.getQos(), formattedMessage, topic);
             } catch (Throwable t) {
                 EventAdapterUtil.logAndDrop(eventAdapterConfiguration.getName(), message, null, t, log, tenantId);
             }
