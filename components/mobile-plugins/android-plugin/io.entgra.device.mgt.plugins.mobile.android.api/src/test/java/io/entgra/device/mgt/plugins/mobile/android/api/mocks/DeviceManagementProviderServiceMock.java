@@ -714,6 +714,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public List<DeviceLocationHistorySnapshot> getAllDeviceLocationInfo(String deviceType, long exactTime, int timeWindow, PaginationRequest paginationRequest) throws DeviceManagementException {
+        return List.of();
+    }
+
+    @Override
     public void notifyPullNotificationSubscriber(Device device, Operation operation)
             throws PullNotificationExecutionFailedException {
     }
