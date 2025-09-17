@@ -719,6 +719,11 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public int getDeviceLocationCount(String s, long l, int i) throws DeviceManagementException {
+        return 0;
+    }
+
+    @Override
     public void notifyPullNotificationSubscriber(Device device, Operation operation)
             throws PullNotificationExecutionFailedException {
     }
