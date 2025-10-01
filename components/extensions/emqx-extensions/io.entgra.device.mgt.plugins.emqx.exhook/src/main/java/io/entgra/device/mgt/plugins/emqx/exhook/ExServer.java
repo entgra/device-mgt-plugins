@@ -22,7 +22,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.GeneratedMessageV3;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
@@ -42,24 +41,24 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKEN_LENGTH;
 
 public class ExServer {
+    private static final String CLIENT_SCOPE_CACHE_FILE = "clientScopeCache.properties";
     private static final Log logger = LogFactory.getLog(ExServer.class.getName());
-
-    private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
-    private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
+    private static final Map<String, String> clientScopeMap = new ConcurrentHashMap<>();
     private Server server;
     private final ExServerUtilityService utilityService;
+    private static ExecutorService executor;
 
     public ExServer(ExServerUtilityService utilityService) {
         this.utilityService = utilityService;
@@ -73,6 +72,8 @@ public class ExServer {
                 .addService(new HookProviderImpl(utilityService))
                 .build()
                 .start();
+        executor = Executors.newSingleThreadExecutor();
+        loadClientScopeMapCache();
         logger.info("Server started, listening on " + port);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -80,6 +81,7 @@ public class ExServer {
                 // Use stderr here since the logger may have been reset by its JVM shutdown hook.
                 System.err.println("*** shutting down gRPC server since JVM is shutting down");
                 try {
+                    executor.shutdown();
                     ExServer.this.stop();
                 } catch (InterruptedException e) {
                     e.printStackTrace(System.err);
@@ -101,6 +103,30 @@ public class ExServer {
     public void blockUntilShutdown() throws InterruptedException {
         if (server != null) {
             server.awaitTermination();
+        }
+    }
+
+    public static void loadClientScopeMapCache() {
+        File file = new File(CLIENT_SCOPE_CACHE_FILE);
+        if (!file.exists()) return;
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(file)) {
+            props.load(fis);
+            for (String key : props.stringPropertyNames()) {
+                clientScopeMap.put(key, props.getProperty(key));
+            }
+        } catch (IOException e) {
+            logger.error("Failed to load cache from file");
+        }
+    }
+
+    public static synchronized void saveClientScopeMapCache() {
+        Properties props = new Properties();
+        props.putAll(clientScopeMap);
+        try (FileOutputStream fos = new FileOutputStream(CLIENT_SCOPE_CACHE_FILE)) {
+            props.store(fos, "Client Scope Cache");
+        } catch (IOException e) {
+            logger.error("Failed to save cache to file");
         }
     }
 
@@ -180,8 +206,7 @@ public class ExServer {
         public void onClientConnack(ClientConnackRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onClientConnack", request);
             if (request.getResultCode().equals("success")) {
-                String accessToken = accessTokenMap.get(request.getConninfo().getClientid());
-                String scopeString = authorizedScopeMap.get(accessToken);
+                String scopeString = clientScopeMap.get(request.getConninfo().getClientid());
                 if (!StringUtils.isEmpty(scopeString)) {
                     String[] scopeArray = scopeString.split(" ");
                     String deviceType = null;
@@ -214,6 +239,7 @@ public class ExServer {
         @Override
         public void onClientConnected(ClientConnectedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onClientConnected", request);
+            executor.submit(ExServer::saveClientScopeMapCache);
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -222,6 +248,9 @@ public class ExServer {
         @Override
         public void onClientDisconnected(ClientDisconnectedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             logger.info("onClientDisconnected -----------------------------");
+            String clientId = request.getClientinfo().getClientid();
+            clientScopeMap.remove(clientId);
+            executor.submit(ExServer::saveClientScopeMapCache);
             DEBUG("onClientDisconnected", request);
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
@@ -323,8 +352,8 @@ public class ExServer {
                 }
 
                 // Token is valid
-                accessTokenMap.put(clientId, token);
-                authorizedScopeMap.put(token, tokenJson.get("scope").getAsString());
+                String scopes = tokenJson.get("scope").getAsString();
+                clientScopeMap.put(clientId, scopes);
 
                 ValuedResponse reply = ValuedResponse.newBuilder()
                         .setBoolResult(true)
@@ -358,14 +387,8 @@ public class ExServer {
                 }
                 String topic = request.getTopic();
                 ClientCheckAclRequest.AclReqType aclType = request.getType();
-                String accessToken = accessTokenMap.get(clientId);
-                if (StringUtils.isEmpty(accessToken)) {
-                    throw Status.PERMISSION_DENIED
-                            .withDescription("Access token not found for clientId: " + clientId)
-                            .asRuntimeException();
-                }
 
-                String authorizedScopeList = authorizedScopeMap.get(accessToken);
+                String authorizedScopeList = clientScopeMap.get(clientId);
                 if (StringUtils.isEmpty(authorizedScopeList)) {
                     throw Status.PERMISSION_DENIED
                             .withDescription("No authorized scopes found for token")
@@ -488,9 +511,8 @@ public class ExServer {
         public void onSessionTerminated(SessionTerminatedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onSessionTerminated", request);
 
-            String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
-            if (!StringUtils.isEmpty(accessToken)) {
-                String scopeString = authorizedScopeMap.get(accessToken);
+            String scopeString = clientScopeMap.get(request.getClientinfo().getClientid());
+            if (!StringUtils.isEmpty(scopeString)) {
                 String[] scopeArray = scopeString.split(" ");
                 String deviceType = null;
                 String deviceId = null;
