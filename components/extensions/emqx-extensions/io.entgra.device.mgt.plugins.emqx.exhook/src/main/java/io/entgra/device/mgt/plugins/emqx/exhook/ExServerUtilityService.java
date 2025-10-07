@@ -17,9 +17,13 @@
  */
 package io.entgra.device.mgt.plugins.emqx.exhook;
 
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 
 public interface ExServerUtilityService {
 
     KeyManagerConfigurations getKeyManagerConfigurations();
+    boolean changeDeviceStatus(DeviceIdentifier var1, EnrolmentInfo.Status var2) throws DeviceManagementException;
 }

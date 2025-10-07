@@ -17,6 +17,9 @@
  */
 package io.entgra.device.mgt.plugins.emqx.initializer;
 
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.plugins.emqx.exhook.ExServerUtilityService;
@@ -31,5 +34,10 @@ public class ExServerUtilityServiceImpl implements ExServerUtilityService {
     @Override
     public KeyManagerConfigurations getKeyManagerConfigurations() {
         return deviceManagementProviderService.getDeviceManagementConfig().getKeyManagerConfigurations();
+    }
+
+    @Override
+    public boolean changeDeviceStatus(DeviceIdentifier var1, EnrolmentInfo.Status var2) throws DeviceManagementException {
+        return deviceManagementProviderService.changeDeviceStatus(var1, var2);
     }
 }
