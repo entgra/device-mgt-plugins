@@ -548,6 +548,13 @@ public class ExServer {
             }
         }
 
+        /**
+         * Updates the status of a device for the given client ID.
+         *
+         * @param clientId the client identifier
+         * @param status the new device status
+         * @implNote Tenant info is currently hardcoded and should be dynamic in future.
+         */
         private void handleDeviceStatusChange(String clientId, EnrolmentInfo.Status status) {
             String accessToken = accessTokenMap.get(clientId);
             if (StringUtils.isEmpty(accessToken)){
