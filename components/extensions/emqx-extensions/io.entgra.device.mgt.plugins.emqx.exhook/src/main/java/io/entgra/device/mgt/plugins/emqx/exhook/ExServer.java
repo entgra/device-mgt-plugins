@@ -187,6 +187,7 @@ public class ExServer {
         public void onClientDisconnected(ClientDisconnectedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             logger.info("onClientDisconnected -----------------------------");
             DEBUG("onClientDisconnected", request);
+            handleDeviceStatusChange(request.getClientinfo().getClientid(), EnrolmentInfo.Status.UNREACHABLE);
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -451,7 +452,6 @@ public class ExServer {
         @Override
         public void onSessionTerminated(SessionTerminatedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onSessionTerminated", request);
-            handleDeviceStatusChange(request.getClientinfo().getClientid(), EnrolmentInfo.Status.UNREACHABLE);
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -550,20 +550,24 @@ public class ExServer {
 
         private void handleDeviceStatusChange(String clientId, EnrolmentInfo.Status status) {
             String accessToken = accessTokenMap.get(clientId);
-            if (StringUtils.isEmpty(accessToken)) return;
+            if (StringUtils.isEmpty(accessToken)){
+                logger.warn("No access token found for clientId: " + clientId);
+                return;
+            }
             String scopeString = authorizedScopeMap.get(accessToken);
-            if (StringUtils.isEmpty(scopeString)) return;
+            if (StringUtils.isEmpty(scopeString)) {
+                logger.warn("No scope found for accessToken: " + accessToken);
+                return;
+            }
             String[] scopeArray = scopeString.split(" ");
             String deviceType = null;
             String deviceId = null;
 
             for (String scope : scopeArray) {
-                if (scope.startsWith("device:")) {
+                if (scope.matches("^device:[^:]+:[^:]+$")) {
                     String[] scopeParts = scope.split(":");
-                    if (scopeParts.length >= 3) {
-                        deviceType = scopeParts[1];
-                        deviceId = scopeParts[2];
-                    }
+                    deviceType = scopeParts[1];
+                    deviceId = scopeParts[2];
                     break;
                 }
             }
@@ -571,12 +575,16 @@ public class ExServer {
             if (!StringUtils.isEmpty(deviceType) && !StringUtils.isEmpty(deviceId)) {
                 try {
                     PrivilegedCarbonContext carbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+                    // TODO: fetch tenant dynamically instead of hardcoding
                     carbonContext.setTenantDomain("carbon.super");
                     carbonContext.setTenantId(-1234);
                     utilityService.changeDeviceStatus(new DeviceIdentifier(deviceId, deviceType), status);
+                    logger.info(String.format("Device status changed successfully: [deviceType=%s, deviceId=%s, status=%s]", deviceType, deviceId, status));
                 } catch (DeviceManagementException e) {
-                    logger.error("Error while setting device status");
+                    logger.error("Error while setting device status for deviceId: " + deviceId, e);
                 }
+            } else {
+                logger.warn("Invalid or missing deviceType/deviceId for clientId: " + clientId);
             }
         }
     }
