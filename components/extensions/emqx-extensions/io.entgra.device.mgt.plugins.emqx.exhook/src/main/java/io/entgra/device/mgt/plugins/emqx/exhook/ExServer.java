@@ -41,16 +41,20 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKEN_LENGTH;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKEN_LENGTH;
+import java.util.Properties;
 
 public class ExServer {
     private static final String CLIENT_SCOPE_CACHE_FILE = "clientScopeCache.properties";
@@ -79,14 +83,14 @@ public class ExServer {
             @Override
             public void run() {
                 // Use stderr here since the logger may have been reset by its JVM shutdown hook.
-                System.err.println("*** shutting down gRPC server since JVM is shutting down");
+                logger.error("*** shutting down gRPC server since JVM is shutting down");
                 try {
                     executor.shutdown();
                     ExServer.this.stop();
                 } catch (InterruptedException e) {
                     e.printStackTrace(System.err);
                 }
-                System.err.println("*** server shut down");
+                logger.error("*** server shut down");
             }
         });
     }
@@ -116,17 +120,17 @@ public class ExServer {
                 clientScopeMap.put(key, props.getProperty(key));
             }
         } catch (IOException e) {
-            logger.error("Failed to load cache from file");
+            logger.error("Failed to load cache from file", e);
         }
     }
 
-    public static synchronized void saveClientScopeMapCache() {
+    public static void saveClientScopeMapCache() {
         Properties props = new Properties();
         props.putAll(clientScopeMap);
         try (FileOutputStream fos = new FileOutputStream(CLIENT_SCOPE_CACHE_FILE)) {
-            props.store(fos, "Client Scope Cache");
+            props.store(fos, null);
         } catch (IOException e) {
-            logger.error("Failed to save cache to file");
+            logger.error("Failed to save cache to file", e);
         }
     }
 
