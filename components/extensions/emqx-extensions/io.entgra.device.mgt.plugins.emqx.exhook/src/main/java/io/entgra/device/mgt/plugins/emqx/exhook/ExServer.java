@@ -57,6 +57,7 @@ import java.util.Properties;
 
 public class ExServer {
     private static final String CLIENT_SCOPE_CACHE_FILE = "clientScopeCache.properties";
+    private static final String tempDirs = System.getProperty("java.io.tmpdir");
     private static final Log logger = LogFactory.getLog(ExServer.class.getName());
     private static final Map<String, String> clientScopeMap = new ConcurrentHashMap<>();
     private Server server;
@@ -110,7 +111,7 @@ public class ExServer {
     }
 
     public static void loadClientScopeMapCache() {
-        File file = new File(CLIENT_SCOPE_CACHE_FILE);
+        File file = new File(tempDirs, CLIENT_SCOPE_CACHE_FILE);
         if (!file.exists()) return;
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream(file)) {
@@ -126,7 +127,8 @@ public class ExServer {
     public static void saveClientScopeMapCache() {
         Properties props = new Properties();
         props.putAll(clientScopeMap);
-        try (FileOutputStream fos = new FileOutputStream(CLIENT_SCOPE_CACHE_FILE)) {
+        File cacheFile = new File(tempDirs, CLIENT_SCOPE_CACHE_FILE);
+        try (FileOutputStream fos = new FileOutputStream(cacheFile)) {
             props.store(fos, null);
         } catch (IOException e) {
             logger.error("Failed to save cache to file", e);
