@@ -44,8 +44,6 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.entgra.device.mgt.plugins.input.adapter.mqtt.util.MQTTEventAdapterConstants.TOKEN_SPLIT_INDEX;
-
 public class MQTTAdapterListener implements MqttCallback, Runnable {
     private static final Log log = LogFactory.getLog(MQTTAdapterListener.class);
 
