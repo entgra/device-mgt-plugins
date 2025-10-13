@@ -149,8 +149,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
                     }
 
                     String accessToken = getToken(apiApplicationKey.getClientId(), apiApplicationKey.getClientSecret());
-                    connectionOptions.setUserName(accessToken.substring(0, TOKEN_SPLIT_INDEX));
-                    connectionOptions.setPassword(accessToken.substring(TOKEN_SPLIT_INDEX).toCharArray());
+                    connectionOptions.setUserName(accessToken);
                 } catch (APIManagerException e) {
                     log.error("Failed to create an oauth token with client_credentials grant type.", e);
                     return false;
