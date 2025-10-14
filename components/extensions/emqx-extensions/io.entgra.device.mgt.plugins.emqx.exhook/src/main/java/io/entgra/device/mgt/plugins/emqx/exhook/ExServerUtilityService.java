@@ -22,8 +22,23 @@ import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 
+/**
+ * Provides operations related to the ExServer functionality.
+ */
 public interface ExServerUtilityService {
 
+    /**
+     * Retrieves the current key manager configurations used by the ExServer.
+     * @return {@link KeyManagerConfigurations} containing key and token management details
+     */
     KeyManagerConfigurations getKeyManagerConfigurations();
+
+    /**
+     * Changes the enrolment status of a specific device.
+     * @param var1 the unique identifier of the target device
+     * @param var2 the new enrolment status to apply
+     * @return {@code true} if the device status was successfully updated; {@code false} otherwise
+     * @throws DeviceManagementException if an error occurs while updating the device status
+     */
     boolean changeDeviceStatus(DeviceIdentifier var1, EnrolmentInfo.Status var2) throws DeviceManagementException;
 }
