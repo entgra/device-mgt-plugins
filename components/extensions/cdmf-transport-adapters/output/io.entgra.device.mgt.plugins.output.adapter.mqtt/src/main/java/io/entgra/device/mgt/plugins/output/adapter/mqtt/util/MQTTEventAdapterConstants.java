@@ -44,7 +44,7 @@ public final class MQTTEventAdapterConstants {
     public static final String ADAPTER_CONF_CLIENTID = "clientId";
     public static final String ADAPTER_CONF_CLIENTID_HINT = "clientId.hint";
     public static final String EMPTY_STRING = "";
-    public static final String ADAPTER_CONF_KEEP_ALIVE = "keepAlive";
+    public static final String ADAPTER_CONF_KEEP_ALIVE = "keepAliveTimeInMillis";
     public static final int ADAPTER_CONF_DEFAULT_KEEP_ALIVE = 60000;
 
     public static final int DEFAULT_MIN_THREAD_POOL_SIZE = 8;
