@@ -47,6 +47,10 @@
             <artifactId>io.entgra.device.mgt.core.device.mgt.common</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.entgra.device.mgt.core</groupId>
+            <artifactId>io.entgra.device.mgt.core.notification.mgt.common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.siddhi</groupId>
             <artifactId>siddhi-core</artifactId>
         </dependency>
@@ -175,6 +179,7 @@
                             io.entgra.device.mgt.core.identity.jwt.client.extension.dto;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.core.identity.jwt.client.extension.exception;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.core.identity.jwt.client.extension.service;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.notification.mgt.common.exception;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.plugins.extension.siddhi.device.client.configs,
                             io.entgra.device.mgt.plugins.extension.siddhi.device.client.dto,
                             io.entgra.device.mgt.plugins.extension.siddhi.device.client.exception,
