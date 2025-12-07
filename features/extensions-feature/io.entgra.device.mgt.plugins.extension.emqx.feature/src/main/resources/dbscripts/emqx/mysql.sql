@@ -1,0 +1,12 @@
+-- -----------------------------------------------------
+-- Table `EMQX_CONNECTION`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS EMQX_CONNECTION (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    DEVICE_ID INT NOT NULL,
+    CLIENT_ID VARCHAR(255) NOT NULL,
+    ACCESS_TOKEN VARCHAR(100) NOT NULL,
+    SCOPES TEXT,
+    TENANT_ID INT,
+    CREATED_TIME TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
