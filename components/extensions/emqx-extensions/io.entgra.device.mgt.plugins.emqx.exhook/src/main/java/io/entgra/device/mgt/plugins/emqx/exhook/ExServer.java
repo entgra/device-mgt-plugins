@@ -22,12 +22,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.GeneratedMessageV3;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DBConnectionException;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
+import io.entgra.device.mgt.plugins.emqx.exhook.dto.EmqxConnection;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.Status;
@@ -42,22 +43,17 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
 import static io.entgra.device.mgt.plugins.emqx.exhook.HandlerConstants.MIN_TOKEN_LENGTH;
 
 public class ExServer {
-    private static final Log logger = LogFactory.getLog(ExServer.class.getName());
 
-    private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
-    private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
+    private static final Log logger = LogFactory.getLog(ExServer.class.getName());
     private Server server;
     private final ExServerUtilityService utilityService;
 
@@ -180,31 +176,7 @@ public class ExServer {
         public void onClientConnack(ClientConnackRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onClientConnack", request);
             if (request.getResultCode().equals("success")) {
-                String accessToken = accessTokenMap.get(request.getConninfo().getClientid());
-                String scopeString = authorizedScopeMap.get(accessToken);
-                if (!StringUtils.isEmpty(scopeString)) {
-                    String[] scopeArray = scopeString.split(" ");
-                    String deviceType = null;
-                    String deviceId = null;
-                    for (String scope : scopeArray) {
-                        if (scope.startsWith("device_")) {
-                            String[] scopeParts = scope.split("_");
-                            deviceType = scopeParts[1];
-                            deviceId = scopeParts[2];
-                            break;
-                        }
-                    }
-                    if (!StringUtils.isEmpty(deviceType) && !StringUtils.isEmpty(deviceId)) {
-                        try {
-                            PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain("carbon.super");
-                            PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(-1234);
-                            DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();
-                            deviceManagementProviderService.changeDeviceStatus(new DeviceIdentifier(deviceId, deviceType), EnrolmentInfo.Status.ACTIVE);
-                        } catch (DeviceManagementException e) {
-                            logger.error("onClientConnack: Error while setting device status");
-                        }
-                    }
-                }
+                handleDeviceStatusChange(request.getConninfo().getClientid(), EnrolmentInfo.Status.ACTIVE);
             }
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
@@ -323,8 +295,11 @@ public class ExServer {
                 }
 
                 // Token is valid
-                accessTokenMap.put(clientId, token);
-                authorizedScopeMap.put(token, tokenJson.get("scope").getAsString());
+                EmqxConnection emqxConnection = new EmqxConnection();
+                emqxConnection.setClientId(clientId);
+                emqxConnection.setAccessToken(token);
+                emqxConnection.setScopes(tokenJson.get("scope").getAsString());
+                this.utilityService.saveEmqxConnectionDetails(emqxConnection);
 
                 ValuedResponse reply = ValuedResponse.newBuilder()
                         .setBoolResult(true)
@@ -336,6 +311,8 @@ public class ExServer {
                 respondGrpcError(responseObserver, e, "gRPC status error");  // proper gRPC status error
             } catch (IOException e) {
                 respondGrpcError(responseObserver, e, "IO error during authentication");
+            } catch (DBConnectionException | SQLException e) {
+                throw new RuntimeException(e);
             }
         }
 
@@ -358,14 +335,14 @@ public class ExServer {
                 }
                 String topic = request.getTopic();
                 ClientCheckAclRequest.AclReqType aclType = request.getType();
-                String accessToken = accessTokenMap.get(clientId);
-                if (StringUtils.isEmpty(accessToken)) {
+                EmqxConnection emqxConnection = this.utilityService.getEmqxConnectionDetailsByClientId(clientId);
+                if (emqxConnection == null) {
                     throw Status.PERMISSION_DENIED
                             .withDescription("Access token not found for clientId: " + clientId)
                             .asRuntimeException();
                 }
 
-                String authorizedScopeList = authorizedScopeMap.get(accessToken);
+                String authorizedScopeList = emqxConnection.getScopes();
                 if (StringUtils.isEmpty(authorizedScopeList)) {
                     throw Status.PERMISSION_DENIED
                             .withDescription("No authorized scopes found for token")
@@ -417,6 +394,8 @@ public class ExServer {
                 respondGrpcError(responseObserver, e, "ACL check failed: " + e.getStatus().getDescription());
             } catch (RuntimeException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error during ACL check");
+            } catch (SQLException | DBConnectionException e) {
+                throw new RuntimeException(e);
             }
         }
 
@@ -487,31 +466,13 @@ public class ExServer {
         @Override
         public void onSessionTerminated(SessionTerminatedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onSessionTerminated", request);
+            String clientId = request.getClientinfo().getClientid();
+            handleDeviceStatusChange(clientId, EnrolmentInfo.Status.UNREACHABLE);
 
-            String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
-            if (!StringUtils.isEmpty(accessToken)) {
-                String scopeString = authorizedScopeMap.get(accessToken);
-                String[] scopeArray = scopeString.split(" ");
-                String deviceType = null;
-                String deviceId = null;
-                for (String scope : scopeArray) {
-                    if (scope.startsWith("device:")) {
-                        String[] scopeParts = scope.split(":");
-                        deviceType = scopeParts[1];
-                        deviceId = scopeParts[2];
-                        break;
-                    }
-                }
-                if (!StringUtils.isEmpty(deviceType) && !StringUtils.isEmpty(deviceId)) {
-                    try {
-                        PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain("carbon.super");
-                        PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(-1234);
-                        DeviceManagementProviderService deviceManagementProviderService = getDeviceManagementService();
-                        deviceManagementProviderService.changeDeviceStatus(new DeviceIdentifier(deviceId, deviceType), EnrolmentInfo.Status.UNREACHABLE);
-                    } catch (DeviceManagementException e) {
-                        logger.error("onSessionTerminated: Error while setting device status");
-                    }
-                }
+            try {
+                this.utilityService.deleteEmqxConnectionDetailsByClientId(clientId);
+            } catch (DBConnectionException | SQLException e) {
+                throw new RuntimeException(e);
             }
 
             EmptySuccess reply = EmptySuccess.newBuilder().build();
@@ -538,30 +499,6 @@ public class ExServer {
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }
-
-// case2: stop publish the 't/d' messages
-//        @Override
-//        public void onMessagePublish(MessagePublishRequest request, StreamObserver<ValuedResponse> responseObserver) {
-//            DEBUG("onMessagePublish", request);
-//
-//            Message nmsg = request.getMessage();
-//            if ("t/d".equals(nmsg.getTopic())) {
-//                ByteString bstr = ByteString.copyFromUtf8("");
-//                nmsg = Message.newBuilder()
-//                              .setId     (request.getMessage().getId())
-//                              .setNode   (request.getMessage().getNode())
-//                              .setFrom   (request.getMessage().getFrom())
-//                              .setTopic  (request.getMessage().getTopic())
-//                              .setPayload(bstr)
-//                              .putHeaders("allow_publish", "false").build();
-//            }
-//
-//            ValuedResponse reply = ValuedResponse.newBuilder()
-//                                                 .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
-//                                                 .setMessage(nmsg).build();
-//            responseObserver.onNext(reply);
-//            responseObserver.onCompleted();
-//        }
 
         @Override
         public void onMessageDelivered(MessageDeliveredRequest request, StreamObserver<EmptySuccess> responseObserver) {
@@ -608,6 +545,65 @@ public class ExServer {
                 logger.error(msg, e);
                 observer.onError(Status.INTERNAL.withDescription(msg).withCause(e).asRuntimeException());
             }
+        }
+
+        /**
+         * Updates the status of a device for the given client ID.
+         *
+         * @param clientId the client identifier
+         * @param status the new device status
+         * @implNote Tenant info is currently hardcoded and should be dynamic in future.
+         */
+        private void handleDeviceStatusChange(String clientId, EnrolmentInfo.Status status){
+            EmqxConnection emqxConnection;
+            try {
+                emqxConnection = this.utilityService.getEmqxConnectionDetailsByClientId(clientId);
+            } catch (DBConnectionException | SQLException e) {
+                throw new RuntimeException(e);
+            }
+            String scopeString = emqxConnection.getScopes();
+            if (StringUtils.isEmpty(scopeString)) {
+                logger.warn("No scope found for clientId: " + clientId);
+                return;
+            }
+            String[] scopeArray = extractDeviceScope(scopeString);
+            String deviceType = scopeArray[0];
+            String deviceId = scopeArray[1];;
+
+            if (!StringUtils.isEmpty(deviceType) && !StringUtils.isEmpty(deviceId)) {
+                try {
+                    PrivilegedCarbonContext carbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+                    // TODO: fetch tenant dynamically instead of hardcoding
+                    carbonContext.setTenantDomain("carbon.super");
+                    carbonContext.setTenantId(-1234);
+                    this.utilityService.changeDeviceStatus(new DeviceIdentifier(deviceId, deviceType), status);
+                    logger.info(String.format("Device status changed successfully: [deviceType=%s, deviceId=%s, status=%s]", deviceType, deviceId, status));
+                } catch (DeviceManagementException e) {
+                    logger.error("Error while setting device status for deviceId: " + deviceId, e);
+                }
+            } else {
+                logger.warn("Invalid or missing deviceType/deviceId for clientId: " + clientId);
+            }
+        }
+
+        private String[] extractDeviceScope(String scopeString) {
+            String[] result = new String[]{ null, null };
+            if (scopeString == null || scopeString.isBlank()) {
+                return result;
+            }
+            for (String scope : scopeString.split(" ")) {
+                if (!scope.startsWith("device_")) {
+                    continue;
+                }
+                String deviceScope = scope.substring("device_".length());
+                String[] parts = deviceScope.split(":");
+                if (parts.length == 2) {
+                    result[0] = parts[0];
+                    result[1] = parts[1];
+                }
+                break;
+            }
+            return result;
         }
     }
 

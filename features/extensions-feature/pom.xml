@@ -37,6 +37,7 @@
 		<module>io.entgra.device.mgt.plugins.notification.listener.feature</module>
         <module>io.entgra.device.mgt.plugins.extension.siddhi.device.feature</module>
         <module>io.entgra.device.mgt.plugins.extension.siddhi.execution.json.feature</module>
+        <module>io.entgra.device.mgt.plugins.extension.emqx.feature</module>
     </modules>
 
 </project>

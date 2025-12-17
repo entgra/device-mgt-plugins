@@ -21,6 +21,8 @@ package io.entgra.device.mgt.plugins.emqx.initializer;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.plugins.emqx.exhook.ExServer;
 import io.entgra.device.mgt.plugins.emqx.exhook.ExServerUtilityService;
+import io.entgra.device.mgt.plugins.emqx.initializer.dao.EmqxConnectionDAO;
+import io.entgra.device.mgt.plugins.emqx.initializer.dao.impl.EmqxConnectionDAOImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
@@ -58,7 +60,8 @@ public class EmqxExhookInitializer implements ServerShutdownHandler, ServerStart
 
             @Override
             public void run() {
-                ExServerUtilityService utilityService = new ExServerUtilityServiceImpl(deviceManagementProviderService);
+                EmqxConnectionDAO emqxConnectionDAO = new EmqxConnectionDAOImpl();
+                ExServerUtilityService utilityService = new ExServerUtilityServiceImpl(deviceManagementProviderService, emqxConnectionDAO);
                 exServer = new ExServer(utilityService);
                 try {
                     exServer.start();
