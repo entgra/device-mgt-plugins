@@ -42,6 +42,7 @@ import org.wso2.carbon.event.input.adapter.core.InputEventAdapterListener;
 import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterRuntimeException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -209,7 +210,25 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         try {
-            String mqttMsgString = mqttMessage.toString();
+            byte[] payload = mqttMessage.getPayload();
+            String mqttMsgString;
+            if (payload == null) {
+                mqttMsgString = mqttMessage.toString();
+            } else {
+                // find the GZIP header in the payload (gzip magic bytes -> 0x1f 0x8b)
+                int gzipHeaderIndex = MQTTUtil.findGzipHeaderOffset(payload);
+                if (gzipHeaderIndex >= 0) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Found gzip compressed MQTT message at offset " + gzipHeaderIndex +
+                                ", Decompressing...");
+                    }
+                    // Decompress the payload starting from the GZIP header offset
+                    mqttMsgString = MQTTUtil.decompressMqttMsgFromOffset(payload, gzipHeaderIndex);
+                } else {
+                    mqttMsgString = new String(payload, StandardCharsets.UTF_8);
+                }
+            }
+
             // Check if mqttMsgString null or empty
             if (StringUtils.isEmpty(mqttMsgString)) {
                 log.warn("Empty MqttMessage Received");

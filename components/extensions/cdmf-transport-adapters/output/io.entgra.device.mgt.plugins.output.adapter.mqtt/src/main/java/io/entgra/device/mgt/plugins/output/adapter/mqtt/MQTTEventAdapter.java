@@ -18,6 +18,8 @@
 package io.entgra.device.mgt.plugins.output.adapter.mqtt;
 
 import com.google.gson.Gson;
+import io.entgra.device.mgt.core.device.mgt.core.config.DeviceConfigurationManager;
+import io.entgra.device.mgt.plugins.output.adapter.mqtt.util.MQTTUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
@@ -30,6 +32,8 @@ import org.wso2.carbon.event.output.adapter.core.OutputEventAdapterConfiguration
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterException;
 import org.wso2.carbon.event.output.adapter.core.exception.TestConnectionNotSupportedException;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
@@ -49,6 +53,7 @@ public class MQTTEventAdapter implements OutputEventAdapter {
     private static final Log log = LogFactory.getLog(MQTTEventAdapter.class);
     private int tenantId;
     private MQTTBrokerConnectionConfiguration mqttBrokerConnectionConfiguration;
+    private static final int DEFAULT_COMPRESSION_THRESHOLD_KB = 4;
 
     public MQTTEventAdapter(OutputEventAdapterConfiguration eventAdapterConfiguration,
                             Map<String, String> globalProperties) {
@@ -130,10 +135,29 @@ public class MQTTEventAdapter implements OutputEventAdapter {
     public void publish(Object message, Map<String, String> dynamicProperties) {
         String topic = dynamicProperties.get(MQTTEventAdapterConstants.ADAPTER_MESSAGE_TOPIC);
         try {
-            threadPoolExecutor.submit(new MQTTSender(topic, message));
+            String mqttMessage = new Gson().toJson(message);
+            byte[] rawBytes = mqttMessage.getBytes(StandardCharsets.UTF_8);
+            //Compress mqttMessage only if payload size >= configuredThresholdKb value (default 4KB)
+            int configuredThresholdKb = DeviceConfigurationManager.getInstance().getDeviceManagementConfig()
+                    .getMqttConfiguration().getCompressionThresholdKb();
+            int compressionThresholdKb = (configuredThresholdKb > 0) ? configuredThresholdKb :
+                    DEFAULT_COMPRESSION_THRESHOLD_KB;
+
+            if (rawBytes.length >= compressionThresholdKb * 1024) {
+                byte[] compressMqttMessage = MQTTUtil.compressMqttMessage(rawBytes);
+                if (log.isDebugEnabled()) {
+                    log.debug("Payload compressed. Original: " + rawBytes.length + "bytes, Compressed: " +
+                            compressMqttMessage.length + " bytes");
+                }
+                threadPoolExecutor.submit(new MQTTSender(topic, compressMqttMessage));
+            } else {
+                threadPoolExecutor.submit(new MQTTSender(topic, message));
+            }
         } catch (RejectedExecutionException e) {
             EventAdapterUtil.logAndDrop(eventAdapterConfiguration.getName(), message, "Job queue is full", e, log,
-                                        tenantId);
+                    tenantId);
+        } catch (IOException e) {
+            log.error("Error while compressing payload for topic: " + topic, e);
         }
     }
 
@@ -191,9 +215,7 @@ public class MQTTEventAdapter implements OutputEventAdapter {
                         }
                     }
                 }
-                // Convert and publish the message
-                String formattedMessage = convertToJsonString(message);
-                mqttAdapterPublisher.publish(mqttBrokerConnectionConfiguration.getQos(), formattedMessage, topic);
+                mqttAdapterPublisher.publish(mqttBrokerConnectionConfiguration.getQos(), message, topic);
             } catch (Throwable t) {
                 EventAdapterUtil.logAndDrop(eventAdapterConfiguration.getName(), message, null, t, log, tenantId);
             }

@@ -18,6 +18,7 @@
 
 package io.entgra.device.mgt.plugins.output.adapter.mqtt.util;
 
+import io.entgra.device.mgt.core.device.mgt.core.config.DeviceConfigurationManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
@@ -27,14 +28,15 @@ import org.apache.http.conn.ssl.SSLContextBuilder;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * This is the utility class that is used for MQTT input adapter.
@@ -42,6 +44,7 @@ import java.security.NoSuchAlgorithmException;
 public class MQTTUtil {
 	private static final String HTTPS_PROTOCOL = "https";
 	private static final Log log = LogFactory.getLog(MQTTUtil.class);
+	private static final int DEFAULT_COMPRESSION_LEVEL = 1;
 
 	/**
 	 * Return a http client instance
@@ -82,6 +85,24 @@ public class MQTTUtil {
 				}
 			}
 		}
+	}
+
+	public static byte[] compressMqttMessage(byte[] data) throws IOException {
+		int configuredCompressionLevel = DeviceConfigurationManager.getInstance().getDeviceManagementConfig()
+				.getMqttConfiguration().getCompressionLevel();
+		int compressionLevel = (configuredCompressionLevel >= 0) ? configuredCompressionLevel :
+				DEFAULT_COMPRESSION_LEVEL;
+
+		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+		GZIPOutputStream gzipStream = new GZIPOutputStream(byteStream) {
+			{
+				// Set compression level to $compressionLevel
+				this.def.setLevel(compressionLevel);
+			}
+		};
+		gzipStream.write(data);
+		gzipStream.close();
+		return byteStream.toByteArray();
 	}
 
 }
