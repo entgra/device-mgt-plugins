@@ -27,6 +27,7 @@ import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.Unexpected
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
@@ -41,6 +42,7 @@ import org.wso2.carbon.event.input.adapter.core.InputEventAdapterListener;
 import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterRuntimeException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -208,11 +210,40 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         try {
-            String mqttMsgString =  mqttMessage.toString();
-            String msgText = mqttMsgString.substring(mqttMsgString.indexOf("{"), mqttMsgString.lastIndexOf("}") + 1);
-            if (log.isDebugEnabled()) {
-                log.debug(msgText);
+            byte[] payload = mqttMessage.getPayload();
+            String mqttMsgString;
+            if (payload == null) {
+                mqttMsgString = mqttMessage.toString();
+            } else {
+                // find the GZIP header in the payload (gzip magic bytes -> 0x1f 0x8b)
+                int gzipHeaderIndex = MQTTUtil.findGzipHeaderOffset(payload);
+                if (gzipHeaderIndex >= 0) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Found gzip compressed MQTT message at offset " + gzipHeaderIndex +
+                                ", Decompressing...");
+                    }
+                    // Decompress the payload starting from the GZIP header offset
+                    mqttMsgString = MQTTUtil.decompressMqttMsgFromOffset(payload, gzipHeaderIndex);
+                } else {
+                    mqttMsgString = new String(payload, StandardCharsets.UTF_8);
+                }
             }
+
+            // Check if mqttMsgString null or empty
+            if (StringUtils.isEmpty(mqttMsgString)) {
+                log.warn("Empty MqttMessage Received");
+                return;
+            }
+            int startIndex = mqttMsgString.indexOf("{");
+            int endIndex = mqttMsgString.lastIndexOf("}");
+
+            // Validate indices before substring
+            if (startIndex == -1 || endIndex == -1 || startIndex >= endIndex) {
+                log.error("Invalid message format - missing or malformed JSON braces");
+                return;
+            }
+            String msgText = mqttMsgString.substring(startIndex, endIndex + 1);
+
             PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantDomain, true);
             if (!tenantDomain.equalsIgnoreCase(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
@@ -226,7 +257,6 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
             if (log.isDebugEnabled()) {
                 log.debug("Event received in MQTT Event Adapter - " + msgText);
             }
-
 
             if (contentValidator != null && contentTransformer != null) {
                 ContentInfo contentInfo;

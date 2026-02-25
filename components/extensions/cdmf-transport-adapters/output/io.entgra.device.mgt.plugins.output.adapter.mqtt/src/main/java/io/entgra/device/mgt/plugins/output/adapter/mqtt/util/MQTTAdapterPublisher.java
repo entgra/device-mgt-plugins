@@ -38,6 +38,7 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.event.output.adapter.core.exception.ConnectionUnavailableException;
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterException;
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterRuntimeException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * MQTT publisher related configuration initialization and publishing capabilties are implemented here.
@@ -94,23 +95,20 @@ public class MQTTAdapterPublisher {
         return mqttClient.isConnected();
     }
 
-    public void publish(int qos, String payload, String topic) {
+    public void publish(int qos, Object message, String topic) {
         try {
-            // Create and configure a message
-            MqttMessage message = new MqttMessage(payload.getBytes());
-            message.setQos(qos);
-            mqttClient.publish(topic, message);
-        } catch (MqttException e) {
-            log.error("Error occurred when publishing message for MQTT server : " + mqttClient.getServerURI(), e);
-            handleException(e);
-        }
-    }
+            byte[] payload;
+            if (message instanceof byte[]) {
+                payload = (byte[]) message;
+            } else {
+                payload = message.toString().getBytes(StandardCharsets.UTF_8);
+            }
 
-    public void publish(String payload, String topic) {
-        try {
-            // Create and configure a message
-            MqttMessage message = new MqttMessage(payload.getBytes());
-            mqttClient.publish(topic, message);
+            MqttMessage mqttMessage = new MqttMessage(payload);
+            if (qos >= 0) {
+                mqttMessage.setQos(qos);
+            }
+            mqttClient.publish(topic, mqttMessage);
         } catch (MqttException e) {
             log.error("Error occurred when publishing message for MQTT server : " + mqttClient.getServerURI(), e);
             handleException(e);
