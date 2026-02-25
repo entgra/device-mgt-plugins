@@ -399,7 +399,7 @@ public class ExServer {
                                 .asRuntimeException();
                 }
 
-                boolean isAuthorized = scopeList.stream().anyMatch(scope -> scope.startsWith(tempScope));
+                boolean isAuthorized = scopeList.stream().anyMatch(scope -> isTopicMatch(scope, tempScope));
                 if (!isAuthorized) {
                     logger.warn("topic=" + topic + ", requiredScope=" + tempScope);
                     throw Status.PERMISSION_DENIED.withDescription("User not authorized for requested topic").asRuntimeException();
@@ -418,6 +418,141 @@ public class ExServer {
             } catch (RuntimeException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error during ACL check");
             }
+        }
+
+        /**
+         * Checks if a topic matches a given scope pattern.
+         *
+         * Supports:
+         * - Exact matches
+         * - Single-level wildcards ("+") in the scope
+         * - Multi-level wildcards ("#") in the scope or topic
+         *
+         * @param scopePattern the scope pattern, may include "+" or "#" wildcards
+         * @param exactTopic the topic to match, may include "#" wildcard
+         * @return true if the topic matches the scope pattern, false otherwise
+         */
+        private boolean isTopicMatch(String scopePattern, String exactTopic) {
+            /*
+            1. EXACT MATCH
+             */
+            if (scopePattern.equals(exactTopic)) {
+                if (logger.isDebugEnabled()){
+                    logger.debug("Exact match: " + scopePattern);
+                }
+                return true;
+            }
+
+            /*
+            2. MULTI-LEVEL WILDCARD IN SUBSCRIPTION REQUEST
+            */
+            if (exactTopic.endsWith(":#")) {
+                if (!scopePattern.endsWith(":#")) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Multi-level wildcard rejected - scope does not end with #: " + scopePattern + " vs " + exactTopic);
+                    }
+                    return false;
+                }
+
+                String topicPrefix = exactTopic.substring(0, exactTopic.length() - 2);
+                String scopePrefix = scopePattern.substring(0, scopePattern.length() - 2);
+                String[] scopeParts = scopePrefix.split(":");
+                String[] topicParts = topicPrefix.split(":");
+
+                if (topicParts.length < scopeParts.length) {
+                    boolean matches = true;
+                    for (int i = 0; i < topicParts.length; i++) {
+                        if (!"+".equals(scopeParts[i]) && !scopeParts[i].equals(topicParts[i])) {
+                            matches = false;
+                            break;
+                        }
+                    }
+
+                    if (matches) {
+                        boolean areWildcards = true;
+                        for (int i = topicParts.length; i < scopeParts.length; i++) {
+                            if (!"+".equals(scopeParts[i])) {
+                                areWildcards = false;
+                                break;
+                            }
+                        }
+
+                        if (areWildcards) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Multi-level wildcard subscription " + exactTopic + " matches scope: " + scopePattern);
+                            }
+                            return true;
+                        }
+                    }
+                } else if (topicParts.length == scopeParts.length) {
+                    boolean matches = true;
+                    for (int i = 0; i < topicParts.length; i++) {
+                        if (!"+".equals(scopeParts[i]) && !scopeParts[i].equals(topicParts[i])) {
+                            matches = false;
+                            break;
+                        }
+                    }
+
+                    if (matches) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Multi-level wildcard subscription " + exactTopic + " matches scope: " + scopePattern);
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            /*
+            3. MULTI-LEVEL WILDCARD IN SCOPE PATTERN
+             */
+            if (scopePattern.endsWith(":#")) {
+                String scopePrefix = scopePattern.substring(0, scopePattern.length() - 2);
+                String[] scopeParts = scopePrefix.split(":");
+                String[] topicParts = exactTopic.split(":");
+
+                if (topicParts.length >= scopeParts.length) {
+                    boolean matches = true;
+                    for (int i = 0; i < scopeParts.length; i++) {
+                        if (!"+".equals(scopeParts[i]) && !scopeParts[i].equals(topicParts[i])) {
+                            matches = false;
+                            break;
+                        }
+                    }
+                    if (matches) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Scope " + scopePattern + " covers " + exactTopic);
+                        }
+                        return true;
+                    }
+                }
+            }
+
+            /*
+            4. SINGLE-LEVEL WILDCARD MATCHING
+             */
+            if (scopePattern.contains("+")) {
+                String[] scopeParts = scopePattern.split(":");
+                String[] topicParts = exactTopic.split(":");
+
+                if (scopeParts.length == topicParts.length) {
+                    boolean matches = true;
+                    for (int i = 0; i < scopeParts.length; i++) {
+                        if (!"+".equals(scopeParts[i]) && !scopeParts[i].equals(topicParts[i])) {
+                            matches = false;
+                            break;
+                        }
+                    }
+                    if (matches) {
+                        if  (logger.isDebugEnabled()) {
+                            logger.debug("Single-level wildcard pattern match: " + scopePattern + " matches " + exactTopic);
+                        }
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         @Override
