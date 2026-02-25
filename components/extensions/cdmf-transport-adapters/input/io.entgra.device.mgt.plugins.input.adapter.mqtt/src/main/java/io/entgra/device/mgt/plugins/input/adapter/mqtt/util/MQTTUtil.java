@@ -18,6 +18,7 @@
 
 package io.entgra.device.mgt.plugins.input.adapter.mqtt.util;
 
+import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
@@ -29,11 +30,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.zip.GZIPInputStream;
 
 /**
  * This is the utility class that is used for MQTT input adapater.
@@ -80,6 +84,35 @@ public class MQTTUtil {
 					log.warn("Error while closing the connection! " + e.getMessage());
 				}
 			}
+		}
+	}
+
+	public static int findGzipHeaderOffset(byte[] payload) {
+		// Find the offset of the gzip header (gzip magic bytes -> 0x1f 0x8b)
+		for (int i = 0; i < payload.length - 1; i++) {
+			if ((payload[i] == (byte) 0x1f) &&
+					(payload[i + 1] == (byte) 0x8b)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static String decompressMqttMsgFromOffset(byte[] payload, int offset) throws IOException {
+		// From original payload, start reading from gzip header offset
+		try (ByteArrayInputStream byteArrayInputStream =
+					 new ByteArrayInputStream(payload, offset, payload.length - offset);
+			 GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
+			 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+
+			byte[] buffer = new byte[4096];
+			int read;
+
+			while ((read = gzipInputStream.read(buffer)) != -1) {
+				byteArrayOutputStream.write(buffer, 0, read);
+			}
+			String result = byteArrayOutputStream.toString();
+			return new Gson().fromJson(result, String.class);
 		}
 	}
 }
