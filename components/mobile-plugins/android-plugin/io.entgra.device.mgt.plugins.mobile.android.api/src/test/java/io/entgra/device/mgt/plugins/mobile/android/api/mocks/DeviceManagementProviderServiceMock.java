@@ -552,6 +552,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public List<? extends Operation> getPendingOperations(Device device, String status)
+            throws OperationManagementException {
+        return null;
+    }
+
+    @Override
     public Operation getNextPendingOperation(DeviceIdentifier deviceIdentifier) throws OperationManagementException {
         return null;
     }
