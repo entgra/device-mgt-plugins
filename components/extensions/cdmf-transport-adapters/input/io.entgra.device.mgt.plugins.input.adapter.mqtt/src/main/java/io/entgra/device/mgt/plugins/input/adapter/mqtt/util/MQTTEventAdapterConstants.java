@@ -40,6 +40,7 @@ public class MQTTEventAdapterConstants {
     public static final String ADAPTER_CONF_CONTENT_TRANSFORMER_TYPE = "contentTransformer";
     public static final String ADAPTER_CONF_CONTENT_TRANSFORMER_TYPE_HINT = "contentTransformer.hint";
     public static final String ADAPTER_MESSAGE_TOPIC = "topic";
+    public static final String ADAPTER_CUSTOM_CLIENT_ID = "customClientId";
     public static final String ADAPTER_MESSAGE_TOPIC_HINT = "topic.hint";
     public static final String ADAPTER_CONF_CLIENTID = "clientId";
     public static final String ADAPTER_CONF_CLIENTID_HINT = "clientId.hint";

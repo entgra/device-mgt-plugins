@@ -56,16 +56,26 @@ public class MQTTAdapterPublisher {
             , int tenantId) {
         this.tenantId = tenantId;
         this.tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        if (clientId == null || clientId.trim().isEmpty()) {
-            this.clientId = MqttClient.generateClientId();
-        }
         this.mqttBrokerConnectionConfiguration = mqttBrokerConnectionConfiguration;
+        String customClientId = mqttBrokerConnectionConfiguration.getCustomClientId();
+        if (clientId == null || clientId.trim().isEmpty()) {
+            if (customClientId != null && !customClientId.trim().isEmpty()) {
+                this.clientId = customClientId;
+            } else {
+                this.clientId = MqttClient.generateClientId();
+            }
+        }
         connect();
     }
 
     public void connect() {
+        String customClientId = mqttBrokerConnectionConfiguration.getCustomClientId();
         if (clientId == null || clientId.trim().isEmpty()) {
-            clientId = MqttClient.generateClientId();
+            if (customClientId != null && !customClientId.trim().isEmpty()) {
+                clientId = customClientId;
+            } else {
+                clientId = MqttClient.generateClientId();
+            }
         }
         boolean cleanSession = mqttBrokerConnectionConfiguration.isCleanSession();
         int keepAlive = mqttBrokerConnectionConfiguration.getKeepAlive();

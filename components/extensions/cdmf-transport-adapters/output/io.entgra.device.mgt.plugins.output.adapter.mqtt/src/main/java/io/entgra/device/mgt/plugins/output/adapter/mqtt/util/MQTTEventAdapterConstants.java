@@ -43,6 +43,7 @@ public final class MQTTEventAdapterConstants {
     public static final String ADAPTER_TEMP_DIRECTORY_NAME = "java.io.tmpdir";
     public static final String ADAPTER_CONF_CLIENTID = "clientId";
     public static final String ADAPTER_CONF_CLIENTID_HINT = "clientId.hint";
+    public static final String ADAPTER_CUSTOM_CLIENT_ID = "customClientId";
     public static final String EMPTY_STRING = "";
     public static final String ADAPTER_CONF_KEEP_ALIVE = "keepAliveTimeInMillis";
     public static final int ADAPTER_CONF_DEFAULT_KEEP_ALIVE = 60000;
