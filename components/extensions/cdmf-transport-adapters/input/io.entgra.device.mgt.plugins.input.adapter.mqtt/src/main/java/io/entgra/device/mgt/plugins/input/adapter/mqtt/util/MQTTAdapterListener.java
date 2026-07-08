@@ -25,6 +25,7 @@ import io.entgra.device.mgt.core.apimgt.application.extension.exception.APIManag
 import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.BadRequestException;
 import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.UnexpectedResponseException;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.paho.client.mqttv3.*;
@@ -69,7 +70,7 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
                                InputEventAdapterListener inputEventAdapterListener) {
         String mqttClientId = inputEventAdapterConfiguration.getProperties()
                 .get(MQTTEventAdapterConstants.ADAPTER_CONF_CLIENTID);
-        if (mqttClientId == null || mqttClientId.trim().isEmpty()) {
+        if (StringUtils.isBlank(mqttClientId)) {
             mqttClientId = MqttClient.generateClientId();
         }
         this.inputEventAdapterConfiguration = inputEventAdapterConfiguration;
