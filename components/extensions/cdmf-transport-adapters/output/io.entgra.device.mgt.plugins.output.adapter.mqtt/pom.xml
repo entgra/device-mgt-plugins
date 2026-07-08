@@ -138,8 +138,8 @@
                             org.wso2.carbon.event.output.adapter.core;version="[5.3,6)",
                             org.wso2.carbon.event.output.adapter.core.exception;version="[5.3,6)",
                             org.wso2.carbon.user.api;version="[1.0,2)",
-                            io.entgra.device.mgt.core.device.mgt.core.config;version="[5.2,6)",
-                            io.entgra.device.mgt.core.device.mgt.core.config.mqtt;version="[5.2,6)"
+                            io.entgra.device.mgt.core.device.mgt.core.config;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.core.config.mqtt;version="${io.entgra.device.mgt.core.version.range}"
                         </Import-Package>
                     </instructions>
                 </configuration>

@@ -44,7 +44,7 @@ import java.util.zip.GZIPOutputStream;
 public class MQTTUtil {
 	private static final String HTTPS_PROTOCOL = "https";
 	private static final Log log = LogFactory.getLog(MQTTUtil.class);
-	private static final int DEFAULT_COMPRESSION_LEVEL = 1;
+	private static final int DEFAULT_COMPRESSION_LEVEL = 0;
 
 	/**
 	 * Return a http client instance
@@ -87,6 +87,18 @@ public class MQTTUtil {
 		}
 	}
 
+	/**
+	 * Compress the provided byte array using GZIP with the configured compression level.
+	 * <p>
+	 * The compression level is taken from the device configuration (via
+	 * {@code DeviceConfigurationManager.getInstance().getDeviceManagementConfig()
+	 * .getMqttConfiguration().getCompressionLevel()}). If the configured level is invalid,
+	 * {@link #DEFAULT_COMPRESSION_LEVEL} will be used.
+	 *
+	 * @param data the input bytes to compress
+	 * @return the compressed bytes
+	 * @throws IOException if an error occurs during compression
+	 */
 	public static byte[] compressMqttMessage(byte[] data) throws IOException {
 		int configuredCompressionLevel = DeviceConfigurationManager.getInstance().getDeviceManagementConfig()
 				.getMqttConfiguration().getCompressionLevel();

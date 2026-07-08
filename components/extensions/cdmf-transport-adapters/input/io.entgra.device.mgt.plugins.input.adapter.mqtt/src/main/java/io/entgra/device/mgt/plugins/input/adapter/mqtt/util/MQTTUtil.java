@@ -87,6 +87,15 @@ public class MQTTUtil {
 		}
 	}
 
+	/**
+	 * Find the byte offset of the GZIP header in the given payload.
+	 * <p>
+	 * Searches for the GZIP magic bytes (0x1f 0x8b) in the payload and returns
+	 * the offset of the first occurrence.
+	 *
+	 * @param payload the byte array to search for the GZIP header
+	 * @return the byte offset where the GZIP header starts, or -1 if not found
+	 */
 	public static int findGzipHeaderOffset(byte[] payload) {
 		// Find the offset of the gzip header (gzip magic bytes -> 0x1f 0x8b)
 		for (int i = 0; i < payload.length - 1; i++) {
@@ -98,6 +107,17 @@ public class MQTTUtil {
 		return -1;
 	}
 
+	/**
+	 * Decompress a GZIP-compressed message embedded in {@code payload} starting at the given {@code offset}.
+	 * <p>
+	 * The method opens a stream from {@code offset} to the end of {@code payload}, inflates the GZIP data,
+	 * converts the decompressed bytes to a String and then parses that JSON string into a String using Gson.
+	 *
+	 * @param payload original payload containing GZIP-compressed data
+	 * @param offset  byte offset where the GZIP header (0x1f 0x8b) starts
+	 * @return the decompressed message as a String
+	 * @throws IOException if an I/O error occurs during decompression
+	 */
 	public static String decompressMqttMsgFromOffset(byte[] payload, int offset) throws IOException {
 		// From original payload, start reading from gzip header offset
 		try (ByteArrayInputStream byteArrayInputStream =

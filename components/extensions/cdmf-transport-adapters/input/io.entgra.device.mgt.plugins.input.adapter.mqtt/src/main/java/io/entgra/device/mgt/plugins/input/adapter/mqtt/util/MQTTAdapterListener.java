@@ -41,6 +41,9 @@ import org.wso2.carbon.event.input.adapter.core.InputEventAdapterConfiguration;
 import org.wso2.carbon.event.input.adapter.core.InputEventAdapterListener;
 import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterRuntimeException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -48,6 +51,7 @@ import java.util.Map;
 
 public class MQTTAdapterListener implements MqttCallback, Runnable {
     private static final Log log = LogFactory.getLog(MQTTAdapterListener.class);
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private MqttClient mqttClient;
     private MqttConnectOptions connectionOptions;
@@ -231,18 +235,43 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
 
             // Check if mqttMsgString null or empty
             if (StringUtils.isEmpty(mqttMsgString)) {
-                log.warn("Empty MqttMessage Received");
+                log.warn("Empty Mqtt Message Received");
                 return;
             }
-            int startIndex = mqttMsgString.indexOf("{");
-            int endIndex = mqttMsgString.lastIndexOf("}");
 
-            // Validate indices before substring
-            if (startIndex == -1 || endIndex == -1 || startIndex >= endIndex) {
-                log.error("Invalid message format - missing or malformed JSON braces");
-                return;
+            // Parse the incoming message as JSON using Jackson. Avoid manual indexOf/lastIndexOf
+            // which can be incorrect when payloads contain additional braces or non-JSON content.
+            String msgText;
+            try {
+                // Attempt to parse the message as JSON
+                JsonNode jsonNode = OBJECT_MAPPER.readTree(mqttMsgString);
+                if (jsonNode.isObject() || jsonNode.isArray()) {
+                    msgText = OBJECT_MAPPER.writeValueAsString(jsonNode);
+                } else if (jsonNode.isValueNode()) {
+                    msgText = jsonNode.asText();
+                } else {
+                    msgText = mqttMsgString;
+                }
+            } catch (JsonProcessingException ex) {
+                // JSON parsing failed - attempt to extract JSON from raw message as fallback
+                if (log.isDebugEnabled()) {
+                    log.debug("Payload is not valid JSON, attempting to extract JSON from raw message using " +
+                            "indexOf/lastIndexOf");
+                }
+
+                // Find the first '{' and last '}' to extract potential JSON content
+                int startIndex = mqttMsgString.indexOf("{");
+                int endIndex = mqttMsgString.lastIndexOf("}");
+
+                // Validate indices before substring to prevent malformed extraction
+                if (startIndex == -1 || endIndex == -1 || startIndex >= endIndex) {
+                    log.error("Invalid message format - missing or malformed JSON braces");
+                    return;
+                }
+
+                // Extract the JSON portion from the raw message
+                msgText = mqttMsgString.substring(startIndex, endIndex + 1);
             }
-            String msgText = mqttMsgString.substring(startIndex, endIndex + 1);
 
             PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(tenantDomain, true);

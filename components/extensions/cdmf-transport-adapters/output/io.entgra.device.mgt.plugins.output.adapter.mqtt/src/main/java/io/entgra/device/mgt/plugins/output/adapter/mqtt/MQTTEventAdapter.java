@@ -54,6 +54,11 @@ public class MQTTEventAdapter implements OutputEventAdapter {
     private int tenantId;
     private MQTTBrokerConnectionConfiguration mqttBrokerConnectionConfiguration;
     private static final int DEFAULT_COMPRESSION_THRESHOLD_KB = 4;
+    /**
+     * Number of bytes in a kilobyte (1024). Use for byte <-> KB conversions.
+     */
+    private static final int BYTES_IN_KB = 1024;
+
 
     public MQTTEventAdapter(OutputEventAdapterConfiguration eventAdapterConfiguration,
                             Map<String, String> globalProperties) {
@@ -137,22 +142,27 @@ public class MQTTEventAdapter implements OutputEventAdapter {
         try {
             String mqttMessage = new Gson().toJson(message);
             byte[] rawBytes = mqttMessage.getBytes(StandardCharsets.UTF_8);
-            //Compress mqttMessage only if payload size >= configuredThresholdKb value (default 4KB)
-            int configuredThresholdKb = DeviceConfigurationManager.getInstance().getDeviceManagementConfig()
-                    .getMqttConfiguration().getCompressionThresholdKb();
-            int compressionThresholdKb = (configuredThresholdKb > 0) ? configuredThresholdKb :
-                    DEFAULT_COMPRESSION_THRESHOLD_KB;
 
-            if (rawBytes.length >= compressionThresholdKb * 1024) {
-                byte[] compressMqttMessage = MQTTUtil.compressMqttMessage(rawBytes);
-                if (log.isDebugEnabled()) {
-                    log.debug("Payload compressed. Original: " + rawBytes.length + "bytes, Compressed: " +
-                            compressMqttMessage.length + " bytes");
+            int configuredCompressionLevel = DeviceConfigurationManager.getInstance().getDeviceManagementConfig()
+                    .getMqttConfiguration().getCompressionLevel();
+            // Compress mqttMessage only if compression level is not 0 and payload size >= configuredThresholdKb
+            if (configuredCompressionLevel != 0) {
+                int configuredThresholdKb = DeviceConfigurationManager.getInstance().getDeviceManagementConfig()
+                        .getMqttConfiguration().getCompressionThresholdKb();
+                int compressionThresholdKb = (configuredThresholdKb > 0) ? configuredThresholdKb :
+                        DEFAULT_COMPRESSION_THRESHOLD_KB;
+                // Compress mqttMessage only if payload size >= configuredThresholdKb value (default 4KB)
+                if (rawBytes.length >= compressionThresholdKb * BYTES_IN_KB) {
+                    byte[] compressMqttMessage = MQTTUtil.compressMqttMessage(rawBytes);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Payload compressed. Original: " + rawBytes.length + "bytes, Compressed: " +
+                                compressMqttMessage.length + " bytes");
+                    }
+                    threadPoolExecutor.submit(new MQTTSender(topic, compressMqttMessage));
+                    return;
                 }
-                threadPoolExecutor.submit(new MQTTSender(topic, compressMqttMessage));
-            } else {
-                threadPoolExecutor.submit(new MQTTSender(topic, message));
             }
+            threadPoolExecutor.submit(new MQTTSender(topic, message));
         } catch (RejectedExecutionException e) {
             EventAdapterUtil.logAndDrop(eventAdapterConfiguration.getName(), message, "Job queue is full", e, log,
                     tenantId);
