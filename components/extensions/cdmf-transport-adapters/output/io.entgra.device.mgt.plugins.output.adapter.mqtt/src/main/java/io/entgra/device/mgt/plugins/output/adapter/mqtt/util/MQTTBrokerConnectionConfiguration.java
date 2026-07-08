@@ -37,6 +37,7 @@ public class MQTTBrokerConnectionConfiguration {
     private int qos;
 
     private String topic;
+    private String customClientId;
 
     public String getTokenUrl() {
         return tokenUrl;
@@ -86,6 +87,10 @@ public class MQTTBrokerConnectionConfiguration {
         return topic;
     }
 
+    public String getCustomClientId() {
+        return customClientId;
+    }
+
     public MQTTBrokerConnectionConfiguration(OutputEventAdapterConfiguration eventAdapterConfiguration,
                                              Map<String, String> globalProperties) {
         adapterName = eventAdapterConfiguration.getName();
@@ -133,6 +138,12 @@ public class MQTTBrokerConnectionConfiguration {
         String topic = eventAdapterConfiguration.getStaticProperties().get(MQTTEventAdapterConstants.ADAPTER_MESSAGE_TOPIC);
         if (!StringUtils.isEmpty(topic)) {
             this.topic = topic;
+        }
+
+        String customClientId = eventAdapterConfiguration.getStaticProperties()
+                .get(MQTTEventAdapterConstants.ADAPTER_CUSTOM_CLIENT_ID);
+        if (!StringUtils.isEmpty(customClientId)) {
+            this.customClientId = customClientId;
         }
     }
 
