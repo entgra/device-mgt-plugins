@@ -132,6 +132,7 @@
                             javax.net.ssl,
                             org.apache.axis2.context;version="[1.6,2)",
                             org.apache.commons.codec.binary;version="[1.4,2)",
+                            org.apache.commons.lang;version="[2.6,3)",
                             org.apache.commons.logging;version="[1.2,2)",
                             org.apache.http;version="[4.4,5)",
                             org.apache.http.client;version="[4.3,5)",

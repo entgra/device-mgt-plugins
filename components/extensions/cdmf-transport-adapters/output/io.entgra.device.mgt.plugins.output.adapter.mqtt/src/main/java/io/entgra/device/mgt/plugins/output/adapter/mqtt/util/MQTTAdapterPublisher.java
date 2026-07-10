@@ -57,15 +57,17 @@ public class MQTTAdapterPublisher {
             , int tenantId) {
         this.tenantId = tenantId;
         this.tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        if (clientId == null || clientId.trim().isEmpty()) {
+        if (StringUtils.isBlank(clientId)) {
             this.clientId = MqttClient.generateClientId();
+        } else {
+            this.clientId = clientId;
         }
         this.mqttBrokerConnectionConfiguration = mqttBrokerConnectionConfiguration;
         connect();
     }
 
     public void connect() {
-        if (clientId == null || clientId.trim().isEmpty()) {
+        if (StringUtils.isBlank(clientId)) {
             clientId = MqttClient.generateClientId();
         }
         boolean cleanSession = mqttBrokerConnectionConfiguration.isCleanSession();

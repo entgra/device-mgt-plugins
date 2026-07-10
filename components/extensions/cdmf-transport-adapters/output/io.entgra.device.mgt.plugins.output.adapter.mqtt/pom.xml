@@ -121,6 +121,7 @@
                             io.entgra.device.mgt.plugins.output.adapter.mqtt,
                             io.entgra.device.mgt.plugins.output.adapter.mqtt.util,
                             javax.net.ssl,
+                            org.apache.commons.lang;version="[2.6,3)",
                             org.apache.commons.logging;version="[1.2,2)",
                             org.apache.commons.ssl;version="[3.1,4)",
                             org.apache.http;version="[4.4,5)",
