@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.entgra.device.mgt.plugins</groupId>
+        <artifactId>extensions-feature</artifactId>
+        <version>8.0.8-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>io.entgra.device.mgt.plugins.extension.emqx.feature</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Entgra Device Management Plugins - EMQX Extension Feature</name>
+    <description>Feature to provision EMQX related configuration and datasource.</description>
+
+    <dependencies>
+        <!-- H2 only if needed for default templates -->
+        <dependency>
+            <groupId>org.wso2.orbit.com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Copy build.properties + p2.inf -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals><goal>copy-resources</goal></goals>
+                        <configuration>
+                            <outputDirectory>src/main/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>resources</directory>
+                                    <includes>
+                                        <include>build.properties</include>
+                                        <include>p2.inf</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- P2 Feature Generator -->
+            <plugin>
+                <groupId>org.wso2.maven</groupId>
+                <artifactId>carbon-p2-plugin</artifactId>
+                <version>${carbon.p2.plugin.version}</version>
+
+                <executions>
+                    <execution>
+                        <id>p2-feature-generation</id>
+                        <phase>package</phase>
+                        <goals><goal>p2-feature-gen</goal></goals>
+                        <configuration>
+
+                            <!-- Feature ID (folder name under /features) -->
+                            <id>io.entgra.device.mgt.plugins.extension.emqx</id>
+
+                            <propertiesFile>
+                                ../../../../features/etc/feature.properties
+                            </propertiesFile>
+
+                            <!-- No bundleDef because this is a config-only feature -->
+                            <bundles/>
+
+                            <adviceFile>
+                                <properties>
+                                    <propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
+                                    <propertyDef>org.eclipse.equinox.p2.type.group:true</propertyDef>
+                                </properties>
+                            </adviceFile>
+
+                            <importFeatures>
+                                <importFeatureDef>
+                                    org.wso2.carbon.core.server:${carbon.kernel.version}
+                                </importFeatureDef>
+                            </importFeatures>
+
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

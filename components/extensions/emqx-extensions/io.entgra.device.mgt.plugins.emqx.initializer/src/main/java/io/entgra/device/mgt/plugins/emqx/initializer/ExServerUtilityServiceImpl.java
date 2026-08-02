@@ -17,19 +17,53 @@
  */
 package io.entgra.device.mgt.plugins.emqx.initializer;
 
+import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
+import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DBConnectionException;
+import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.core.config.keymanager.KeyManagerConfigurations;
 import io.entgra.device.mgt.core.device.mgt.core.service.DeviceManagementProviderService;
 import io.entgra.device.mgt.plugins.emqx.exhook.ExServerUtilityService;
+import io.entgra.device.mgt.plugins.emqx.exhook.dto.EmqxConnection;
+import io.entgra.device.mgt.plugins.emqx.initializer.dao.EmqxConnectionDAO;
+
+import java.sql.SQLException;
 
 public class ExServerUtilityServiceImpl implements ExServerUtilityService {
 
     private final DeviceManagementProviderService deviceManagementProviderService;
+    private final EmqxConnectionDAO emqxConnectionDAO;
 
-    public ExServerUtilityServiceImpl(DeviceManagementProviderService deviceManagementProviderService) {
+    public ExServerUtilityServiceImpl(DeviceManagementProviderService deviceManagementProviderService, EmqxConnectionDAO emqxConnectionDAO) {
         this.deviceManagementProviderService = deviceManagementProviderService;
+        this.emqxConnectionDAO = emqxConnectionDAO;
     }
     @Override
     public KeyManagerConfigurations getKeyManagerConfigurations() {
         return deviceManagementProviderService.getDeviceManagementConfig().getKeyManagerConfigurations();
+    }
+
+    @Override
+    public boolean changeDeviceStatus(DeviceIdentifier var1, EnrolmentInfo.Status var2) throws DeviceManagementException {
+        return deviceManagementProviderService.changeDeviceStatus(var1, var2);
+    }
+
+    @Override
+    public void saveEmqxConnectionDetails(EmqxConnection emqxConnection) throws DBConnectionException, SQLException {
+        boolean isExist = emqxConnectionDAO.isEmqxConnectionExists(emqxConnection.getClientId());
+        if (isExist) {
+            emqxConnectionDAO.deleteEmqxConnectionDetailsByClientId(emqxConnection.getClientId());
+        }
+        emqxConnectionDAO.saveEmqxConnectionDetails(emqxConnection);
+    }
+
+    @Override
+    public EmqxConnection getEmqxConnectionDetailsByClientId(String clientId) throws DBConnectionException, SQLException {
+        return emqxConnectionDAO.getEmqxConnectionDetailsByClientId(clientId);
+    }
+
+    @Override
+    public void deleteEmqxConnectionDetailsByClientId(String clientId) throws DBConnectionException, SQLException {
+        emqxConnectionDAO.deleteEmqxConnectionDetailsByClientId(clientId);
     }
 }

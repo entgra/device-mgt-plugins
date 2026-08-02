@@ -91,11 +91,18 @@
                             org.osgi.framework;version="${imp.package.version.osgi.framework}",
                             org.osgi.service.component;version="${imp.package.version.osgi.service}",
                             org.wso2.carbon.context;version="${carbon.kernel.version}",
-                            org.wso2.carbon.core;version="${carbon.kernel.version}"
+                            org.wso2.carbon.core;version="${carbon.kernel.version}",
+                            io.entgra.device.mgt.core.device.mgt.core.dao;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.core.dao.util;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.core.device.mgt.common.exceptions;version="${io.entgra.device.mgt.core.version.range}",
+                            io.entgra.device.mgt.plugins.emqx.exhook.dto,
+                            javax.sql,
+                            javax.naming
                         </Import-Package>
                         <Export-Package>
                             !io.entgra.device.mgt.plugins.emqx.initializer.internal,
-                            io.entgra.device.mgt.plugins.emqx.initializer.*
+                            io.entgra.device.mgt.plugins.emqx.initializer.*,
+                            io.entgra.device.mgt.plugins.emqx.initializer.dao
                         </Export-Package>
                     </instructions>
                 </configuration>

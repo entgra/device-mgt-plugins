@@ -1,0 +1,41 @@
+<!--
+  ~ Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd.
+  -->
+<datasources-configuration xmlns:svns="http://org.wso2.securevault/configuration">
+    <providers>
+        <provider>org.wso2.carbon.ndatasource.rdbms.RDBMSDataSourceReader</provider>
+    </providers>
+    <datasources>
+        <datasource>
+            <name>Emqx_DB</name>
+            <description>The datasource for EMQX plugin</description>
+            <jndiConfig>
+                <name>jdbc/Emqx_DB</name>
+            </jndiConfig>
+            <definition type="RDBMS">
+                <configuration>
+                {% if database.emqx is defined %}
+                    <url>{{database.emqx.url}}</url>
+                    <username>{{database.emqx.username}}</username>
+                    <password>{{database.emqx.password}}</password>
+                    <driverClassName>{{database.emqx.driver}}</driverClassName>
+                    <validationQuery>{{database.emqx.validationQuery}}</validationQuery>
+                    {% for property_name,property_value in database.emqx.pool_options.items() %}
+                    <{{property_name}}>{{property_value}}</{{property_name}}>
+                    {% endfor %}
+                {% else %}
+                    <url>jdbc:h2:./repository/database/EMQX_DB;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE</url>
+                    <username>wso2carbon</username>
+                    <password>wso2carbon</password>
+                    <driverClassName>org.h2.Driver</driverClassName>
+                    <maxActive>50</maxActive>
+                    <maxWait>60000</maxWait>
+                    <testOnBorrow>true</testOnBorrow>
+                    <validationQuery>SELECT 1</validationQuery>
+                    <validationInterval>30000</validationInterval>
+                {% endif %}
+                </configuration>
+            </definition>
+        </datasource>
+    </datasources>
+</datasources-configuration>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  ~ Copyright (C) 2018 - 2025 Entgra.
+  ~ Unauthorised copying/redistribution of this file, via any medium is strictly prohibited.
+  ~ Licensed under the Entgra Commercial License, Version 1.0
+  -->
+
+<EmqxExtensionConfig>
+
+    <!--
+     ~  EMQX Extension Configuration
+     ~  Similar to HeartBeatBeaconConfig, this allows enabling/disabling
+     ~  the EMQX extension and configuring runtime settings.
+     -->
+
+    <!-- EMQX Data Source -->
+    <DataSourceConfiguration>
+        <JndiLookupDefinition>
+            <Name>jdbc/Emqx_DB</Name>
+        </JndiLookupDefinition>
+    </DataSourceConfiguration>
+
+    {% if emqx_conf is defined %}
+
+        <Enable>{{emqx_conf.enable}}</Enable>
+        <InitialDelayInSeconds>{{emqx_conf.initial_delay_in_seconds}}</InitialDelayInSeconds>
+        <ExecutionFrequencyInSeconds>{{emqx_conf.execution_frequency_in_seconds}}</ExecutionFrequencyInSeconds>
+        <MaxRetryCount>{{emqx_conf.max_retry_count}}</MaxRetryCount>
+        <RetryIntervalInSeconds>{{emqx_conf.retry_interval_in_seconds}}</RetryIntervalInSeconds>
+
+        {% if emqx_conf.notifiers is defined %}
+        <Notifiers>
+            {% for notifier in emqx_conf.notifiers %}
+            <Notifier>{{ notifier }}</Notifier>
+            {% endfor %}
+        </Notifiers>
+        {% endif %}
+
+    {% else %}
+
+        <!-- Default configuration when YAML template values are not provided -->
+        <Enable>false</Enable>
+        <InitialDelayInSeconds>30</InitialDelayInSeconds>
+        <ExecutionFrequencyInSeconds>300</ExecutionFrequencyInSeconds>
+        <MaxRetryCount>5</MaxRetryCount>
+        <RetryIntervalInSeconds>10</RetryIntervalInSeconds>
+
+        <Notifiers>
+            <Notifier></Notifier>
+        </Notifiers>
+
+    {% endif %}
+
+</EmqxExtensionConfig>

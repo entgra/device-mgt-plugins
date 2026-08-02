@@ -1,0 +1,8 @@
+instructions.configure = \
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/io.entgra.device.mgt.plugins.extension.emqx_${feature.version}/datasources/,target:${installFolder}/../../conf/datasources/,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/io.entgra.device.mgt.plugins.extension.emqx_${feature.version}/conf_templates/,target:${installFolder}/../../resources/conf/,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/io.entgra.device.mgt.plugins.extension.emqx_${feature.version}/dbscripts/emqx/,target:${installFolder}/../../../dbscripts/emqx,overwrite:true);\
+
+instructions.unconfigure = \
+org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/../../conf/datasources/emqx-datasources.xml);\
+org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/../../../dbscripts/emqx);\
