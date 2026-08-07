@@ -48,6 +48,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -58,6 +59,10 @@ public class ExServer {
 
     private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
     private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
+    // EMQX only forwards the client's password on the client.authenticate hook, not on
+    // client.check_acl, so the trusted node's client ID (not its username/password) is
+    // what onClientCheckAcl checks after a successful bypass at authenticate time.
+    private static final Set<String> trustedNodeClientIds = ConcurrentHashMap.newKeySet();
     private Server server;
     private final ExServerUtilityService utilityService;
 
@@ -223,6 +228,7 @@ public class ExServer {
         public void onClientDisconnected(ClientDisconnectedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             logger.info("onClientDisconnected -----------------------------");
             DEBUG("onClientDisconnected", request);
+            trustedNodeClientIds.remove(request.getClientinfo().getClientid());
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -231,6 +237,19 @@ public class ExServer {
         @Override
         public void onClientAuthenticate(ClientAuthenticateRequest request, StreamObserver<ValuedResponse> responseObserver) {
             DEBUG("onClientAuthenticate", request);
+
+            if (TrustedNodeCredentialsConfig.getInstance().isTrustedNode(
+                    request.getClientinfo().getUsername(), request.getClientinfo().getPassword())) {
+                trustedNodeClientIds.add(request.getClientinfo().getClientid());
+                logger.info("Authenticated trusted node client: " + request.getClientinfo().getClientid());
+                ValuedResponse reply = ValuedResponse.newBuilder()
+                        .setBoolResult(true)
+                        .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                        .build();
+                responseObserver.onNext(reply);
+                responseObserver.onCompleted();
+                return;
+            }
 
             String username = request.getClientinfo().getUsername();
             String password = request.getClientinfo().getPassword();
@@ -348,6 +367,20 @@ public class ExServer {
                 data/carbonsuper/deviceType/deviceId
                 republished/deviceType
              */
+            if (trustedNodeClientIds.contains(request.getClientinfo().getClientid())) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Granting ACL bypass for trusted node client: " +
+                            request.getClientinfo().getClientid());
+                }
+                ValuedResponse reply = ValuedResponse.newBuilder()
+                        .setBoolResult(true)
+                        .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                        .build();
+                responseObserver.onNext(reply);
+                responseObserver.onCompleted();
+                return;
+            }
+
             try {
                 //todo: check token validity
                 String clientId = request.getClientinfo().getClientid();
