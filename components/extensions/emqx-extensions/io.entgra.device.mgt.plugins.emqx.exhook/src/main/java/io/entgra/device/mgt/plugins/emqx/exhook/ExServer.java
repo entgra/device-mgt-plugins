@@ -228,7 +228,12 @@ public class ExServer {
         public void onClientDisconnected(ClientDisconnectedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             logger.info("onClientDisconnected -----------------------------");
             DEBUG("onClientDisconnected", request);
-            trustedNodeClientIds.remove(request.getClientinfo().getClientid());
+            String clientId = request.getClientinfo().getClientid();
+            trustedNodeClientIds.remove(clientId);
+            String accessToken = accessTokenMap.remove(clientId);
+            if (!StringUtils.isEmpty(accessToken)) {
+                authorizedScopeMap.remove(accessToken);
+            }
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -237,7 +242,7 @@ public class ExServer {
         @Override
         public void onClientAuthenticate(ClientAuthenticateRequest request, StreamObserver<ValuedResponse> responseObserver) {
             DEBUG("onClientAuthenticate", request);
-
+            trustedNodeClientIds.remove(request.getClientinfo().getClientid());
             if (TrustedNodeCredentialsConfig.getInstance().isTrustedNode(
                     request.getClientinfo().getUsername(), request.getClientinfo().getPassword())) {
                 trustedNodeClientIds.add(request.getClientinfo().getClientid());

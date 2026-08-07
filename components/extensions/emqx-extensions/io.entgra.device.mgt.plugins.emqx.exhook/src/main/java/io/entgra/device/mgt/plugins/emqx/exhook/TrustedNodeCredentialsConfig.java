@@ -1,18 +1,17 @@
 /*
- * Copyright (C) 2018 - 2026 Entgra (Pvt) Ltd, Inc - All Rights Reserved.
+ * Copyright (c) 2026, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
- * Unauthorised copying/redistribution of this file, via any medium is strictly prohibited.
- *
- * Licensed under the Entgra Commercial License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://entgra.io/licenses/entgra-commercial/1.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
@@ -26,6 +25,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
@@ -103,7 +103,8 @@ public class TrustedNodeCredentialsConfig {
     private static File resolveConfigFile() {
         String configDirPath = System.getProperty(CONFIG_PATH_OVERRIDE_PROPERTY);
         if (StringUtils.isNotEmpty(configDirPath)) {
-            return new File(configDirPath);
+            File override = new File(configDirPath);
+            return override.isDirectory() ? new File(override, CONFIG_FILE_NAME) : override;
         }
 
         configDirPath = System.getProperty(CARBON_CONFIG_DIR_PROPERTY);
@@ -122,6 +123,11 @@ public class TrustedNodeCredentialsConfig {
      */
     static String[] parseCredentials(File configFile) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(configFile);
         Element root = document.getDocumentElement();
