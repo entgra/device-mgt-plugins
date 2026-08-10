@@ -18,11 +18,12 @@
 
 package io.entgra.device.mgt.plugins.emqx.exhook;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.GeneratedMessageV3;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
@@ -63,8 +64,34 @@ public class ExServer {
     // client.check_acl, so the trusted node's client ID (not its username/password) is
     // what onClientCheckAcl checks after a successful bypass at authenticate time.
     private static final Set<String> trustedNodeClientIds = ConcurrentHashMap.newKeySet();
+    // Keyed by the resolved token string and intentionally survives client disconnects, so a
+    // client reconnecting with the same token within the TTL skips the introspection round-trip.
+    // Capped at MAX_CACHED_TOKENS as a safety net against unbounded growth from tokens that are never seen again.
+    private static final long MAX_CACHED_TOKENS = 10_000;
+    private static final Cache<String, String> introspectionCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(resolveTokenCacheTtlSeconds(), TimeUnit.SECONDS)
+            .maximumSize(MAX_CACHED_TOKENS)
+            .build();
     private Server server;
     private final ExServerUtilityService utilityService;
+
+    private static long resolveTokenCacheTtlSeconds() {
+        String configured = System.getProperty(HandlerConstants.TOKEN_CACHE_TTL_SECONDS_PROPERTY);
+        if (StringUtils.isNotEmpty(configured)) {
+            try {
+                long ttlSeconds = Long.parseLong(configured.trim());
+                if (ttlSeconds > 0) {
+                    return ttlSeconds;
+                }
+                logger.warn("Ignoring non-positive " + HandlerConstants.TOKEN_CACHE_TTL_SECONDS_PROPERTY +
+                        " value: " + configured);
+            } catch (NumberFormatException e) {
+                logger.warn("Ignoring invalid " + HandlerConstants.TOKEN_CACHE_TTL_SECONDS_PROPERTY +
+                        " value: " + configured);
+            }
+        }
+        return HandlerConstants.DEFAULT_TOKEN_CACHE_TTL_SECONDS;
+    }
 
     public ExServer(ExServerUtilityService utilityService) {
         this.utilityService = utilityService;
@@ -313,6 +340,20 @@ public class ExServer {
          */
         private void tryAuthenticateWithToken(String token, StreamObserver<ValuedResponse> responseObserver,
                                               String clientId) {
+            String cachedScope = introspectionCache.getIfPresent(token);
+            if (cachedScope != null) {
+                accessTokenMap.put(clientId, token);
+                authorizedScopeMap.put(token, cachedScope);
+                logger.info("Using cached token introspection result for client: " + clientId);
+                ValuedResponse reply = ValuedResponse.newBuilder()
+                        .setBoolResult(true)
+                        .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                        .build();
+                responseObserver.onNext(reply);
+                responseObserver.onCompleted();
+                return;
+            }
+
             try {
                 KeyManagerConfigurations kmConfig = utilityService.getKeyManagerConfigurations();
                 HttpPost tokenEndpoint = new HttpPost(kmConfig.getServerUrl() + HandlerConstants.INTROSPECT_ENDPOINT);
@@ -347,8 +388,10 @@ public class ExServer {
                 }
 
                 // Token is valid
+                String scope = tokenJson.get("scope").getAsString();
                 accessTokenMap.put(clientId, token);
-                authorizedScopeMap.put(token, tokenJson.get("scope").getAsString());
+                authorizedScopeMap.put(token, scope);
+                introspectionCache.put(token, scope);
 
                 ValuedResponse reply = ValuedResponse.newBuilder()
                         .setBoolResult(true)
