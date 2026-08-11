@@ -64,16 +64,31 @@ public class ExServer {
     // client.check_acl, so the trusted node's client ID (not its username/password) is
     // what onClientCheckAcl checks after a successful bypass at authenticate time.
     private static final Set<String> trustedNodeClientIds = ConcurrentHashMap.newKeySet();
-    // Keyed by the resolved token string and intentionally survives client disconnects, so a
-    // client reconnecting with the same token within the TTL skips the introspection round-trip.
-    // Capped at MAX_CACHED_TOKENS as a safety net against unbounded growth from tokens that are never seen again.
     private static final long MAX_CACHED_TOKENS = 10_000;
-    private static final Cache<String, String> introspectionCache = CacheBuilder.newBuilder()
+    // expireAfterWrite is only an outer cap on cache size/staleness; it is not authoritative on its
+    // own since it is unrelated to the token's real lifetime. Each entry also carries the "exp"
+    // value returned by introspection so a hit can be rejected once the token has actually expired,
+    // even if that happens sooner than the cache's own TTL.
+    private static final Cache<String, CachedTokenInfo> introspectionCache = CacheBuilder.newBuilder()
             .expireAfterWrite(HandlerConstants.TOKEN_CACHE_TTL_SECONDS, TimeUnit.SECONDS)
             .maximumSize(MAX_CACHED_TOKENS)
             .build();
     private Server server;
     private final ExServerUtilityService utilityService;
+
+    private static final class CachedTokenInfo {
+        private final String scope;
+        private final long expiryEpochSeconds;
+
+        private CachedTokenInfo(String scope, long expiryEpochSeconds) {
+            this.scope = scope;
+            this.expiryEpochSeconds = expiryEpochSeconds;
+        }
+
+        private boolean isExpired() {
+            return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) >= expiryEpochSeconds;
+        }
+    }
 
     public ExServer(ExServerUtilityService utilityService) {
         this.utilityService = utilityService;
@@ -322,10 +337,14 @@ public class ExServer {
          */
         private void tryAuthenticateWithToken(String token, StreamObserver<ValuedResponse> responseObserver,
                                               String clientId) {
-            String cachedScope = introspectionCache.getIfPresent(token);
-            if (cachedScope != null) {
+            CachedTokenInfo cachedTokenInfo = introspectionCache.getIfPresent(token);
+            if (cachedTokenInfo != null && cachedTokenInfo.isExpired()) {
+                introspectionCache.invalidate(token);
+                cachedTokenInfo = null;
+            }
+            if (cachedTokenInfo != null) {
                 accessTokenMap.put(clientId, token);
-                authorizedScopeMap.put(token, cachedScope);
+                authorizedScopeMap.put(token, cachedTokenInfo.scope);
                 logger.info("Using cached token introspection result for client: " + clientId);
                 ValuedResponse reply = ValuedResponse.newBuilder()
                         .setBoolResult(true)
@@ -371,9 +390,12 @@ public class ExServer {
 
                 // Token is valid
                 String scope = tokenJson.get("scope").getAsString();
+                long expiryEpochSeconds = tokenJson.has("exp")
+                        ? tokenJson.get("exp").getAsLong()
+                        : Long.MAX_VALUE;
                 accessTokenMap.put(clientId, token);
                 authorizedScopeMap.put(token, scope);
-                introspectionCache.put(token, scope);
+                introspectionCache.put(token, new CachedTokenInfo(scope, expiryEpochSeconds));
 
                 ValuedResponse reply = ValuedResponse.newBuilder()
                         .setBoolResult(true)
