@@ -69,29 +69,11 @@ public class ExServer {
     // Capped at MAX_CACHED_TOKENS as a safety net against unbounded growth from tokens that are never seen again.
     private static final long MAX_CACHED_TOKENS = 10_000;
     private static final Cache<String, String> introspectionCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(resolveTokenCacheTtlSeconds(), TimeUnit.SECONDS)
+            .expireAfterWrite(HandlerConstants.TOKEN_CACHE_TTL_SECONDS, TimeUnit.SECONDS)
             .maximumSize(MAX_CACHED_TOKENS)
             .build();
     private Server server;
     private final ExServerUtilityService utilityService;
-
-    private static long resolveTokenCacheTtlSeconds() {
-        String configured = System.getProperty(HandlerConstants.TOKEN_CACHE_TTL_SECONDS_PROPERTY);
-        if (StringUtils.isNotEmpty(configured)) {
-            try {
-                long ttlSeconds = Long.parseLong(configured.trim());
-                if (ttlSeconds > 0) {
-                    return ttlSeconds;
-                }
-                logger.warn("Ignoring non-positive " + HandlerConstants.TOKEN_CACHE_TTL_SECONDS_PROPERTY +
-                        " value: " + configured);
-            } catch (NumberFormatException e) {
-                logger.warn("Ignoring invalid " + HandlerConstants.TOKEN_CACHE_TTL_SECONDS_PROPERTY +
-                        " value: " + configured);
-            }
-        }
-        return HandlerConstants.DEFAULT_TOKEN_CACHE_TTL_SECONDS;
-    }
 
     public ExServer(ExServerUtilityService utilityService) {
         this.utilityService = utilityService;
