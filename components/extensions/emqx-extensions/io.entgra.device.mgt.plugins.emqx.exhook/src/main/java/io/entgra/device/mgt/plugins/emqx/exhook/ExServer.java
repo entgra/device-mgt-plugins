@@ -386,12 +386,13 @@ public class ExServer {
 
                 // Token is valid
                 String scope = tokenJson.get("scope").getAsString();
-                long expiryEpochSeconds = tokenJson.has("exp")
-                        ? tokenJson.get("exp").getAsLong()
-                        : Long.MAX_VALUE;
                 accessTokenMap.put(clientId, token);
                 authorizedScopeMap.put(token, scope);
-                introspectionCache.put(token, new CachedTokenInfo(scope, expiryEpochSeconds));
+                // Only cache tokens with a real "exp" claim; without one there is no basis to reject a cache hit
+                // once the token is actually revoked/expired, so such tokens must always be re-introspected.
+                if (tokenJson.has("exp")) {
+                    introspectionCache.put(token, new CachedTokenInfo(scope, tokenJson.get("exp").getAsLong()));
+                }
 
                 ValuedResponse reply = ValuedResponse.newBuilder()
                         .setBoolResult(true)
