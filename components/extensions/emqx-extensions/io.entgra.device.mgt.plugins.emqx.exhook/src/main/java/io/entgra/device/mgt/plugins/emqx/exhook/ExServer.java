@@ -254,10 +254,6 @@ public class ExServer {
             DEBUG("onClientDisconnected", request);
             String clientId = request.getClientinfo().getClientid();
             trustedNodeClientIds.remove(clientId);
-            String accessToken = accessTokenMap.remove(clientId);
-            if (!StringUtils.isEmpty(accessToken)) {
-                authorizedScopeMap.remove(accessToken);
-            }
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -573,7 +569,8 @@ public class ExServer {
         public void onSessionTerminated(SessionTerminatedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onSessionTerminated", request);
 
-            String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
+            String clientId = request.getClientinfo().getClientid();
+            String accessToken = accessTokenMap.remove(clientId);
             if (!StringUtils.isEmpty(accessToken)) {
                 String scopeString = authorizedScopeMap.get(accessToken);
                 String[] scopeArray = scopeString.split(" ");
@@ -597,6 +594,7 @@ public class ExServer {
                         logger.error("onSessionTerminated: Error while setting device status");
                     }
                 }
+                authorizedScopeMap.remove(accessToken);
             }
 
             EmptySuccess reply = EmptySuccess.newBuilder().build();
