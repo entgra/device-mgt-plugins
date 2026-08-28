@@ -26,4 +26,5 @@ public class HandlerConstants {
     public static final String COLON = ":";
     public static final int INTERNAL_ERROR_CODE = 500;
     public static final int MIN_TOKEN_LENGTH = 36;
+    public static final long TOKEN_CACHE_TTL_SECONDS = 3600L;
 }

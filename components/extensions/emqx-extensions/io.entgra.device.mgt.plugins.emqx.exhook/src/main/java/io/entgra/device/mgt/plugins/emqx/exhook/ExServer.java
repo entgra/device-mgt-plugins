@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 - 2026, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
+ * Copyright (c) 2018 - 2023, Entgra (Pvt) Ltd. (http://www.entgra.io) All Rights Reserved.
  *
  * Entgra (Pvt) Ltd. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -18,11 +18,12 @@
 
 package io.entgra.device.mgt.plugins.emqx.exhook;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.GeneratedMessageV3;
 import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.EnrolmentInfo;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
@@ -48,6 +49,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -58,8 +60,35 @@ public class ExServer {
 
     private static Map<String, String> accessTokenMap = new ConcurrentHashMap<>();
     private static Map<String, String> authorizedScopeMap = new ConcurrentHashMap<>();
+    // EMQX only forwards the client's password on the client.authenticate hook, not on
+    // client.check_acl, so the trusted node's client ID (not its username/password) is
+    // what onClientCheckAcl checks after a successful bypass at authenticate time.
+    private static final Set<String> trustedNodeClientIds = ConcurrentHashMap.newKeySet();
+    private static final long MAX_CACHED_TOKENS = 10_000;
+    // expireAfterWrite is only an outer cap on cache size/staleness; it is not authoritative on its
+    // own since it is unrelated to the token's real lifetime. Each entry also carries the "exp"
+    // value returned by introspection so a hit can be rejected once the token has actually expired,
+    // even if that happens sooner than the cache's own TTL.
+    private static final Cache<String, CachedTokenInfo> introspectionCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(HandlerConstants.TOKEN_CACHE_TTL_SECONDS, TimeUnit.SECONDS)
+            .maximumSize(MAX_CACHED_TOKENS)
+            .build();
     private Server server;
     private final ExServerUtilityService utilityService;
+
+    private static final class CachedTokenInfo {
+        private final String scope;
+        private final long expiryEpochSeconds;
+
+        private CachedTokenInfo(String scope, long expiryEpochSeconds) {
+            this.scope = scope;
+            this.expiryEpochSeconds = expiryEpochSeconds;
+        }
+
+        private boolean isExpired() {
+            return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) >= expiryEpochSeconds;
+        }
+    }
 
     private static final String TOPIC_SEPARATOR = ":";
     private static final String SINGLE_LEVEL_WILDCARD = "+";
@@ -228,6 +257,8 @@ public class ExServer {
         public void onClientDisconnected(ClientDisconnectedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             logger.info("onClientDisconnected -----------------------------");
             DEBUG("onClientDisconnected", request);
+            String clientId = request.getClientinfo().getClientid();
+            trustedNodeClientIds.remove(clientId);
             EmptySuccess reply = EmptySuccess.newBuilder().build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -236,6 +267,19 @@ public class ExServer {
         @Override
         public void onClientAuthenticate(ClientAuthenticateRequest request, StreamObserver<ValuedResponse> responseObserver) {
             DEBUG("onClientAuthenticate", request);
+            trustedNodeClientIds.remove(request.getClientinfo().getClientid());
+            if (TrustedNodeCredentialsConfig.getInstance().isTrustedNode(
+                    request.getClientinfo().getUsername(), request.getClientinfo().getPassword())) {
+                trustedNodeClientIds.add(request.getClientinfo().getClientid());
+                logger.info("Authenticated trusted node client: " + request.getClientinfo().getClientid());
+                ValuedResponse reply = ValuedResponse.newBuilder()
+                        .setBoolResult(true)
+                        .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                        .build();
+                responseObserver.onNext(reply);
+                responseObserver.onCompleted();
+                return;
+            }
 
             String username = request.getClientinfo().getUsername();
             String password = request.getClientinfo().getPassword();
@@ -294,6 +338,24 @@ public class ExServer {
          */
         private void tryAuthenticateWithToken(String token, StreamObserver<ValuedResponse> responseObserver,
                                               String clientId) {
+            CachedTokenInfo cachedTokenInfo = introspectionCache.getIfPresent(token);
+            if (cachedTokenInfo != null && cachedTokenInfo.isExpired()) {
+                introspectionCache.invalidate(token);
+                cachedTokenInfo = null;
+            }
+            if (cachedTokenInfo != null) {
+                accessTokenMap.put(clientId, token);
+                authorizedScopeMap.put(token, cachedTokenInfo.scope);
+                logger.info("Using cached token introspection result for client: " + clientId);
+                ValuedResponse reply = ValuedResponse.newBuilder()
+                        .setBoolResult(true)
+                        .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                        .build();
+                responseObserver.onNext(reply);
+                responseObserver.onCompleted();
+                return;
+            }
+
             try {
                 KeyManagerConfigurations kmConfig = utilityService.getKeyManagerConfigurations();
                 HttpPost tokenEndpoint = new HttpPost(kmConfig.getServerUrl() + HandlerConstants.INTROSPECT_ENDPOINT);
@@ -328,8 +390,14 @@ public class ExServer {
                 }
 
                 // Token is valid
+                String scope = tokenJson.get("scope").getAsString();
                 accessTokenMap.put(clientId, token);
-                authorizedScopeMap.put(token, tokenJson.get("scope").getAsString());
+                authorizedScopeMap.put(token, scope);
+                // Only cache tokens with a real "exp" claim; without one there is no basis to reject a cache hit
+                // once the token is actually revoked/expired, so such tokens must always be re-introspected.
+                if (tokenJson.has("exp")) {
+                    introspectionCache.put(token, new CachedTokenInfo(scope, tokenJson.get("exp").getAsLong()));
+                }
 
                 ValuedResponse reply = ValuedResponse.newBuilder()
                         .setBoolResult(true)
@@ -353,6 +421,20 @@ public class ExServer {
                 data/carbonsuper/deviceType/deviceId
                 republished/deviceType
              */
+            if (trustedNodeClientIds.contains(request.getClientinfo().getClientid())) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Granting ACL bypass for trusted node client: " +
+                            request.getClientinfo().getClientid());
+                }
+                ValuedResponse reply = ValuedResponse.newBuilder()
+                        .setBoolResult(true)
+                        .setType(ValuedResponse.ResponsedType.STOP_AND_RETURN)
+                        .build();
+                responseObserver.onNext(reply);
+                responseObserver.onCompleted();
+                return;
+            }
+
             try {
                 //todo: check token validity
                 String clientId = request.getClientinfo().getClientid();
@@ -559,7 +641,8 @@ public class ExServer {
         public void onSessionTerminated(SessionTerminatedRequest request, StreamObserver<EmptySuccess> responseObserver) {
             DEBUG("onSessionTerminated", request);
 
-            String accessToken = accessTokenMap.get(request.getClientinfo().getClientid());
+            String clientId = request.getClientinfo().getClientid();
+            String accessToken = accessTokenMap.remove(clientId);
             if (!StringUtils.isEmpty(accessToken)) {
                 String scopeString = authorizedScopeMap.get(accessToken);
                 String[] scopeArray = scopeString.split(" ");
@@ -583,6 +666,7 @@ public class ExServer {
                         logger.error("onSessionTerminated: Error while setting device status");
                     }
                 }
+                authorizedScopeMap.remove(accessToken);
             }
 
             EmptySuccess reply = EmptySuccess.newBuilder().build();
