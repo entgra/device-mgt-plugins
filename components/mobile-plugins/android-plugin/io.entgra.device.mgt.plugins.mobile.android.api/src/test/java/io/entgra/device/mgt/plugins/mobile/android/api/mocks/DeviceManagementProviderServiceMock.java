@@ -32,9 +32,12 @@ import io.entgra.device.mgt.core.device.mgt.common.PaginationResult;
 import io.entgra.device.mgt.core.device.mgt.common.StartupOperationConfig;
 import io.entgra.device.mgt.core.device.mgt.common.app.mgt.Application;
 import io.entgra.device.mgt.core.device.mgt.common.app.mgt.ApplicationManagementException;
+import io.entgra.device.mgt.core.device.mgt.common.app.mgt.DeviceFirmwareModel;
 import io.entgra.device.mgt.core.device.mgt.common.configuration.mgt.*;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceData;
 import io.entgra.device.mgt.core.device.mgt.common.device.details.DeviceLocationHistorySnapshot;
+import io.entgra.device.mgt.core.device.mgt.common.device.firmware.model.mgt.DeviceFirmwareModelSearchFilter;
+import io.entgra.device.mgt.core.device.mgt.common.device.firmware.model.mgt.DeviceFirmwareResult;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.ConflictException;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceManagementException;
 import io.entgra.device.mgt.core.device.mgt.common.exceptions.DeviceNotFoundException;
@@ -1005,5 +1008,60 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     @Override
     public DeviceManagementConfig getDeviceManagementConfig() {
         return null;
+    }
+
+    @Override
+    public List<Device> getGroupedDevicesBasedOnProperties(int groupId, Map<String, String> properties)
+            throws DeviceManagementException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<? extends Operation> getDeviceOperations(DeviceIdentifier deviceIdentifier, Operation.Status status,
+                                                          String operationCode)
+            throws OperationManagementException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public DeviceFirmwareModel getDeviceFirmwareModel(int deviceId) throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public DeviceFirmwareModel addDeviceFirmwareModel(Device device, String firmwareId, int tenantId)
+            throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public DeviceFirmwareResult getFilteredDeviceListByFirmwareVersion(DeviceFirmwareModelSearchFilter filter,
+                                                                        int tenantId, boolean requireDeviceInfo)
+            throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public List<DevicePropertyInfo> getDeviceBasedOnProperties(Map<String, String> properties)
+            throws DeviceManagementException, DeviceNotFoundException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public DeviceConfiguration getDeviceConfiguration(DevicePropertyInfo devicePropertyInfo)
+            throws DeviceManagementException, UnauthorizedDeviceAccessException, AmbiguousConfigurationException {
+        return null;
+    }
+
+    @Override
+    public List<PropertyValidationInfo> validateDeviceProperties(DeviceIdentifier deviceIdentifier,
+                                                                  Map<String, String> properties, int tenantId)
+            throws DeviceNotFoundException, DeviceManagementException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean isFirmwareModelExists(String firmwareId) throws DeviceManagementException {
+        return false;
     }
 }
