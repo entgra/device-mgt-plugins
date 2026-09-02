@@ -74,7 +74,7 @@
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
+                <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
                 <scope>provided</scope>
             </dependency>
@@ -498,7 +498,7 @@
             <!--Orbit dependencies-->
             <dependency>
                 <groupId>org.wso2.orbit.com.h2database</groupId>
-                <artifactId>h2</artifactId>
+                <artifactId>h2-engine</artifactId>
                 <version>${orbit.h2.version}</version>
             </dependency>
             <dependency>
@@ -974,23 +974,23 @@
         <android.agent.version>4.0.0</android.agent.version>
 
         <!--Carbon kernel versions-->
-        <carbon.kernel.version>4.8.1</carbon.kernel.version>
+        <carbon.kernel.version>4.9.28</carbon.kernel.version>
         <pax.logging.api.version>1.11.2</pax.logging.api.version>
         <carbon.p2.plugin.version>5.2.74</carbon.p2.plugin.version>
 
         <!-- Axis2 -->
-        <axis2.orbit.version>1.6.1-wso2v85</axis2.orbit.version>
+        <axis2.orbit.version>1.6.1-wso2v102</axis2.orbit.version>
 
         <!--Testing -->
         <junit.version>4.13.1</junit.version>
         <testng.version>7.4.0</testng.version>
 
         <!--Orbit versions-->
-        <orbit.h2.version>2.1.210.wso2v1</orbit.h2.version>
-        <orbit.tomcat.jdbc.pooling.version>9.0.71.wso2v1</orbit.tomcat.jdbc.pooling.version>
+        <orbit.h2.version>2.3.232.wso2v1</orbit.h2.version>
+        <orbit.tomcat.jdbc.pooling.version>9.0.65.wso2v1</orbit.tomcat.jdbc.pooling.version>
 
         <!-- CXF version -->
-        <cxf.version>3.5.5</cxf.version>
+        <cxf.version>3.6.5</cxf.version>
         <cxf.bindings.version>2.5.11</cxf.bindings.version>
         <cxf-bundle.version>2.6.1.wso2v2</cxf-bundle.version>
         <jackson.version>1.9.13</jackson.version>
@@ -998,10 +998,10 @@
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
 
         <!-- Carbon Commons -->
-        <carbon.commons.version>4.9.2</carbon.commons.version>
+        <carbon.commons.version>4.9.11</carbon.commons.version>
 
         <!-- Carbon Identity -->
-        <identity.inbound.auth.oauth.version>6.9.6</identity.inbound.auth.oauth.version>
+        <identity.inbound.auth.oauth.version>6.13.27</identity.inbound.auth.oauth.version>
 
         <!-- XMPP/MQTT Version -->
         <smack.wso2.version>3.0.4.wso2v1</smack.wso2.version>
@@ -1015,7 +1015,7 @@
         <swagger.version>1.6.9</swagger.version>
 
         <!-- Carbon Analytics -->
-        <carbon.analytics.common.version>5.3.5</carbon.analytics.common.version>
+        <carbon.analytics.common.version>5.3.20</carbon.analytics.common.version>
 
         <!-- Third Party Dependencies-->
         <google.gson.version>2.9.1</google.gson.version>
@@ -1059,11 +1059,11 @@
         <commons.pool.wso2.version>1.5.6.wso2v1</commons.pool.wso2.version>
 
         <!--websocket related lib versions-->
-        <tomcat.websocket.version>9.0.24</tomcat.websocket.version>
+        <tomcat.websocket.version>9.0.94</tomcat.websocket.version>
         <javax.websocket.version>1.1</javax.websocket.version>
-        <javax.version>2.0.1</javax.version>
+        <javax.version>2.1.1</javax.version>
 
-        <servlet-api.version>2.5</servlet-api.version>
+        <servlet-api.version>4.0.1</servlet-api.version>
 
         <hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
 
@@ -1081,8 +1081,8 @@
         <javassist.version>3.12.1.GA</javassist.version>
         <powermock.version>2.0.2</powermock.version>
 
-        <squareup.okhttp3.version>4.6.0</squareup.okhttp3.version>
-        <okio.version>1.13.0</okio.version>
+        <squareup.okhttp3.version>4.12.0</squareup.okhttp3.version>
+        <okio.version>3.6.0</okio.version>
         <github.openfeign.version>11.0</github.openfeign.version>
 
         <cxf-bundle-package.version>2.7.18</cxf-bundle-package.version>
