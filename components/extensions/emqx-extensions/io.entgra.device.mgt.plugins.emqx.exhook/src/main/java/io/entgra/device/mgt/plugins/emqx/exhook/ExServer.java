@@ -90,6 +90,11 @@ public class ExServer {
         }
     }
 
+    private static final String TOPIC_SEPARATOR = ":";
+    private static final String SINGLE_LEVEL_WILDCARD = "+";
+    private static final String MULTI_LEVEL_WILDCARD = "#";
+    private static final String MULTI_LEVEL_WILDCARD_SUFFIX = TOPIC_SEPARATOR + MULTI_LEVEL_WILDCARD;
+
     public ExServer(ExServerUtilityService utilityService) {
         this.utilityService = utilityService;
     }
@@ -472,8 +477,7 @@ public class ExServer {
                         // subscribing for events from iotserver to emqx
                         // subscribing for operation from device to emqx
                         // subscribing for operation response from iotserver to emqx
-                        tempScope = "perm:topic:sub:" + (topic.endsWith("/#") ? topic.substring(0, topic.indexOf("/#")) : topic)
-                                .replace("/", ":");
+                        tempScope = "perm:topic:sub:" + topic.replace("/", ":");
                         break;
                     default:
                         throw Status.INVALID_ARGUMENT
@@ -481,7 +485,7 @@ public class ExServer {
                                 .asRuntimeException();
                 }
 
-                boolean isAuthorized = scopeList.stream().anyMatch(scope -> scope.startsWith(tempScope));
+                boolean isAuthorized = scopeList.stream().anyMatch(scope -> isTopicMatch(scope, tempScope));
                 if (!isAuthorized) {
                     logger.warn("topic=" + topic + ", requiredScope=" + tempScope);
                     throw Status.PERMISSION_DENIED.withDescription("User not authorized for requested topic").asRuntimeException();
@@ -500,6 +504,72 @@ public class ExServer {
             } catch (RuntimeException e) {
                 respondGrpcError(responseObserver, e, "Unexpected error during ACL check");
             }
+        }
+
+        private boolean isTopicMatch(String scopePattern, String exactTopic) {
+            if (scopePattern.equals(exactTopic)) {
+                return true;
+            }
+
+            String[] scopeParts = scopePattern.split(TOPIC_SEPARATOR);
+            String[] topicParts = exactTopic.split(TOPIC_SEPARATOR);
+
+            boolean scopeHasMulti = scopePattern.endsWith(MULTI_LEVEL_WILDCARD_SUFFIX);
+            boolean topicHasMulti = exactTopic.endsWith(MULTI_LEVEL_WILDCARD_SUFFIX);
+
+            if (topicHasMulti) {
+                return matchMultiLevelSubscription(scopeParts, topicParts);
+            }
+
+            if (scopeHasMulti) {
+                return matchMultiLevelScope(scopeParts, topicParts);
+            }
+
+            return matchSingleLevelWildcards(scopeParts, topicParts);
+        }
+
+        /**
+         * Handles cases where the incoming subscription request contains a '#'
+         */
+        private boolean matchMultiLevelSubscription(String[] scopeParts, String[] topicParts) {
+            if (topicParts.length < scopeParts.length || !MULTI_LEVEL_WILDCARD.equals(scopeParts[scopeParts.length - 1])) {
+                return false;
+            }
+            return compareParts(scopeParts, topicParts, scopeParts.length - 1);
+        }
+
+        /**
+         * Handles cases where the defined scope contains a '#'
+         */
+        private boolean matchMultiLevelScope(String[] scopeParts, String[] topicParts) {
+            if (topicParts.length < scopeParts.length - 1) {
+                return false;
+            }
+            return compareParts(scopeParts, topicParts, scopeParts.length - 1);
+        }
+
+        /**
+         * Handles standard positional matching including '+' wildcards
+         */
+        private boolean matchSingleLevelWildcards(String[] scopeParts, String[] topicParts) {
+            if (scopeParts.length != topicParts.length) {
+                return false;
+            }
+            return compareParts(scopeParts, topicParts, scopeParts.length);
+        }
+
+        /**
+         * Helper to compare individual segments of the topic
+         */
+        private boolean compareParts(String[] scopeParts, String[] topicParts, int lengthToCompare) {
+            for (int i = 0; i < lengthToCompare; i++) {
+                String scope = scopeParts[i];
+                String topic = topicParts[i];
+                if (!SINGLE_LEVEL_WILDCARD.equals(scope) && !scope.equals(topic)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         @Override
