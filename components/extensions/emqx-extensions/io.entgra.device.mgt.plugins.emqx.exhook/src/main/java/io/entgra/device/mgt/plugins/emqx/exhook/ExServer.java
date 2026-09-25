@@ -477,8 +477,7 @@ public class ExServer {
                         // subscribing for events from iotserver to emqx
                         // subscribing for operation from device to emqx
                         // subscribing for operation response from iotserver to emqx
-                        tempScope = "perm:topic:sub:" + (topic.endsWith("/#") ? topic.substring(0, topic.indexOf("/#")) : topic)
-                                .replace("/", ":");
+                        tempScope = "perm:topic:sub:" + topic.replace("/", ":");
                         break;
                     default:
                         throw Status.INVALID_ARGUMENT
@@ -533,10 +532,10 @@ public class ExServer {
          * Handles cases where the incoming subscription request contains a '#'
          */
         private boolean matchMultiLevelSubscription(String[] scopeParts, String[] topicParts) {
-            if (topicParts.length > scopeParts.length || !MULTI_LEVEL_WILDCARD.equals(scopeParts[scopeParts.length - 1])) {
+            if (topicParts.length < scopeParts.length || !MULTI_LEVEL_WILDCARD.equals(scopeParts[scopeParts.length - 1])) {
                 return false;
             }
-            return compareParts(scopeParts, topicParts, topicParts.length - 1);
+            return compareParts(scopeParts, topicParts, scopeParts.length - 1);
         }
 
         /**

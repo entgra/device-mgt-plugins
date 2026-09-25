@@ -239,6 +239,7 @@ public class TopicMatchTest {
     public Object[][] backwardCompatibilityInvalidData() {
         return new Object[][] {
                 // Scope with single-level wildcard should NOT accept topic with multi-level wildcard
+                {"perm:topic:sub:tenant:+", "perm:topic:sub:tenant:device:#", false},
                 {"perm:topic:sub:ami:reading:+", "perm:topic:sub:ami:#", false},
                 {"perm:topic:pub:+:device:data", "perm:topic:pub:#", false},
                 {"perm:topic:sub:tenant:+:+", "perm:topic:sub:tenant:#", false},
