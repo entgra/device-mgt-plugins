@@ -699,14 +699,14 @@
                 <version>${spring-web.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.bouncycastle.wso2</groupId>
-                <artifactId>bcprov-jdk15on</artifactId>
-                <version>${bcprov-jdk15on.version}</version>
+                <groupId>org.wso2.orbit.org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bcprov.wso2.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.bouncycastle.wso2</groupId>
-                <artifactId>bcpkix-jdk15on</artifactId>
-                <version>${bcpkix-jdk15on.version}</version>
+                <groupId>org.wso2.orbit.org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk18on</artifactId>
+                <version>${bcpkix.wso2.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.jscep.wso2</groupId>
@@ -1033,8 +1033,8 @@
         <log4j.version>1.2.17</log4j.version>
         <spring-web.version>5.3.23</spring-web.version>
 
-        <bcpkix-jdk15on.version>1.49.0.wso2v2</bcpkix-jdk15on.version>
-        <bcprov-jdk15on.version>1.49.0.wso2v2</bcprov-jdk15on.version>
+        <bcpkix.wso2.version>1.78.1.wso2v1</bcpkix.wso2.version>
+        <bcprov.wso2.version>1.78.1.wso2v1</bcprov.wso2.version>
         <jscep.version>2.0.2.wso2v2</jscep.version>
         <common-logging.version>1.2</common-logging.version>
         <slf4j.version>1.7.13</slf4j.version>
@@ -1069,6 +1069,7 @@
 
         <!--Feign Version-->
         <io.github.openfeign.version>11.0</io.github.openfeign.version>
+        <io.github.openfeign.runtime.version>13.2.1</io.github.openfeign.runtime.version>
         <maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
         <siddhi.version>3.2.9</siddhi.version>
         <maven.javadoc.skip>true</maven.javadoc.skip>

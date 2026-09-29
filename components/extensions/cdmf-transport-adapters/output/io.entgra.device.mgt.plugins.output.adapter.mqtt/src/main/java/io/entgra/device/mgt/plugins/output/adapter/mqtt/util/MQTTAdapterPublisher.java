@@ -28,7 +28,6 @@ import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.BadRequest
 import io.entgra.device.mgt.core.apimgt.extension.rest.api.exceptions.UnexpectedResponseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.ssl.Base64;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -39,6 +38,7 @@ import org.wso2.carbon.event.output.adapter.core.exception.ConnectionUnavailable
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterException;
 import org.wso2.carbon.event.output.adapter.core.exception.OutputEventAdapterRuntimeException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * MQTT publisher related configuration initialization and publishing capabilties are implemented here.
@@ -211,7 +211,7 @@ public class MQTTAdapterPublisher {
     }
 
     private String getBase64Encode(String key, String value) {
-        return new String(Base64.encodeBase64((key + ":" + value).getBytes()));
+        return Base64.getEncoder().encodeToString((key + ":" + value).getBytes(StandardCharsets.UTF_8));
     }
 
 }
