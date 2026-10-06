@@ -112,12 +112,12 @@
 
 		<!--Dependency on BouncyCastle Library for SCEP-->
 		<dependency>
-			<groupId>org.bouncycastle.wso2</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
+			<groupId>org.wso2.orbit.org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk18on</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.bouncycastle.wso2</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
+			<groupId>org.wso2.orbit.org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk18on</artifactId>
 		</dependency>
 
 		<!--Dependency on WSO2 JSCEP Orbit-->

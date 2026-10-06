@@ -104,7 +104,7 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.orbit.com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <artifactId>h2-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -164,11 +164,11 @@
                             io.entgra.device.mgt.plugins.extension.siddhi.device.*
                         </Export-Package>
                         <Import-Package>
-                            feign;version="[11.0,12)",
-                            feign.auth;version="[11.0,12)",
-                            feign.codec;version="[11.0,12)",
-                            feign.gson;version="[11.0,12)",
-                            feign.slf4j;version="[11.0,12)",
+                            feign;version="[13.2,14)",
+                            feign.auth;version="[13.2,14)",
+                            feign.codec;version="[13.2,14)",
+                            feign.gson;version="[13.2,14)",
+                            feign.slf4j;version="[13.2,14)",
                             io.entgra.device.mgt.core.device.mgt.common;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.core.device.mgt.common.exceptions;version="${io.entgra.device.mgt.core.version.range}",
                             io.entgra.device.mgt.core.device.mgt.common.group.mgt;version="${io.entgra.device.mgt.core.version.range}",
