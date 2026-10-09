@@ -210,7 +210,9 @@ public class ExServer {
             DEBUG("onClientConnack", request);
             if (request.getResultCode().equals("success")) {
                 String accessToken = accessTokenMap.get(request.getConninfo().getClientid());
-                String scopeString = authorizedScopeMap.get(accessToken);
+                // Trusted clients have no OAuth token; another worker may also lack this client's state.
+                // Connack is a notification. Missing token state must not throw or grant ACL access.
+                String scopeString = StringUtils.isEmpty(accessToken) ? null : authorizedScopeMap.get(accessToken);
                 if (!StringUtils.isEmpty(scopeString)) {
                     String[] scopeArray = scopeString.split(" ");
                     String deviceType = null;
