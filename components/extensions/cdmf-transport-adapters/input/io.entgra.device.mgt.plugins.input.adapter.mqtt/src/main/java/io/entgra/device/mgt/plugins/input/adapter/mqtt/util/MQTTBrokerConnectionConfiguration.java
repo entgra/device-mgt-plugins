@@ -21,12 +21,14 @@ import org.wso2.carbon.event.input.adapter.core.InputEventAdapterConfiguration;
 import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterException;
 
 import java.util.Map;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 /**
  * This holds the configurations related to MQTT Broker.
  */
 public class MQTTBrokerConnectionConfiguration {
 
+    private boolean passwordAuthentication;
     private String username = null;
     private String password = null;
     private String brokerScopes = null;
@@ -42,6 +44,18 @@ public class MQTTBrokerConnectionConfiguration {
 
     public String getBrokerScopes() {
         return brokerScopes;
+    }
+
+    /**
+     * Applies explicit per-adapter credentials. False leaves the existing OAuth flow in control.
+     */
+    public boolean applyPasswordAuthentication(MqttConnectOptions options) {
+        if (!passwordAuthentication) {
+            return false;
+        }
+        options.setUserName(username);
+        options.setPassword(password.toCharArray());
+        return true;
     }
 
     public String getUsername() {
@@ -96,8 +110,20 @@ public class MQTTBrokerConnectionConfiguration {
                                              Map<String, String> globalProperties) throws InputEventAdapterException {
 
         adapterName = eventAdapterConfiguration.getName();
+        // Authentication mode is deliberately local: shared global properties cannot opt clients in.
+        String authMode = eventAdapterConfiguration.getProperties().get(MQTTEventAdapterConstants.ADAPTER_CONF_AUTH_MODE);
+        if (authMode != null && !authMode.isEmpty()
+                && !MQTTEventAdapterConstants.AUTH_MODE_OAUTH.equals(authMode)
+                && !MQTTEventAdapterConstants.AUTH_MODE_PASSWORD.equals(authMode)) {
+            throw new IllegalArgumentException("Unsupported MQTT authentication mode");
+        }
+        passwordAuthentication = MQTTEventAdapterConstants.AUTH_MODE_PASSWORD.equals(authMode);
         this.username = eventAdapterConfiguration.getProperties().get(MQTTEventAdapterConstants.ADAPTER_CONF_USERNAME);
         this.password = eventAdapterConfiguration.getProperties().get(MQTTEventAdapterConstants.ADAPTER_CONF_PASSWORD);
+        if (passwordAuthentication && (username == null || username.trim().isEmpty()
+                || password == null || password.isEmpty())) {
+            throw new IllegalArgumentException("MQTT password authentication requires per-adapter username and password");
+        }
         if ((username == null || username.isEmpty()) && (password == null || password.isEmpty())) {
             username = globalProperties.get(MQTTEventAdapterConstants.ADAPTER_CONF_USERNAME);
             password = globalProperties.get(MQTTEventAdapterConstants.ADAPTER_CONF_PASSWORD);
@@ -112,8 +138,10 @@ public class MQTTBrokerConnectionConfiguration {
             url = globalProperties.get(MQTTEventAdapterConstants.ADAPTER_CONF_URL);
         }
         this.brokerUrl = PropertyUtils.replaceMqttProperty(url);
-        this.dcrUrl = PropertyUtils
-                .replaceMqttProperty(globalProperties.get(MQTTEventAdapterConstants.ADAPTER_CONF_DCR_URL));
+        if (!passwordAuthentication) {
+            this.dcrUrl = PropertyUtils
+                    .replaceMqttProperty(globalProperties.get(MQTTEventAdapterConstants.ADAPTER_CONF_DCR_URL));
+        }
         this.contentValidatorType = globalProperties.get(MQTTEventAdapterConstants.ADAPTER_CONF_CONTENT_VALIDATOR_TYPE);
         String contentValidatorTypeLocal = eventAdapterConfiguration.getProperties()
                 .get(MQTTEventAdapterConstants.ADAPTER_CONF_CONTENT_VALIDATOR_TYPE);

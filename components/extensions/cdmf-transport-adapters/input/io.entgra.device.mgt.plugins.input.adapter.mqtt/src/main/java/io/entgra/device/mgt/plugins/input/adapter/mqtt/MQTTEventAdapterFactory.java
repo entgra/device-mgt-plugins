@@ -74,6 +74,14 @@ public class MQTTEventAdapterFactory extends InputEventAdapterFactory {
         contentValidator.setDefaultValue(MQTTEventAdapterConstants.DEFAULT);
         propertyList.add(contentValidator);
 
+        Property authMode = new Property(MQTTEventAdapterConstants.ADAPTER_CONF_AUTH_MODE);
+        authMode.setDisplayName(resourceBundle.getString(MQTTEventAdapterConstants.ADAPTER_CONF_AUTH_MODE));
+        authMode.setRequired(false);
+        authMode.setOptions(new String[]{MQTTEventAdapterConstants.AUTH_MODE_OAUTH,
+                MQTTEventAdapterConstants.AUTH_MODE_PASSWORD});
+        authMode.setDefaultValue(MQTTEventAdapterConstants.AUTH_MODE_OAUTH);
+        propertyList.add(authMode);
+
         //Broker Username
         Property userName = new Property(MQTTEventAdapterConstants.ADAPTER_CONF_USERNAME);
         userName.setDisplayName(

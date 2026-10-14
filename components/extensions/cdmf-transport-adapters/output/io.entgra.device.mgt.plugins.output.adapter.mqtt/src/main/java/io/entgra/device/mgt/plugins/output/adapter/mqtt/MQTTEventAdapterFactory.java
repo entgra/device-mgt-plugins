@@ -53,6 +53,14 @@ public class MQTTEventAdapterFactory extends OutputEventAdapterFactory {
         brokerUrl.setRequired(false);
         brokerUrl.setHint(resourceBundle.getString(MQTTEventAdapterConstants.ADAPTER_CONF_URL_HINT));
 
+        Property authMode = new Property(MQTTEventAdapterConstants.ADAPTER_CONF_AUTH_MODE);
+        authMode.setDisplayName(resourceBundle.getString(MQTTEventAdapterConstants.ADAPTER_CONF_AUTH_MODE));
+        authMode.setRequired(false);
+        authMode.setOptions(new String[]{MQTTEventAdapterConstants.AUTH_MODE_OAUTH,
+                MQTTEventAdapterConstants.AUTH_MODE_PASSWORD});
+        authMode.setDefaultValue(MQTTEventAdapterConstants.AUTH_MODE_OAUTH);
+        staticPropertyList.add(authMode);
+
         //Broker Username
         Property userName = new Property(MQTTEventAdapterConstants.ADAPTER_CONF_USERNAME);
         userName.setDisplayName(resourceBundle.getString(MQTTEventAdapterConstants.ADAPTER_CONF_USERNAME));
