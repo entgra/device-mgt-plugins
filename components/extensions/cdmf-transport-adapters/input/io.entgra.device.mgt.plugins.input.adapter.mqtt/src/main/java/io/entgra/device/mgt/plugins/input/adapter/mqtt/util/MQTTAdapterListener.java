@@ -130,7 +130,8 @@ public class MQTTAdapterListener implements MqttCallback, Runnable {
     }
 
     public boolean startListener() throws MqttException {
-        if (this.mqttBrokerConnectionConfiguration.getUsername() != null &&
+        if (!mqttBrokerConnectionConfiguration.applyPasswordAuthentication(connectionOptions)
+                && this.mqttBrokerConnectionConfiguration.getUsername() != null &&
                 this.mqttBrokerConnectionConfiguration.getDcrUrl() != null) {
             String dcrUrlString = this.mqttBrokerConnectionConfiguration.getDcrUrl();
 
