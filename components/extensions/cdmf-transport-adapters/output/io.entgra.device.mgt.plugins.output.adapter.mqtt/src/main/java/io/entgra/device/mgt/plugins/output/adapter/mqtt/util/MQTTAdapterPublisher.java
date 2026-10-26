@@ -78,7 +78,8 @@ public class MQTTAdapterPublisher {
             MqttConnectOptions connectionOptions = new MqttConnectOptions();
             connectionOptions.setCleanSession(cleanSession);
             connectionOptions.setKeepAliveInterval(keepAlive);
-            if (mqttBrokerConnectionConfiguration.getUsername() != null) {
+            if (!mqttBrokerConnectionConfiguration.applyPasswordAuthentication(connectionOptions)
+                    && mqttBrokerConnectionConfiguration.getUsername() != null) {
                 String accessToken = getToken();
                 connectionOptions.setUserName(accessToken);
             }

@@ -25,6 +25,10 @@ public final class MQTTEventAdapterConstants {
 
     public static final String ADAPTER_TYPE_MQTT = "oauth-mqtt";
     public static final String ADAPTER_CONF_URL = "url";
+    public static final String ADAPTER_CONF_AUTH_MODE = "authMode";
+    public static final String AUTH_MODE_OAUTH = "oauth";
+    public static final String AUTH_MODE_PASSWORD = "password";
+
     public static final String ADAPTER_CONF_USERNAME = "username";
     public static final String ADAPTER_CONF_USERNAME_HINT = "username.hint";
     public static final String ADAPTER_CONF_PASSWORD = "password";
