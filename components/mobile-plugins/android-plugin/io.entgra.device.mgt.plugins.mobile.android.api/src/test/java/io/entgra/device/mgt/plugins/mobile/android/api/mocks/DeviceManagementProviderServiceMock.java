@@ -583,6 +583,19 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
     }
 
     @Override
+    public Device updateOperationStatus(DeviceIdentifier deviceIdentifier, Operation operation)
+            throws DeviceManagementException, OperationManagementException {
+        return null;
+    }
+
+    @Override
+    public Device updateOperationStatuses(DeviceIdentifier deviceIdentifier, List<Operation> operations,
+                                          Operation.Status status)
+            throws DeviceManagementException, DeviceNotFoundException, OperationManagementException {
+        return null;
+    }
+
+    @Override
     public boolean updateProperties(DeviceIdentifier deviceIdentifier, List<Device.Property> list)
             throws DeviceManagementException {
         return false;
@@ -965,6 +978,12 @@ public class DeviceManagementProviderServiceMock implements DeviceManagementProv
 
     @Override
     public PaginationResult getDevicesNotInGroup(PaginationRequest request, boolean requireDeviceInfo)
+            throws DeviceManagementException {
+        return null;
+    }
+
+    @Override
+    public PaginationResult getDevicesNotInTag(PaginationRequest request, boolean requireDeviceInfo)
             throws DeviceManagementException {
         return null;
     }
