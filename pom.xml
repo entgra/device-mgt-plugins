@@ -954,7 +954,7 @@
             </dependency>
             <dependency>
                 <groupId>io.entgra.device.mgt.core</groupId>
-                <artifactId>io.entgra.device.mgt.core.notification.mgt.common</artifactId>
+                <artifactId>io.entgra.device.mgt.core.realtime.notification.mgt.common</artifactId>
                 <version>${io.entgra.device.mgt.core.version}</version>
             </dependency>
         </dependencies>

@@ -22,6 +22,7 @@ import io.entgra.device.mgt.core.device.mgt.common.DeviceIdentifier;
 import io.entgra.device.mgt.core.device.mgt.common.Feature;
 import io.entgra.device.mgt.core.device.mgt.common.PaginationRequest;
 import io.entgra.device.mgt.core.device.mgt.common.PaginationResult;
+import io.entgra.device.mgt.core.device.mgt.common.PolicyPaginationRequest;
 import io.entgra.device.mgt.core.device.mgt.common.policy.mgt.Policy;
 import io.entgra.device.mgt.core.device.mgt.common.policy.mgt.Profile;
 import io.entgra.device.mgt.core.device.mgt.common.policy.mgt.ProfileFeature;
@@ -38,6 +39,7 @@ import io.entgra.device.mgt.core.policy.mgt.core.PolicyManagerService;
 import io.entgra.device.mgt.core.policy.mgt.core.task.TaskScheduleService;
 
 import java.util.List;
+import java.util.Map;
 
 public class PolicyManagerServiceMock implements PolicyManagerService {
 
@@ -118,12 +120,22 @@ public class PolicyManagerServiceMock implements PolicyManagerService {
     }
 
     @Override
+    public int getPolicyCount(PolicyPaginationRequest request) throws PolicyManagementException {
+        return 0;
+    }
+
+    @Override
     public Policy getAppliedPolicyToDevice(DeviceIdentifier deviceIdentifier) throws PolicyManagementException {
         return null;
     }
 
     @Override
     public Policy getAppliedPolicyToDevice(Device device) throws PolicyManagementException {
+        return null;
+    }
+
+    @Override
+    public Map<Integer, Policy> getAppliedPolicies(List<Device> devices) throws PolicyManagementException {
         return null;
     }
 
