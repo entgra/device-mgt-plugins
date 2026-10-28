@@ -26,10 +26,10 @@ import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.commons.httpclient.protocol.SSLProtocolSocketFactory;
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.core.util.Utils;
@@ -37,10 +37,8 @@ import io.entgra.device.mgt.plugins.input.adapter.http.oauth.exception.OAuthToke
 import io.entgra.device.mgt.plugins.input.adapter.http.util.HTTPEventAdapterConstants;
 import org.wso2.carbon.identity.oauth2.stub.OAuth2TokenValidationServiceStub;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.Map;
 
 /**
@@ -115,10 +113,9 @@ public class OAuthTokenValidaterStubFactory extends BasePoolableObjectFactory {
 					client.setOptions(options);
 					if (hostURL.getProtocol().equals("https")) {
 						// set up ssl factory since axis2 https transport is used.
-						EasySSLProtocolSocketFactory sslProtocolSocketFactory =
-								createProtocolSocketFactory();
+						ProtocolSocketFactory sslProtocolSocketFactory = new SSLProtocolSocketFactory();
 						Protocol authhttps = new Protocol(hostURL.getProtocol(),
-														  (ProtocolSocketFactory) sslProtocolSocketFactory,
+														  sslProtocolSocketFactory,
 														  hostURL.getPort());
 						Protocol.registerProtocol(hostURL.getProtocol(), authhttps);
 						options.setProperty(HTTPConstants.CUSTOM_PROTOCOL_HANDLER, authhttps);
@@ -140,24 +137,6 @@ public class OAuthTokenValidaterStubFactory extends BasePoolableObjectFactory {
 		}
 
 		return stub;
-	}
-
-	/**
-	 * This is required to create a trusted connection with the external entity.
-	 * Have to manually configure it since we use CommonHTTPTransport(axis2 transport) in axis2.
-	 *
-	 * @return an EasySSLProtocolSocketFactory for SSL communication.
-	 */
-	private EasySSLProtocolSocketFactory createProtocolSocketFactory() throws OAuthTokenValidationException {
-		try {
-			return new EasySSLProtocolSocketFactory();
-		} catch (IOException e) {
-			String errorMsg = "Failed to initiate EasySSLProtocolSocketFactory.";
-			throw new OAuthTokenValidationException(errorMsg, e);
-		} catch (GeneralSecurityException e) {
-			String errorMsg = "Failed to set the key material in easy ssl factory.";
-			throw new OAuthTokenValidationException(errorMsg, e);
-		}
 	}
 
 	/**

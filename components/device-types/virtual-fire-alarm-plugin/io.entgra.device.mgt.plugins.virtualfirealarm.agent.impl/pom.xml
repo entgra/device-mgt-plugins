@@ -23,7 +23,7 @@
 	<parent>
 		<artifactId>virtual-fire-alarm-plugin</artifactId>
 		<groupId>io.entgra.device.mgt.plugins</groupId>
-		<version>8.0.8-SNAPSHOT</version>
+		<version>9.0.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -112,12 +112,12 @@
 
 		<!--Dependency on BouncyCastle Library for SCEP-->
 		<dependency>
-			<groupId>org.bouncycastle.wso2</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
+			<groupId>org.wso2.orbit.org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk18on</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.bouncycastle.wso2</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
+			<groupId>org.wso2.orbit.org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk18on</artifactId>
 		</dependency>
 
 		<!--Dependency on WSO2 JSCEP Orbit-->
