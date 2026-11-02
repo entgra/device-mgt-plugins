@@ -56,10 +56,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -337,7 +339,7 @@ public class HTTPEventAdapter implements OutputEventAdapter {
     }
 
     private String getBase64Encode(String key, String value) {
-        return new String(org.apache.commons.ssl.Base64.encodeBase64((key + ":" + value).getBytes()));
+        return Base64.getEncoder().encodeToString((key + ":" + value).getBytes(StandardCharsets.UTF_8));
     }
 
 
