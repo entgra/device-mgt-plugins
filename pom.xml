@@ -899,13 +899,18 @@
             </dependency>
             <dependency>
                 <groupId>com.squareup.okio</groupId>
-                <artifactId>okio</artifactId>
+                <artifactId>okio-jvm</artifactId>
                 <version>${okio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>${kotlin.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-okhttp</artifactId>
-                <version>${github.openfeign.version}</version>
+                <version>${io.github.openfeign.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.entgra.emm</groupId>
@@ -1068,8 +1073,7 @@
         <hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
 
         <!--Feign Version-->
-        <io.github.openfeign.version>11.0</io.github.openfeign.version>
-        <io.github.openfeign.runtime.version>13.2.1</io.github.openfeign.runtime.version>
+        <io.github.openfeign.version>13.2.1</io.github.openfeign.version>
         <maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
         <siddhi.version>3.2.9</siddhi.version>
         <maven.javadoc.skip>true</maven.javadoc.skip>
@@ -1084,8 +1088,7 @@
 
         <squareup.okhttp3.version>4.12.0</squareup.okhttp3.version>
         <okio.version>3.6.0</okio.version>
-        <github.openfeign.version>11.0</github.openfeign.version>
-
+        <kotlin.version>1.9.10</kotlin.version>
         <cxf-bundle-package.version>2.7.18</cxf-bundle-package.version>
 
         <imp.package.version.osgi.framework>[1.6.0, 2.0.0)</imp.package.version.osgi.framework>
@@ -1129,7 +1132,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>5.1.9</version>
                     <extensions>true</extensions>
                     <configuration>
                         <instructions>
